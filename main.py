@@ -1,6 +1,3 @@
-# test line
-print('main: hello world')
-
 # global variable settings
 import settings
 settings.init()
