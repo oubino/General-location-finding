@@ -5,6 +5,8 @@ settings.init()
 # library imports
 import functions
 
+# test line
+print('main: hello world')
 
 # initialise or load model
 initialise = functions.yes_or_no('initialise new network?')
