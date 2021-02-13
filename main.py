@@ -1,3 +1,6 @@
+# test line
+print('main: hello world')
+
 # global variable settings
 import settings
 settings.init()
@@ -5,8 +8,6 @@ settings.init()
 # library imports
 import functions
 
-# test line
-print('main: hello world')
 
 # initialise or load model
 initialise = functions.yes_or_no('initialise new network?')
