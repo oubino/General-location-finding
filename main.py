@@ -4,6 +4,7 @@ settings.init()
 
 # library imports
 import functions
+import time
 
 
 # initialise or load model
@@ -20,9 +21,15 @@ if initialise == True:
     print('------------')
     initialise_model.save()
     for i in range(settings.num_epoch_batches - 1):
+        start_time = time.time()
         print('Training model')
         print('--------------')
         initialise_model.train(False)
+        time_elapsed = time.time() - start_time
+        end_time = time.ctime(time_elapsed * (settings.num_epoch_batches - i - 2) + time.time())
+        print('\n')
+        print('Estimated finish time: ', end_time)
+        print('\n')
         print('Saving model to files')
         print('------------')
         initialise_model.save()
