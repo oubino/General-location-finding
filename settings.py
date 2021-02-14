@@ -48,7 +48,7 @@ def init():
     
     batch_size = 1
     
-    landmarks = [1,2,3,4,5,6] # brainstem # not general
+    landmarks = [1,2,3,4] # brainstem # not general
     # sigmas = defaultdict(float) ?
     sigmas = {} # sigma per landmark
     for k in landmarks:
@@ -66,8 +66,8 @@ def init():
     
     # training parameters
     
-    epoch_batch = 2
-    num_epoch_batches = 3
+    epoch_batch = 20
+    num_epoch_batches = 6
     
     alpha = 1/25000
     reg = 0.01 # reg = 0.001
@@ -81,7 +81,7 @@ def init():
     # normalise parameters
     normal_min = 15
     normal_max = 50
-    normal_window = 200
+    normal_window = 1000
     
     # mixed precision
     use_amp = True
@@ -105,7 +105,7 @@ def init():
     downsample_user = True
     
     # run folder
-    run_folder = "run_14_feb_21_test"
+    run_folder = "run_14_feb_21_mod_norm"
     run_path = os.path.join(save_data_path, run_folder) 
     try:  
         os.mkdir(run_path)  
@@ -113,7 +113,7 @@ def init():
         print(error) 
     
     # load model path
-    run_folder_load = "run_14_feb_21_test"
+    run_folder_load = "run_14_feb_21_mod_norm"
     epoch_load = str(6)
     
     # create tensorboard writer

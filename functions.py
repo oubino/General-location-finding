@@ -19,7 +19,8 @@ def com_structure(heatmap, landmark): # assumes 1 channel
   landmark = float(landmark) # ensure that comparison is made properly
   for i in range(batch_size):
     # heatmap shape [1, 1, 256, 256, 100] i.e. B x C x H x W x D
-    locations = (heatmap[i][0] == landmark).nonzero().to(S.device)
+    # add in round here to see if picks up landmarks its missing
+    locations = (torch.round(heatmap[i][0]) == landmark).nonzero().to(S.device)
     if (locations.size(0) == 0): # if no landmarks detected for image in batch
       print('no structure for %1.0f' % landmark)
       print('heatmap maximum value %5.2f' % heatmap[i][0].max())

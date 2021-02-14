@@ -134,7 +134,7 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
         finish_time = time.ctime(time_elapsed * (num_epochs - epoch) + time.time())
         print('\n')
         print('Epoch time: ' + '{:.0f}m {:.0f}s'.format(time_elapsed // 60, time_elapsed % 60))
-        print('Estimated finish time: ', finish_time)
+        print('Estimated finish time (till end of epoch batch): ', finish_time)
         print('\n')
         # save number of epochs completed
         epochs_completed_total = epochs_completed + epoch + 1
