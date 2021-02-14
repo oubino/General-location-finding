@@ -173,7 +173,7 @@ def print_3D_heatmap(image, structure, pred, landmark, eval_path):
   # - currently has all landmarks in but need to plot only 1 landmark - l
   # pred
   # - C x H x W x D needs to be cut down to H x W x D
-  # - not sure what values of this heatmap will be so not sure what threshold should be
+  # -t not sure what values of this heatmap will be so not sure what threshold should be
 
   structure_max = torch.max(structure).item()
 
@@ -343,7 +343,8 @@ def performance_metrics(model,sigmas,gamma, epochs_completed):
     file.close()
     
     # add to csv file
-    with open('results_summary.csv', 'a', newline = '') as file:
+    csv_name = os.path.join(S.save_data_path, 'results_summary.csv')
+    with open(csv_name, 'a', newline = '') as file:
         writer = csv.writer(file)
         sigma_string = str(sigmas[l])
         writer.writerow(['%s' % S.run_folder, '%s' % epochs_completed_string, 'Landmark %1.0f' % l, 
