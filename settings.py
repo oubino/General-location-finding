@@ -26,11 +26,16 @@ def init():
     global epoch_load 
     global writer
     global img_counter_1, img_counter_2, img_counter_3
+    global save_data_path
         
     
     # data path
-    coding_path = r'C:\Users\olive\OneDrive\Documents\CNN\Sem 2'
+    coding_path = r'C:\Users\olive\OneDrive\Documents\GitHub\General-location-finding'
     root = r'C:\Users\olive\OneDrive\Documents\CNN\3D_data\HNSCC_deepmind_cropped' # note lack of " "
+    save_data_path = r'C:\Users\olive\OneDrive\Documents\CNN\Sem 2\Results'
+    
+    print('Results directory:')
+    print(save_data_path)
     
     
     # device
@@ -43,7 +48,7 @@ def init():
     
     batch_size = 1
     
-    landmarks = [1,2] # brainstem # not general
+    landmarks = [1,2,3,4,5,6] # brainstem # not general
     # sigmas = defaultdict(float) ?
     sigmas = {} # sigma per landmark
     for k in landmarks:
@@ -61,8 +66,8 @@ def init():
     
     # training parameters
     
-    epoch_batch = 1
-    num_epoch_batches = 1
+    epoch_batch = 2
+    num_epoch_batches = 3
     
     alpha = 1/25000
     reg = 0.01 # reg = 0.001
@@ -100,19 +105,21 @@ def init():
     downsample_user = True
     
     # run folder
-    run_folder = "run_1"
-    run_path = os.path.join(coding_path, run_folder) 
+    run_folder = "run_14_feb_21_test"
+    run_path = os.path.join(save_data_path, run_folder) 
     try:  
         os.mkdir(run_path)  
     except OSError as error:  
         print(error) 
     
     # load model path
-    run_folder_load = "run_1"
-    epoch_load = str(1)
+    run_folder_load = "run_14_feb_21_test"
+    epoch_load = str(6)
     
     # create tensorboard writer
-    writer = SummaryWriter() # may need to amend
+    tensor_folder = os.path.join(save_data_path, 'tensorboard')
+    tensorboard_loc = os.path.join(tensor_folder, '%s-%s' % (time_stamp,run_folder_load))
+    writer = SummaryWriter(tensorboard_loc) # may need to amend
     
     # image saved coutner
     img_counter_1 = 0
