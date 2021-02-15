@@ -3,12 +3,13 @@ import settings
 settings.init()
 
 # library imports
-import functions
+#import functions
 import time
+import yes_or_no
 
 
 # initialise or load model
-initialise = functions.yes_or_no('initialise new network?')
+initialise = yes_or_no.question('initialise new network?')
 #save_model = functions.yes_or_no('would you like to save model at end?')
 
 if initialise == True:
@@ -42,7 +43,7 @@ if initialise == True:
 elif initialise == False:
     import load_model
     load_model.init()
-    train_decision = functions.yes_or_no('train loaded in model?')
+    train_decision = yes_or_no.question('train loaded in model?')
     if train_decision == True:
         print('Training model')
         print('------------')

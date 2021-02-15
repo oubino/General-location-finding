@@ -329,6 +329,7 @@ def performance_metrics(model,sigmas,gamma, epochs_completed):
     print('    percentage of images which were outliers is ' + str(outliers_perc) + '%')
     print('    sigma is ' + str(sigmas[l]))
     print('    trained for ' + str(epochs_completed) + ' epochs')
+    print('    pred max used = %s' % S.pred_max)
     print('\n')
   
     name_of_file = os.path.join(eval_path, "results.txt")
@@ -338,6 +339,7 @@ def performance_metrics(model,sigmas,gamma, epochs_completed):
          '  median point to point error is ' + str(median), '\n', 
          '  percentage of images which were outliers is ' + str(outliers_perc) + '%', '\n',
          '  sigma is ' + str(sigmas[l]), '\n', 
+         '  pred max used = ' + str(S.pred_max), '\n',
          '  trained for ' + str(epochs_completed) + ' epochs\n']
     file.writelines(L)
     file.close()
@@ -348,7 +350,7 @@ def performance_metrics(model,sigmas,gamma, epochs_completed):
         writer = csv.writer(file)
         sigma_string = str(sigmas[l])
         writer.writerow(['%s' % S.run_folder, '%s' % epochs_completed_string, 'Landmark %1.0f' % l, 
-             str(mean), str(std_mean),str(median),str(outliers_perc) + '%', sigma_string.replace("\n", " "), time.strftime("%Y%m%d-%H%M%S")])
+             str(mean), str(std_mean),str(median),str(outliers_perc) + '%', sigma_string.replace("\n", " "), time.strftime("%Y%m%d-%H%M%S"), 'pred max used = %s' % S.pred_max])
     
   
     

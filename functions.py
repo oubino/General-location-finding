@@ -281,13 +281,6 @@ def weights_init(m):
         torch.nn.init.kaiming_normal_(m.weight, mode='fan_in', nonlinearity='relu') # change if switch to ReLU
         torch.nn.init.zeros_(m.bias)
         
-def yes_or_no(question):
-    while "the answer is invalid":
-        reply = str(input(question+' (y/n): ')).lower().strip()
-        if reply[:1] == 'y':
-            return True
-        if reply[:1] == 'n':
-            return False
         
 os.chdir(S.coding_path) # change to data path and change back at end
 print('Coding directory: ')

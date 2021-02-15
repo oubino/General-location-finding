@@ -4,6 +4,7 @@ import numpy as np
 import os
 import time
 from torch.utils.tensorboard import SummaryWriter
+import yes_or_no
 
 
 def init():
@@ -30,9 +31,17 @@ def init():
         
     
     # data path
-    coding_path = r'C:\Users\olive\OneDrive\Documents\GitHub\General-location-finding'
-    root = r'C:\Users\olive\OneDrive\Documents\CNN\3D_data\HNSCC_deepmind_cropped' # note lack of " "
-    save_data_path = r'C:\Users\olive\OneDrive\Documents\CNN\Sem 2\Results'
+    aaron_or_oli = yes_or_no.question('aaron(y) / oli (n)')
+    if aaron_or_oli == True:
+        # aaron paths
+        coding_path = r'C:\Users\olive\OneDrive\Documents\GitHub\General-location-finding'
+        root = r'C:\Users\olive\OneDrive\Documents\CNN\3D_data\HNSCC_deepmind_cropped' # note lack of " "
+        save_data_path = r'C:\Users\olive\OneDrive\Documents\CNN\Sem 2\Results'
+    elif aaron_or_oli == False:
+        coding_path = r'C:\Users\olive\OneDrive\Documents\GitHub\General-location-finding'
+        root = r'C:\Users\olive\OneDrive\Documents\CNN\3D_data\HNSCC_deepmind_cropped' # note lack of " "
+        save_data_path = r'C:\Users\olive\OneDrive\Documents\CNN\Sem 2\Results'
+    
     
     print('Results directory:')
     print(save_data_path)
@@ -66,8 +75,8 @@ def init():
     
     # training parameters
     
-    epoch_batch = 20
-    num_epoch_batches = 6
+    epoch_batch = 1
+    num_epoch_batches = 1
     
     alpha = 1/25000
     reg = 0.01 # reg = 0.001
@@ -93,7 +102,7 @@ def init():
     downsample_idx_list = np.empty((0), float)
     
     # use predicted max - if want gauss fit set to false
-    pred_max = False
+    pred_max = True
     
     # unique timestamp for model
     time_stamp = time.strftime("%Y%m%d-%H%M%S")
@@ -105,7 +114,7 @@ def init():
     downsample_user = True
     
     # run folder
-    run_folder = "run_14_feb_21_mod_norm"
+    run_folder = "run_15_feb_test"
     run_path = os.path.join(save_data_path, run_folder) 
     try:  
         os.mkdir(run_path)  
@@ -113,8 +122,8 @@ def init():
         print(error) 
     
     # load model path
-    run_folder_load = "run_14_feb_21_mod_norm"
-    epoch_load = str(120)
+    run_folder_load = "run_15_feb_test"
+    epoch_load = str(1)
     
     # create tensorboard writer
     tensor_folder = os.path.join(save_data_path, 'tensorboard')
