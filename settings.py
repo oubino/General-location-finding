@@ -31,16 +31,37 @@ def init():
         
     
     # data path
-    aaron_or_oli = yes_or_no.question('aaron(y) / oli (n)')
-    if aaron_or_oli == True:
-        # aaron paths
-        coding_path = r'C:\Users\olive\OneDrive\Documents\GitHub\General-location-finding'
-        root = r'C:\Users\olive\OneDrive\Documents\CNN\3D_data\HNSCC_deepmind_cropped' # note lack of " "
-        save_data_path = r'C:\Users\olive\OneDrive\Documents\CNN\Sem 2\Results'
-    elif aaron_or_oli == False:
-        coding_path = r'C:\Users\olive\OneDrive\Documents\GitHub\General-location-finding'
-        root = r'C:\Users\olive\OneDrive\Documents\CNN\3D_data\HNSCC_deepmind_cropped' # note lack of " "
-        save_data_path = r'C:\Users\olive\OneDrive\Documents\CNN\Sem 2\Results'
+    locally_or_server = yes_or_no.question('locally(y) / server(n)')
+    if locally_or_server == True:
+        # use local paths and ask Aaron/Oli for local paths 
+        aaron_or_oli = yes_or_no.question('aaron(y) / oli (n)')
+        if aaron_or_oli == True:
+            # Aaron paths
+            coding_path = r'C:\Users\ranki_252uikw\Documents\MPhysS2\General-location-finding'
+            root = r'C:\Users\ranki_252uikw\Documents\MPhysS2\HNSCC_deepmind_cropped' # note lack of " "
+            save_data_path = r'C:\Users\ranki_252uikw\Documents\MPhysS2\Results'
+        elif aaron_or_oli == False:
+            # Oli paths
+            coding_path = r'C:\Users\olive\OneDrive\Documents\GitHub\General-location-finding'
+            root = r'C:\Users\olive\OneDrive\Documents\CNN\3D_data\HNSCC_deepmind_cropped' # note lack of " "
+            save_data_path = r'C:\Users\olive\OneDrive\Documents\CNN\Sem 2\Results'
+    elif locally_or_server == False:
+        # use server paths for data and code for Aaron/Oli
+        aaron_or_oli = yes_or_no.question('aaron(y) / oli (n)')
+        if aaron_or_oli == True:
+            # Aaron paths
+            coding_path = r'/home/rankinaaron98/General-location-finding'
+            root = r'/home/olive/shared/data/HNSCC_deepmind_cropped'
+            save_data_path = r'/home/rankinaaron98/shared/results'
+        elif aaron_or_oli == False:
+            # Oli paths
+            coding_path = r'/home/olive/General-location-finding'
+            root = r'/home/olive/shared/data/HNSCC_deepmind_cropped'
+            save_data_path = r'/home/olive/shared/results'
+            
+        
+        
+   
     
     
     print('Results directory:')
@@ -61,7 +82,7 @@ def init():
     # sigmas = defaultdict(float) ?
     sigmas = {} # sigma per landmark
     for k in landmarks:
-      sigmas[k] = nn.Parameter(torch.tensor([20.], device = 'cuda'))#.to(device) # what value to initialise sigma
+      sigmas[k] = nn.Parameter(torch.tensor([20.]).to(device))# device = 'cuda'))#.to(device) # what value to initialise sigma
       sigmas[k].requires_grad = True
       #print(sigmas[k])
     
