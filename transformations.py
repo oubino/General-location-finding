@@ -3,7 +3,7 @@ import skimage
 import scipy.ndimage
 from torchvision import transforms #, datasets, models
 from skimage import transform
-from kornia import augmentation as aug
+#from kornia import augmentation as aug
 import torch
 import numpy as np
 import functions
