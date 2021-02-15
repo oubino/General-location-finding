@@ -3,7 +3,7 @@ import settings as S
 import os
  
 train_folder_name = "train_" + S.epoch_load
-run_folder_name = os.path.join(S.coding_path, S.run_folder_load)
+run_folder_name = os.path.join(S.save_data_path, S.run_folder_load)
 epoch_load = os.path.join(run_folder_name, train_folder_name)
 
 

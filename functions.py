@@ -151,7 +151,7 @@ def gauss_max(heatmap, landmark, height_trained, sigma_trained, in_x, in_y, in_z
     # heatmap is batch of masks or images of dim (B x C x H x W x D)
     # output is (B x coord)
     # i.e. x,y of 3rd image = coords[3][0], coords[3][1] only 1 channel
-    pred_coords = pred_max(heatmap, landmark).cpu().numpy()
+    pred_coords = pred_max(heatmap, landmark, S.landmarks).cpu().numpy()
     batch_size = (heatmap.size()[0])
     heatmap = heatmap.detach().cpu().numpy()
     index = landmarks.index(landmark)
