@@ -4,6 +4,7 @@ import numpy as np
 import os
 import time
 from torch.utils.tensorboard import SummaryWriter
+import functions
 
 
 def init():
@@ -30,9 +31,17 @@ def init():
         
     
     # data path
-    coding_path = r'C:\Users\olive\OneDrive\Documents\GitHub\General-location-finding'
-    root = r'C:\Users\olive\OneDrive\Documents\CNN\3D_data\HNSCC_deepmind_cropped' # note lack of " "
-    save_data_path = r'C:\Users\olive\OneDrive\Documents\CNN\Sem 2\Results'
+    aaron_or_oli = functions.yes_or_no('aaron y/oli n')
+    if aaron_or_oli == True:
+        # aaron paths
+        coding_path = r'C:\Users\olive\OneDrive\Documents\GitHub\General-location-finding'
+        root = r'C:\Users\olive\OneDrive\Documents\CNN\3D_data\HNSCC_deepmind_cropped' # note lack of " "
+        save_data_path = r'C:\Users\olive\OneDrive\Documents\CNN\Sem 2\Results'
+    elif aaron_or_oli == False:
+        coding_path = r'C:\Users\olive\OneDrive\Documents\GitHub\General-location-finding'
+        root = r'C:\Users\olive\OneDrive\Documents\CNN\3D_data\HNSCC_deepmind_cropped' # note lack of " "
+        save_data_path = r'C:\Users\olive\OneDrive\Documents\CNN\Sem 2\Results'
+    
     
     print('Results directory:')
     print(save_data_path)
