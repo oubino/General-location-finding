@@ -51,13 +51,13 @@ def init():
         if aaron_or_oli == True:
             # Aaron paths
             coding_path = r'/home/rankinaaron98/General-location-finding'
-            root = r'/home/olive/shared/data/HNSCC_deepmind_cropped'
-            save_data_path = r'/home/rankinaaron98/shared/results'
+            root = r'/home/rankinaaron98/data/HNSCC_deepmind_cropped'
+            save_data_path = r'/home/rankinaaron98/data/Aaron/results'
         elif aaron_or_oli == False:
             # Oli paths
             coding_path = r'/home/olive/General-location-finding'
-            root = r'/home/olive/shared/data/HNSCC_deepmind_cropped'
-            save_data_path = r'/home/olive/shared/results'
+            root = r'/home/olive/data/HNSCC_deepmind_cropped'
+            save_data_path = r'/home/olive/data/Oli/results'
             
         
         
