@@ -28,6 +28,7 @@ def init():
     global writer
     global img_counter_1, img_counter_2, img_counter_3
     global save_data_path
+    global landmarks_loc
         
     
     # data path
@@ -79,6 +80,9 @@ def init():
     batch_size = 1
     
     landmarks = [1,2,3,4] # brainstem # not general
+    landmarks_loc = {1:'bot', 2:'bot', 3: 'top', 4:'top'} 
+        # define which part of OAR to find
+    
     # sigmas = defaultdict(float) ?
     sigmas = {} # sigma per landmark
     for k in landmarks:
@@ -97,7 +101,7 @@ def init():
     # training parameters
     
     epoch_batch = 1
-    num_epoch_batches = 10
+    num_epoch_batches = 1
     
     alpha = 1/25000
     reg = 0.01 # reg = 0.001
@@ -135,7 +139,7 @@ def init():
     downsample_user = True
     
     # run folder
-    run_folder = "run_15_feb_test"
+    run_folder = "run_19_feb"
     run_path = os.path.join(save_data_path, run_folder) 
     try:  
         os.mkdir(run_path)  
@@ -143,7 +147,7 @@ def init():
         print(error) 
     
     # load model path
-    run_folder_load = "run_15_feb_test"
+    run_folder_load = "run_19_feb"
     epoch_load = str(1)
     
     # create tensorboard writer
