@@ -63,16 +63,12 @@ print('----------------------')
 for i in range(1):
     print('image size: ')
     print(train_set.__getitem__(i)['structure'].size()) # i.e. 1 x 224 x 224 as torch tensor (C x H x W)
-    print('structure plot')
 
     
     print('landmark locations for image %1.0f in dataset' % i)
     for l in S.landmarks:
-        #print(functions.com_structure(train_set.__getitem__(i)['structure'].unsqueeze(0), l))
-        #print(S.landmarks_loc[l])
         print(functions.landmark_loc(S.landmarks_loc[l],train_set.__getitem__(i)['structure'].unsqueeze(0),l))
         
-    #print(train_set.__getitem__(i)['structure'].size()) 
 
 
 #img = dataset.__getitem__(10)['image']

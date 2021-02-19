@@ -8,7 +8,6 @@ import time
 import yes_or_no
 
 
-
 # initialise or load model
 initialise = yes_or_no.question('initialise new network?')
 #save_model = functions.yes_or_no('would you like to save model at end?')

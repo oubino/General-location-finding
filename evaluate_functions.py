@@ -296,9 +296,9 @@ def performance_metrics(model,sigmas,gamma, epochs_completed):
             print_3D_heatmap(image[i], structure[i], pred[i], l, eval_path)
             #print_3D_gauss_heatmap(image[i], structure_max_x, structure_max_y, structure_max_z, pred[i], l, sigmas[l], eval_path)
             print('\n')
-            print('Structure COM for landmark %1.0f:' % l)
+            print('Structure LOC for landmark %1.0f:' % l)
             print(structure_max_x, structure_max_y, structure_max_z)
-            print('Predicted COM for landmark %1.0f:' % l)
+            print('Predicted LOC for landmark %1.0f:' % l)
             print(pred_max_x, pred_max_y, pred_max_z)
             print('\n')
             # print 2D slice

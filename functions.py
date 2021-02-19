@@ -46,9 +46,6 @@ def com_structure(heatmap, landmark): # assumes 1 channel
       x_com /= locations.size(0)
       y_com /= locations.size(0)
       z_com /= locations.size(0)
-      #print('divisor')
-      #print(locations.size(0))
-      #print(locations.size(0).dtype)
 
 
     if i == 0:
@@ -56,73 +53,11 @@ def com_structure(heatmap, landmark): # assumes 1 channel
     else: 
       coords_temp = torch.tensor([[x_com,y_com,z_com]]).to(S.device)
       coords = torch.cat((coords,coords_temp),dim = 0)
-      #print('datatype')
-      #print(coords.dtype)
   # returns arrays of B x coord
   # returns array of B x True/False
   # if True then for that coord it is COM, if false then need to produce heatmap of zeros
   return coords, landmark_present   
 
-"""
-
-def top_structure(heatmap, landmark): # assumes 1 channel
-  # heatmap is batch of either masks or image of 
-  # heatmap dim is (B x C x H x W x D)
-  # output is (B x coord)
-  # i.e. x,y,z of 3rd image = coords[3][0],coords[3][1], coords[3][2] only 1 channel
-  batch_size = (heatmap.size()[0])
-  landmark_present = []
-  landmark = float(landmark) # ensure that comparison is made properly
-  for i in range(batch_size):
-    # heatmap shape [1, 1, 256, 256, 100] i.e. B x C x H x W x D
-    # add in round here to see if picks up landmarks its missing
-    locations = (torch.nonzero((torch.round(heatmap[i][0]) == landmark),as_tuple = False)).to(S.device)
-    counter = torch.tensor(1, dtype = torch.float64).to(S.device) # counter defines number of points at top per image
-    if (locations.size(0) == 0): # if no landmarks detected for image in batch
-      print('no structure for %1.0f' % landmark)
-      print('heatmap maximum value %5.2f' % heatmap[i][0].max())
-      print('heatmap minimum value %5.2f' % heatmap[i][0].min())
-      landmark_present.append(False)
-      x_top = torch.tensor(0, dtype = torch.float64).to(S.device) # in theory this should not be used
-      y_top = torch.tensor(0, dtype = torch.float64).to(S.device)
-      z_top = torch.tensor(0, dtype = torch.float64).to(S.device)
-    else:
-      landmark_present.append(True)
-      x_top = torch.tensor(0, dtype = torch.float64).to(S.device)
-      y_top = torch.tensor(0, dtype = torch.float64).to(S.device)
-      z_top = torch.tensor(0, dtype = torch.float64).to(S.device)
-      for k in range(locations.size(0)): # number of landmarks present in the image i.e. number of 3s in image
-        # assumes image right way up 
-        if (locations[k][2] > z_top): 
-            counter = torch.tensor(1, dtype = torch.float64).to(S.device) # one new image at heigher height
-            x_top = locations[k][1]
-            y_top = locations[k][0]
-            z_top = locations[k][2]
-        #if (locations[k][2] == z_top): # if at same height
-        #    counter += 1
-        #    x_top += locations[k][1]
-        #    y_top += locations[k][0]
-        #    z_top += locations[k][2]
-      
-      x_mid = x_top/counter # multiple poitns same height
-      y_mid = y_top/counter
-      z_mid = z_top/counter
-      
-      x_top = x_mid
-      y_top = y_mid
-      z_top = z_mid
-       
-    if i == 0:
-      coords = torch.tensor([[x_top,y_top,z_top]]).to(S.device)
-    else: 
-      coords_temp = torch.tensor([[x_top,y_top,z_top]]).to(S.device)
-      coords = torch.cat((coords,coords_temp),dim = 0)
-  # returns arrays of B x coord
-  # returns array of B x True/False
-  # if True then for that coord it is TOP, if false then need to produce heatmap of zeros
-  return coords, landmark_present  
-
-"""
 
 def top_structure(heatmap, landmark): # assumes 1 channel
   # heatmap is batch of either masks or image of 
@@ -202,65 +137,6 @@ def bot_structure(heatmap, landmark): # assumes 1 channel
   # if True then for that coord it is TOP, if false then need to produce heatmap of zeros
   return coords, landmark_present
 
-"""
-def bot_structure(heatmap, landmark): # assumes 1 channel
-  # heatmap is batch of either masks or image of 
-  # heatmap dim is (B x C x H x W x D)
-  # output is (B x coord)
-  # i.e. x,y,z of 3rd image = coords[3][0],coords[3][1], coords[3][2] only 1 channel
-  batch_size = (heatmap.size()[0])
-  landmark_present = []
-  landmark = float(landmark) # ensure that comparison is made properly
-  for i in range(batch_size):
-    # heatmap shape [1, 1, 256, 256, 100] i.e. B x C x H x W x D
-    # add in round here to see if picks up landmarks its missing
-    locations = (torch.nonzero((torch.round(heatmap[i][0]) == landmark),as_tuple = False)).to(S.device)
-    counter = torch.tensor(1, dtype = torch.float64).to(S.device) # counter defines number of points at top per image
-    if (locations.size(0) == 0): # if no landmarks detected for image in batch
-      print('no structure for %1.0f' % landmark)
-      print('heatmap maximum value %5.2f' % heatmap[i][0].max())
-      print('heatmap minimum value %5.2f' % heatmap[i][0].min())
-      landmark_present.append(False)
-      x_bot = torch.tensor(0, dtype = torch.float64).to(S.device) # in theory this should not be used
-      y_bot = torch.tensor(0, dtype = torch.float64).to(S.device)
-      z_bot = torch.tensor(S.in_z, dtype = torch.float64).to(S.device) # S.in_z = 80 i.e. top of image
-    else:
-      landmark_present.append(True)
-      x_bot = torch.tensor(0, dtype = torch.float64).to(S.device)
-      y_bot = torch.tensor(0, dtype = torch.float64).to(S.device)
-      z_bot = torch.tensor(S.in_z, dtype = torch.float64).to(S.device)
-      for k in range(locations.size(0)): # number of landmarks present in the image i.e. number of 3s in image
-        # assumes image right way up 
-        if (locations[k][2] < z_bot): 
-            counter = torch.tensor(1, dtype = torch.float64).to(S.device) # one new image at lower height
-            x_bot = locations[k][1]
-            y_bot = locations[k][0]
-            z_bot = locations[k][2]
-       # if (locations[k][2] == z_bot): # if at same height
-       #     counter += 1
-       #     x_bot += locations[k][1]
-       #     y_bot += locations[k][0]
-       #     z_bot += locations[k][2]
-            
-      x_mid = x_bot/counter # multiple poitns same height
-      y_mid = y_bot/counter
-      z_mid = z_bot/counter
-      
-      x_bot = x_mid
-      y_bot = y_mid
-      z_bot = z_mid
-       
-    if i == 0:
-      coords = torch.tensor([[x_bot,y_bot,z_bot]]).to(S.device)
-    else: 
-      coords_temp = torch.tensor([[x_bot,y_bot,z_bot]]).to(S.device)
-      coords = torch.cat((coords,coords_temp),dim = 0)
-  # returns arrays of B x coord
-  # returns array of B x True/False
-  # if True then for that coord it is TOP, if false then need to produce heatmap of zeros
-  return coords, landmark_present  
-
-"""
 
 def landmarks_coords(heatmap, landmark):
   # heatmap is batch of either masks or image of 
