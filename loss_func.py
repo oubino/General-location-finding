@@ -31,7 +31,8 @@ def calc_loss_gauss(img, pred, target, idx, metrics_landmarks, alpha, reg, gamma
     for l in S.landmarks:
 
       # need location of landmark for all images in target 3D CT scan
-      target_coords = functions.com_structure(target,l)[0] # the [0] means it extracts the coords rather than the True/False
+      target_coords = functions.landmark_loc(S.landmarks_loc[l], target, l)[0]
+      #target_coords = functions.com_structure(target,l)[0] # the [0] means it extracts the coords rather than the True/False
       # change to top structure
       batch_size = target_coords.size()[0]
       
@@ -75,7 +76,8 @@ def calc_loss_gauss(img, pred, target, idx, metrics_landmarks, alpha, reg, gamma
         #img_landmark_point_to_point = point_to_point_mm(structure_com_x, structure_com_y, structure_com_z, pred_max_x, pred_max_y, pred_max_z, idx[i].item())
 
         # create target gauss map
-        if functions.com_structure(target,l)[1][i] == True:
+        #if functions.com_structure(target,l)[1][i] == True:
+        if functions.landmark_loc(S.landmarks_loc[l], target, l)[1][i] == True:
         # change to top structure
           targ_gaus = functions.gaussian_map(structure_com_x,structure_com_y, structure_com_z,S.sigmas[l],gamma,x_size,y_size,z_size, output = True) 
         else:

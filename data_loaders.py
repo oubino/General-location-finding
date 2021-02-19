@@ -7,6 +7,7 @@ import torch
 from torch.utils.data import DataLoader
 import math
 import os
+import numpy
 
 import settings as S
 import functions 
@@ -62,10 +63,12 @@ print('----------------------')
 for i in range(1):
     print('image size: ')
     print(train_set.__getitem__(i)['structure'].size()) # i.e. 1 x 224 x 224 as torch tensor (C x H x W)
+
+    
     print('landmark locations for image %1.0f in dataset' % i)
     for l in S.landmarks:
-        print(functions.com_structure(train_set.__getitem__(i)['structure'].unsqueeze(0), l))
-    #print(train_set.__getitem__(i)['structure'].size()) 
+        print(functions.landmark_loc(S.landmarks_loc[l],train_set.__getitem__(i)['structure'].unsqueeze(0),l))
+        
 
 
 #img = dataset.__getitem__(10)['image']

@@ -58,6 +58,7 @@ structure_3d = structure_3d.squeeze(0)
 structure_3d = structure_3d.numpy()
 
 for l in S.landmarks:
+    print('com of structure')
     print(functions.com_structure(D.train_set.__getitem__(0)['structure'].unsqueeze(0), l))
 
 plot_3d(image_3d,structure_3d,max_value/2, 6)

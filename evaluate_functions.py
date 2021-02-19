@@ -269,9 +269,11 @@ def performance_metrics(model,sigmas,gamma, epochs_completed):
       
       for i in range(S.batch_size):
         
-        structure_com = functions.com_structure(structure, l)[0] # [0] ensures extracts coords rather than True/False
+        structure_loc = functions.landmark_loc(S.landmarks_loc[l], structure, l)[0]
+        #structure_com = functions.com_structure(structure, l)[0]# [0] ensures extracts coords rather than True/False
         # change to top structure
-        if functions.com_structure(structure,1)[1][i] == True:
+        #if functions.com_structure(structure,1)[1][i] == True:
+        if functions.landmark_loc(S.landmarks_loc[l],structure,l)[1][i] == True:
         # change to top structure
           dimension = 3
           height_guess = ((gamma) * (2*np.pi)**(-dimension/2) * sigmas[l].item() ** (-dimension)) 
@@ -283,7 +285,7 @@ def performance_metrics(model,sigmas,gamma, epochs_completed):
 
           #print(pred.shape)
           
-          structure_max_x, structure_max_y, structure_max_z = structure_com[i][0],structure_com[i][1], structure_com[i][2] 
+          structure_max_x, structure_max_y, structure_max_z = structure_loc[i][0],structure_loc[i][1], structure_loc[i][2] 
           pred_max_x, pred_max_y, pred_max_z =  pred_coords_max[i][0], pred_coords_max[i][1], pred_coords_max[i][2] 
 
 
@@ -291,12 +293,12 @@ def performance_metrics(model,sigmas,gamma, epochs_completed):
           if batch_number == 0 and i == 0: # for first batch 
             # now need to choose first in batch i.e. # image[0]
             #print('3D plots for landmark %1.0f' % l)
-            #print_3D_heatmap(image[i], structure[i], pred[i], l, eval_path)
+            print_3D_heatmap(image[i], structure[i], pred[i], l, eval_path)
             #print_3D_gauss_heatmap(image[i], structure_max_x, structure_max_y, structure_max_z, pred[i], l, sigmas[l], eval_path)
             print('\n')
-            print('Structure COM for landmark %1.0f:' % l)
+            print('Structure LOC for landmark %1.0f:' % l)
             print(structure_max_x, structure_max_y, structure_max_z)
-            print('Predicted COM for landmark %1.0f:' % l)
+            print('Predicted LOC for landmark %1.0f:' % l)
             print(pred_max_x, pred_max_y, pred_max_z)
             print('\n')
             # print 2D slice
