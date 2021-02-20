@@ -62,8 +62,18 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
                         
                         with torch.cuda.amp.autocast(enabled = S.use_amp):
                             outputs = model((inputs))
+                            loss = 0
+                            # output is batch x 1 x 128 x 128 x 80 (there are # of landmarks x these)
+                                # e.g. 4 lots of these
+                            # input is just the structure batch x 128 x 128 x 80 (with 1,2,3 etc at locations)
+                            for l in S.landmarks: # over length of landmarsk
                             # 1. convert masks to heatmaps inside loss function (allows sigma optimisation)
-                            loss = loss_func.calc_loss_gauss(inputs, outputs, labels, idx, metrics_landmarks,alpha,reg,gamma,epoch_samples,sigmas)
+                                # i.e. if landmarks [5,2,1]
+                                # for landmark 1 index is 2
+                                # therefore need outputs[2] - i.e. second output from network
+                                index = S.landmarks.index(l)
+                                loss_temp = loss_func.calc_loss_gauss(inputs, outputs[index], labels, idx, metrics_landmarks,alpha,reg,gamma,epoch_samples,sigmas, l)
+                                loss += loss_temp
                         
                         # print image for comparison
                         if epoch_samples == 0:

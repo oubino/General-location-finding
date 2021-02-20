@@ -101,9 +101,13 @@ class UNet3d(nn.Module):
         x7 = self.dec2(x6, x3)
         x8 = self.dec3(x7, x2)
         x9 = self.dec4(x8, x1)
-        output = self.out(x9)
-        return output 
         
+        outputs = []
+        for i in range(len(S.landmarks)):
+          outputs.append(self.out(x9))
+         
+        return outputs
+    
 # SCNET 3D
 
 features = 24

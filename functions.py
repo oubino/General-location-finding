@@ -179,10 +179,10 @@ def pred_max(heatmap, landmark, landmarks):
   c = torch.max(b[0],dim = 2,keepdim = True)
   batch_size = (heatmap.size()[0])
   for i in range(batch_size):
-    index = landmarks.index(landmark)
-    y = c[1][i][index][0][0][0]
-    x = b[1][i][index][y][0][0]
-    z = a[1][i][index][y][x][0]
+    #index = landmarks.index(landmark)
+    y = c[1][i][0][0][0][0]
+    x = b[1][i][0][y][0][0]
+    z = a[1][i][0][y][x][0]
     if i == 0:
       coords = torch.tensor([[x,y,z]]).to(S.device)
     else: 
