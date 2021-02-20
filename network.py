@@ -9,7 +9,7 @@ from torchsummary import summary
 
 # UNET3D
 
-unet_feat = 8
+unet_feat = S.net_features
 
 class ConvUnit(nn.Module):
     """
