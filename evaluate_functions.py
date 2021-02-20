@@ -61,8 +61,8 @@ def plot_3d_pred_img_struc(image, structure, pred, threshold_img, eval_path):
 
 
     ax.add_collection3d(mesh_img)
-    ax.add_collection3d(mesh_structure)
-    #ax.add_collection3d(mesh_pred)
+    #ax.add_collection3d(mesh_structure)
+    ax.add_collection3d(mesh_pred)
 
     ax.set_xlim(0, image.shape[1])
     ax.set_ylim(0, image.shape[0])
