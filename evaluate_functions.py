@@ -297,8 +297,8 @@ def performance_metrics(model,sigmas,gamma, epochs_completed):
           if batch_number == 0 and i == 0: # for first batch 
             # now need to choose first in batch i.e. # image[0]
             #print('3D plots for landmark %1.0f' % l)
-            print_3D_heatmap(image[i], structure[i], pred[i], l, eval_path)
-            #print_3D_gauss_heatmap(image[i], structure_max_x, structure_max_y, structure_max_z, pred[i], l, sigmas[l], eval_path)
+            print_3D_heatmap(image[i], structure[i], pred[index][i], l, eval_path)
+            #print_3D_gauss_heatmap(image[i], structure_max_x, structure_max_y, structure_max_z, pred[index][i], l, sigmas[l], eval_path)
             print('\n')
             print('Structure LOC for landmark %1.0f:' % l)
             print(structure_max_x, structure_max_y, structure_max_z)
@@ -307,7 +307,7 @@ def performance_metrics(model,sigmas,gamma, epochs_completed):
             print('\n')
             # print 2D slice
             #print('2D slice for landmark %1.0f' % l)
-            #print_2D_slice(image[i], structure[i], pred[i], l, pred_max_z, eval_path)
+            #print_2D_slice(image[i], structure[i], pred[index][i], l, pred_max_z, eval_path)
             
 
           #img_landmark_point_to_point = point_to_point(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z)
