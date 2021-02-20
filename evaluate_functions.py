@@ -128,7 +128,7 @@ def print_2D_slice(image, structure, pred, landmark, pred_z, eval_path):
     # - not sure what values of this heatmap will be so not sure what threshold should be
     image = image.squeeze(0).cpu().numpy()
     index = S.landmarks.index(landmark)
-    pred = pred[index].detach().cpu().numpy() # chooses relevant channel for landmark - might need to be squeezed
+    pred = pred[0].detach().cpu().numpy() # chooses relevant channel for landmark - might need to be squeezed
     structure = structure.squeeze(0)
     structure_l = extract_landmark_for_structure(structure, landmark).cpu().numpy() # edit
     structure = structure.cpu().numpy()
@@ -179,7 +179,7 @@ def print_3D_heatmap(image, structure, pred, landmark, eval_path):
 
   image = image.squeeze(0).cpu().numpy()
   index = S.landmarks.index(landmark)
-  pred = pred[index].detach().cpu().numpy() # chooses relevant channel for landmark - might need to be squeezed
+  pred = pred[0].detach().cpu().numpy() # chooses relevant channel for landmark - might need to be squeezed
   structure = structure.squeeze(0)
   structure_1 = extract_landmark_for_structure(structure, landmark).cpu().numpy() # edit
   structure = structure.cpu().numpy()
@@ -201,7 +201,7 @@ def print_3D_heatmap_no_img(structure, pred, landmark):
   structure_max = torch.max(structure).item()
     
   index = S.landmarks.index(landmark)
-  pred = pred[index].detach().cpu().numpy() # chooses relevant channel for landmark - might need to be squeezed
+  pred = pred[0].detach().cpu().numpy() # chooses relevant channel for landmark - might need to be squeezed
   structure = structure.squeeze(0)
   structure_1 = extract_landmark_for_structure(structure, landmark).cpu().numpy() # edit
   structure = structure.cpu().numpy()
@@ -228,7 +228,7 @@ def print_3D_gauss_heatmap(image, structure_com_x, structure_com_y, structure_co
   z_size = image.shape[2]
   structure_gauss = functions.gaussian_map(structure_com_x,structure_com_y,structure_com_z, sigma,S.gamma,x_size,y_size, z_size, output = True,dimension = 3).detach().cpu()
   index = S.landmarks.index(landmark)
-  pred = pred[index].detach().cpu().numpy() # chooses relevant channel for landmark - might need to be squeezed
+  pred = pred[0].detach().cpu().numpy() # chooses relevant channel for landmark - might need to be squeezed
 
 
   threshold_img = S.threshold_img_print
