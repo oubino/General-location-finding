@@ -88,7 +88,7 @@ def calc_loss_gauss(img, pred, target, idx, metrics_landmarks, alpha, reg, gamma
 
       # pred heatmap is based on image in batch & landmark
       index = S.landmarks.index(l)
-      pred_heatmap = pred[i][index]
+      pred_heatmap = pred[i]
       # l - 1 because l is 1,2,3,4,5,6
       
       # img_loss and sum_loss per landmark
