@@ -102,7 +102,7 @@ def init():
     
     # training parameters
     epoch_batch = 10
-    num_epoch_batches = 12
+    num_epoch_batches = 15
     net_features = 16
     
     alpha = 1/25000
