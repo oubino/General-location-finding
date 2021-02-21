@@ -144,3 +144,4 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
     # load best model weights
     model.load_state_dict(best_model_wts)
     return model, best_loss, epochs_completed_total
+
