@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 import torch
 import torch.nn as nn
 import numpy as np
@@ -327,4 +327,3 @@ def init():
     img_counter_2 = 0
     img_counter_3 = 0
     
->>>>>>> d18fcd6b2c2797e9b31aff8090b0599d372c19e9
