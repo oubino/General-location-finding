@@ -213,7 +213,7 @@ def print_3D_heatmap_no_img(structure, pred, landmark):
   plot_3d_pred_img_struc_no_img(structure_1, pred)
 
 # print structure as 3D gauss and then print prediction heatmap and the max of it 
-def print_3D_gauss_heatmap(image, structure_com_x, structure_com_y, structure_com_z, pred, landmark, sigma):
+def print_3D_gauss_heatmap(image, structure_com_x, structure_com_y, structure_com_z, pred, landmark, sigma, eval_path):
   # image
   # - C x H x W x D needs to be cut down to H x W x D
   # structure_com
@@ -235,7 +235,7 @@ def print_3D_gauss_heatmap(image, structure_com_x, structure_com_y, structure_co
   #threshold_structure = landmark # unuused
   #threshold_pred = threshold_pred_print # unused
 
-  plot_3d_pred_img_struc(image, structure_gauss, pred, threshold_img)
+  plot_3d_pred_img_struc(image, structure_gauss, pred, threshold_img, eval_path)
 
 
 
