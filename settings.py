@@ -99,11 +99,11 @@ def init():
     in_z = 80
     
     
-    # training parameters
-
+    # training parameter
     epoch_batch = 1
     num_epoch_batches = 1
-    net_features = 1
+    net_features = 16
+
     
     alpha = 1/25000
     reg = 0.01 # reg = 0.001
