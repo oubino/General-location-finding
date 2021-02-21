@@ -262,14 +262,10 @@ def performance_metrics(model,sigmas,gamma, epochs_completed):
     structure = batch['structure'].to(S.device)
     idx = batch['idx'].to(S.device)
     pred = model(image)
-    # pred is batch x 1 x 128 x 128 x 80 (there are # of landmarks x these)
-        # e.g. 4 lots of these
-    # image is batch x 128 x 128 x 80 
   
     batch_number = 0
     
     for l in S.landmarks: # cycle over all landmarks
-      index = S.landmarks.index(l)
       
       for i in range(S.batch_size):
         
@@ -283,9 +279,9 @@ def performance_metrics(model,sigmas,gamma, epochs_completed):
           height_guess = ((gamma) * (2*np.pi)**(-dimension/2) * sigmas[l].item() ** (-dimension)) 
           
           if S.pred_max == True:
-              pred_coords_max = functions.pred_max(pred[index], l, S.landmarks) # change to gauss fit
+              pred_coords_max = functions.pred_max(pred, l, S.landmarks) # change to gauss fit
           else:
-              pred_coords_max = functions.gauss_max(pred[index],l,height_guess,sigmas[l].item(), S.in_x, S.in_y, S.in_z, S.landmarks)  
+              pred_coords_max = functions.gauss_max(pred,l,height_guess,sigmas[l].item(), S.in_x, S.in_y, S.in_z, S.landmarks)  
 
           #print(pred.shape)
           
@@ -357,6 +353,4 @@ def performance_metrics(model,sigmas,gamma, epochs_completed):
         sigma_string = str(sigmas[l])
         writer.writerow(['%s' % S.run_folder, '%s' % epochs_completed_string, 'Landmark %1.0f' % l, 
              str(mean), str(std_mean),str(median),str(outliers_perc) + '%', sigma_string.replace("\n", " "), time.strftime("%Y%m%d-%H%M%S"), 'pred max used = %s' % S.pred_max])
-    
-  
     
