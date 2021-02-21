@@ -84,8 +84,8 @@ def top_structure(heatmap, landmark): # assumes 1 channel
       landmark_present.append(True)
       z_coords = locations[:,2]
       top_coords = locations[torch.max(z_coords, dim=0)[1].item()]
-      x_top = top_coords[0]
-      y_top = top_coords[1]
+      x_top = top_coords[1]
+      y_top = top_coords[0]
       z_top = top_coords[2]
        
     if i == 0:
@@ -123,8 +123,8 @@ def bot_structure(heatmap, landmark): # assumes 1 channel
       landmark_present.append(True)
       z_coords = locations[:,2]
       bot_coords = locations[torch.min(z_coords, dim=0)[1].item()]
-      x_bot = bot_coords[0]
-      y_bot = bot_coords[1]
+      x_bot = bot_coords[1]
+      y_bot = bot_coords[0]
       z_bot = bot_coords[2]
        
     if i == 0:
