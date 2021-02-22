@@ -30,6 +30,7 @@ def init():
     global save_data_path
     global landmarks_loc
     global net_features
+    global top_structures
         
     
     # data path
@@ -101,9 +102,9 @@ def init():
     
     # training parameters
 
-    epoch_batch = 1
-    num_epoch_batches = 1
-    net_features = 8
+    epoch_batch = 15
+    num_epoch_batches = 10
+    net_features = 16
     
     alpha = 1/25000
     reg = 0.01 # reg = 0.001
@@ -141,7 +142,7 @@ def init():
     downsample_user = True
     
     # run folder
-    run_folder = "run_21_feb_test_branch_2"
+    run_folder = "run_22_feb_multiple_heads_2_16ft"
     run_path = os.path.join(save_data_path, run_folder) 
     try:  
         os.mkdir(run_path)  
@@ -149,8 +150,8 @@ def init():
         print(error) 
     
     # load model path
-    run_folder_load = "run_21_test_branch_2"
-    epoch_load = str(1)
+    run_folder_load = "run_22_feb_multiple_heads_2_16ft"
+    epoch_load = str(150)
     
     # create tensorboard writer
     tensor_folder = os.path.join(save_data_path, 'tensorboard')
@@ -162,3 +163,5 @@ def init():
     img_counter_2 = 0
     img_counter_3 = 0
     
+    # structures near the top which can be used for flipping
+    top_structures = [5,6,3]

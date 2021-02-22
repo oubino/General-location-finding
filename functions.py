@@ -215,7 +215,7 @@ def gauss_max(heatmap, landmark, height_trained, sigma_trained, in_x, in_y, in_z
         
         # catch error
         try:
-            params = curve_fit(f, t.ravel() , heatmap[i][index].ravel(), p0 = p0)          
+            params = curve_fit(f, t.ravel() , heatmap[i].ravel(), p0 = p0)          
             x = params[0][1]
             y = params[0][0]
             z = params[0][2]  

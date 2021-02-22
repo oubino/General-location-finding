@@ -62,7 +62,7 @@ def plot_3d_pred_img_struc(image, structure, pred, threshold_img, eval_path):
 
     ax.add_collection3d(mesh_img)
     ax.add_collection3d(mesh_structure)
-    #ax.add_collection3d(mesh_pred)
+    ax.add_collection3d(mesh_pred)
 
     ax.set_xlim(0, image.shape[1])
     ax.set_ylim(0, image.shape[0])
@@ -267,7 +267,7 @@ def performance_metrics(model,sigmas,gamma, epochs_completed):
     # image is batch x 128 x 128 x 80 
   
     batch_number = 0
-    
+
     for l in S.landmarks: # cycle over all landmarks
       index = S.landmarks.index(l)
       

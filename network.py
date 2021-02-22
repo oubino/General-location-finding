@@ -109,9 +109,17 @@ class UNet3d(nn.Module):
         self.dec3 = DecoderUnit(4 * s_channels, s_channels)
         
         self.dec4 = FinalConvTranspose(2 * s_channels)
-        self.dec5 = ConvUnit(2*s_channels, s_channels)
         
-        self.out = OutConv(s_channels, 1)
+        self.dec5 = nn.ModuleList()
+        for i in range(len(S.landmarks)):
+            self.dec5.append(ConvUnit(2*s_channels, s_channels))
+        #self.dec5 = ConvUnit(2*s_channels, s_channels)
+        
+        self.out = nn.ModuleList()
+        for i in range(len(S.landmarks)):
+            self.out.append(OutConv(s_channels, 1))
+        
+        #self.out = OutConv(s_channels, 1)
 
     def forward(self, x):
         x1 = self.conv(x)
@@ -127,13 +135,14 @@ class UNet3d(nn.Module):
 
         x10 = []
         for i in range(len(S.landmarks)):
-          x10.append(self.dec5(x9))
+          x10.append(self.dec5[i](x9))
                
         outputs = []
         for i in range(len(S.landmarks)):
-          outputs.append(self.out(x10[i]))
+          outputs.append(self.out[i](x10[i]))
 
         return outputs
+        
 
         
 # SCNET 3D
