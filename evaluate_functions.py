@@ -185,8 +185,8 @@ def print_3D_heatmap(image, structure, pred, landmark, eval_path):
   structure = structure.cpu().numpy()
 
   threshold_img = S.threshold_img_print
-  #threshold_structure = structure_max # unused
-  #threshold_pred = threshold_pred_print # unused
+  threshold_structure = structure_max # unused
+  threshold_pred = threshold_pred_print # unused
 
 
   plot_3d_pred_img_struc(image, structure_1, pred, threshold_img, eval_path)

@@ -102,8 +102,8 @@ def init():
     
     # training parameters
     epoch_batch = 10
-    num_epoch_batches = 5
-    net_features = 16
+    num_epoch_batches = 20
+    net_features = 32
     
     alpha = 1/25000
     reg = 0.01 # reg = 0.001
@@ -141,7 +141,7 @@ def init():
     downsample_user = True
     
     # run folder
-    run_folder = "run_22_feb_16ft_200"
+    run_folder = "run_22_feb_32ft_200"
     run_path = os.path.join(save_data_path, run_folder) 
     try:  
         os.mkdir(run_path)  
@@ -149,7 +149,7 @@ def init():
         print(error) 
     
     # load model path
-    run_folder_load = "run_22_feb_16ft_200"
+    run_folder_load = "run_22_feb_32ft_200"
     epoch_load = str(200)
     
     # create tensorboard writer
