@@ -31,6 +31,7 @@ def init():
     global save_data_path
     global landmarks_loc
     global net_features
+    global top_structures
         
     
     # data path
@@ -161,4 +162,7 @@ def init():
     img_counter_1 = 0
     img_counter_2 = 0
     img_counter_3 = 0
+    
+    # structures near the top which can be used for flipping
+    top_structures = [5,6,3]
     

@@ -205,34 +205,26 @@ class Upsidedown_scipy(object):
         # if upside down need to flip
         # if left cochlea landmark = 5 above 1/2
         # data is y, x, z
-        landmark_loc = np.where(structure == 5)
-        if landmark_loc[0].size == 0: # if no 5 present check for 6
-            landmark_loc = np.where(structure == 6)
-            if landmark_loc[0].size == 0: # no 5 or 6 present just return image and structure
+        counter = 0
+        landmark_loc = np.where(structure == S.top_structures[counter])
+        while landmark_loc[0].size == 0:
+            counter += 1
+            try:
+                landmark_loc = np.where(structure == S.top_structures[counter])
+            except:
+                print('ERROR NONE OF THE TOP STRUCTURES FOUND IN IMAGE- returning unflipped image')
                 return {'image': image, 'structure': structure, 'idx': idx}
-            else:
-                z_landmark = landmark_loc[0][0]
-                z_size = structure.shape[0] 
-                if z_landmark < z_size/2:
-                    angle = 180
-                    image = scipy.ndimage.rotate(image, angle, axes = [2,0], reshape = False, order =0)
-                    #rotate(input, angle, axes=1, 0, reshape=True, output=None, order=3, mode='constant', cval=0.0, prefilter=True)
-                    structure = scipy.ndimage.rotate(structure, angle, axes = [2,0], reshape = False, order =0)
-                    return {'image': image, 'structure': structure, 'idx': idx}
-                else:
-                    return {'image': image, 'structure': structure, 'idx': idx}
-                    
+        
+        z_landmark = landmark_loc[0][0]
+        z_size = structure.shape[0] 
+        if z_landmark < z_size/2:
+            angle = 180
+            image = scipy.ndimage.rotate(image, angle, axes = [2,0], reshape = False, order =0)
+            #rotate(input, angle, axes=1, 0, reshape=True, output=None, order=3, mode='constant', cval=0.0, prefilter=True)
+            structure = scipy.ndimage.rotate(structure, angle, axes = [2,0], reshape = False, order =0)
+            return {'image': image, 'structure': structure, 'idx': idx}
         else:
-            z_landmark = landmark_loc[0][0]
-            z_size = structure.shape[0] 
-            if z_landmark < z_size/2:
-                angle = 180
-                image = scipy.ndimage.rotate(image, angle, axes = [2,0],reshape = False, order =0)
-                #rotate(input, angle, axes=1, 0, reshape=True, output=None, order=3, mode='constant', cval=0.0, prefilter=True)
-                structure = scipy.ndimage.rotate(structure, angle, axes = [2,0], reshape = False, order =0)
-                return {'image': image, 'structure': structure, 'idx': idx}
-            else:
-                return {'image': image, 'structure': structure, 'idx': idx}
+            return {'image': image, 'structure': structure, 'idx': idx}
         
     
 class Upsidedown(object):
