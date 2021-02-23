@@ -33,6 +33,7 @@ def init():
     global net_features
     global top_structures
     global left_structures, right_structures
+    global wing_loss, wing_omega, wing_epsilon, wing_alpha, wing_theta
         
     
     # data path
@@ -170,4 +171,15 @@ def init():
     # L/R structures
     left_structures = [1]
     right_structures = [2]
+    
+    # adaptive wing loss
+    wing_loss = True
+    # our max for heatmap is pre_factor 
+    # ((gamma) * (2*np.pi)**(-dimension/2) * sigma ** (-dimension))  roughly 1
+    # from paper, Wang et al
+    # We empirically used α= 2.1 in our model. In our ex-periments, we found ω= 14,epsilon= 1,θ= 0.5
+    wing_omega = 14
+    wing_epsilon = 1
+    wing_alpha = 2.1
+    wing_theta = 0.5
     

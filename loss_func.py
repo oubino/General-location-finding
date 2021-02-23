@@ -90,9 +90,19 @@ def calc_loss_gauss(img, pred, target, idx, metrics_landmarks, alpha, reg, gamma
         # l - 1 because l is 1,2,3,4,5,6
         
         # img_loss and sum_loss per landmark
-        img_loss = ((((pred_heatmap - targ_gaus)**2)).sum()) # multiply by targ gaus for box normalisation
-        sum_loss = ((((pred_heatmap - targ_gaus)**2)).sum())
-        
+        if S.wing_loss == False:
+            img_loss = ((((pred_heatmap - targ_gaus)**2)).sum()) # multiply by targ gaus for box normalisation
+            sum_loss = ((((pred_heatmap - targ_gaus)**2)).sum())
+        else:
+            A_1 = (1/ (1 +torch.pow(S.wing_theta/S.wing_epsilon,S.wing_alpha - targ_gaus)))
+            A_2 = (torch.pow((S.wing_theta/S.wing_epsilon),(S.wing_alpha-targ_gaus-1)))
+            A = S.wing_omega*A_1*(S.wing_alpha-targ_gaus)*A_2*(1/S.wing_epsilon)
+            C = (S.wing_theta*A-S.wing_omega*torch.log(1+torch.pow((S.wing_theta/S.wing_epsilon),S.wing_alpha-targ_gaus)))
+            a = torch.abs(targ_gaus-pred_heatmap)
+            log_arg = 1 + torch.pow(torch.abs((targ_gaus-pred_heatmap)/S.wing_epsilon), S.wing_alpha-targ_gaus)
+            img_loss = torch.where(torch.lt(a,S.wing_theta), S.wing_omega*torch.log(log_arg),A*a - C).sum()
+            sum_loss = torch.where(torch.lt(a,S.wing_theta), S.wing_omega*torch.log(log_arg),A*a - C).sum()
+
         # just to see
         #if sum_loss < 10:
         #    print_3D_heatmap(img.squeeze(0), target.squeeze(0), pred.squeeze(0), l)
