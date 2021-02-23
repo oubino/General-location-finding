@@ -105,7 +105,7 @@ def init():
     
     
     # training parameters
-    epoch_batch = 5
+    epoch_batch = 15
     num_epoch_batches = 1
     net_features = 16
     
@@ -145,7 +145,7 @@ def init():
     downsample_user = True
     
     # run folder
-    run_folder = "run_23_feb_p2p_term"
+    run_folder = "run_23_feb_16_ft"
     run_path = os.path.join(save_data_path, run_folder) 
     try:  
         os.mkdir(run_path)  
@@ -153,7 +153,7 @@ def init():
         print(error) 
     
     # load model path
-    run_folder_load = "run_23_feb_p2p_term"
+    run_folder_load = "run_23_feb_16_ft"
     epoch_load = str(150)
     
     # create tensorboard writer
@@ -185,7 +185,7 @@ def init():
     wing_theta = 0.5
     
     # penalise p2p 
-    p2p_reg_term = 50
+    p2p_reg_term = 0
     
     
     
