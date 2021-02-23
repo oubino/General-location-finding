@@ -34,6 +34,7 @@ def init():
     global top_structures
     global left_structures, right_structures
     global wing_loss, wing_omega, wing_epsilon, wing_alpha, wing_theta
+    global p2p_reg_term
         
     
     # data path
@@ -104,8 +105,8 @@ def init():
     
     
     # training parameters
-    epoch_batch = 15
-    num_epoch_batches = 10
+    epoch_batch = 5
+    num_epoch_batches = 1
     net_features = 16
     
     alpha = 1/25000
@@ -144,7 +145,7 @@ def init():
     downsample_user = True
     
     # run folder
-    run_folder = "run_23_feb_16_ft"
+    run_folder = "run_23_feb_p2p_term"
     run_path = os.path.join(save_data_path, run_folder) 
     try:  
         os.mkdir(run_path)  
@@ -152,7 +153,7 @@ def init():
         print(error) 
     
     # load model path
-    run_folder_load = "run_23_feb_16_ft"
+    run_folder_load = "run_23_feb_p2p_term"
     epoch_load = str(150)
     
     # create tensorboard writer
@@ -173,7 +174,7 @@ def init():
     right_structures = [2]
     
     # adaptive wing loss
-    wing_loss = True
+    wing_loss = False
     # our max for heatmap is pre_factor 
     # ((gamma) * (2*np.pi)**(-dimension/2) * sigma ** (-dimension))  roughly 1
     # from paper, Wang et al
@@ -182,4 +183,9 @@ def init():
     wing_epsilon = 1
     wing_alpha = 2.1
     wing_theta = 0.5
+    
+    # penalise p2p 
+    p2p_reg_term = 50
+    
+    
     
