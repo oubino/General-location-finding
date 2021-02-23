@@ -95,6 +95,8 @@ class Normalise(object):
       img_norm = np.clip(image, minval, maxval)
       img_norm -= minval
       img_norm /= self.window
+      print('normalisation values')
+      print(minval, maxval)
       return {'image':img_norm, 'structure': structure, 'idx': idx} # note note !
 
 class CentreCrop(object):    
