@@ -197,6 +197,22 @@ class Horizontal_flip(object):
             structure = np.flip(structure, axis = 2).copy()
             #print('horizontal flipped')
         return {'image': image, 'structure': structure, 'idx': idx}
+
+class Flip_left_right_structures(object):
+    def __call__(self,sample):
+        image, structure, idx = sample['image'], sample['structure'], sample['idx']
+        for i in range(len(S.left_structures)):
+            # all locations of left structure, take on value of right structure
+            # and vice versa
+            # structure is DxHxW
+            indices_left = np.round(structure) == S.left_structures[i]
+            indices_right = np.round(structure) == S.right_structures[i]
+            # trial method if maximum right structure coord > maximum left structure coord then flip
+            if np.amin(np.nonzero(indices_right)[2]) > np.amax(np.nonzero(indices_left)[2]):
+                structure[indices_left] = S.right_structures[i] 
+                structure[indices_right] = S.left_structures[i] 
+                #print('flipped landmarks')
+            return {'image': image, 'structure': structure, 'idx': idx}
        
     
 class Upsidedown_scipy(object):

@@ -31,7 +31,8 @@ def init():
     global landmarks_loc
     global net_features
     global top_structures
-    global wing_w, wing_epsilon, wing_alpha, wing_theta
+    global left_structures, right_structures
+    global wing_loss, wing_omega, wing_epsilon, wing_alpha, wing_theta
         
     
     # data path
@@ -66,8 +67,6 @@ def init():
         
         
    
-    
-    
     print('Results directory:')
     print(save_data_path)
     
@@ -89,7 +88,7 @@ def init():
     # sigmas = defaultdict(float) ?
     sigmas = {} # sigma per landmark
     for k in landmarks:
-      sigmas[k] = nn.Parameter(torch.tensor([10.]).to(device))# device = 'cuda'))#.to(device) # what value to initialise sigma
+      sigmas[k] = nn.Parameter(torch.tensor([20.]).to(device))# device = 'cuda'))#.to(device) # what value to initialise sigma
       sigmas[k].requires_grad = True
       #print(sigmas[k])
     
@@ -103,7 +102,7 @@ def init():
     
     # training parameters
 
-    epoch_batch = 1
+    epoch_batch = 5
     num_epoch_batches = 1
     net_features = 16
     
@@ -143,7 +142,7 @@ def init():
     downsample_user = True
     
     # run folder
-    run_folder = "run_23_feb_multiple_heads_2_test"
+    run_folder = "run_23_feb_multiple_heads_2_test_wing_loss"
     run_path = os.path.join(save_data_path, run_folder) 
     try:  
         os.mkdir(run_path)  
@@ -166,9 +165,20 @@ def init():
     
     # structures near the top which can be used for flipping
     top_structures = [5,6,3]
+    
+    # L/R structures
+    left_structures = [1]
+    right_structures = [2]
 
     # adaptive wing loss
-    wing_w = 
-    wing_epsilon = 
-    wing_alpha = 
-    wing_theta = 
+    wing_loss = True
+    # our max for heatmap is pre_factor 
+    # ((gamma) * (2*np.pi)**(-dimension/2) * sigma ** (-dimension))  roughly 1
+    # from paper, Wang et al
+    # We empirically used α= 2.1 in our model. In our ex-periments, we found ω= 14,epsilon= 1,θ= 0.5
+    wing_omega = 14
+    wing_epsilon = 1
+    wing_alpha = 2.1
+    wing_theta = 0.5
+    
+    

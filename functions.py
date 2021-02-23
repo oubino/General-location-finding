@@ -327,7 +327,7 @@ def weights_init(m):
         torch.nn.init.kaiming_normal_(m.weight, mode='fan_in', nonlinearity='relu') # change if switch to ReLU
         torch.nn.init.zeros_(m.bias)
         
-        
+       
 os.chdir(S.coding_path) # change to data path and change back at end
 print('Coding directory: ')
 print(os.getcwd())
