@@ -197,7 +197,7 @@ class Flip_left_right_structures(object):
             indices_left = np.round(structure) == S.left_structures[i]
             indices_right = np.round(structure) == S.right_structures[i]
             # trial method if maximum right structure coord > maximum left structure coord then flip
-            if np.amax(np.nonzero(indices_right)[2]) > np.amax(np.nonzero(indices_left)[2]):
+            if np.amin(np.nonzero(indices_right)[2]) > np.amax(np.nonzero(indices_left)[2]):
                 structure[indices_left] = S.right_structures[i] 
                 structure[indices_right] = S.left_structures[i] 
                 #print('flipped landmarks')
