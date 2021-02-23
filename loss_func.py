@@ -92,8 +92,9 @@ def calc_loss_gauss(img, pred, target, idx, metrics_landmarks, alpha, reg, gamma
       # l - 1 because l is 1,2,3,4,5,6
       
       # img_loss and sum_loss per landmark
-      img_loss = ((((pred_heatmap - targ_gaus)**2)).sum()) # multiply by targ gaus for box normalisation
-      sum_loss = ((((pred_heatmap - targ_gaus)**2)).sum())
+      #img_loss = ((((pred_heatmap - targ_gaus)**2)).sum()) # multiply by targ gaus for box normalisation
+      #sum_loss = ((((pred_heatmap - targ_gaus)**2)).sum())
+      
       
       # just to see
       #if sum_loss < 10:

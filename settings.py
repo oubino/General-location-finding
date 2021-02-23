@@ -31,6 +31,7 @@ def init():
     global landmarks_loc
     global net_features
     global top_structures
+    global wing_w, wing_epsilon, wing_alpha, wing_theta
         
     
     # data path
@@ -165,3 +166,9 @@ def init():
     
     # structures near the top which can be used for flipping
     top_structures = [5,6,3]
+
+    # adaptive wing loss
+    wing_w = 
+    wing_epsilon = 
+    wing_alpha = 
+    wing_theta = 
