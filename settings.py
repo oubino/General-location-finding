@@ -88,7 +88,7 @@ def init():
     # sigmas = defaultdict(float) ?
     sigmas = {} # sigma per landmark
     for k in landmarks:
-      sigmas[k] = nn.Parameter(torch.tensor([20.]).to(device))# device = 'cuda'))#.to(device) # what value to initialise sigma
+      sigmas[k] = nn.Parameter(torch.tensor([10.]).to(device))# device = 'cuda'))#.to(device) # what value to initialise sigma
       sigmas[k].requires_grad = True
       #print(sigmas[k])
     
@@ -102,8 +102,8 @@ def init():
     
     # training parameters
 
-    epoch_batch = 15
-    num_epoch_batches = 10
+    epoch_batch = 1
+    num_epoch_batches = 1
     net_features = 16
     
     alpha = 1/25000
@@ -142,7 +142,7 @@ def init():
     downsample_user = True
     
     # run folder
-    run_folder = "run_22_feb_multiple_heads_2_16ft"
+    run_folder = "run_23_feb_multiple_heads_2_test"
     run_path = os.path.join(save_data_path, run_folder) 
     try:  
         os.mkdir(run_path)  
@@ -150,8 +150,8 @@ def init():
         print(error) 
     
     # load model path
-    run_folder_load = "run_22_feb_multiple_heads_2_16ft"
-    epoch_load = str(150)
+    run_folder_load = "run_23_feb_multiple_heads_2_16ft"
+    epoch_load = str(200)
     
     # create tensorboard writer
     tensor_folder = os.path.join(save_data_path, 'tensorboard')

@@ -10,6 +10,7 @@ import data_loaders
 import train_function
 import evaluate_functions
 import os
+import yes_or_no
 
 def init():    
     
@@ -17,7 +18,9 @@ def init():
     for k in S.landmarks:
 #      print(paths.PATH_sigma_load)
       PATH_sigma_load = os.path.join(paths.epoch_load, "sigma_%1.0f.pt" % k)
-      S.sigmas[k] = torch.load(PATH_sigma_load)['sigma'] # what value to initialise sigma
+      load_sigmas = yes_or_no.question('would you like to load in the trained sigma for landmark %1.0f, if no then can load in new ones with different values i.e. to test with sigma = 10' % k)
+      if load_sigmas == True:
+          S.sigmas[k] = torch.load(PATH_sigma_load)['sigma'] # what value to initialise sigma
 
     global model_load
     global optimizer_load
