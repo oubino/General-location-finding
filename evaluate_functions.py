@@ -60,9 +60,9 @@ def plot_3d_pred_img_struc(image, structure, pred, threshold_img, eval_path):
     mesh_pred.set_facecolor(face_color_pred)
 
 
-    #ax.add_collection3d(mesh_img)
-    #ax.add_collection3d(mesh_structure)
-    #ax.add_collection3d(mesh_pred)
+    ax.add_collection3d(mesh_img)
+    ax.add_collection3d(mesh_structure)
+    ax.add_collection3d(mesh_pred)
 
     ax.set_xlim(0, image.shape[1])
     ax.set_ylim(0, image.shape[0])
@@ -186,7 +186,7 @@ def print_3D_heatmap(image, structure, pred, landmark, eval_path):
 
   threshold_img = S.threshold_img_print
   threshold_structure = structure_max # unused
-  threshold_pred = threshold_pred_print # unused
+  #threshold_pred = threshold_pred_print # unused
 
 
   plot_3d_pred_img_struc(image, structure_1, pred, threshold_img, eval_path)
@@ -293,7 +293,7 @@ def performance_metrics(model,sigmas,gamma, epochs_completed):
           if batch_number == 0 and i == 0: # for first batch 
             # now need to choose first in batch i.e. # image[0]
             #print('3D plots for landmark %1.0f' % l)
-            print_3D_heatmap(image[i], structure[i], pred[i], l, eval_path)
+            #print_3D_heatmap(image[i], structure[i], pred[i], l, eval_path)
             print_3D_gauss_heatmap(image[i], structure_max_x, structure_max_y, structure_max_z, pred[i], l, sigmas[l], eval_path)
             print('\n')
             print('Structure LOC for landmark %1.0f:' % l)
