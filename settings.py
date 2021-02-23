@@ -62,7 +62,7 @@ def init():
             # Oli paths
             coding_path = r'/home/olive/GitHub/General-location-finding'
             root = r'/home/olive/data/HNSCC_deepmind_cropped'
-            save_data_path = r'/home/olive/data/results/Oli'
+            save_data_path = r'/home/olive/data/results_oli'
             
         
         
