@@ -60,7 +60,7 @@ def init():
             save_data_path = r'/home/rankinaaron98/data/results/Aaron'
         elif aaron_or_oli == False:
             # Oli paths
-            coding_path = r'/home/olive/General-location-finding'
+            coding_path = r'/home/olive/GitHub/General-location-finding'
             root = r'/home/olive/data/HNSCC_deepmind_cropped'
             save_data_path = r'/home/olive/data/results/Oli'
             
