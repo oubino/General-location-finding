@@ -134,7 +134,7 @@ def init():
     downsample_idx_list = np.empty((0), float)
     
     # use predicted max - if want gauss fit set to false
-    pred_max = True
+    pred_max = False
     
     # unique timestamp for model
     time_stamp = time.strftime("%Y%m%d-%H%M%S")
@@ -146,7 +146,7 @@ def init():
     downsample_user = True
     
     # run folder
-    run_folder = "run_24_feb_16_ft_reg_term"
+    run_folder = "run_24_feb_16_ft"
     run_path = os.path.join(save_data_path, run_folder) 
     try:  
         os.mkdir(run_path)  
@@ -154,7 +154,7 @@ def init():
         print(error) 
     
     # load model path
-    run_folder_load = "run_24_feb_16_ft_reg_term"
+    run_folder_load = "run_24_feb_16_ft"
     epoch_load = str(150)
     
     # create tensorboard writer
