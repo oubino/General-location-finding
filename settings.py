@@ -35,6 +35,7 @@ def init():
     global left_structures, right_structures
     global wing_loss, wing_omega, wing_epsilon, wing_alpha, wing_theta
     global p2p_reg_term
+    global error_counter
         
     
     # data path
@@ -105,7 +106,7 @@ def init():
     
     
     # training parameters
-    epoch_batch = 5
+    epoch_batch = 15
     num_epoch_batches = 10
     net_features = 16
     
@@ -133,7 +134,7 @@ def init():
     downsample_idx_list = np.empty((0), float)
     
     # use predicted max - if want gauss fit set to false
-    pred_max = False
+    pred_max = True
     
     # unique timestamp for model
     time_stamp = time.strftime("%Y%m%d-%H%M%S")
@@ -145,7 +146,7 @@ def init():
     downsample_user = True
     
     # run folder
-    run_folder = "run_23_feb_16_ft"
+    run_folder = "run_24_feb_16_ft"
     run_path = os.path.join(save_data_path, run_folder) 
     try:  
         os.mkdir(run_path)  
@@ -153,8 +154,8 @@ def init():
         print(error) 
     
     # load model path
-    run_folder_load = "run_23_feb_16_ft"
-    epoch_load = str(150)
+    run_folder_load = "run_24_feb_16_ft"
+    epoch_load = str(1)
     
     # create tensorboard writer
     tensor_folder = os.path.join(save_data_path, 'tensorboard')
@@ -185,7 +186,12 @@ def init():
     wing_theta = 0.5
     
     # penalise p2p 
-    p2p_reg_term = 50
+    p2p_reg_term = 0
+    
+    # error counter
+    error_counter = 0
+    
+    
     
     
     

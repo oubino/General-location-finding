@@ -76,6 +76,15 @@ class Resize(object):
       S.downsample_idx_list = np.append(S.downsample_idx_list, idx)     
         
       return {'image':image, 'structure': structure, 'idx': idx} # note note !
+  
+class Fix_base_value(object):  
+  """ Some images start from -1024, others from 0 make sure all start from 0 """
+                            
+  def __call__(self, sample):
+      image, structure, idx = sample['image'], sample['structure'], sample['idx']
+      if np.round(np.amin(image)) < -1000:
+          image = image + np.abs(np.round(np.amin(image)))
+      return {'image':image, 'structure': structure, 'idx': idx} # note note !
 
 class Normalise(object):  
   """ Normalise CT scan in the desired examination window
@@ -89,14 +98,17 @@ class Normalise(object):
   def __call__(self, sample):
       image, structure, idx = sample['image'], sample['structure'], sample['idx']
       # need to normalise around different values
+      if np.round(np.amin(image)) < 0:
+          print("MIN VALUE LESS THAN 0")
+          print('idx and min value')
+          print(idx, np.amin(image))
+          S.error_counter += 1
       level = random.randint(self.level_min, self.level_max)
       minval = max(level - self.window/2, 0) # ensures don't go to negative values
       maxval = level + self.window/2
       img_norm = np.clip(image, minval, maxval)
       img_norm -= minval
       img_norm /= self.window
-      print('normalisation values')
-      print(minval, maxval)
       return {'image':img_norm, 'structure': structure, 'idx': idx} # note note !
 
 class CentreCrop(object):    

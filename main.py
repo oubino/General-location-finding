@@ -37,7 +37,9 @@ if initialise == True:
     print('\n')
     print('Evaluating model')
     print('----------------')
-    initialise_model.evaluate()    
+    initialise_model.evaluate()   
+    print('error counter')
+    print(settings.error_counter)
         
 
 elif initialise == False:
@@ -67,3 +69,5 @@ elif initialise == False:
         print('Evaluating model')
         print('----------------')
         load_model.evaluate_pre_train()
+    print('error counter')
+    print(settings.error_counter)
