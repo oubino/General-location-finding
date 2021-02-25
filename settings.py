@@ -146,7 +146,7 @@ def init():
     downsample_user = True
     
     # run folder
-    run_folder = "run_25_feb_16_ft_window_level_mod"
+    run_folder = "run_25_feb_16_ft_wing_loss"
     run_path = os.path.join(save_data_path, run_folder) 
     try:  
         os.mkdir(run_path)  
@@ -154,7 +154,7 @@ def init():
         print(error) 
     
     # load model path
-    run_folder_load = "run_25_feb_16_ft_window_level_mod"
+    run_folder_load = "run_25_feb_16_ft_wing_loss"
     epoch_load = str(130)
     
     # create tensorboard writer
@@ -175,7 +175,7 @@ def init():
     right_structures = [2]
     
     # adaptive wing loss
-    wing_loss = False
+    wing_loss = True
     # our max for heatmap is pre_factor 
     # ((gamma) * (2*np.pi)**(-dimension/2) * sigma ** (-dimension))  roughly 1
     # from paper, Wang et al
