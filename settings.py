@@ -107,7 +107,7 @@ def init():
     
     # training parameters
     epoch_batch = 10
-    num_epoch_batches = 5
+    num_epoch_batches = 15
     net_features = 16
     
     alpha = 1/25000
@@ -134,7 +134,7 @@ def init():
     downsample_idx_list = np.empty((0), float)
     
     # use predicted max - if want gauss fit set to false
-    pred_max = False
+    pred_max = True
     
     # unique timestamp for model
     time_stamp = time.strftime("%Y%m%d-%H%M%S")
@@ -146,7 +146,7 @@ def init():
     downsample_user = True
     
     # run folder
-    run_folder = "run_24_feb_16_ft_reg_term"
+    run_folder = "run_25_feb_16_ft_window_level_mod"
     run_path = os.path.join(save_data_path, run_folder) 
     try:  
         os.mkdir(run_path)  
@@ -154,8 +154,8 @@ def init():
         print(error) 
     
     # load model path
-    run_folder_load = "run_24_feb_16_ft_reg_term"
-    epoch_load = str(200)
+    run_folder_load = "run_25_feb_16_ft_window_level_mod"
+    epoch_load = str(150)
     
     # create tensorboard writer
     tensor_folder = os.path.join(save_data_path, 'tensorboard')
