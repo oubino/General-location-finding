@@ -107,7 +107,7 @@ def init():
     
     # training parameters
     epoch_batch = 10
-    num_epoch_batches = 15
+    num_epoch_batches = 2
     net_features = 16
     
     alpha = 1/25000
@@ -155,7 +155,7 @@ def init():
     
     # load model path
     run_folder_load = "run_25_feb_16_ft_window_level_mod"
-    epoch_load = str(150)
+    epoch_load = str(130)
     
     # create tensorboard writer
     tensor_folder = os.path.join(save_data_path, 'tensorboard')
