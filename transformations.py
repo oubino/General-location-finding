@@ -42,8 +42,8 @@ class Rescale(object):
         
         # h and w are swapped for mask because for images,
         # x and y axes are axis 1 and 0 respectively
-        img = transform.resize(image, (d, new_h, new_w),preserve_range = True, anti_aliasing = False) # anti-aliasing was false
-        structure = transform.resize(structure, (d, new_h,new_w), preserve_range = True,  anti_aliasing = False) # anti-aliasing was false
+        img = transform.resize(image, (d, new_h, new_w),preserve_range = True, anti_aliasing = True) # anti-aliasing was false
+        structure = transform.resize(structure, (d, new_h,new_w), preserve_range = True,  anti_aliasing = True) # anti-aliasing was false
         #mask_centre =  transform.resize(mask_centre, (new_h,new_w), preserve_range = True, anti_aliasing = True)
         #print(mask.max())
         #print(mask.min())
@@ -155,6 +155,9 @@ class CentreCrop(object):
 
       return {'image':image, 'structure': structure, 'idx':idx} # note note !
 
+    
+    
+
 
 class ToTensor(object):
     """Convert ndarrays in sample to Tensors."""
@@ -172,6 +175,15 @@ class ToTensor(object):
         image = image.unsqueeze(0)
         return {'image': image,'structure': structure, 'idx': idx}
 
+class Flips(object):
+
+    def __call__(self, sample):
+      image, structure, idx = sample['image'], sample['structure'], sample['idx']
+      if random.random() <= 0.5:
+        flip = transforms.Compose([aug.RandomHorizontalFlip3D(p=1, same_on_batch= True)])
+        image = flip(image)
+        structure = flip(structure)
+      return {'image': image, 'structure': structure, 'idx':idx}
 
 class Flips_scipy(object):
     def __call__(self,sample):
@@ -204,7 +216,21 @@ class Flip_left_right_structures(object):
                 structure[indices_right] = S.left_structures[i] 
                 #print('flipped landmarks')
             return {'image': image, 'structure': structure, 'idx': idx}
-
+    
+class Horizontal_flip(object):
+    def __call__(self,sample):
+        image, structure, idx = sample['image'], sample['structure'], sample['idx']
+        random_number = random.random()
+        if random_number <= 0.5:
+            #print('image shape', image.shape)
+            image = np.flip(image, axis = 2).copy()
+            structure = np.flip(structure, axis = 2).copy()
+            #print('horizontal flipped')
+            # flip any left right structures 
+            #structure = flip_left_right_structures(structure)
+            #print('horizontal flipped')
+        return {'image': image, 'structure': structure, 'idx': idx}
+       
     
 class Upsidedown_scipy(object):
     def __call__(self,sample):
@@ -234,21 +260,26 @@ class Upsidedown_scipy(object):
         else:
             return {'image': image, 'structure': structure, 'idx': idx}
         
-class Horizontal_flip(object):
-    def __call__(self,sample):
-        image, structure, idx = sample['image'], sample['structure'], sample['idx']
-        random_number = random.random()
-        if random_number <= 0.5:
-            #print('image shape', image.shape)
-            image = np.flip(image, axis = 2).copy()
-            structure = np.flip(structure, axis = 2).copy()
-            #print('horizontal flipped')
-            # flip any left right structures 
-            #structure = flip_left_right_structures(structure)
-            #print('horizontal flipped')
-        return {'image': image, 'structure': structure, 'idx': idx}
-       
-
+    
+class Upsidedown(object):
+  def __call__(self,sample):
+    image, structure, idx = sample['image'], sample['structure'], sample['idx']
+    # if upside down need to flip
+    # if left cochlea landmark = 5 above 1/2
+    # note that cause kornea takes in z, y, x between pre and post tranpose
+    # data is z, y, x
+    # com structure takes in y, x, z -> x, y, z
+    # therefore if take in z, y, x -> y, z, x (*1)
+    structure_com = functions.com_structure(structure.unsqueeze(0), 5)
+    structure_com_z = structure_com[0][0][1] # see (*1)
+    z_size = structure.size()[1] # cause in this section is z, y, x
+    #print(structure_com_z, z_size/2)
+    if structure_com_z < z_size/2:
+      flip = transforms.Compose([aug.RandomVerticalFlip3D(p=1)])
+      image = flip(image)
+      structure = flip(structure)
+    #structure = torch.squeeze(structure,0)
+    return {'image': image, 'structure': structure, 'idx': idx}
 
 class Unsqueeze(object):
   def __call__(self,sample):
@@ -258,6 +289,30 @@ class Unsqueeze(object):
     return {'image': image, 'structure': structure, 'idx': idx}
 
 
+
+
+# for now not going to use below because not sure if it acts on image and structure equally
+class Affine(object):
+  def __call__(self, sample):
+    image, structure, idx = sample['image'], sample['structure'], sample['idx']
+    if random.random() <= 0.3:
+      affine = transforms.Compose([aug.RandomAffine3D(degrees=(0,10,10), translate=(0,0.05,0.05), same_on_batch=True, p=1)])
+      image = affine(image)
+      print('affined')
+      structure = affine(structure)
+
+
+    return{'image': image, 'structure': structure, 'idx': idx}
+
+class Noise(object):  # helps prevent overfitting
+  #Random noise images
+  def __call__(self,sample):
+    image, structure, idx = sample['image'], sample['structure'], sample['idx']
+    if random.random() <= 1:
+      noise = transforms.Compose(aug.RandomMotionBlur3D(5, 10, direction=0, p=1))
+      image = noise(image)
+    return {'image': image, 'structure': structure, 'idx': idx}
+
 class Noise1(object):  # helps prevent overfitting
  # Random noise images
   def __call__(self,sample):
@@ -266,3 +321,38 @@ class Noise1(object):  # helps prevent overfitting
       image = skimage.util.random_noise(image, mean = 0, var = 1.0000000001, clip = False)
       # would this work given that mask is unchanged??
     return {'image': image, 'structure': structure}
+class Pre_Transpose(object):
+  def __call__(self, sample):
+    image, structure = sample['image'], sample['structure']
+    image = torch.transpose(image, 1, 3)
+    image = torch.transpose(image, 2, 3)
+    structure = torch.transpose(structure, 1, 3)
+    structure = torch.transpose(structure, 2, 3)
+
+    return {'image': image, 'structure': structure}
+
+class Post_Transpose(object):
+  def __call__(self, sample):
+    image, structure = sample['image'], sample['structure']
+    #torch.squeeze(image, 0)
+    #torch.squeeze(structure, 0)
+
+    structure = torch.squeeze(structure,0)
+    image = torch.squeeze(image, 0)
+    #torch.squeeze(structure,0)
+    #torch.squeeze(image, 0)
+    image = torch.transpose(image, 3, 2)
+    image = torch.transpose(image, 3, 1)
+    structure = torch.transpose(structure, 3, 2)
+    structure = torch.transpose(structure, 3, 1)
+
+    return {'image': image, 'structure': structure}
+'''
+class Squeeze(object):
+  def __call__(self, sample):
+    image, structure = sample['image'], sample['structure']
+    image = torch.squeeze(image, 0)
+    print('squeeze')
+    structure = torch.squeeze(structure, 0)
+    return {'image': image, 'structure': structure}
+'''
