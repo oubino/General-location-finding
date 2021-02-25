@@ -86,8 +86,8 @@ def init():
     
     batch_size = 1
     
-    landmarks = [1,2,3,4] # brainstem # not general
-    landmarks_loc = {1:'bot', 2:'bot', 3: 'top', 4:'top'} 
+    landmarks = [1,2,3,4,5,6] # brainstem # not general
+    landmarks_loc = {1:'bot', 2:'bot', 3: 'top', 4:'top', 5:'bot', 6:'top'} 
         # define which part of OAR to find
     
     # sigmas = defaultdict(float) ?
@@ -106,8 +106,8 @@ def init():
     
     
     # training parameters
-    epoch_batch = 10
-    num_epoch_batches = 15
+    epoch_batch = 1
+    num_epoch_batches = 1
     net_features = 16
     
     alpha = 1/25000
@@ -121,8 +121,8 @@ def init():
     
     # normalise parameters
     normal_min = 15 + 1024
-    normal_max = 50 + 1024
-    normal_window = 1000
+    normal_max = 400 + 1024
+    normal_window = 1800
     
     # mixed precision
     use_amp = True
@@ -146,7 +146,7 @@ def init():
     downsample_user = True
     
     # run folder
-    run_folder = "run_25_feb_16_ft_window_level_mod"
+    run_folder = "run_25_feb_16_ft_addcochleas"
     run_path = os.path.join(save_data_path, run_folder) 
     try:  
         os.mkdir(run_path)  
@@ -154,7 +154,7 @@ def init():
         print(error) 
     
     # load model path
-    run_folder_load = "run_25_feb_16_ft_window_level_mod"
+    run_folder_load = "run_25_feb_16_ft_"
     epoch_load = str(150)
     
     # create tensorboard writer
@@ -171,8 +171,8 @@ def init():
     top_structures = [5,6,3]
     
     # L/R structures
-    left_structures = [1]
-    right_structures = [2]
+    left_structures = [1,5]
+    right_structures = [2,6]
     
     # adaptive wing loss
     wing_loss = False

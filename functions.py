@@ -115,6 +115,9 @@ def bot_structure(heatmap, landmark): # assumes 1 channel
       print('no structure for %1.0f' % landmark)
       print('heatmap maximum value %5.2f' % heatmap[i][0].max())
       print('heatmap minimum value %5.2f' % heatmap[i][0].min())
+      #print(heatmap)
+     # checkimg = torch.tensor(heatmap).to(S.device)
+      #print(checkimg)
       landmark_present.append(False)
       x_bot = torch.tensor(0, dtype = torch.float64).to(S.device) # in theory this should not be used
       y_bot = torch.tensor(0, dtype = torch.float64).to(S.device)
