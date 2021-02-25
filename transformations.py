@@ -8,6 +8,7 @@ import torch
 import numpy as np
 import functions
 import settings as S
+import numpy_loc
 
 class Rescale(object): 
     # need to change rescale so longer side is matched to int and then pad
@@ -66,16 +67,30 @@ class Resize(object):
       d_pre, h_pre, w_pre = image.shape[:3]
         
       image = skimage.transform.resize(image, (depth, width, height), order = 0, preserve_range=True, anti_aliasing=False )
-      structure = skimage.transform.resize(structure, (depth, width, height), order = 0, preserve_range=True, anti_aliasing=False )
+      #structure = skimage.transform.resize(structure, (depth, width, height), order = 0, preserve_range = True, anti_aliasing=False )
         
       d_post, h_post, w_post = image.shape[:3] 
     
       S.downsample_ratio_h = np.append(S.downsample_ratio_h, h_pre/h_post)
       S.downsample_ratio_w = np.append(S.downsample_ratio_w, w_pre/w_post)
       S.downsample_ratio_d = np.append(S.downsample_ratio_d, d_pre/d_post)
-      S.downsample_idx_list = np.append(S.downsample_idx_list, idx)     
+      S.downsample_idx_list = np.append(S.downsample_idx_list, idx) 
+      
+      structure_new = np.zeros(image.shape)
+      for l in S.landmarks:
+          #index = S.landmarks.index(l)
+          old_index = np.where(structure == l) # z y x
+          if len(old_index) != 0:
+              new_z = int(old_index[0] * d_post/d_pre)
+              new_y = int(old_index[1] * h_post/h_pre)
+              new_x = int(old_index[2] * w_post/w_pre)
+          else:
+              new_z = int(0)
+              new_y = int(0)
+              new_x = int(0)
+          structure_new[new_z][new_y][new_x] = l
         
-      return {'image':image, 'structure': structure, 'idx': idx} # note note !
+      return {'image':image, 'structure': structure_new, 'idx': idx} # note note !
   
 class Fix_base_value(object):  
   """ Some images start from -1024, others from 0 make sure all start from 0 """
@@ -85,6 +100,21 @@ class Fix_base_value(object):
       if np.round(np.amin(image)) < -1000:
           image = image + np.abs(np.round(np.amin(image)))
       return {'image':image, 'structure': structure, 'idx': idx} # note note !
+  
+class Extract_landmark_location(object):
+    """ Convert structure to tensor of zeros with one value at the desired landmark location """
+    
+    def __call__(self,sample):
+        image, structure, idx = sample['image'], sample['structure'], sample['idx']
+        structure_mod = np.zeros(structure.shape)
+        for l in S.landmarks:
+            # structure is z, y, x
+            # need it in y, x, z
+            coords = numpy_loc.landmark_loc_np(S.landmarks_loc[l],structure,l)[0]
+            x, y, z = coords[0], coords[1], coords[2]
+            structure_mod[z][y][x] = l
+        return {'image':image, 'structure': structure_mod, 'idx': idx} # note note !
+        
 
 class Normalise(object):  
   """ Normalise CT scan in the desired examination window
