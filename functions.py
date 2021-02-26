@@ -28,8 +28,8 @@ def com_structure(heatmap, landmark): # assumes 1 channel
     
     if (locations.size(0) == 0): # if no landmarks detected for image in batch
       print('no structure for %1.0f' % landmark)
-      print('heatmap maximum value %5.2f' % heatmap[i][0].max())
-      print('heatmap minimum value %5.2f' % heatmap[i][0].min())
+      #print('heatmap maximum value %5.2f' % heatmap[i][0].max())
+      #print('heatmap minimum value %5.2f' % heatmap[i][0].min())
       landmark_present.append(False)
       x_com = torch.tensor(0, dtype = torch.float64).to(S.device) # in theory this should not be used
       y_com = torch.tensor(0, dtype = torch.float64).to(S.device)
@@ -74,8 +74,8 @@ def top_structure(heatmap, landmark): # assumes 1 channel
     #counter = torch.tensor(1, dtype = torch.float64).to(S.device) # counter defines number of points at top per image
     if (locations.size(0) == 0): # if no landmarks detected for image in batch
       print('no structure for %1.0f' % landmark)
-      print('heatmap maximum value %5.2f' % heatmap[i][0].max())
-      print('heatmap minimum value %5.2f' % heatmap[i][0].min())
+      #print('heatmap maximum value %5.2f' % heatmap[i][0].max())
+      #print('heatmap minimum value %5.2f' % heatmap[i][0].min())
       landmark_present.append(False)
       x_top = torch.tensor(0, dtype = torch.float64).to(S.device) # in theory this should not be used
       y_top = torch.tensor(0, dtype = torch.float64).to(S.device)
@@ -113,8 +113,8 @@ def bot_structure(heatmap, landmark): # assumes 1 channel
     #counter = torch.tensor(1, dtype = torch.float64).to(S.device) # counter defines number of points at top per image
     if (locations.size(0) == 0): # if no landmarks detected for image in batch
       print('no structure for %1.0f' % landmark)
-      print('heatmap maximum value %5.2f' % heatmap[i][0].max())
-      print('heatmap minimum value %5.2f' % heatmap[i][0].min())
+      #print('heatmap maximum value %5.2f' % heatmap[i][0].max())
+      #print('heatmap minimum value %5.2f' % heatmap[i][0].min())
       landmark_present.append(False)
       x_bot = torch.tensor(0, dtype = torch.float64).to(S.device) # in theory this should not be used
       y_bot = torch.tensor(0, dtype = torch.float64).to(S.device)
@@ -150,8 +150,8 @@ def landmarks_coords(heatmap, landmark):
   for i in range(batch_size):
     locations = (heatmap[i][0] == landmark).nonzero()
     if (locations.size(0) == 0): # if no landmarks detected for image in batch
-      print('no structure for %1.0f' % landmark)
-      print('heatmap maximum value %5.2f' % heatmap[i][0].max())
+      #print('no structure for %1.0f' % landmark)
+      #print('heatmap maximum value %5.2f' % heatmap[i][0].max())
       landmark_present.append(False)
       x_com = torch.tensor(0, dtype = torch.float64).to(S.device) # in theory this should not be used
       y_com = torch.tensor(0, dtype = torch.float64).to(S.device)
