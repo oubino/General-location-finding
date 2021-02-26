@@ -242,28 +242,17 @@ class Flip_left_right_structures(object):
             # and vice versa
             # structure is DxHxW
             indices_left = np.round(structure) == S.left_structures[i]
-            #print(indices_left)
             indices_right = np.round(structure) == S.right_structures[i]
-            #print(indices_right)
             # trial method if maximum right structure coord > maximum left structure coord then flip
-            if (indices_left[2]).size == 0:
-                print(indices_left[2].size)
-                indices_left[2] = np.zeroes_like(indices_right[2])
-                print(indices_left[2].size)
-            if (indices_right[2]).size == 0:
-                print(indices_right[2].size)
-                indices_right[2] = np.zeroes_like(indices_left[2])
-                print(indices_right[2].size)
-           # print(np.amin(np.nonzero(indices_right)[2]))
-            min_right = np.amin(np.nonzero(indices_right)[2])
-            #print('min_right: %1.0f' % min_right)
-            #print( np.amax(np.nonzero(indices_left)[2]))
-            max_left = np.amax(np.nonzero(indices_left)[2])
-            #print('max_left: %1.0f' % max_left)
-            if min_right > max_left:
-                structure[indices_left] = S.right_structures[i] 
-                structure[indices_right] = S.left_structures[i] 
-                #print('flipped landmarks')
+            if (np.nonzero(indices_left)[2].size != 0) and (np.nonzero(indices_right)[2].size != 0):
+                #print('indices_right')
+                #print(np.nonzero(indices_right)[2].size)
+                min_right = np.amin(np.nonzero(indices_right)[2])
+                max_left = np.amax(np.nonzero(indices_left)[2])
+                if min_right > max_left:
+                    structure[indices_left] = S.right_structures[i] 
+                    structure[indices_right] = S.left_structures[i] 
+                    #print('flipped landmarks')
             return {'image': image, 'structure': structure, 'idx': idx}
     
 class Horizontal_flip(object):
