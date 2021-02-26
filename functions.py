@@ -27,7 +27,7 @@ def com_structure(heatmap, landmark): # assumes 1 channel
     locations = (torch.nonzero((torch.round(heatmap[i][0]) == landmark),as_tuple = False)).to(S.device)
     
     if (locations.size(0) == 0): # if no landmarks detected for image in batch
-      print('no structure for %1.0f' % landmark)
+      #print('no structure for %1.0f' % landmark)
       #print('heatmap maximum value %5.2f' % heatmap[i][0].max())
       #print('heatmap minimum value %5.2f' % heatmap[i][0].min())
       landmark_present.append(False)
@@ -73,7 +73,7 @@ def top_structure(heatmap, landmark): # assumes 1 channel
     locations = (torch.nonzero((torch.round(heatmap[i][0]) == landmark),as_tuple = False)).to(S.device)
     #counter = torch.tensor(1, dtype = torch.float64).to(S.device) # counter defines number of points at top per image
     if (locations.size(0) == 0): # if no landmarks detected for image in batch
-      print('no structure for %1.0f' % landmark)
+      #print('no structure for %1.0f' % landmark)
       #print('heatmap maximum value %5.2f' % heatmap[i][0].max())
       #print('heatmap minimum value %5.2f' % heatmap[i][0].min())
       landmark_present.append(False)
@@ -112,7 +112,7 @@ def bot_structure(heatmap, landmark): # assumes 1 channel
     locations = (torch.nonzero((torch.round(heatmap[i][0]) == landmark),as_tuple = False)).to(S.device)
     #counter = torch.tensor(1, dtype = torch.float64).to(S.device) # counter defines number of points at top per image
     if (locations.size(0) == 0): # if no landmarks detected for image in batch
-      print('no structure for %1.0f' % landmark)
+      #print('no structure for %1.0f' % landmark)
       #print('heatmap maximum value %5.2f' % heatmap[i][0].max())
       #print('heatmap minimum value %5.2f' % heatmap[i][0].min())
       landmark_present.append(False)

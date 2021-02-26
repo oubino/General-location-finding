@@ -52,6 +52,7 @@ def top_structure_np(structure, landmark): # assumes 1 channel
   else:
     landmark_present.append(True)
     z_coords = locations[0]
+    #print('here')
     #top_coords = locations[np.argmax(z_coords)]
     x_top = locations[2][np.argmax(z_coords)]#top_coords[2]
     y_top = locations[1][np.argmax(z_coords)]
@@ -75,6 +76,7 @@ def bot_structure_np(structure, landmark): # assumes 1 channel
   else:
     landmark_present.append(True)
     z_coords = locations[0]
+    #print('here')
     #top_coords = locations[np.argmax(z_coords)]
     x_bot = locations[2][np.argmin(z_coords)]#top_coords[2]
     y_bot = locations[1][np.argmin(z_coords)]

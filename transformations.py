@@ -81,9 +81,19 @@ class Resize(object):
           #index = S.landmarks.index(l)
           old_index = np.where(structure == l) # z y x
           if len(old_index) != 0:
-              new_z = int(old_index[0] * d_post/d_pre)
-              new_y = int(old_index[1] * h_post/h_pre)
-              new_x = int(old_index[2] * w_post/w_pre)
+              #print(old_index[0])
+             # print(old_index)
+             # print(sum(old_index[0]))
+              if sum(old_index[0]) == 0:
+                 new_z = int(0)
+                 new_y = int(0)
+                 new_x = int(0)
+                  
+                 
+              else:      
+                  new_z = int(old_index[0] * d_post/d_pre)
+                  new_y = int(old_index[1] * h_post/h_pre)
+                  new_x = int(old_index[2] * w_post/w_pre)
           else:
               new_z = int(0)
               new_y = int(0)
@@ -112,6 +122,7 @@ class Extract_landmark_location(object):
             # need it in y, x, z
             coords = numpy_loc.landmark_loc_np(S.landmarks_loc[l],structure,l)[0]
             x, y, z = coords[0], coords[1], coords[2]
+            #print(l,x,y,z)
             structure_mod[z][y][x] = l
         return {'image':image, 'structure': structure_mod, 'idx': idx} # note note !
         
@@ -205,15 +216,7 @@ class ToTensor(object):
         image = image.unsqueeze(0)
         return {'image': image,'structure': structure, 'idx': idx}
 
-class Flips(object):
 
-    def __call__(self, sample):
-      image, structure, idx = sample['image'], sample['structure'], sample['idx']
-      if random.random() <= 0.5:
-        flip = transforms.Compose([aug.RandomHorizontalFlip3D(p=1, same_on_batch= True)])
-        image = flip(image)
-        structure = flip(structure)
-      return {'image': image, 'structure': structure, 'idx':idx}
 
 class Flips_scipy(object):
     def __call__(self,sample):
@@ -239,9 +242,25 @@ class Flip_left_right_structures(object):
             # and vice versa
             # structure is DxHxW
             indices_left = np.round(structure) == S.left_structures[i]
+            #print(indices_left)
             indices_right = np.round(structure) == S.right_structures[i]
+            #print(indices_right)
             # trial method if maximum right structure coord > maximum left structure coord then flip
-            if np.amin(np.nonzero(indices_right)[2]) > np.amax(np.nonzero(indices_left)[2]):
+            if (indices_left[2]).size == 0:
+                print(indices_left[2].size)
+                indices_left[2] = np.zeroes_like(indices_right[2])
+                print(indices_left[2].size)
+            if (indices_right[2]).size == 0:
+                print(indices_right[2].size)
+                indices_right[2] = np.zeroes_like(indices_left[2])
+                print(indices_right[2].size)
+           # print(np.amin(np.nonzero(indices_right)[2]))
+            min_right = np.amin(np.nonzero(indices_right)[2])
+            #print('min_right: %1.0f' % min_right)
+            #print( np.amax(np.nonzero(indices_left)[2]))
+            max_left = np.amax(np.nonzero(indices_left)[2])
+            #print('max_left: %1.0f' % max_left)
+            if min_right > max_left:
                 structure[indices_left] = S.right_structures[i] 
                 structure[indices_right] = S.left_structures[i] 
                 #print('flipped landmarks')

@@ -87,11 +87,8 @@ def init():
     batch_size = 1
     
     landmarks = [1,2,3,4,5,6] # brainstem # not general
-<<<<<<< HEAD
-    landmarks_loc = {1:'bot', 2:'bot', 3: 'top', 4:'top', 5:'bot', 6:'bot'} 
-=======
-    landmarks_loc = {1:'com', 2:'com', 3: 'com', 4:'com',5:'com', 6:'com'} 
->>>>>>> ca63cf74c9ad40984ab0dc0189d8c00715a3a16e
+
+    landmarks_loc = {1:'com', 2:'com', 3: 'com', 4:'com',5:'com', 6:'com'}
         # define which part of OAR to find
 
     # sigmas = defaultdict(float) ?
@@ -110,15 +107,9 @@ def init():
     
     
     # training parameters
-<<<<<<< HEAD
-    epoch_batch = 10
-    num_epoch_batches = 10
-    net_features = 16
-=======
     epoch_batch = 1
     num_epoch_batches = 1
     net_features = 1
->>>>>>> ca63cf74c9ad40984ab0dc0189d8c00715a3a16e
     
     alpha = 1/25000
     reg = 0.01 # reg = 0.001
@@ -156,11 +147,7 @@ def init():
     downsample_user = True
     
     # run folder
-<<<<<<< HEAD
     run_folder = "run_26_feb_16_ft_cochlea_trial"
-=======
-    run_folder = "run_25_feb_cochlea_mod"
->>>>>>> ca63cf74c9ad40984ab0dc0189d8c00715a3a16e
     run_path = os.path.join(save_data_path, run_folder) 
     try:  
         os.mkdir(run_path)  
@@ -168,13 +155,9 @@ def init():
         print(error) 
     
     # load model path
-<<<<<<< HEAD
     run_folder_load = "run_26_feb_16_cochlea_trial"
     epoch_load = str(20)
-=======
-    run_folder_load = "run_25_feb_cochlea_mod"
-    epoch_load = str(130)
->>>>>>> ca63cf74c9ad40984ab0dc0189d8c00715a3a16e
+
     
     # create tensorboard writer
     tensor_folder = os.path.join(save_data_path, 'tensorboard')
