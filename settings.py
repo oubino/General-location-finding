@@ -155,7 +155,7 @@ def init():
     
     # load model path
     run_folder_load = "run_25_feb_16_ft_wing_loss"
-    epoch_load = str(20)
+    epoch_load = str(130)
     
     # create tensorboard writer
     tensor_folder = os.path.join(save_data_path, 'tensorboard')
