@@ -79,7 +79,14 @@ class Resize(object):
       structure_new = np.zeros(image.shape)
       for l in S.landmarks:
           #index = S.landmarks.index(l)
-          old_index = np.where(structure == l) # z y x
+          old_index = np.where(np.round(structure) == l)
+          if sum(old_index) != 0:
+              new_z = int(old_index[0] * d_post/d_pre)
+              new_y = int(old_index[1] * h_post/h_pre)
+              new_x = int(old_index[2] * w_post/w_pre)
+              structure_new[new_z][new_y][new_x] = l
+          
+          """
           if len(old_index) != 0:
               #print(old_index[0])
              # print(old_index)
@@ -98,7 +105,8 @@ class Resize(object):
               new_z = int(0)
               new_y = int(0)
               new_x = int(0)
-          structure_new[new_z][new_y][new_x] = l
+              """
+              
         
       return {'image':image, 'structure': structure_new, 'idx': idx} # note note !
   
@@ -121,9 +129,14 @@ class Extract_landmark_location(object):
             # structure is z, y, x
             # need it in y, x, z
             coords = numpy_loc.landmark_loc_np(S.landmarks_loc[l],structure,l)[0]
-            x, y, z = coords[0], coords[1], coords[2]
-            #print(l,x,y,z)
-            structure_mod[z][y][x] = l
+            #if (coords[0] == 0) and  (coords[1] == 0) and (coords[2] == 0):
+            #    print(' -- landmark not extracted -- ')
+            # if coords[0] coords[1] and coords[2] all 0 then sum is zero
+            # then not present so don't do anything
+            # otherwise set x,y and z 
+            if sum(coords) != 0 :
+                x, y, z = coords[0], coords[1], coords[2]
+                structure_mod[z][y][x] = l
         return {'image':image, 'structure': structure_mod, 'idx': idx} # note note !
         
 
