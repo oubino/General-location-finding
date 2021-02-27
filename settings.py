@@ -88,7 +88,7 @@ def init():
     
     landmarks = [1,2,3,4,5,6] # brainstem # not general
 
-    landmarks_loc = {1:'bot', 2:'top', 3: 'top', 4:'bot',5:'bot', 6:'top'}
+    landmarks_loc = {1:'bot', 2:'bot', 3: 'top', 4:'top',5:'top', 6:'top'}
         # define which part of OAR to find
 
     # sigmas = defaultdict(float) ?
@@ -107,9 +107,9 @@ def init():
     
     
     # training parameters
-    epoch_batch = 1
-    num_epoch_batches = 1
-    net_features = 1
+    epoch_batch = 10
+    num_epoch_batches = 15
+    net_features = 16
     
     alpha = 1/25000
     reg = 0.01 # reg = 0.001
@@ -147,7 +147,7 @@ def init():
     downsample_user = True
     
     # run folder
-    run_folder = "run_27_feb_cochlea_trial"
+    run_folder = "run_27_feb_cochlea_16ft"
     run_path = os.path.join(save_data_path, run_folder) 
     try:  
         os.mkdir(run_path)  
@@ -155,7 +155,7 @@ def init():
         print(error) 
     
     # load model path
-    run_folder_load = "run_27_cochlea_trial"
+    run_folder_load = "run_27_feb_cochlea_16ft"
     epoch_load = str(20)
 
     
