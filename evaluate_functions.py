@@ -62,7 +62,7 @@ def plot_3d_pred_img_struc(image, structure, pred, threshold_img, eval_path):
 
     ax.add_collection3d(mesh_img)
     ax.add_collection3d(mesh_structure)
-    ax.add_collection3d(mesh_pred)
+    #ax.add_collection3d(mesh_pred)
 
     ax.set_xlim(0, image.shape[1])
     ax.set_ylim(0, image.shape[0])
@@ -269,11 +269,11 @@ def performance_metrics(model,sigmas,gamma, epochs_completed):
       
       for i in range(S.batch_size):
         
-        structure_loc = functions.landmark_loc(S.landmarks_loc[l], structure, l)[0]
+        structure_loc = functions.landmark_loc(structure, l)[0]
         #structure_com = functions.com_structure(structure, l)[0]# [0] ensures extracts coords rather than True/False
         # change to top structure
         #if functions.com_structure(structure,1)[1][i] == True:
-        if functions.landmark_loc(S.landmarks_loc[l],structure,l)[1][i] == True:
+        if functions.landmark_loc(structure,l)[1][i] == True:
         # change to top structure
           dimension = 3
           height_guess = ((gamma) * (2*np.pi)**(-dimension/2) * sigmas[l].item() ** (-dimension)) 

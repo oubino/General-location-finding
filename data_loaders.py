@@ -16,15 +16,15 @@ os.chdir(S.root) # change to data path and change back at end
 #print(os.getcwd())
 
 if S.downsample_user == True:
-    trans_plain = transforms.Compose([T.Extract_landmark_location(), T.Fix_base_value(), T.Normalise(S.normal_min, S.normal_max, S.normal_window), T.Resize(S.in_z,S.in_x,S.in_y), T.Upsidedown_scipy(),T.Flip_left_right_structures(), T.ToTensor()])
-    trans_augment = transforms.Compose([T.Extract_landmark_location(), T.Fix_base_value(), T.Normalise(S.normal_min, S.normal_max, S.normal_window),T.Resize(S.in_z,S.in_x,S.in_y), T.Upsidedown_scipy(), T.Flips_scipy(), T.Horizontal_flip(), T.Flip_left_right_structures(),T.ToTensor()])
+    trans_plain = transforms.Compose([T.Upsidedown_scipy(), T.Extract_landmark_location(), T.Fix_base_value(), T.Normalise(S.normal_min, S.normal_max, S.normal_window), T.Resize(S.in_z,S.in_x,S.in_y), T.ToTensor()])
+    trans_augment = transforms.Compose([T.Upsidedown_scipy(), T.Extract_landmark_location(), T.Fix_base_value(), T.Normalise(S.normal_min, S.normal_max, S.normal_window),T.Resize(S.in_z,S.in_x,S.in_y), T.Flips_scipy(), T.Horizontal_flip(), T.ToTensor()])
 #trans_plain = transforms.Compose([Normalise(normal_min, normal_max, normal_window), Depth(100,256,256), Upsidedown_scipy(), ToTensor()])
 #trans_augment = transforms.Compose([Normalise(normal_min, normal_max, normal_window),Depth(100,256,256), Upsidedown_scipy(), Flips_scipy(), ToTensor()])#, Pre_Transpose(), Check_com_present('bob'), Post_Transpose()])#,  Upsidedown(),Flips(), CentreCrop(), Affine(), Post_Transpose()])#HorizontalFlip()Noise(),, Affine() CentreCrop()CentreCrop(), Flips(), Affine(),
 # torch image: C X H X W x D -> this is output and what we deal with from now on
 # Upsidedown(), Flips(), CentreCrop(), Affine()
 elif S.downsample_user == False:
-    trans_plain = transforms.Compose([T.Extract_landmark_location(), T.Fix_base_value(), T.Normalise(S.normal_min, S.normal_max, S.normal_window), T.CentreCrop(S.in_z,S.in_x,S.in_y), T.Upsidedown_scipy(),T.Flip_left_right_structures(), T.ToTensor()])
-    trans_augment = transforms.Compose([T.Extract_landmark_location(), T.Fix_base_value(), T.Normalise(S.normal_min, S.normal_max, S.normal_window),T.CentreCrop(S.in_z,S.in_x,S.in_y), T.Upsidedown_scipy(), T.Flips_scipy(), T.Horizontal_flip(),T.Flip_left_right_structures(),T.ToTensor()])
+    trans_plain = transforms.Compose([T.Upsidedown_scipy(),T.Extract_landmark_location(), T.Fix_base_value(), T.Normalise(S.normal_min, S.normal_max, S.normal_window), T.CentreCrop(S.in_z,S.in_x,S.in_y), T.ToTensor()])
+    trans_augment = transforms.Compose([T.Upsidedown_scipy(), T.Extract_landmark_location(), T.Fix_base_value(), T.Normalise(S.normal_min, S.normal_max, S.normal_window),T.CentreCrop(S.in_z,S.in_x,S.in_y), T.Flips_scipy(), T.Horizontal_flip(), T.ToTensor()])
     #trans_plain = transforms.Compose([Normalise(normal_min, normal_max, normal_window), Depth(100,256,256), Upsidedown_scipy(), ToTensor()])
     #trans_augment = transforms.Compose([Normalise(normal_min, normal_max, normal_window),Depth(100,256,256), Upsidedown_scipy(), Flips_scipy(), ToTensor()])#, Pre_Transpose(), Check_com_present('bob'), Post_Transpose()])#,  Upsidedown(),Flips(), CentreCrop(), Affine(), Post_Transpose()])#HorizontalFlip()Noise(),, Affine() CentreCrop()CentreCrop(), Flips(), Affine(),
     # torch image: C X H X W x D -> this is output and what we deal with from now on
@@ -67,7 +67,7 @@ for i in range(1):
     
     print('landmark locations for image %1.0f in dataset' % i)
     for l in S.landmarks:
-        print(functions.landmark_loc(S.landmarks_loc[l],train_set.__getitem__(i)['structure'].unsqueeze(0),l))
+        print(functions.landmark_loc(train_set.__getitem__(i)['structure'].unsqueeze(0),l))
         
 
 

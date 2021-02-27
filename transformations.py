@@ -247,26 +247,23 @@ class Flips_scipy(object):
             structure = scipy.ndimage.rotate(structure, angle, axes = [2,0], reshape = False, order = 0)
         return {'image': image, 'structure': structure, 'idx': idx}
     
-class Flip_left_right_structures(object):
-    def __call__(self,sample):
-        image, structure, idx = sample['image'], sample['structure'], sample['idx']
-        for i in range(len(S.left_structures)):
-            # all locations of left structure, take on value of right structure
-            # and vice versa
-            # structure is DxHxW
-            indices_left = np.round(structure) == S.left_structures[i]
-            indices_right = np.round(structure) == S.right_structures[i]
-            # trial method if maximum right structure coord > maximum left structure coord then flip
-            if (np.nonzero(indices_left)[2].size != 0) and (np.nonzero(indices_right)[2].size != 0):
-                #print('indices_right')
-                #print(np.nonzero(indices_right)[2].size)
-                min_right = np.amin(np.nonzero(indices_right)[2])
-                max_left = np.amax(np.nonzero(indices_left)[2])
-                if min_right > max_left:
-                    structure[indices_left] = S.right_structures[i] 
-                    structure[indices_right] = S.left_structures[i] 
-                    #print('flipped landmarks')
-            return {'image': image, 'structure': structure, 'idx': idx}
+def Flip_left_right_structures(structure):
+    
+    for i in range(len(S.left_structures)):
+        # all locations of left structure, take on value of right structure
+        # and vice versa
+        # structure is DxHxW
+        indices_left = np.round(structure) == S.left_structures[i]
+        indices_right = np.round(structure) == S.right_structures[i]
+        # trial method if maximum right structure coord > maximum left structure coord then flip
+        if (np.nonzero(indices_left)[2].size != 0) and (np.nonzero(indices_right)[2].size != 0):
+            structure[indices_left] = S.right_structures[i] 
+            structure[indices_right] = S.left_structures[i] 
+        elif (np.nonzero(indices_left)[2].size == 0) and (np.nonzero(indices_right)[2].size != 0):
+            structure[indices_right] = S.left_structures[i] 
+        elif (np.nonzero(indices_left)[2].size != 0) and (np.nonzero(indices_right)[2].size == 0):
+            structure[indices_left] = S.right_structures[i] 
+    return structure
     
 class Horizontal_flip(object):
     def __call__(self,sample):
@@ -280,6 +277,7 @@ class Horizontal_flip(object):
             # flip any left right structures 
             #structure = flip_left_right_structures(structure)
             #print('horizontal flipped')
+            structure = Flip_left_right_structures(structure) # need to flip L/R structures
         return {'image': image, 'structure': structure, 'idx': idx}
        
     
@@ -307,6 +305,7 @@ class Upsidedown_scipy(object):
             #rotate(input, angle, axes=1, 0, reshape=True, output=None, order=3, mode='constant', cval=0.0, prefilter=True)
             structure = scipy.ndimage.rotate(structure, angle, axes = [2,0], reshape = False, order =0)
             #print('flipped upside down')
+            structure = Flip_left_right_structures(structure) # need to flip left/right structures
             return {'image': image, 'structure': structure, 'idx': idx}
         else:
             return {'image': image, 'structure': structure, 'idx': idx}

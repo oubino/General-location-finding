@@ -9,6 +9,36 @@ os.chdir(S.root) # change to data path and change back at end
 print('Data directory: ')
 print(os.getcwd())
 
+def landmark_loc(heatmap, landmark):
+    batch_size = (heatmap.size()[0])
+    landmark_present = []
+    landmark = float(landmark) # ensure that comparison is made properly
+    for i in range(batch_size):
+      # heatmap shape [1, 1, 256, 256, 100] i.e. B x C x H x W x D
+      # add in round here to see if picks up landmarks its missing
+      locations = (torch.nonzero((torch.round(heatmap[i][0]) == landmark),as_tuple = False)).to(S.device)
+      
+      if (locations.size(0) == 0): # if no landmarks detected for image in batch
+        landmark_present.append(False)
+        x = torch.tensor(0, dtype = torch.float64).to(S.device) # in theory this should not be used
+        y = torch.tensor(0, dtype = torch.float64).to(S.device)
+        z = torch.tensor(0, dtype = torch.float64).to(S.device)
+      else:
+        landmark_present.append(True)
+        x = locations[0][1]
+        y = locations[0][0]
+        z = locations[0][2]
+      if i == 0:
+        coords = torch.tensor([[x,y,z]]).to(S.device)
+      else: 
+        coords_temp = torch.tensor([[x,y,z]]).to(S.device)
+        coords = torch.cat((coords,coords_temp),dim = 0)
+    # returns arrays of B x coord
+    # returns array of B x True/False
+    # if True then for that coord it is COM, if false then need to produce heatmap of zeros
+    return coords, landmark_present   
+    
+"""
 def landmark_loc(locat, heatmap, landmark):
     if locat == 'com':
         return com_structure(heatmap,landmark)
@@ -16,6 +46,7 @@ def landmark_loc(locat, heatmap, landmark):
         return top_structure(heatmap,landmark)
     elif locat == 'bot':
         return bot_structure(heatmap,landmark)
+"""
 
 def com_structure(heatmap, landmark): # assumes 1 channel
   # heatmap is batch of either masks or image of 
