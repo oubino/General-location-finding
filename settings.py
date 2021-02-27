@@ -88,7 +88,7 @@ def init():
     
     landmarks = [1,2,3,4,5,6] # brainstem # not general
 
-    landmarks_loc = {1:'com', 2:'com', 3: 'com', 4:'com',5:'com', 6:'com'}
+    landmarks_loc = {1:'bot', 2:'top', 3: 'top', 4:'bot',5:'bot', 6:'top'}
         # define which part of OAR to find
 
     # sigmas = defaultdict(float) ?
@@ -147,7 +147,7 @@ def init():
     downsample_user = True
     
     # run folder
-    run_folder = "run_26_feb_16_ft_cochlea_trial"
+    run_folder = "run_27_feb_cochlea_trial"
     run_path = os.path.join(save_data_path, run_folder) 
     try:  
         os.mkdir(run_path)  
@@ -155,7 +155,7 @@ def init():
         print(error) 
     
     # load model path
-    run_folder_load = "run_26_feb_16_cochlea_trial"
+    run_folder_load = "run_27_cochlea_trial"
     epoch_load = str(20)
 
     

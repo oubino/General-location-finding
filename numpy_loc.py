@@ -6,8 +6,13 @@ import settings as S
 import os
 
 def landmark_loc_np(locat, structure, landmark):
-    return { 'com': com_structure_np(structure,landmark), 'top': top_structure_np(structure,landmark), 'bot': bot_structure_np(structure,landmark)}.get(locat)
-
+    if locat == 'com':
+        return com_structure_np(structure,landmark)
+    elif locat == 'top':
+        return top_structure_np(structure,landmark)
+    elif locat == 'bot':
+        return bot_structure_np(structure,landmark)
+        
 def com_structure_np(structure, landmark): # assumes 1 channel
   # structure is (D x H x W)
   # output is x,y,z

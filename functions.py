@@ -10,7 +10,12 @@ print('Data directory: ')
 print(os.getcwd())
 
 def landmark_loc(locat, heatmap, landmark):
-    return { 'com': com_structure(heatmap,landmark), 'top': top_structure(heatmap,landmark), 'bot': bot_structure(heatmap,landmark)}.get(locat)
+    if locat == 'com':
+        return com_structure(heatmap,landmark)
+    elif locat == 'top':
+        return top_structure(heatmap,landmark)
+    elif locat == 'bot':
+        return bot_structure(heatmap,landmark)
 
 def com_structure(heatmap, landmark): # assumes 1 channel
   # heatmap is batch of either masks or image of 
