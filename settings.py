@@ -86,9 +86,9 @@ def init():
     
     batch_size = 1
     
-    landmarks = [1,2,3,4,5,6] # brainstem # not general
+    landmarks = [1,2,3,4] # brainstem # not general
 
-    landmarks_loc = {1:'bot', 2:'bot', 3: 'top', 4:'top',5:'top', 6:'top'}
+    landmarks_loc = {1:'bot', 2:'bot', 3: 'top', 4:'top'}# ,5:'top', 6:'top'}
         # define which part of OAR to find
 
     # sigmas = defaultdict(float) ?
@@ -108,7 +108,7 @@ def init():
     
     # training parameters
     epoch_batch = 10
-    num_epoch_batches = 6
+    num_epoch_batches = 5
     net_features = 16
     
     alpha = 1/25000
@@ -122,8 +122,8 @@ def init():
     
     # normalise parameters
     normal_min = 15 + 1024
-    normal_max = 400 + 1024
-    normal_window = 1800
+    normal_max = 50 + 1024
+    normal_window = 1000
     
     # mixed precision
     use_amp = True
@@ -147,7 +147,7 @@ def init():
     downsample_user = True
     
     # run folder
-    run_folder = "run_27_feb_cochlea_16ft"
+    run_folder = "run_27_feb_test_cochlea_mod_without_cochleas"
     run_path = os.path.join(save_data_path, run_folder) 
     try:  
         os.mkdir(run_path)  
@@ -155,7 +155,7 @@ def init():
         print(error) 
     
     # load model path
-    run_folder_load = "run_27_feb_cochlea_16ft"
+    run_folder_load = "run_27_feb_test_cochlea_mod_without_cochleas"
     epoch_load = str(150)
 
     
@@ -173,8 +173,8 @@ def init():
     top_structures = [5,6,3]
     
     # L/R structures
-    left_structures = [1,5]
-    right_structures = [2,6]
+    left_structures = [1]#,5]
+    right_structures = [2]#,6]
     
     # adaptive wing loss
     wing_loss = False
