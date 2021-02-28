@@ -86,9 +86,14 @@ def init():
     
     batch_size = 1
     
+<<<<<<< HEAD
     landmarks = [1,2,3,4,5,6] # brainstem # not general
 
     landmarks_loc = {1:'bot', 2:'bot', 3: 'top', 4:'top',5:'top', 6:'top'}
+=======
+    landmarks = [1,2,3,4] # brainstem # not general
+    landmarks_loc = {1:'bot', 2:'bot', 3: 'top', 4:'top'} 
+>>>>>>> fcd42aebb422ad824399893d9979eb8e3dd5b7a7
         # define which part of OAR to find
 
     # sigmas = defaultdict(float) ?
@@ -107,8 +112,13 @@ def init():
     
     
     # training parameters
+<<<<<<< HEAD
     epoch_batch = 15
     num_epoch_batches = 10
+=======
+    epoch_batch = 10
+    num_epoch_batches = 5
+>>>>>>> fcd42aebb422ad824399893d9979eb8e3dd5b7a7
     net_features = 16
     
     alpha = 1/25000
@@ -122,8 +132,8 @@ def init():
     
     # normalise parameters
     normal_min = 15 + 1024
-    normal_max = 400 + 1024
-    normal_window = 1800
+    normal_max = 50 + 1024
+    normal_window = 1000
     
     # mixed precision
     use_amp = True
@@ -147,7 +157,11 @@ def init():
     downsample_user = True
     
     # run folder
+<<<<<<< HEAD
     run_folder = "run_27_feb_cochlea_16ft"
+=======
+    run_folder = "run_28_feb_50_epoch_comparison"
+>>>>>>> fcd42aebb422ad824399893d9979eb8e3dd5b7a7
     run_path = os.path.join(save_data_path, run_folder) 
     try:  
         os.mkdir(run_path)  
@@ -155,7 +169,12 @@ def init():
         print(error) 
     
     # load model path
+<<<<<<< HEAD
     run_folder_load = "run_27_feb_cochlea_16ft"
+=======
+
+    run_folder_load = "run_28_feb_50_epoch_comparison"
+>>>>>>> fcd42aebb422ad824399893d9979eb8e3dd5b7a7
     epoch_load = str(20)
 
     
@@ -173,8 +192,8 @@ def init():
     top_structures = [5,6,3]
     
     # L/R structures
-    left_structures = [1,5]
-    right_structures = [2,6]
+    left_structures = [1]
+    right_structures = [2]
     
     # adaptive wing loss
     wing_loss = False
