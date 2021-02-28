@@ -85,15 +85,9 @@ def init():
     norm_std = 180
     
     batch_size = 1
-    
-<<<<<<< HEAD
-    landmarks = [1,2,3,4,5,6] # brainstem # not general
 
-    landmarks_loc = {1:'bot', 2:'bot', 3: 'top', 4:'top',5:'top', 6:'top'}
-=======
     landmarks = [1,2,3,4] # brainstem # not general
     landmarks_loc = {1:'bot', 2:'bot', 3: 'top', 4:'top'} 
->>>>>>> fcd42aebb422ad824399893d9979eb8e3dd5b7a7
         # define which part of OAR to find
 
     # sigmas = defaultdict(float) ?
@@ -112,13 +106,9 @@ def init():
     
     
     # training parameters
-<<<<<<< HEAD
-    epoch_batch = 15
-    num_epoch_batches = 10
-=======
+
     epoch_batch = 10
     num_epoch_batches = 5
->>>>>>> fcd42aebb422ad824399893d9979eb8e3dd5b7a7
     net_features = 16
     
     alpha = 1/25000
@@ -157,11 +147,8 @@ def init():
     downsample_user = True
     
     # run folder
-<<<<<<< HEAD
-    run_folder = "run_27_feb_cochlea_16ft"
-=======
+
     run_folder = "run_28_feb_50_epoch_comparison"
->>>>>>> fcd42aebb422ad824399893d9979eb8e3dd5b7a7
     run_path = os.path.join(save_data_path, run_folder) 
     try:  
         os.mkdir(run_path)  
@@ -169,12 +156,7 @@ def init():
         print(error) 
     
     # load model path
-<<<<<<< HEAD
-    run_folder_load = "run_27_feb_cochlea_16ft"
-=======
-
     run_folder_load = "run_28_feb_50_epoch_comparison"
->>>>>>> fcd42aebb422ad824399893d9979eb8e3dd5b7a7
     epoch_load = str(20)
 
     
