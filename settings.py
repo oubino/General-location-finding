@@ -156,7 +156,7 @@ def init():
     
     # load model path
     run_folder_load = "run_27_feb_cochlea_16ft"
-    epoch_load = str(20)
+    epoch_load = str(90)
 
     
     # create tensorboard writer
