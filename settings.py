@@ -87,8 +87,8 @@ def init():
     batch_size = 1
     
     landmarks = [1,2,3,4] # brainstem # not general
+    landmarks_loc = {1:'bot', 2:'bot', 3: 'top', 4:'top'} 
 
-    landmarks_loc = {1:'bot', 2:'bot', 3: 'top', 4:'top'}# ,5:'top', 6:'top'}
         # define which part of OAR to find
 
     # sigmas = defaultdict(float) ?
@@ -147,7 +147,7 @@ def init():
     downsample_user = True
     
     # run folder
-    run_folder = "run_27_feb_test_cochlea_mod_without_cochleas"
+    run_folder = "run_28_feb_50_epoch_comparison"
     run_path = os.path.join(save_data_path, run_folder) 
     try:  
         os.mkdir(run_path)  
@@ -155,8 +155,8 @@ def init():
         print(error) 
     
     # load model path
-    run_folder_load = "run_27_feb_test_cochlea_mod_without_cochleas"
-    epoch_load = str(150)
+    run_folder_load = "run_28_feb_50_epoch_comparison"
+    epoch_load = str(20)
 
     
     # create tensorboard writer
@@ -175,6 +175,7 @@ def init():
     # L/R structures
     left_structures = [1]#,5]
     right_structures = [2]#,6]
+
     
     # adaptive wing loss
     wing_loss = False
