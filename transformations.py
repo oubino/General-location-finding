@@ -85,29 +85,7 @@ class Resize(object):
               new_y = int(old_index[1] * h_post/h_pre)
               new_x = int(old_index[2] * w_post/w_pre)
               structure_new[new_z][new_y][new_x] = l
-          
-          """
-          if len(old_index) != 0:
-              #print(old_index[0])
-             # print(old_index)
-             # print(sum(old_index[0]))
-              if sum(old_index[0]) == 0:
-                 new_z = int(0)
-                 new_y = int(0)
-                 new_x = int(0)
-                  
-                 
-              else:      
-                  new_z = int(old_index[0] * d_post/d_pre)
-                  new_y = int(old_index[1] * h_post/h_pre)
-                  new_x = int(old_index[2] * w_post/w_pre)
-          else:
-              new_z = int(0)
-              new_y = int(0)
-              new_x = int(0)
-              """
-              
-        
+
       return {'image':image, 'structure': structure_new, 'idx': idx} # note note !
   
 class Fix_base_value(object):  
@@ -129,11 +107,6 @@ class Extract_landmark_location(object):
             # structure is z, y, x
             # need it in y, x, z
             coords = numpy_loc.landmark_loc_np(S.landmarks_loc[l],structure,l)[0]
-            #if (coords[0] == 0) and  (coords[1] == 0) and (coords[2] == 0):
-            #    print(' -- landmark not extracted -- ')
-            # if coords[0] coords[1] and coords[2] all 0 then sum is zero
-            # then not present so don't do anything
-            # otherwise set x,y and z 
             if sum(coords) != 0 :
                 x, y, z = coords[0], coords[1], coords[2]
                 structure_mod[z][y][x] = l
@@ -270,13 +243,8 @@ class Horizontal_flip(object):
         image, structure, idx = sample['image'], sample['structure'], sample['idx']
         random_number = random.random()
         if random_number <= 0.5:
-            #print('image shape', image.shape)
             image = np.flip(image, axis = 2).copy()
             structure = np.flip(structure, axis = 2).copy()
-            #print('horizontal flipped')
-            # flip any left right structures 
-            #structure = flip_left_right_structures(structure)
-            #print('horizontal flipped')
             structure = Flip_left_right_structures(structure) # need to flip L/R structures
         return {'image': image, 'structure': structure, 'idx': idx}
        
@@ -302,9 +270,7 @@ class Upsidedown_scipy(object):
         if z_landmark < z_size/2:
             angle = 180
             image = scipy.ndimage.rotate(image, angle, axes = [2,0], reshape = False, order =0)
-            #rotate(input, angle, axes=1, 0, reshape=True, output=None, order=3, mode='constant', cval=0.0, prefilter=True)
             structure = scipy.ndimage.rotate(structure, angle, axes = [2,0], reshape = False, order =0)
-            #print('flipped upside down')
             structure = Flip_left_right_structures(structure) # need to flip left/right structures
             return {'image': image, 'structure': structure, 'idx': idx}
         else:
