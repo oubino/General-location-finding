@@ -142,7 +142,7 @@ def init():
     time_stamp = time.strftime("%Y%m%d-%H%M%S")
 
     # decision on whether to use UNET or SCNET
-    UNET_model_user = True
+    UNET_model_user = False
     
     # decision on whether to crop or downsample
     downsample_user = True
