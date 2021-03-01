@@ -106,7 +106,7 @@ class UNet3d(nn.Module):
         
 # SCNET 3D
 
-features = 24
+scnet_feat = 64
 dilation = [1,1,1]
 
 # 4 features goes through test
@@ -114,7 +114,7 @@ dilation = [1,1,1]
 
 class SCNET(nn.Module): # need to add bottleneck
     
-    def __init__(self, in_channels, out_channels):
+    def __init__(self, in_channels, out_channels, features):
         super().__init__()
         
         #initialise sigma to model
@@ -134,24 +134,24 @@ class SCNET(nn.Module): # need to add bottleneck
         self.pool_block_2 = self.pool_layer_block_2()
 
         # block 3
-        self.conv4 = self.conv_block3(features, features, 3, 1) # note conv4 acts on pool, which acts on conv2
-        self.conv5 = self.conv_block3(features, features, 3, 1)
-        self.conv6 = self.conv_block3(features,features,3, 1)
+        self.conv4 = self.conv_block3(features, 2*features, 3, 1) # note conv4 acts on pool, which acts on conv2
+        self.conv5 = self.conv_block3(2*features, 2*features, 3, 1)
+        self.conv6 = self.conv_block3(2*features,2*features,3, 1)
 
         # block 4
         self.pool_block_4 = self.pool_layer_block_4()
 
         # block 5
-        self.conv7 = self.conv_block5(features, features, 3, 1) # note conv7 acts on pool, which acts on conv5
-        self.conv8 = self.conv_block5(features, features, 3, 1)
-        self.conv9 = self.conv_block5(features,features,3, 1)
+        self.conv7 = self.conv_block5(2*features, 4*features, 3, 1) # note conv7 acts on pool, which acts on conv5
+        self.conv8 = self.conv_block5(4*features, 4*features, 3, 1)
+        self.conv9 = self.conv_block5(4*features,4*features,3, 1)
 
         # block 6
-        self.upsample_block_6 = self.upsample_layer_block_6(features)
+        self.upsample_block_6 = self.upsample_layer_block_6(4*features, 2*features)
 
         # block 7
         # addition
-        self.upsample_block_7 = self.upsample_layer_block_7(features)
+        self.upsample_block_7 = self.upsample_layer_block_7(2*features, features)
 
 
         # block 8
@@ -268,17 +268,17 @@ class SCNET(nn.Module): # need to add bottleneck
         )
         return conv_block5
     
-    def upsample_layer_block_6(self, channels):
+    def upsample_layer_block_6(self, in_channels, out_channels):
 
         upsample_block_6 = nn.Sequential(
-          nn.ConvTranspose3d(channels, channels, kernel_size = 3, stride = 2, padding = 1, output_padding=1) # add dilation
+          nn.ConvTranspose3d(in_channels, out_channels, kernel_size = 3, stride = 2, padding = 1, output_padding=1) # add dilation
         )
         return upsample_block_6
     
-    def upsample_layer_block_7(self, channels):
+    def upsample_layer_block_7(self, in_channels, out_channels):
 
         upsample_block_7 = nn.Sequential(
-          nn.ConvTranspose3d(channels, channels, kernel_size = 3, stride = 2, padding = 1, dilation = dilation, output_padding=1) # add dilation
+          nn.ConvTranspose3d(in_channels, out_channels, kernel_size = 3, stride = 2, padding = 1, dilation = dilation, output_padding=1) # add dilation
         )
         return upsample_block_7
 
