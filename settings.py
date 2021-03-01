@@ -30,7 +30,7 @@ def init():
     global img_counter_1, img_counter_2, img_counter_3
     global save_data_path
     global landmarks_loc
-    global net_features
+    global net_features, scnet_feat
     global top_structures
     global left_structures, right_structures
     global wing_loss, wing_omega, wing_epsilon, wing_alpha, wing_theta
@@ -108,8 +108,9 @@ def init():
     
     # training parameters
     epoch_batch = 10
-    num_epoch_batches = 6
+    num_epoch_batches = 10
     net_features = 32
+    scnet_feat = 64
     
     alpha = 1/25000
     reg = 0.01 # reg = 0.001
@@ -147,7 +148,7 @@ def init():
     downsample_user = True
     
     # run folder
-    run_folder = "run_1_mar_32_ft_WL"
+    run_folder = "run_1_mar_64_ft_scn"
     run_path = os.path.join(save_data_path, run_folder) 
     try:  
         os.mkdir(run_path)  
@@ -155,7 +156,7 @@ def init():
         print(error) 
     
     # load model path
-    run_folder_load = "run_1_mar_32_ft_WL"
+    run_folder_load = "run_1_mar_64_ft_scn"
     epoch_load = str(40) 
 
     

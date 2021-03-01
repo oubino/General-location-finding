@@ -106,7 +106,6 @@ class UNet3d(nn.Module):
         
 # SCNET 3D
 
-scnet_feat = 64
 dilation = [1,1,1]
 
 # 4 features goes through test
@@ -323,7 +322,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 if S.UNET_model_user == True:
     model = UNet3d(1,S.num_class, unet_feat)
 elif S.UNET_model_user == False:
-    model = SCNET(1, S.num_class)
+    model = SCNET(1, S.num_class, S.scnet_feat)
 
 model = model.to(device)
 
