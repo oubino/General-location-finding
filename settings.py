@@ -85,9 +85,10 @@ def init():
     norm_std = 180
     
     batch_size = 1
-
+    
     landmarks = [1,2,3,4] # brainstem # not general
     landmarks_loc = {1:'bot', 2:'bot', 3: 'top', 4:'top'} 
+
         # define which part of OAR to find
 
     # sigmas = defaultdict(float) ?
@@ -106,7 +107,6 @@ def init():
     
     
     # training parameters
-
     epoch_batch = 10
     num_epoch_batches = 5
     net_features = 16
@@ -147,7 +147,6 @@ def init():
     downsample_user = True
     
     # run folder
-
     run_folder = "run_28_feb_50_epoch_comparison"
     run_path = os.path.join(save_data_path, run_folder) 
     try:  
@@ -174,8 +173,9 @@ def init():
     top_structures = [5,6,3]
     
     # L/R structures
-    left_structures = [1]
-    right_structures = [2]
+    left_structures = [1]#,5]
+    right_structures = [2]#,6]
+
     
     # adaptive wing loss
     wing_loss = False
