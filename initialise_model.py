@@ -17,7 +17,10 @@ def init():
     global optimizer
     global model
     
-    model = network.UNet3d(1,S.num_class, network.unet_feat)
+    if S.unet_model_user == True:
+        model = network.UNet3d(1,S.num_class, network.unet_feat)
+    else:
+        model = network.SCNET(1, S.num_class, S.scnet_feat)
     model = model.to(S.device)
     
     # initialise optimizer/scheduler/scaler

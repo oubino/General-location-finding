@@ -25,7 +25,11 @@ def init():
     global scheduler
     
     # load in model/optimizer/scaler
-    model_load = network.UNet3d(1,S.num_class, network.unet_feat)
+    if S.unet_model_user == True:
+        model_load = network.UNet3d(1,S.num_class, network.unet_feat)
+    else:
+        model_load = network.SCNET(1, S.num_class, S.scnet_feat)
+        
     model_load = model_load.to(S.device)
     optimizer_load = optim.Adam([
                     {'params': network.model.parameters()}
