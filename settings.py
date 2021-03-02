@@ -148,7 +148,7 @@ def init():
     downsample_user = True
     
     # run folder
-    run_folder = "run_1_mar_64_ft_scn"
+    run_folder = "run_1_mar_64_ft_scn_fix"
     run_path = os.path.join(save_data_path, run_folder) 
     try:  
         os.mkdir(run_path)  
@@ -156,7 +156,7 @@ def init():
         print(error) 
     
     # load model path
-    run_folder_load = "run_1_mar_64_ft_scn"
+    run_folder_load = "run_1_mar_64_ft_scn_fix"
     epoch_load = str(90) 
 
     
