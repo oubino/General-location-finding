@@ -17,7 +17,7 @@ def init():
     global optimizer
     global model
     
-    if S.unet_model_user == True:
+    if S.UNET_model_user == True:
         model = network.UNet3d(1,S.num_class, network.unet_feat)
     else:
         model = network.SCNET(1, S.num_class, S.scnet_feat)

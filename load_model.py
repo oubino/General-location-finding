@@ -25,7 +25,7 @@ def init():
     global scheduler
     
     # load in model/optimizer/scaler
-    if S.unet_model_user == True:
+    if S.UNET_model_user == True:
         model_load = network.UNet3d(1,S.num_class, network.unet_feat)
     else:
         model_load = network.SCNET(1, S.num_class, S.scnet_feat)
