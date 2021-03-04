@@ -10,5 +10,5 @@ print(files)
 with open(r'C:\Users\olive\OneDrive\Documents\CNN\db.csv', 'w', newline='') as csvfile:
       writer = csv.writer(csvfile)
       for i in files:
-          writer.writerow([files[files.index(i)] + '.pack'])#)#[index[i]])
+          writer.writerow([i])
         
