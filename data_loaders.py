@@ -60,7 +60,7 @@ dataloaders = {
 
 print('Example training image')
 print('----------------------')
-for i in range(1):
+for i in range(train_size):
     print('image size: ')
     print(train_set.__getitem__(i)['structure'].size()) # i.e. 1 x 224 x 224 as torch tensor (C x H x W)
 

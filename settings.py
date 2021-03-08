@@ -46,7 +46,7 @@ def init():
         if aaron_or_oli == True:
             # Aaron paths
             coding_path = r'C:\Users\ranki_252uikw\Documents\MPhysS2\General-location-finding'
-            root = r'C:\Users\ranki_252uikw\Documents\MPhysS2\HNSCC_deepmind_cropped' # note lack of " "
+            root = r'C:\Users\ranki_252uikw\Documents\MPhysS2\Facial_asymmetry' # note lack of " "
             save_data_path = r'C:\Users\ranki_252uikw\Documents\MPhysS2\Results'
         elif aaron_or_oli == False:
             # Oli paths
@@ -87,7 +87,7 @@ def init():
     batch_size = 1
     
     landmarks = [1,2,3,4,5,6] # brainstem # not general
-    landmarks_loc = {1:'bot', 2:'bot', 3: 'top', 4:'top', 5:'top', 6:'top'} 
+    landmarks_loc = {1:'com', 2:'com', 3: 'com', 4:'com', 5:'com', 6:'com'} 
 
         # define which part of OAR to find
 
@@ -107,9 +107,9 @@ def init():
     
     
     # training parameters
-    epoch_batch = 10
-    num_epoch_batches = 10
-    net_features = 32
+    epoch_batch = 1
+    num_epoch_batches = 1
+    net_features = 8
     scnet_feat = 64
     
     alpha = 1/25000
@@ -142,13 +142,13 @@ def init():
     time_stamp = time.strftime("%Y%m%d-%H%M%S")
 
     # decision on whether to use UNET or SCNET
-    UNET_model_user = False
+    UNET_model_user = True
     
     # decision on whether to crop or downsample
     downsample_user = True
     
     # run folder
-    run_folder = "run_1_mar_64_ft_scn_fix"
+    run_folder = "run_08_mar_facial_test"
     run_path = os.path.join(save_data_path, run_folder) 
     try:  
         os.mkdir(run_path)  
@@ -156,7 +156,7 @@ def init():
         print(error) 
     
     # load model path
-    run_folder_load = "run_1_mar_64_ft_scn_fix"
+    run_folder_load = "run_08_mar_facial_test"
     epoch_load = str(90) 
 
     
@@ -174,8 +174,8 @@ def init():
     top_structures = [5,6,3]
     
     # L/R structures
-    left_structures = [1,5]
-    right_structures = [2,6]
+    left_structures = [1,3,5]
+    right_structures = [2,4,6]
 
     
     # adaptive wing loss
