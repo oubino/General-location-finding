@@ -10,15 +10,17 @@ import os
 
 nii_path = r'/home/rankinaaron98/data/Facial_asymmetry/CTs'
 numpy_path = r'/home/rankinaaron98/data/Facial_asymmetry/CTs_np'
+
 # loop opver nii images
 files = list(sorted(os.listdir(nii_path)))
 print(files)
 for i in files:
-    sitk = sitk.ReadImage(i)
-    print('Image %1.0f' % i)
-    py_arr = sitk.GetArrayFromImage(sitk)
-    np_root = i.replace('.nii','.py')
-    np.save(np_root,py_arr)
+    image = sitk.ReadImage(os.path.join(nii_path,i))
+    print('Image % s' % i)
+    py_arr = sitk.GetArrayFromImage(image)
+    np_root = i.replace('.nii','')
+    numpy_file = os.path.join(numpy_path,np_root)
+    np.save(numpy_file,py_arr)
     print('--------------------')
 
 # A path to a T1-weighted brain .nii image:
