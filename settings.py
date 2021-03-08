@@ -59,12 +59,12 @@ def init():
         if aaron_or_oli == True:
             # Aaron paths
             coding_path = r'/home/rankinaaron98/General-location-finding'
-            root = r'/home/rankinaaron98/data/HNSCC_deepmind_cropped'
+            root = r'/home/rankinaaron98/data/Facial_asymmetry'
             save_data_path = r'/home/rankinaaron98/data/results/Aaron'
         elif aaron_or_oli == False:
             # Oli paths
             coding_path = r'/home/olive/GitHub/General-location-finding'
-            root = r'/home/olive/data/HNSCC_deepmind_cropped'
+            root = r'/home/olive/data/Facial_asymmetry'
             save_data_path = r'/home/olive/data/results/Oli'
             
         
