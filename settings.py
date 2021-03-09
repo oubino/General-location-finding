@@ -171,8 +171,8 @@ def init():
     img_counter_3 = 0
     
     # structures near the top which can be used for flipping
-    top_structures = [5,6,3]
-    
+    top_structures = [5,6]
+    bot_structures = [1,2]
     # L/R structures
     left_structures = [1,3,5]
     right_structures = [2,4,6]
