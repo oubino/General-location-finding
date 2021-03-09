@@ -67,7 +67,7 @@ class Resize(object):
       d_pre, h_pre, w_pre = image.shape[:3]
         
       image = skimage.transform.resize(image, (depth, width, height), order = 1, preserve_range=True, anti_aliasing=True)
-      #structure = skimage.transform.resize(structure, (depth, width, height), order = 0, preserve_range = True, anti_aliasing=False )
+      structure = skimage.transform.resize(structure, (depth, width, height), order = 0, preserve_range = True, anti_aliasing=False )
         
       d_post, h_post, w_post = image.shape[:3] 
     
@@ -75,7 +75,7 @@ class Resize(object):
       S.downsample_ratio_w = np.append(S.downsample_ratio_w, w_pre/w_post)
       S.downsample_ratio_d = np.append(S.downsample_ratio_d, d_pre/d_post)
       S.downsample_idx_list = np.append(S.downsample_idx_list, idx) 
-      
+      '''
       structure_new = np.zeros(image.shape)
       for l in S.landmarks:
           #index = S.landmarks.index(l)
@@ -85,8 +85,8 @@ class Resize(object):
               new_y = int(old_index[1] * h_post/h_pre)
               new_x = int(old_index[2] * w_post/w_pre)
               structure_new[new_z][new_y][new_x] = l
-
-      return {'image':image, 'structure': structure_new, 'idx': idx} # note note !
+        '''
+      return {'image':image,'structure': structure , 'idx': idx} # note note !'structure': structure_new
   
 class Fix_base_value(object):  
   """ Some images start from -1024, others from 0 make sure all start from 0 """
@@ -255,19 +255,30 @@ class Upsidedown_scipy(object):
         # if upside down need to flip
         # if left cochlea landmark = 5 above 1/2
         # data is y, x, z
-        counter = 0
-        landmark_loc = np.where(structure == S.top_structures[counter])
-        while landmark_loc[0].size == 0:
-            counter += 1
+        counter_top = 0
+        landmark_loc_top = np.where(structure == S.top_structures[counter_top])
+        while landmark_loc_top[0].size == 0:
+            counter_top += 1
             try:
-                landmark_loc = np.where(structure == S.top_structures[counter])
+                landmark_loc_top = np.where(structure == S.top_structures[counter_top])
             except:
                 print('ERROR NONE OF THE TOP STRUCTURES FOUND IN IMAGE- returning unflipped image')
                 return {'image': image, 'structure': structure, 'idx': idx}
         
-        z_landmark = landmark_loc[0][0]
-        z_size = structure.shape[0] 
-        if z_landmark < z_size/2:
+       counter_bot = 0
+        landmark_loc_bot = np.where(structure == S.bot_structures[counter_bot])
+        while landmark_loc_bot[0].size == 0:
+            counter_bot += 1
+            try:
+                landmark_loc_bot = np.where(structure == S.bot_structures[counter_bot])
+            except:
+                print('ERROR NONE OF THE BOTTOM STRUCTURES FOUND IN IMAGE- returning unflipped image')
+                return {'image': image, 'structure': structure, 'idx': idx}
+
+        z_landmark_top = landmark_loc_top[0][0]
+        z_landmark_bot = landmark_loc_bot[0][0]
+        #z_size = structure.shape[0] 
+        if z_landmark_top < z_landmark_bot:
             angle = 180
             image = scipy.ndimage.rotate(image, angle, axes = [2,0], reshape = False, order =0)
             structure = scipy.ndimage.rotate(structure, angle, axes = [2,0], reshape = False, order =0)
