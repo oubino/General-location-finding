@@ -31,7 +31,7 @@ def init():
     global save_data_path
     global landmarks_loc
     global net_features, scnet_feat
-    global top_structures
+    global top_structures, bot_structures
     global left_structures, right_structures
     global wing_loss, wing_omega, wing_epsilon, wing_alpha, wing_theta
     global p2p_reg_term
