@@ -255,17 +255,7 @@ class Upsidedown_scipy(object):
         # if upside down need to flip
         # if left cochlea landmark = 5 above 1/2
         # data is y, x, z
-        counter_top = 0
-        landmark_loc_top = np.where(structure == S.top_structures[counter_top])
-        while landmark_loc_top[0].size == 0:
-            counter_top += 1
-            try:
-                landmark_loc_top = np.where(structure == S.top_structures[counter_top])
-            except:
-                print('ERROR NONE OF THE TOP STRUCTURES FOUND IN IMAGE- returning unflipped image')
-                return {'image': image, 'structure': structure, 'idx': idx}
-        
-       counter_bot = 0
+        # if top structure is below bottom structure then flips by 180
         landmark_loc_bot = np.where(structure == S.bot_structures[counter_bot])
         while landmark_loc_bot[0].size == 0:
             counter_bot += 1
