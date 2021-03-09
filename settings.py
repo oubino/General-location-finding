@@ -107,7 +107,7 @@ def init():
     
     
     # training parameters
-    epoch_batch = 10
+    epoch_batch = 40
     num_epoch_batches = 1
     net_features = 8
     scnet_feat = 64
@@ -157,7 +157,7 @@ def init():
     
     # load model path
     run_folder_load = "run_08_mar_facial_test"
-    epoch_load = str(90) 
+    epoch_load = str(10) 
 
     
     # create tensorboard writer
