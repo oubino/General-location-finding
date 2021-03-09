@@ -86,8 +86,8 @@ def init():
     
     batch_size = 1
     
-    landmarks = [1,2,3,4,5,6] # brainstem # not general
-    landmarks_loc = {1:'com', 2:'com', 3: 'com', 4:'com', 5:'com', 6:'com'} 
+    landmarks = [1,2,3,4,5,6,7,8,9,10] # brainstem # not general
+    landmarks_loc = {1:'com', 2:'com', 3: 'com', 4:'com', 5:'com', 6:'com', 7: 'com', 8:'com', 9:'com', 10:'com', } 
 
         # define which part of OAR to find
 
@@ -174,8 +174,8 @@ def init():
     top_structures = [5,6]
     bot_structures = [1,2]
     # L/R structures
-    left_structures = [1,3,5]
-    right_structures = [2,4,6]
+    left_structures = [1,3,5,7,9]
+    right_structures = [2,4,6,8,10]
 
     
     # adaptive wing loss
