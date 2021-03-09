@@ -252,9 +252,7 @@ class Horizontal_flip(object):
 class Upsidedown_scipy(object):
     def __call__(self,sample):
         image, structure, idx = sample['image'], sample['structure'], sample['idx']
-        # if upside down need to flip
-        # if left cochlea landmark = 5 above 1/2
-        # data is y, x, z
+        # if top structure is below bottom structure then flips by 180
         counter_top = 0
         landmark_loc_top = np.where(structure == S.top_structures[counter_top])
         while landmark_loc_top[0].size == 0:
