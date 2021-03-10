@@ -237,6 +237,18 @@ def Flip_left_right_structures(structure):
         elif (np.nonzero(indices_left)[2].size != 0) and (np.nonzero(indices_right)[2].size == 0):
             structure[indices_left] = S.right_structures[i] 
     return structure
+
+class Check_left_right(object):
+    def __call__(self,sample):
+        image, structure, idx, patient = sample['image'], sample['structure'], sample['idx'], sample['patient']
+        for i in range(len(S.left_structures)):
+            indices_left = np.round(structure) == S.left_structures[i]
+            indices_right = np.round(structure) == S.right_structures[i]
+            if np.amax(np.nonzero(indices_right)[2]) > np.amax(np.nonzero(indices_left)[2]):
+                print('ERROR LEFT AND RIGHT WRONG WAy RouND')
+                S.error_counter += 1
+        return {'image': image, 'structure': structure, 'idx': idx, 'patient':patient}
+    
     
 class Horizontal_flip(object):
     def __call__(self,sample):
