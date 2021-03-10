@@ -301,6 +301,8 @@ def point_to_point_mm(mask_x, mask_y, mask_z, pred_x, pred_y, pred_z, patient):
   for i in range(len(list_img)):
       if list_img[i][0] == pat_ind:
           index = i
+  print('index')
+  print(index)
   pixel_mm_x = list_img[index][1] # 1 pixel = pixel_mm_x * mm
   pixel_mm_y = list_img[index][1]
   pixel_mm_z = list_img[index][2]
@@ -312,6 +314,8 @@ def point_to_point_mm(mask_x, mask_y, mask_z, pred_x, pred_y, pred_z, patient):
         for i in range(len(S.downsample_idx_list)):
           if S.downsample_idx_list == patient:
               index = i
+        print('index')
+        print(index)
         print('downsample list')
         print(S.downsample_idx_list)
         print('downsample values')
