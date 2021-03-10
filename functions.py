@@ -313,7 +313,7 @@ def point_to_point_mm(mask_x, mask_y, mask_z, pred_x, pred_y, pred_z, patient):
   print(pixel_mm_x)
   if len(S.downsample_idx_list):
         # array not emtpy
-        index = np.where(S.downsample_idx_list==patient)
+        index = S.downsample_idx_list.index(patient)
         print('list')
         print(S.downsample_idx_list)
         print('patient')
