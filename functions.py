@@ -323,9 +323,9 @@ def point_to_point_mm(mask_x, mask_y, mask_z, pred_x, pred_y, pred_z, patient):
               index = i
         #index = S.downsample_idx_list.index(patient)
         #print('pre amendment pixel sizes', pixel_mm_x, pixel_mm_y, pixel_mm_z)
-        pixel_mm_x = float(pixel_mm_x) * S.downsample_ratio_w[index[0][0]]
-        pixel_mm_y = float(pixel_mm_y) * S.downsample_ratio_h[index[0][0]]
-        pixel_mm_z = float(pixel_mm_z) * S.downsample_ratio_d[index[0][0]]
+        pixel_mm_x = float(pixel_mm_x) * S.downsample_ratio_w[index]
+        pixel_mm_y = float(pixel_mm_y) * S.downsample_ratio_h[index]
+        pixel_mm_z = float(pixel_mm_z) * S.downsample_ratio_d[index]
         pixel_mm_x = torch.tensor((pixel_mm_x)).to(S.device)
         pixel_mm_y = torch.tensor((pixel_mm_y)).to(S.device)
         pixel_mm_z = torch.tensor((pixel_mm_z)).to(S.device)
