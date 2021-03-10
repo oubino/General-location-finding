@@ -59,12 +59,12 @@ def init():
         if aaron_or_oli == True:
             # Aaron paths
             coding_path = r'/home/rankinaaron98/General-location-finding'
-            root = r'/home/rankinaaron98/data/Facial_asymmetry'
+            root = r'/home/rankinaaron98/data/Facial_asymmetry_oli'
             save_data_path = r'/home/rankinaaron98/data/results/Aaron'
         elif aaron_or_oli == False:
             # Oli paths
             coding_path = r'/home/olive/GitHub/General-location-finding'
-            root = r'/home/olive/data/Facial_asymmetry'
+            root = r'/home/olive/data/Facial_asymmetry_oli'
             save_data_path = r'/home/olive/data/results/Oli'
             
         
@@ -107,7 +107,7 @@ def init():
     
     
     # training parameters
-    epoch_batch = 40
+    epoch_batch = 1
     num_epoch_batches = 1
     net_features = 8
     scnet_feat = 64
