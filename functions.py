@@ -314,6 +314,8 @@ def point_to_point_mm(mask_x, mask_y, mask_z, pred_x, pred_y, pred_z, patient):
               index = i
         print('downsample list')
         print(S.downsample_idx_list)
+        print('downsample values')
+        print(S.downsample_ratio_w)
         print('downsample ratio')
         print(S.downsample_ratio_w[index])
         #index = S.downsample_idx_list.index(patient)
