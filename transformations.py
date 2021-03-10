@@ -74,7 +74,7 @@ class Resize(object):
       S.downsample_ratio_h = np.append(S.downsample_ratio_h, h_pre/h_post)
       S.downsample_ratio_w = np.append(S.downsample_ratio_w, w_pre/w_post)
       S.downsample_ratio_d = np.append(S.downsample_ratio_d, d_pre/d_post)
-      S.downsample_idx_list = S.downsample_idx_list.append(patient) 
+      S.downsample_idx_list.append(patient) 
       '''
       structure_new = np.zeros(image.shape)
       for l in S.landmarks:
