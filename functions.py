@@ -304,18 +304,10 @@ def point_to_point_mm(mask_x, mask_y, mask_z, pred_x, pred_y, pred_z, patient):
   pixel_mm_z = list_img[index][2]
   if len(S.downsample_idx_list):
         # array not emtpy
-        index = 0
-        print('list')
-        print(S.downsample_idx_list)
-        print('len list')
-        print(len(S.downsample_idx_list))
-        print('patient 0')
-        print(patient[0])
+        index = 0       
         for i in range(len(S.downsample_idx_list)):
           if S.downsample_idx_list[i] == patient[0]:
               index = i
-        print('index')
-        print(index)
         #index = S.downsample_idx_list.index(patient)
         #print('pre amendment pixel sizes', pixel_mm_x, pixel_mm_y, pixel_mm_z)
         pixel_mm_x = float(pixel_mm_x) * S.downsample_ratio_w[index]
