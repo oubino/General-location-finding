@@ -133,7 +133,7 @@ def init():
     downsample_ratio_h = np.empty((0), float)
     downsample_ratio_w = np.empty((0), float)
     downsample_ratio_d = np.empty((0), float)
-    downsample_idx_list = np.empty((0), float)
+    downsample_idx_list = []
     
     # use predicted max - if want gauss fit set to false
     pred_max = True

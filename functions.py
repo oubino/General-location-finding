@@ -287,19 +287,22 @@ def point_to_point(mask_x, mask_y, mask_z, pred_x, pred_y, pred_z):
   point_to_point = ((pred_x - mask_x)**2 + (pred_y - mask_y)**2 + (pred_z - mask_z)**2)**0.5 
   return point_to_point
 
-def point_to_point_mm(mask_x, mask_y, mask_z, pred_x, pred_y, pred_z, image_idx):
+def point_to_point_mm(mask_x, mask_y, mask_z, pred_x, pred_y, pred_z, patient):
   # calculates point to point in mm
   data = csv.reader(open(os.path.join(S.root, 'image_dimensions.csv')),delimiter=',')
   next(data) # skip first line
-  sortedlist = sorted(data, key=operator.itemgetter(0))
+  list_img = list(data)#, key=operator.itemgetter(0))
   # sortedlist[img_number][0 = name, 1 = x/y, 2 = z]
-  image_idx = int(image_idx)
-  pixel_mm_x = sortedlist[image_idx][1] # 1 pixel = pixel_mm_x * mm
-  pixel_mm_y = sortedlist[image_idx][1]
-  pixel_mm_z = sortedlist[image_idx][2]
+  #image_idx = int(image_idx)
+  index = list_img.index(patient)
+  print('index')
+  print(index)
+  pixel_mm_x = list_img[index][1] # 1 pixel = pixel_mm_x * mm
+  pixel_mm_y = list_img[index][1]
+  pixel_mm_z = list_img[index][2]
   if S.downsample_idx_list.size:
         # array not emtpy
-        index = np.where(S.downsample_idx_list==image_idx)
+        index = np.where(S.downsample_idx_list==patient)
         #print('pre amendment pixel sizes', pixel_mm_x, pixel_mm_y, pixel_mm_z)
         pixel_mm_x = float(pixel_mm_x) * S.downsample_ratio_w[index[0][0]]
         pixel_mm_y = float(pixel_mm_y) * S.downsample_ratio_h[index[0][0]]
