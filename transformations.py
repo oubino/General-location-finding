@@ -106,7 +106,7 @@ class Extract_landmark_location(object):
         for l in S.landmarks:
             # structure is z, y, x
             # need it in y, x, z
-            coords = numpy_loc.landmark_loc_np(S.landmarks_loc[l],structure,l)[0]
+            coords = numpy_loc.landmark_loc_np(S.landmarks_loc[l],structure,l, idx)[0]
             if sum(coords) != 0 :
                 x, y, z = coords[0], coords[1], coords[2]
                 structure_mod[z][y][x] = l

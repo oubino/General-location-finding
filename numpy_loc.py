@@ -5,15 +5,15 @@ import csv, operator
 import settings as S
 import os
 
-def landmark_loc_np(locat, structure, landmark):
+def landmark_loc_np(locat, structure, landmark, idx):
     if locat == 'com':
-        return com_structure_np(structure,landmark)
+        return com_structure_np(structure,landmark, idx)
     elif locat == 'top':
-        return top_structure_np(structure,landmark)
+        return top_structure_np(structure,landmark, idx)
     elif locat == 'bot':
-        return bot_structure_np(structure,landmark)
+        return bot_structure_np(structure,landmark, idx)
         
-def com_structure_np(structure, landmark): # assumes 1 channel
+def com_structure_np(structure, landmark, idx): # assumes 1 channel
   # structure is (D x H x W)
   # output is x,y,z
   landmark_present = []
@@ -21,7 +21,7 @@ def com_structure_np(structure, landmark): # assumes 1 channel
   locations = np.nonzero(np.round(structure) == landmark)
   
   if (len(locations[0]) == 0): # if no landmarks detected for structure
-    print('no structure found using np for %1.0f' % landmark)
+    print('no structure found using np for %1.0f for image % s' % (landmark,idx))
     landmark_present.append(False)
     x_com = 0
     y_com = 0
@@ -41,7 +41,7 @@ def com_structure_np(structure, landmark): # assumes 1 channel
   coords = [int(x_com),int(y_com),int(z_com)]
   return coords, landmark_present 
 
-def top_structure_np(structure, landmark): # assumes 1 channel
+def top_structure_np(structure, landmark, idx): # assumes 1 channel
   # structure is (D x H x W)
   # output is x,y,z
   landmark_present = []
@@ -49,7 +49,7 @@ def top_structure_np(structure, landmark): # assumes 1 channel
   locations = np.nonzero(np.round(structure) == landmark)
   
   if (len(locations[0]) == 0): # if no landmarks detected for structure
-    print('no structure found using np for %1.0f' % landmark)
+    print('no structure found using np for %1.0f for image % s' % (landmark,idx))
     landmark_present.append(False)
     x_top = 0
     y_top = 0
@@ -65,7 +65,7 @@ def top_structure_np(structure, landmark): # assumes 1 channel
   coords = [x_top, y_top, z_top]
   return coords, landmark_present   
 
-def bot_structure_np(structure, landmark): # assumes 1 channel
+def bot_structure_np(structure, landmark, idx): # assumes 1 channel
   # structure is (D x H x W)
   # output is x,y,z
   landmark_present = []
@@ -73,7 +73,7 @@ def bot_structure_np(structure, landmark): # assumes 1 channel
   locations = np.nonzero(np.round(structure) == landmark)
   
   if (len(locations[0]) == 0): # if no landmarks detected for structure
-    print('no structure found using np for %1.0f' % landmark)
+    print('no structure found using np for %1.0f for image % s' % (landmark,idx))
     landmark_present.append(False)
     x_bot = 0
     y_bot = 0
