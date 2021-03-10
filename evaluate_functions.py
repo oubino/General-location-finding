@@ -260,7 +260,7 @@ def performance_metrics(model,sigmas,gamma, epochs_completed):
   for batch in data_loaders.dataloaders['test']:
     image = batch['image'].to(S.device)
     structure = batch['structure'].to(S.device)
-    idx = batch['idx'].to(S.device)
+    idx = batch['idx']
     pred = model(image)
   
     batch_number = 0
