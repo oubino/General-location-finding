@@ -49,7 +49,8 @@ class CTDataset(Dataset):
         #print(img.shape)
 
         sample = {'image': img, 'structure': structure} # both are nd.arrays, stored in sample dataset
-        sample['idx'] = self.imgs[idx] # should print out which image is problematic
+        sample['idx'] = idx # should print out which image is problematic
+        sample['patient'] = self.imgs[idx]
         
         if (self.transform_train) and (self.test == False):
             sample = self.transform_train(sample) # if transforms present, act on sample

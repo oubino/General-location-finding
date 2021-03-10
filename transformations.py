@@ -101,12 +101,12 @@ class Extract_landmark_location(object):
     """ Convert structure to tensor of zeros with one value at the desired landmark location """
     
     def __call__(self,sample):
-        image, structure, idx = sample['image'], sample['structure'], sample['idx']
+        image, structure, idx, patient = sample['image'], sample['structure'], sample['idx'], sample['patient']
         structure_mod = np.zeros(structure.shape)
         for l in S.landmarks:
             # structure is z, y, x
             # need it in y, x, z
-            coords = numpy_loc.landmark_loc_np(S.landmarks_loc[l],structure,l, idx)[0]
+            coords = numpy_loc.landmark_loc_np(S.landmarks_loc[l],structure,l, patient)[0]
             if sum(coords) != 0 :
                 x, y, z = coords[0], coords[1], coords[2]
                 structure_mod[z][y][x] = l
@@ -123,12 +123,12 @@ class Normalise(object):
       self.window = window
                           
   def __call__(self, sample):
-      image, structure, idx = sample['image'], sample['structure'], sample['idx']
+      image, structure, idx, patient = sample['image'], sample['structure'], sample['idx'], sample['patient']
       # need to normalise around different values
       if np.round(np.amin(image)) < 0:
           print("MIN VALUE LESS THAN 0")
-          print('idx and min value')
-          print(idx, np.amin(image))
+          print('ident and min value')
+          print(patient, np.amin(image))
           S.error_counter += 1
       level = random.randint(self.level_min, self.level_max)
       minval = max(level - self.window/2, 0) # ensures don't go to negative values
