@@ -294,15 +294,8 @@ def point_to_point_mm(mask_x, mask_y, mask_z, pred_x, pred_y, pred_z, patient):
   list_img = list(data)#, key=operator.itemgetter(0))
   # sortedlist[img_number][0 = name, 1 = x/y, 2 = z]
   #image_idx = int(image_idx)
-  print('list')
-  print(list_img)
-  print('patient')
-  print(patient)
   pat_ind = patient[0].replace('.npy','')
-  index = 0
-  print('index')
-  print(index)
-  
+  index = 0 
   for i in range(len(list_img)):
       if list_img[i][0] == pat_ind:
           index = i
