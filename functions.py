@@ -299,9 +299,12 @@ def point_to_point_mm(mask_x, mask_y, mask_z, pred_x, pred_y, pred_z, patient):
   print('patient')
   print(patient)
   pat_ind = patient[0].replace('.npy','')
-  index = list_img.index(pat_ind)
+  index = 0
   print('index')
   print(index)
+  for i in len(list_img):
+      if list_img[i][0] == pat_ind:
+          index = i
   pixel_mm_x = list_img[index][1] # 1 pixel = pixel_mm_x * mm
   pixel_mm_y = list_img[index][1]
   pixel_mm_z = list_img[index][2]
