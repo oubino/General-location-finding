@@ -32,7 +32,7 @@ def com_structure_np(structure, landmark): # assumes 1 channel
 
 # paths
 aaron_folder = r'/home/olive/data/Facial_asymmetry_aaron/Structures_aaron'
-oli_folder = r'/home/olive/data/Facial_asymmetry_oli\Structures'
+oli_folder = r'/home/olive/data/Facial_asymmetry_oli/Structures'
 save_structure_folder = r'/home/olive/data/Facial_asymmetry_combined/Structures'
 save_ct_folder = r'/home/olive/data/Facial_asymmetry_combined/CTs'
 load_ct_folder = r'/home/olive/data/Facial_asymmetry_oli/CTs'
