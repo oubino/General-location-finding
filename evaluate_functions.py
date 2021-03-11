@@ -33,26 +33,6 @@ def extract_landmark_for_structure(structure, landmark):
 
   return b
 
-def extract_landmark_for_structure_np(structure, landmark):
-  landmark = float(landmark)
-  zero_array = np.empty(structure.shape)
-
-  min = landmark - 0.1
-  max = landmark + 0.1 # small range around int
-
-  min = float(min)
-  max = float(max)
-
-  #print(structure.type())
-  #print(zero_tensor.type())
-
-  a = np.where(structure > min, structure, zero_array)
-  b = np.where(a < max, a, zero_array)
-  c = np.where(structure == landmark, structure, zero_array)
-
-  return c
-
-
 # for pred/structure & image
 def plot_3d_pred_img_struc(image, structure, pred, threshold_img, eval_path, patient, landmark):
     

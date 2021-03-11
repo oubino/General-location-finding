@@ -9,6 +9,8 @@ import math
 import os
 import numpy
 import evaluate_functions as eval_func
+import numpy as np
+
 
 import settings as S
 import functions 
@@ -58,7 +60,7 @@ dataloaders = {
 #print(train_set.__getitem__(0)['image'].size()) # i.e. 1 x 224 x 224 as torch tensor (C x H x W)
 #print(train_set.__getitem__(0)['structure'].size()) 
 
-"""
+
 print('Example training image')
 print('----------------------')
 for i in range(1):
@@ -70,11 +72,11 @@ for i in range(1):
     for l in S.landmarks:
         print(functions.landmark_loc(train_set.__getitem__(i)['structure'].unsqueeze(0),l))
 
-"""
+
         
 # print all images as CT scans to view them
 if S.print_CT_check == True:
-    """
+    
     # training set
     file_name_train = "train_cts"
     train_path_ct = os.path.join(S.run_path, file_name_train)
@@ -83,11 +85,18 @@ if S.print_CT_check == True:
     except OSError as error:
         print(error)
     
-    for i in range(5):
-        eval_func.plot_3d_pred_img_no_pred(train_set.__getitem__(i)['image'].squeeze(0), train_set.__getitem__(i)['structure'].squeeze(0), S.threshold_img_print, train_path_ct, train_set.__getitem__(i)['patient'])
+    for i in range(len(train_set)):
+        for landmark in S.landmarks:
+            structure = train_set.__getitem__(i)['structure'].squeeze(0)
+            locations = np.nonzero(np.round(structure) == landmark)
+            x, y, z = locations[0][1], locations[0][0], locations[0][2]
+            empty_struc = np.zeros((128,128,80))
+            empty_struc[y][x][z] = landmark
+            #structure_extrac = eval_func.extract_landmark_for_structure_np(structure, landmark)
+            eval_func.plot_3d_pred_img_no_pred(train_set.__getitem__(i)['image'].squeeze(0).cpu().numpy(), empty_struc, S.threshold_img_print, train_path_ct, train_set.__getitem__(i)['patient'], landmark)
         print(train_set.__getitem__(i)['patient'])
     
-    """
+    
     
     # val set
     file_name_val = "val_cts"
@@ -97,21 +106,18 @@ if S.print_CT_check == True:
     except OSError as error:
         print(error)
     
-    import numpy as np
     for i in range(len(val_set)):
         for landmark in S.landmarks:
             structure = val_set.__getitem__(i)['structure'].squeeze(0)
             locations = np.nonzero(np.round(structure) == landmark)
             x, y, z = locations[0][1], locations[0][0], locations[0][2]
-            print(x, y, z)
-            print(structure.shape)
             empty_struc = np.zeros((128,128,80))
             empty_struc[y][x][z] = landmark
             #structure_extrac = eval_func.extract_landmark_for_structure_np(structure, landmark)
             eval_func.plot_3d_pred_img_no_pred(val_set.__getitem__(i)['image'].squeeze(0).cpu().numpy(), empty_struc, S.threshold_img_print, val_path_ct, val_set.__getitem__(i)['patient'], landmark)
         print(val_set.__getitem__(i)['patient'])
     
-    """
+    
         
     # test set
     file_name_test = "test_cts"
@@ -122,10 +128,17 @@ if S.print_CT_check == True:
         print(error)
     
     for i in range(len(test_set)):
-        eval_func.plot_3d_pred_img_no_pred(test_set.__getitem__(i)['image'].squeeze(0), test_set.__getitem__(i)['structure'].squeeze(0), S.threshold_img_print, test_path_ct, test_set.__getitem__(i)['patient'])
+        for landmark in S.landmarks:
+            structure = test_set.__getitem__(i)['structure'].squeeze(0)
+            locations = np.nonzero(np.round(structure) == landmark)
+            x, y, z = locations[0][1], locations[0][0], locations[0][2]
+            empty_struc = np.zeros((128,128,80))
+            empty_struc[y][x][z] = landmark
+            #structure_extrac = eval_func.extract_landmark_for_structure_np(structure, landmark)
+            eval_func.plot_3d_pred_img_no_pred(test_set.__getitem__(i)['image'].squeeze(0).cpu().numpy(), empty_struc, S.threshold_img_print, test_path_ct, test_set.__getitem__(i)['patient'], landmark)
         print(test_set.__getitem__(i)['patient'])
     
-    '''
+    
     #img = dataset.__getitem__(10)['image']
     #idx = dataset.__getitem__(10)['idx']
     #print(idx)
@@ -135,4 +148,4 @@ if S.print_CT_check == True:
     os.chdir(S.coding_path) # change to data path and change back at end
     #print(os.getcwd())
     
-    """
+    
