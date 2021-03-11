@@ -77,6 +77,35 @@ def plot_3d_pred_img_struc(image, structure, pred, threshold_img, eval_path):
     S.img_counter_1 += 1
     plt.savefig(img_name)
     
+def plot_3d_pred_img_no_struc(image, threshold_img, eval_path):
+    
+    verts_img, faces_img = measure.marching_cubes_classic(image, threshold_img)
+
+    fig = plt.figure(figsize=(10, 10))
+    ax = fig.add_subplot(111, projection='3d')
+
+    # Fancy indexing: `verts[faces]` to generate a collection of triangles
+    mesh_img = Poly3DCollection(verts_img[faces_img], alpha=0.1)
+
+    #face_color_img = [0.5, 0.5, 1]
+    face_color_img = ['tab:gray']
+    mesh_img.set_facecolor(face_color_img)
+
+    ax.add_collection3d(mesh_img)
+
+    ax.set_xlim(0, image.shape[1])
+    ax.set_ylim(0, image.shape[0])
+    ax.set_zlim(0, image.shape[2])
+
+    ax.invert_xaxis()
+
+    # rotate the axes and update
+    ax.mouse_init(rotate_btn=1, zoom_btn=3)
+
+    img_name = os.path.join(eval_path, "%1.0f.png" % S.img_counter_1)
+    S.img_counter_1 += 1
+    plt.savefig(img_name)
+    
 def plot_3d_pred_img_struc_no_img(structure, pred, eval_path):
     
     verts_structure, faces_structure = measure.marching_cubes_classic(structure)#, threshold_structure)

@@ -8,6 +8,7 @@ from torch.utils.data import DataLoader
 import math
 import os
 import numpy
+import evaluate_functions as eval_func
 
 import settings as S
 import functions 
@@ -69,6 +70,40 @@ for i in range(1):
     for l in S.landmarks:
         print(functions.landmark_loc(train_set.__getitem__(i)['structure'].unsqueeze(0),l))
         
+# print all images as CT scans to view them
+
+# training set
+file_name_train = "train_cts"
+train_path_ct = os.path.join(S.run_path, file_name_train)
+try: 
+    os.mkdir(train_path_ct)
+except OSError as error:
+    print(error)
+
+for i in range(len(train_set)):
+    eval_func.plot_3d_pred_img_no_struc(train_set.__getitem__(i)['image'], S.threshold_img, train_path_ct)
+    
+# val set
+file_name_val = "val_cts"
+val_path_ct = os.path.join(S.run_path, file_name_val)
+try: 
+    os.mkdir(val_path_ct)
+except OSError as error:
+    print(error)
+
+for i in range(len(val_set)):
+    eval_func.plot_3d_pred_img_no_struc(val_set.__getitem__(i)['image'], S.threshold_img, val_path_ct)
+    
+# test set
+file_name_test = "test_cts"
+test_path_ct = os.path.join(S.run_path, file_name_test)
+try: 
+    os.mkdir(test_path_ct)
+except OSError as error:
+    print(error)
+
+for i in range(len(test_set)):
+    eval_func.plot_3d_pred_img_no_struc(test_set.__getitem__(i)['image'], S.threshold_img, test_path_ct)
 
 
 #img = dataset.__getitem__(10)['image']
