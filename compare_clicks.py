@@ -91,9 +91,9 @@ def pixel_to_mm(patient):
     for i in range(len(list_img)):
         if list_img[i][0] == pat_ind:
             index = i
-    pixel_mm_x = list_img[index][1] # 1 pixel = pixel_mm_x * mm
-    pixel_mm_y = list_img[index][1]
-    pixel_mm_z = list_img[index][2]
+    pixel_mm_x = float(list_img[index][1]) # 1 pixel = pixel_mm_x * mm
+    pixel_mm_y = float(list_img[index][1])
+    pixel_mm_z = float(list_img[index][2])
     
     return pixel_mm_x, pixel_mm_y, pixel_mm_z
 
@@ -102,9 +102,9 @@ def pixel_to_mm(patient):
 for j in range(len(list_1)):
     for k in landmarks:
         x_mm, y_mm, z_mm = pixel_to_mm(list_1[j])
-        dev_x = abs(com_list_aaron['%1.0f' % k][j][2] - com_list_oli['%1.0f' % k][j][2])*float(x_mm)
-        dev_y = abs(com_list_aaron['%1.0f' % k][j][1] - com_list_oli['%1.0f' % k][j][1])*float(y_mm)
-        dev_z = abs(com_list_aaron['%1.0f' % k][j][0] - com_list_oli['%1.0f' % k][j][0])*float(z_mm)
+        dev_x = abs(com_list_aaron['%1.0f' % k][j][2] - com_list_oli['%1.0f' % k][j][2])*(x_mm)
+        dev_y = abs(com_list_aaron['%1.0f' % k][j][1] - com_list_oli['%1.0f' % k][j][1])*(y_mm)
+        dev_z = abs(com_list_aaron['%1.0f' % k][j][0] - com_list_oli['%1.0f' % k][j][0])*(z_mm)
         dev = math.sqrt(dev_x**2 + dev_y**2 + dev_z**2)
         dev_list['%1.0f' % k].append(dev)
         if dev > limit:
@@ -125,9 +125,9 @@ for k in landmarks:
 # calculate mean of aaron and oli from arrays
 for j in range(len(list_1)):
     for k in landmarks:
-        mean_x = (com_list_aaron['%1.0f' % k][j][2] + com_list_oli['%1.0f' % k][j][2])/2
-        mean_y = (com_list_aaron['%1.0f' % k][j][1] + com_list_oli['%1.0f' % k][j][1])/2
-        mean_z = (com_list_aaron['%1.0f' % k][j][0] + com_list_oli['%1.0f' % k][j][0])/2
+        mean_x = ((com_list_aaron['%1.0f' % k][j][2] + com_list_oli['%1.0f' % k][j][2])/2)*(x_mm)
+        mean_y = ((com_list_aaron['%1.0f' % k][j][1] + com_list_oli['%1.0f' % k][j][1])/2)*(y_mm)
+        mean_z = ((com_list_aaron['%1.0f' % k][j][0] + com_list_oli['%1.0f' % k][j][0])/2)*(z_mm)
         coords = [mean_x, mean_y, mean_z]
         mean_list['%1.0f' % k].append(coords)
         
