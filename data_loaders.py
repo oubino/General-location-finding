@@ -71,52 +71,52 @@ for i in range(1):
         print(functions.landmark_loc(train_set.__getitem__(i)['structure'].unsqueeze(0),l))
         
 # print all images as CT scans to view them
-
-# training set
-file_name_train = "train_cts"
-train_path_ct = os.path.join(S.run_path, file_name_train)
-try: 
-    os.mkdir(train_path_ct)
-except OSError as error:
-    print(error)
-
-for i in range(len(train_set)):
-    eval_func.plot_3d_pred_img_no_pred(train_set.__getitem__(i)['image'].squeeze(0), train_set.__getitem__(i)['structure'].squeeze(0), S.threshold_img_print, train_path_ct)
-    print('image %1.0f' % i)
-    print(train_set.__getitem__(i)['patient'])
+if S.print_CT_check == True:
+    # training set
+    file_name_train = "train_cts"
+    train_path_ct = os.path.join(S.run_path, file_name_train)
+    try: 
+        os.mkdir(train_path_ct)
+    except OSError as error:
+        print(error)
     
-# val set
-file_name_val = "val_cts"
-val_path_ct = os.path.join(S.run_path, file_name_val)
-try: 
-    os.mkdir(val_path_ct)
-except OSError as error:
-    print(error)
-
-for i in range(len(val_set)):
-    eval_func.plot_3d_pred_img_no_pred(val_set.__getitem__(i)['image'].squeeze(0), val_set.__getitem__(i)['structure'].squeeze(0), S.threshold_img_print, val_path_ct)
-    print('image %1.0f' % i)
-    print(val_set.__getitem__(i)['patient'])
+    for i in range(len(train_set)):
+        eval_func.plot_3d_pred_img_no_pred(train_set.__getitem__(i)['image'].squeeze(0), train_set.__getitem__(i)['structure'].squeeze(0), S.threshold_img_print, train_path_ct, train_set.__getitem__(i)['patient'])
+        print('image %1.0f' % i)
+        print(train_set.__getitem__(i)['patient'])
+        
+    # val set
+    file_name_val = "val_cts"
+    val_path_ct = os.path.join(S.run_path, file_name_val)
+    try: 
+        os.mkdir(val_path_ct)
+    except OSError as error:
+        print(error)
     
-# test set
-file_name_test = "test_cts"
-test_path_ct = os.path.join(S.run_path, file_name_test)
-try: 
-    os.mkdir(test_path_ct)
-except OSError as error:
-    print(error)
-
-for i in range(len(test_set)):
-    eval_func.plot_3d_pred_img_no_pred(test_set.__getitem__(i)['image'].squeeze(0), test_set.__getitem__(i)['structure'].squeeze(0), S.threshold_img_print, test_path_ct)
-    print('image %1.0f' % i)
-    print(test_set.__getitem__(i)['patient'])
-
-
-#img = dataset.__getitem__(10)['image']
-#idx = dataset.__getitem__(10)['idx']
-#print(idx)
-
-batch_accumulation = math.ceil(train_set.__len__()/S.batch_size) # rounds it up
-
-os.chdir(S.coding_path) # change to data path and change back at end
-#print(os.getcwd())
+    for i in range(len(val_set)):
+        eval_func.plot_3d_pred_img_no_pred(val_set.__getitem__(i)['image'].squeeze(0), val_set.__getitem__(i)['structure'].squeeze(0), S.threshold_img_print, val_path_ct, val_set.__getitem__(i)['patient'])
+        print('image %1.0f' % i)
+        print(val_set.__getitem__(i)['patient'])
+        
+    # test set
+    file_name_test = "test_cts"
+    test_path_ct = os.path.join(S.run_path, file_name_test)
+    try: 
+        os.mkdir(test_path_ct)
+    except OSError as error:
+        print(error)
+    
+    for i in range(len(test_set)):
+        eval_func.plot_3d_pred_img_no_pred(test_set.__getitem__(i)['image'].squeeze(0), test_set.__getitem__(i)['structure'].squeeze(0), S.threshold_img_print, test_path_ct, test_set.__getitem__(i)['patient'])
+        print('image %1.0f' % i)
+        print(test_set.__getitem__(i)['patient'])
+    
+    
+    #img = dataset.__getitem__(10)['image']
+    #idx = dataset.__getitem__(10)['idx']
+    #print(idx)
+    
+    batch_accumulation = math.ceil(train_set.__len__()/S.batch_size) # rounds it up
+    
+    os.chdir(S.coding_path) # change to data path and change back at end
+    #print(os.getcwd())
