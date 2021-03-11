@@ -2,6 +2,7 @@ import settings as S
 import numpy as np
 import os
 import math
+import csv
 
 def com_structure_np(structure, landmark): # assumes 1 channel
   # structure is (D x H x W)
@@ -36,6 +37,7 @@ oli_folder = r'/home/olive/data/Facial_asymmetry_oli/Structures'
 save_structure_folder = r'/home/olive/data/Facial_asymmetry_combined/Structures'
 save_ct_folder = r'/home/olive/data/Facial_asymmetry_combined/CTs'
 load_ct_folder = r'/home/olive/data/Facial_asymmetry_oli/CTs'
+csv_root = r'/home/rankinaaron98/data/Facial_asymmetry_aaron/'
 
 # landmarks
 landmarks = [1,2,3,4,5,6,7,8,9,10]
@@ -78,13 +80,31 @@ for k in landmarks:
     mean_dev['%1.0f' % k] = []
     mean_list['%1.0f' % k] = []
     
-        
+def pixel_to_mm(patient):
+    data = csv.reader(open(os.path.join(csv_root, 'image_dimensions.csv')),delimiter=',')
+    next(data) # skip first line
+    list_img = list(data)#, key=operator.itemgetter(0))
+    # sortedlist[img_number][0 = name, 1 = x/y, 2 = z]
+    #image_idx = int(image_idx)
+    pat_ind = patient.replace('.npy','')
+    index = 0 
+    for i in range(len(list_img)):
+        if list_img[i][0] == pat_ind:
+            index = i
+    pixel_mm_x = list_img[index][1] # 1 pixel = pixel_mm_x * mm
+    pixel_mm_y = list_img[index][1]
+    pixel_mm_z = list_img[index][2]
+    
+    return pixel_mm_x, pixel_mm_y, pixel_mm_z
+
+
 # calculate deviation of arrays etc.
 for j in range(len(list_1)):
     for k in landmarks:
-        dev_x = abs(com_list_aaron['%1.0f' % k][j][2] - com_list_oli['%1.0f' % k][j][2])
-        dev_y = abs(com_list_aaron['%1.0f' % k][j][1] - com_list_oli['%1.0f' % k][j][1])
-        dev_z = abs(com_list_aaron['%1.0f' % k][j][0] - com_list_oli['%1.0f' % k][j][0])
+        x_mm, y_mm, z_mm = pixel_to_mm(list_1[j])
+        dev_x = abs(com_list_aaron['%1.0f' % k][j][2] - com_list_oli['%1.0f' % k][j][2])*x_mm
+        dev_y = abs(com_list_aaron['%1.0f' % k][j][1] - com_list_oli['%1.0f' % k][j][1])*y_mm
+        dev_z = abs(com_list_aaron['%1.0f' % k][j][0] - com_list_oli['%1.0f' % k][j][0])*z_mm
         dev = math.sqrt(dev_x**2 + dev_y**2 + dev_z**2)
         dev_list['%1.0f' % k].append(dev)
         if dev > limit:
