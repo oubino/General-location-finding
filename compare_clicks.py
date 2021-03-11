@@ -102,9 +102,9 @@ def pixel_to_mm(patient):
 for j in range(len(list_1)):
     for k in landmarks:
         x_mm, y_mm, z_mm = pixel_to_mm(list_1[j])
-        dev_x = abs(com_list_aaron['%1.0f' % k][j][2] - com_list_oli['%1.0f' % k][j][2])*x_mm
-        dev_y = abs(com_list_aaron['%1.0f' % k][j][1] - com_list_oli['%1.0f' % k][j][1])*y_mm
-        dev_z = abs(com_list_aaron['%1.0f' % k][j][0] - com_list_oli['%1.0f' % k][j][0])*z_mm
+        dev_x = abs(com_list_aaron['%1.0f' % k][j][2] - com_list_oli['%1.0f' % k][j][2])*float(x_mm)
+        dev_y = abs(com_list_aaron['%1.0f' % k][j][1] - com_list_oli['%1.0f' % k][j][1])*float(y_mm)
+        dev_z = abs(com_list_aaron['%1.0f' % k][j][0] - com_list_oli['%1.0f' % k][j][0])*float(z_mm)
         dev = math.sqrt(dev_x**2 + dev_y**2 + dev_z**2)
         dev_list['%1.0f' % k].append(dev)
         if dev > limit:
