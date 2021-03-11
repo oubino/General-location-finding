@@ -41,7 +41,7 @@ load_ct_folder = r'/home/olive/data/Facial_asymmetry_oli/CTs'
 landmarks = [1,2,3,4,5,6,7,8,9,10]
 
 # limit
-limit = 5
+limit = 10
 
 # loop over .py
 files_aaron = list(sorted(os.listdir(aaron_folder)))
@@ -109,7 +109,7 @@ for j in range(len(list_1)):
         mean_list['%1.0f' % k].append(coords)
         
 # ------ return a structure with just one point at the mean  ----- #
-
+'''
 # for each image create an array
 for i in list_1:
     py_array_load = np.load(os.path.join(aaron_folder,i))
@@ -126,7 +126,7 @@ for i in list_1:
     np.save(os.path.join(save_structure_folder,i), structure)
     # save ct
     np.save(os.path.join(save_ct_folder,i), ct)
-
+'''
 # deviations per landmark per image
 print('deviations per landmark per image')
 print(dev_list)
