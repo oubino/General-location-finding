@@ -81,7 +81,7 @@ except OSError as error:
     print(error)
 
 for i in range(len(train_set)):
-    eval_func.plot_3d_pred_img_no_pred(train_set.__getitem__(i)['image'].squeeze(0), train_set.__getitem__(i)['structure'].squeeze(0), S.threshold_img_print, train_path_ct)
+    eval_func.plot_3d_pred_img_no_pred(train_set.__getitem__(i)['image'].squeeze(0), train_set.__getitem__(i)['structure'].squeeze(0), S.threshold_img_print, train_path_ct, train_set.__getitem__(i)['patient'])
     print('image %1.0f' % i)
     print(train_set.__getitem__(i)['patient'])
     
@@ -94,7 +94,7 @@ except OSError as error:
     print(error)
 
 for i in range(len(val_set)):
-    eval_func.plot_3d_pred_img_no_pred(val_set.__getitem__(i)['image'].squeeze(0), val_set.__getitem__(i)['structure'].squeeze(0), S.threshold_img_print, val_path_ct)
+    eval_func.plot_3d_pred_img_no_pred(val_set.__getitem__(i)['image'].squeeze(0), val_set.__getitem__(i)['structure'].squeeze(0), S.threshold_img_print, val_path_ct, val_set.__getitem__(i)['patient'])
     print('image %1.0f' % i)
     print(val_set.__getitem__(i)['patient'])
     
@@ -107,7 +107,7 @@ except OSError as error:
     print(error)
 
 for i in range(len(test_set)):
-    eval_func.plot_3d_pred_img_no_pred(test_set.__getitem__(i)['image'].squeeze(0), test_set.__getitem__(i)['structure'].squeeze(0), S.threshold_img_print, test_path_ct)
+    eval_func.plot_3d_pred_img_no_pred(test_set.__getitem__(i)['image'].squeeze(0), test_set.__getitem__(i)['structure'].squeeze(0), S.threshold_img_print, test_path_ct, test_set.__getitem__(i)['patient'])
     print('image %1.0f' % i)
     print(test_set.__getitem__(i)['patient'])
 
