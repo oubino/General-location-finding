@@ -58,7 +58,7 @@ dataloaders = {
 #print(train_set.__getitem__(0)['image'].size()) # i.e. 1 x 224 x 224 as torch tensor (C x H x W)
 #print(train_set.__getitem__(0)['structure'].size()) 
 
-
+"""
 print('Example training image')
 print('----------------------')
 for i in range(1):
@@ -69,6 +69,8 @@ for i in range(1):
     print('landmark locations for image %1.0f in dataset' % i)
     for l in S.landmarks:
         print(functions.landmark_loc(train_set.__getitem__(i)['structure'].unsqueeze(0),l))
+
+"""
         
 # print all images as CT scans to view them
 if S.print_CT_check == True:
