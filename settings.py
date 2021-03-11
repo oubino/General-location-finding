@@ -59,7 +59,7 @@ def init():
         if aaron_or_oli == True:
             # Aaron paths
             coding_path = r'/home/rankinaaron98/General-location-finding'
-            root = r'/home/rankinaaron98/data/Facial_asymmetry_oli'
+            root = r'/home/rankinaaron98/data/Facial_asymmetry_aaron'
             save_data_path = r'/home/rankinaaron98/data/results/Aaron'
         elif aaron_or_oli == False:
             # Oli paths
