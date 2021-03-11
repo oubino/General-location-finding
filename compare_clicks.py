@@ -31,11 +31,11 @@ def com_structure_np(structure, landmark): # assumes 1 channel
   return coords, landmark_present 
 
 # paths
-aaron_folder = r'C:\Users\olive\OneDrive\Documents\CNN\3D_data\HNSCC_deepmind_cropped\Structures'
-oli_folder = r'C:\Users\olive\OneDrive\Documents\CNN\3D_data\HNSCC_deepmind_cropped\Structures'
-save_structure_folder = r'C:\Users\olive\OneDrive\Documents\CNN\inter_observer\Structures'
-save_ct_folder = r'C:\Users\olive\OneDrive\Documents\CNN\inter_observer\CTs'
-load_ct_folder = r'C:\Users\olive\OneDrive\Documents\CNN\3D_data\HNSCC_deepmind_cropped\CTs'
+aaron_folder = r'/home/olive/data/Facial_asymmetry_aaron/Structures_aaron'
+oli_folder = r'/home/olive/data/Facial_asymmetry_oli\Structures'
+save_structure_folder = r'/home/olive/data/Facial_asymmetry_combined/Structures'
+save_ct_folder = r'/home/olive/data/Facial_asymmetry_combined/CTs'
+load_ct_folder = r'/home/olive/data/Facial_asymmetry_oli/CTs'
 
 # landmarks
 landmarks = [1,2,3,4,5,6,7,8,9,10]
