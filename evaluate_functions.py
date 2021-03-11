@@ -96,7 +96,7 @@ def plot_3d_pred_img_struc(image, structure, pred, threshold_img, eval_path, pat
     S.img_counter_1 += 1
     plt.savefig(img_name)
     
-def plot_3d_pred_img_no_pred(image, structure, threshold_img, eval_path, patient):
+def plot_3d_pred_img_no_pred(image, structure, threshold_img, eval_path, patient, landmark):
     
     verts_img, faces_img = measure.marching_cubes_classic(image, threshold_img)
     verts_structure, faces_structure = measure.marching_cubes_classic(structure)#, threshold_structure)
@@ -129,7 +129,7 @@ def plot_3d_pred_img_no_pred(image, structure, threshold_img, eval_path, patient
     # rotate the axes and update
     ax.mouse_init(rotate_btn=1, zoom_btn=3)
 
-    img_name = os.path.join(eval_path, patient.replace('.npy', '.png'))
+    img_name = os.path.join(eval_path, patient.replace('.npy', '_%1.0f.png') % landmark)
     S.img_counter_1 += 1
     plt.savefig(img_name)
     
