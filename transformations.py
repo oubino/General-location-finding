@@ -244,9 +244,12 @@ class Check_left_right(object):
         for i in range(len(S.left_structures)):
             indices_left = np.round(structure) == S.left_structures[i]
             indices_right = np.round(structure) == S.right_structures[i]
-            if np.amax(np.nonzero(indices_right)[2]) > np.amax(np.nonzero(indices_left)[2]):
-                print('ERROR LEFT AND RIGHT WRONG WAy RouND')
-                S.error_counter += 1
+            if (np.nonzero(indices_left)[2].size != 0) and (np.nonzero(indices_right)[2].size != 0):
+                min_right = np.amin(np.nonzero(indices_right)[2])
+                max_left = np.amax(np.nonzero(indices_left)[2])
+                if min_right > max_left:
+                    print('ERROR LEFT AND RIGHT WRONG WAy RouND')
+                    S.error_counter += 1
         return {'image': image, 'structure': structure, 'idx': idx, 'patient':patient}
     
     
