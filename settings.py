@@ -148,7 +148,7 @@ def init():
     downsample_user = True
     
     # run folder
-    run_folder = "run_11_mar_print_cts"
+    run_folder = "run_11_mar_struc_check"
     run_path = os.path.join(save_data_path, run_folder) 
     try:  
         os.mkdir(run_path)  
@@ -156,7 +156,7 @@ def init():
         print(error) 
     
     # load model path
-    run_folder_load = "run_11_mar_print_cts"
+    run_folder_load = "run_11_mar_struc_check"
     epoch_load = str(1) 
 
     
