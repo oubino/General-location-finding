@@ -72,6 +72,7 @@ for i in range(1):
         
 # print all images as CT scans to view them
 if S.print_CT_check == True:
+    """
     # training set
     file_name_train = "train_cts"
     train_path_ct = os.path.join(S.run_path, file_name_train)
@@ -83,7 +84,9 @@ if S.print_CT_check == True:
     for i in range(5):
         eval_func.plot_3d_pred_img_no_pred(train_set.__getitem__(i)['image'].squeeze(0), train_set.__getitem__(i)['structure'].squeeze(0), S.threshold_img_print, train_path_ct, train_set.__getitem__(i)['patient'])
         print(train_set.__getitem__(i)['patient'])
-    '''    
+    
+    """
+    
     # val set
     file_name_val = "val_cts"
     val_path_ct = os.path.join(S.run_path, file_name_val)
@@ -93,8 +96,13 @@ if S.print_CT_check == True:
         print(error)
     
     for i in range(len(val_set)):
-        eval_func.plot_3d_pred_img_no_pred(val_set.__getitem__(i)['image'].squeeze(0), val_set.__getitem__(i)['structure'].squeeze(0), S.threshold_img_print, val_path_ct, val_set.__getitem__(i)['patient'])
+        for landmark in S.landmarks:
+            structure = val_set.__getitem__(i)['structure'].squeeze(0)
+            structure_1 = eval_func.extract_landmark_for_structure(structure, landmark).cpu().numpy()
+            eval_func.plot_3d_pred_img_no_pred(val_set.__getitem__(i)['image'].squeeze(0), val_set.__getitem__(i)['structure'].squeeze(0), S.threshold_img_print, val_path_ct, val_set.__getitem__(i)['patient'], landmark)
         print(val_set.__getitem__(i)['patient'])
+    
+    """
         
     # test set
     file_name_test = "test_cts"

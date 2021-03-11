@@ -35,7 +35,7 @@ def extract_landmark_for_structure(structure, landmark):
 
 
 # for pred/structure & image
-def plot_3d_pred_img_struc(image, structure, pred, threshold_img, eval_path, patient):
+def plot_3d_pred_img_struc(image, structure, pred, threshold_img, eval_path, patient, landmark):
     
     verts_structure, faces_structure = measure.marching_cubes_classic(structure)#, threshold_structure)
     verts_img, faces_img = measure.marching_cubes_classic(image, threshold_img)
@@ -73,7 +73,7 @@ def plot_3d_pred_img_struc(image, structure, pred, threshold_img, eval_path, pat
     # rotate the axes and update
     ax.mouse_init(rotate_btn=1, zoom_btn=3)
 
-    img_name = os.path.join(eval_path, patient.replace('.npy', '.png'))
+    img_name = os.path.join(eval_path, patient.replace('.npy', '_%1.0f.png') % landmark)
     S.img_counter_1 += 1
     plt.savefig(img_name)
     
@@ -196,7 +196,7 @@ def print_2D_slice(image, structure, pred, landmark, pred_z, eval_path, patient)
     norm = matplotlib.colors.BoundaryNorm(bounds, cmap.N)
     plt.imshow(structure_l, cmap = cmap, alpha = 0.5)
 
-    img_name = os.path.join(eval_path, "2d_slice_%s.png" % patient)
+    img_name = os.path.join(eval_path, "2d_slice_%s.png" % patient.replace('.npy', '_%1.0f') % landmark)
     S.img_counter_3 += 1
     plt.savefig(img_name)
 
@@ -226,7 +226,7 @@ def print_3D_heatmap(image, structure, pred, landmark, eval_path, patient):
   #threshold_pred = threshold_pred_print # unused
 
 
-  plot_3d_pred_img_struc(image, structure_1, pred, threshold_img, eval_path, patient)
+  plot_3d_pred_img_struc(image, structure_1, pred, threshold_img, eval_path, patient, landmark)
 
 def print_3D_heatmap_no_img(structure, pred, landmark):
   # - C x H x W x D needs to be cut down to H x W x D
@@ -272,7 +272,7 @@ def print_3D_gauss_heatmap(image, structure_com_x, structure_com_y, structure_co
   #threshold_structure = landmark # unuused
   #threshold_pred = threshold_pred_print # unused
 
-  plot_3d_pred_img_struc(image, structure_gauss, pred, threshold_img, eval_path, patient)
+  plot_3d_pred_img_struc(image, structure_gauss, pred, threshold_img, eval_path, patient, landmark)
 
 
 
