@@ -87,8 +87,8 @@ def plot_3d_pred_img_no_pred(image, structure, threshold_img, eval_path, patient
     ax = fig.add_subplot(111, projection='3d')
 
     # Fancy indexing: `verts[faces]` to generate a collection of triangles
-    mesh_img = Poly3DCollection(verts_img[faces_img], alpha=0.1)
-    mesh_structure = Poly3DCollection(verts_structure[faces_structure], alpha=0.6)
+    mesh_img = Poly3DCollection(verts_img[faces_img], alpha=0.01)
+    mesh_structure = Poly3DCollection(verts_structure[faces_structure], alpha=0.9)
 
 
     #face_color_img = [0.5, 0.5, 1]

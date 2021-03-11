@@ -43,7 +43,7 @@ csv_root = r'/home/rankinaaron98/data/Facial_asymmetry_aaron/'
 landmarks = [1,2,3,4,5,6,7,8,9,10]
 
 # limit
-limit = 15
+limit = 12
 
 # loop over .py
 files_aaron = list(sorted(os.listdir(aaron_folder)))
