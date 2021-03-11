@@ -80,10 +80,10 @@ if S.print_CT_check == True:
     except OSError as error:
         print(error)
     
-    for i in range(len(train_set)):
+    for i in range(len(5)):
         eval_func.plot_3d_pred_img_no_pred(train_set.__getitem__(i)['image'].squeeze(0), train_set.__getitem__(i)['structure'].squeeze(0), S.threshold_img_print, train_path_ct, train_set.__getitem__(i)['patient'])
         print(train_set.__getitem__(i)['patient'])
-        
+    '''    
     # val set
     file_name_val = "val_cts"
     val_path_ct = os.path.join(S.run_path, file_name_val)
@@ -108,7 +108,7 @@ if S.print_CT_check == True:
         eval_func.plot_3d_pred_img_no_pred(test_set.__getitem__(i)['image'].squeeze(0), test_set.__getitem__(i)['structure'].squeeze(0), S.threshold_img_print, test_path_ct, test_set.__getitem__(i)['patient'])
         print(test_set.__getitem__(i)['patient'])
     
-    
+    '''
     #img = dataset.__getitem__(10)['image']
     #idx = dataset.__getitem__(10)['idx']
     #print(idx)
