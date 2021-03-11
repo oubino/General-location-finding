@@ -81,6 +81,7 @@ except OSError as error:
     print(error)
 
 for i in range(len(train_set)):
+    print(train_set.__getitem__(i)['image'].unsqueeze(0).size())
     eval_func.plot_3d_pred_img_no_struc(train_set.__getitem__(i)['image'].unsqueeze(0), S.threshold_img_print, train_path_ct)
     
 # val set
