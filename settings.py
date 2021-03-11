@@ -107,9 +107,9 @@ def init():
     
     
     # training parameters
-    epoch_batch = 5
-    num_epoch_batches = 5
-    net_features = 8
+    epoch_batch = 1
+    num_epoch_batches = 1
+    net_features = 1
     scnet_feat = 64
     
     alpha = 1/25000
@@ -148,7 +148,7 @@ def init():
     downsample_user = True
     
     # run folder
-    run_folder = "run_11_mar_8_ft_face"
+    run_folder = "run_11_mar_print_cts"
     run_path = os.path.join(save_data_path, run_folder) 
     try:  
         os.mkdir(run_path)  
@@ -156,7 +156,7 @@ def init():
         print(error) 
     
     # load model path
-    run_folder_load = "run_11_mar_8_ft_face"
+    run_folder_load = "run_11_mar_print_cts"
     epoch_load = str(1) 
 
     
