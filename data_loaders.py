@@ -80,7 +80,7 @@ if S.print_CT_check == True:
     except OSError as error:
         print(error)
     
-    for i in range(len(5)):
+    for i in range(5):
         eval_func.plot_3d_pred_img_no_pred(train_set.__getitem__(i)['image'].squeeze(0), train_set.__getitem__(i)['structure'].squeeze(0), S.threshold_img_print, train_path_ct, train_set.__getitem__(i)['patient'])
         print(train_set.__getitem__(i)['patient'])
     '''    
