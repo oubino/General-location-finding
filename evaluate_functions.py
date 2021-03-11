@@ -35,7 +35,7 @@ def extract_landmark_for_structure(structure, landmark):
 
 def extract_landmark_for_structure_np(structure, landmark):
   landmark = float(landmark)
-  zero_array = np.empty(structure.size())
+  zero_array = np.empty(structure.shape)
 
   min = landmark - 0.1
   max = landmark + 0.1 # small range around int
