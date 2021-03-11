@@ -41,7 +41,7 @@ load_ct_folder = r'/home/olive/data/Facial_asymmetry_oli/CTs'
 landmarks = [1,2,3,4,5,6,7,8,9,10]
 
 # limit
-limit = 10
+limit = 15
 
 # loop over .py
 files_aaron = list(sorted(os.listdir(aaron_folder)))
@@ -89,6 +89,8 @@ for j in range(len(list_1)):
         dev_list['%1.0f' % k].append(dev)
         if dev > limit:
             dev_upper_limit_list['%1.0f' % k].append(list_1[j])
+            print('image: %1.0f' % j)
+            print('landmark: %1.0f' % k)
         
 
 # average deviation per landmark
@@ -127,12 +129,13 @@ for i in list_1:
     # save ct
     np.save(os.path.join(save_ct_folder,i), ct)
 '''
+
 # deviations per landmark per image
-print('deviations per landmark per image')
-print(dev_list)
+#print('deviations per landmark per image')
+#print(dev_list)
 
 # for each landmark, list of the images with deviations greater than ceratin distance
-print('for each landmark, list of the images with deviations greater than ceratin distance')
+print('for each landmark, list of the images with deviations greater than certain distance')
 print(dev_upper_limit_list)
             
 # mean deviation per landmark
