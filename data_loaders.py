@@ -82,6 +82,8 @@ except OSError as error:
 
 for i in range(len(train_set)):
     eval_func.plot_3d_pred_img_no_struc(train_set.__getitem__(i)['image'].squeeze(0), S.threshold_img_print, train_path_ct)
+    print('image %1.0f' % i)
+    print(train_set.__getitem__(i)['patient'])
     
 # val set
 file_name_val = "val_cts"
@@ -93,6 +95,8 @@ except OSError as error:
 
 for i in range(len(val_set)):
     eval_func.plot_3d_pred_img_no_struc(val_set.__getitem__(i)['image'].squeeze(0), S.threshold_img_print, val_path_ct)
+    print('image %1.0f' % i)
+    print(val_set.__getitem__(i)['patient'])
     
 # test set
 file_name_test = "test_cts"
@@ -104,6 +108,8 @@ except OSError as error:
 
 for i in range(len(test_set)):
     eval_func.plot_3d_pred_img_no_struc(test_set.__getitem__(i)['image'].squeeze(0), S.threshold_img_print, test_path_ct)
+    print('image %1.0f' % i)
+    print(test_set.__getitem__(i)['patient'])
 
 
 #img = dataset.__getitem__(10)['image']
