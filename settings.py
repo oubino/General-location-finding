@@ -149,7 +149,7 @@ def init():
     downsample_user = True
     
     # run folder
-    run_folder = "run_11_mar_16_ft_face_oli"
+    run_folder = "run_11_mar_16_ft_plotchange"
     run_path = os.path.join(save_data_path, run_folder) 
     try:  
         os.mkdir(run_path)  
@@ -157,7 +157,7 @@ def init():
         print(error) 
     
     # load model path
-    run_folder_load = "run_11_mar_16_ft_face_oli"
+    run_folder_load = "run_11_mar_16_ft_plotchange"
     epoch_load = str(1) 
 
     
