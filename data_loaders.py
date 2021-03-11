@@ -125,3 +125,5 @@ if S.print_CT_check == True:
     
     os.chdir(S.coding_path) # change to data path and change back at end
     #print(os.getcwd())
+    
+    """
