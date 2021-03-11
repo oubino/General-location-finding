@@ -36,6 +36,7 @@ def init():
     global wing_loss, wing_omega, wing_epsilon, wing_alpha, wing_theta
     global p2p_reg_term
     global error_counter
+    global print_CT_check
         
     
     # data path
@@ -194,6 +195,9 @@ def init():
     
     # error counter
     error_counter = 0
+    
+    # whether to print all CTs as a check
+    print_CT_check = True
     
     
     
