@@ -104,6 +104,7 @@ if S.print_CT_check == True:
             locations = np.nonzero(np.round(structure) == landmark)
             x, y, z = locations[0][1], locations[0][0], locations[0][2]
             print(x, y, z)
+            print(stucture.shape)
             empty_struc = np.zeros(structure.shape)
             empty_struc[y][x][z] = landmark
             #structure_extrac = eval_func.extract_landmark_for_structure_np(structure, landmark)
