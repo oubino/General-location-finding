@@ -35,7 +35,7 @@ def extract_landmark_for_structure(structure, landmark):
 
 
 # for pred/structure & image
-def plot_3d_pred_img_struc(image, structure, pred, threshold_img, eval_path):
+def plot_3d_pred_img_struc(image, structure, pred, threshold_img, eval_path, patient):
     
     verts_structure, faces_structure = measure.marching_cubes_classic(structure)#, threshold_structure)
     verts_img, faces_img = measure.marching_cubes_classic(image, threshold_img)
@@ -73,7 +73,7 @@ def plot_3d_pred_img_struc(image, structure, pred, threshold_img, eval_path):
     # rotate the axes and update
     ax.mouse_init(rotate_btn=1, zoom_btn=3)
 
-    img_name = os.path.join(eval_path, "%1.0f.png" % S.img_counter_1)
+    img_name = os.path.join(eval_path, patient)
     S.img_counter_1 += 1
     plt.savefig(img_name)
     
@@ -145,7 +145,7 @@ def plot_3d_pred_img_struc_no_img(structure, pred, eval_path):
     S.img_counter_2 += 1
     plt.savefig(img_name)
     
-def print_2D_slice(image, structure, pred, landmark, pred_z, eval_path):
+def print_2D_slice(image, structure, pred, landmark, pred_z, eval_path, patient):
     
     # image
     # - C x H x W x D needs to be cut down to H x W x D
@@ -188,13 +188,13 @@ def print_2D_slice(image, structure, pred, landmark, pred_z, eval_path):
     norm = matplotlib.colors.BoundaryNorm(bounds, cmap.N)
     plt.imshow(structure_l, cmap = cmap, alpha = 0.5)
 
-    img_name = os.path.join(eval_path, "2d_slice_%1.0f.png" % S.img_counter_3)
+    img_name = os.path.join(eval_path, "2d_slice_%s.png" % patient)
     S.img_counter_3 += 1
     plt.savefig(img_name)
 
     
     
-def print_3D_heatmap(image, structure, pred, landmark, eval_path):
+def print_3D_heatmap(image, structure, pred, landmark, eval_path, patient):
   # image
   # - C x H x W x D needs to be cut down to H x W x D
   # structure
@@ -218,7 +218,7 @@ def print_3D_heatmap(image, structure, pred, landmark, eval_path):
   #threshold_pred = threshold_pred_print # unused
 
 
-  plot_3d_pred_img_struc(image, structure_1, pred, threshold_img, eval_path)
+  plot_3d_pred_img_struc(image, structure_1, pred, threshold_img, eval_path, patient)
 
 def print_3D_heatmap_no_img(structure, pred, landmark):
   # - C x H x W x D needs to be cut down to H x W x D
@@ -242,7 +242,7 @@ def print_3D_heatmap_no_img(structure, pred, landmark):
   plot_3d_pred_img_struc_no_img(structure_1, pred)
 
 # print structure as 3D gauss and then print prediction heatmap and the max of it 
-def print_3D_gauss_heatmap(image, structure_com_x, structure_com_y, structure_com_z, pred, landmark, sigma, eval_path):
+def print_3D_gauss_heatmap(image, structure_com_x, structure_com_y, structure_com_z, pred, landmark, sigma, eval_path, patient):
   # image
   # - C x H x W x D needs to be cut down to H x W x D
   # structure_com
@@ -264,7 +264,7 @@ def print_3D_gauss_heatmap(image, structure_com_x, structure_com_y, structure_co
   #threshold_structure = landmark # unuused
   #threshold_pred = threshold_pred_print # unused
 
-  plot_3d_pred_img_struc(image, structure_gauss, pred, threshold_img, eval_path)
+  plot_3d_pred_img_struc(image, structure_gauss, pred, threshold_img, eval_path, patient)
 
 
 
@@ -322,8 +322,8 @@ def performance_metrics(model,sigmas,gamma, epochs_completed):
           if batch_number == 0 and i == 0: # for first batch 
             # now need to choose first in batch i.e. # image[0]
             #print('3D plots for landmark %1.0f' % l)
-            #print_3D_heatmap(image[i], structure[i], pred[i], l, eval_path)
-            print_3D_gauss_heatmap(image[i], structure_max_x, structure_max_y, structure_max_z, pred[i], l, sigmas[l], eval_path)
+            #print_3D_heatmap(image[i], structure[i], pred[i], l, eval_path, patient[i])
+            print_3D_gauss_heatmap(image[i], structure_max_x, structure_max_y, structure_max_z, pred[i], l, sigmas[l], eval_path, patient[i])
             print('\n')
             print('Structure LOC for landmark %1.0f:' % l)
             print(structure_max_x, structure_max_y, structure_max_z)
@@ -332,7 +332,7 @@ def performance_metrics(model,sigmas,gamma, epochs_completed):
             print('\n')
             # print 2D slice
             #print('2D slice for landmark %1.0f' % l)
-            #print_2D_slice(image[i], structure[i], pred[i], l, pred_max_z, eval_path)
+            #print_2D_slice(image[i], structure[i], pred[i], l, pred_max_z, eval_path, patient[i])
             
 
           #img_landmark_point_to_point = point_to_point(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z)
