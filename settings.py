@@ -156,7 +156,7 @@ def init():
         print(error) 
     
     # load model path
-    run_folder_load = "run_11_test_lr"
+    run_folder_load = "run_11_mar_test_lr"
     epoch_load = str(1) 
 
     
