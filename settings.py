@@ -110,7 +110,7 @@ def init():
     # training parameters
     epoch_batch = 5
     num_epoch_batches = 5
-    net_features = 16
+    net_features = 32
     scnet_feat = 64
     
     alpha = 1/25000
@@ -149,7 +149,7 @@ def init():
     downsample_user = True
     
     # run folder
-    run_folder = "run_11_mar_16_ft_plotchange"
+    run_folder = "run_11_mar_32_ft"
     run_path = os.path.join(save_data_path, run_folder) 
     try:  
         os.mkdir(run_path)  
@@ -157,7 +157,7 @@ def init():
         print(error) 
     
     # load model path
-    run_folder_load = "run_11_mar_16_ft_plotchange"
+    run_folder_load = "run_11_mar_32_ft"
     epoch_load = str(1) 
 
     
@@ -197,7 +197,7 @@ def init():
     error_counter = 0
     
     # whether to print all CTs as a check
-    print_CT_check = True
+    print_CT_check = False
     
     
     
