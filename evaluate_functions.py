@@ -42,15 +42,6 @@ def extract_landmark_for_structure_np(structure, landmark):
 
   min = float(min)
   max = float(max)
-  
-  print('zero array size')
-  print(zero_array.size)
-  
-  print('min')
-  print(min)
-  
-  print('max')
-  print(max)
 
   #print(structure.type())
   #print(zero_tensor.type())
