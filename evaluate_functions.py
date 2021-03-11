@@ -42,9 +42,6 @@ def extract_landmark_for_structure_np(structure, landmark):
 
   min = float(min)
   max = float(max)
-  
-  print('zero array shape')
-  print(zero_array.shape)
 
   #print(structure.type())
   #print(zero_tensor.type())
@@ -53,7 +50,7 @@ def extract_landmark_for_structure_np(structure, landmark):
   b = np.where(a < max, a, zero_array)
   c = np.where(structure == landmark, structure, zero_array)
 
-  return b
+  return c
 
 
 # for pred/structure & image
