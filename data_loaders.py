@@ -131,7 +131,12 @@ if S.print_CT_check == True:
         for landmark in S.landmarks:
             structure = test_set.__getitem__(i)['structure'].squeeze(0)
             locations = np.nonzero(np.round(structure) == landmark)
-            x, y, z = locations[0][1], locations[0][0], locations[0][2]
+            if len(locations[0] == 0):
+                x = 0
+                y = 0
+                z = 0
+            else:
+                x, y, z = locations[0][1], locations[0][0], locations[0][2]
             empty_struc = np.zeros((128,128,80))
             empty_struc[y][x][z] = landmark
             #structure_extrac = eval_func.extract_landmark_for_structure_np(structure, landmark)
