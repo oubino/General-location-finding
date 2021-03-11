@@ -101,6 +101,9 @@ if S.print_CT_check == True:
         for landmark in S.landmarks:
             structure = val_set.__getitem__(i)['structure'].squeeze(0)
             structure_extrac = eval_func.extract_landmark_for_structure_np(structure, landmark)
+            print('image & structure shape')
+            print(val_set.__getitem__(i)['image'].squeeze(0).shape)
+            print(structure_extrac.shape)
             eval_func.plot_3d_pred_img_no_pred(val_set.__getitem__(i)['image'].squeeze(0), structure_extrac, S.threshold_img_print, val_path_ct, val_set.__getitem__(i)['patient'], landmark)
         print(val_set.__getitem__(i)['patient'])
     
