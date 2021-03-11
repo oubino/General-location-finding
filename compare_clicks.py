@@ -91,7 +91,8 @@ for j in range(len(list_1)):
             dev_upper_limit_list['%1.0f' % k].append(list_1[j])
             print('image: %1.0f' % j)
             print('landmark: %1.0f' % k)
-        
+            print(dev)
+            print('------------')
 
 # average deviation per landmark
 for k in landmarks:
