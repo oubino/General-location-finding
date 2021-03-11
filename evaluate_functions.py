@@ -73,7 +73,7 @@ def plot_3d_pred_img_struc(image, structure, pred, threshold_img, eval_path, pat
     # rotate the axes and update
     ax.mouse_init(rotate_btn=1, zoom_btn=3)
 
-    img_name = os.path.join(eval_path, patient)
+    img_name = os.path.join(eval_path, patient.replace('.npy', '.png'))
     S.img_counter_1 += 1
     plt.savefig(img_name)
     
@@ -110,7 +110,7 @@ def plot_3d_pred_img_no_pred(image, structure, threshold_img, eval_path, patient
     # rotate the axes and update
     ax.mouse_init(rotate_btn=1, zoom_btn=3)
 
-    img_name = os.path.join(eval_path, patient)
+    img_name = os.path.join(eval_path, patient.replace('.npy', '.png'))
     S.img_counter_1 += 1
     plt.savefig(img_name)
     
