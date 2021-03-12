@@ -91,8 +91,7 @@ if S.print_CT_check == True:
             locations = np.nonzero(np.round(structure) == landmark)
             try:
                 x, y, z = locations[0][1], locations[0][0], locations[0][2]
-            except:
-                IndexError as error:
+            except IndexError as error:
                     x = 0
                     y = 0
                     z = 0
@@ -118,8 +117,7 @@ if S.print_CT_check == True:
             locations = np.nonzero(np.round(structure) == landmark)
             try:
                 x, y, z = locations[0][1], locations[0][0], locations[0][2]
-            except:
-                IndexError as error:
+            except IndexError as error:
                     x = 0
                     y = 0
                     z = 0
@@ -145,8 +143,7 @@ if S.print_CT_check == True:
             locations = np.nonzero(np.round(structure) == landmark)
             try:
                 x, y, z = locations[0][1], locations[0][0], locations[0][2]
-            except:
-                IndexError as error:
+            except IndexError as error:
                     x = 0
                     y = 0
                     z = 0
