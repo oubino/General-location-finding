@@ -149,7 +149,7 @@ def init():
     downsample_user = True
     
     # run folder
-    run_folder = "run_12_mar_print_ct_oli"
+    run_folder = "run_12_mar_aaron_model_test_my_data"
     run_path = os.path.join(save_data_path, run_folder) 
     try:  
         os.mkdir(run_path)  
