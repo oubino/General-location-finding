@@ -10,6 +10,7 @@ import data_loaders
 import train_function
 import evaluate_functions
 import os
+from torchsummary import summary
 
 def init():    
     
@@ -48,7 +49,8 @@ def freeze_layers():
     for name, param in model_load_in.named_parameters():
         if (name != 'out.conv.bias' and name != 'out.conv.weight'):
             param.requires_grad = False
-    model_load = model_load[:-1]
+    model_froze = model_load[:-1]
+    summary(model_froze, input_size=(1, S.in_y, S.in_x, S.in_z))
     
 def train(first_train):
     # load in val loss
