@@ -44,8 +44,11 @@ def init():
     scaler_load.load_state_dict(torch.load(paths.PATH_scaler_load))
     scheduler = lr_scheduler.StepLR(optimizer_load, step_size=20000, gamma=0.1)
     
-   
-
+def freeze_layers():
+    for name, param in model_load.parameters():
+        print(name, param)
+        if (name != 'OutConv'):
+            param.requires_grad = False
     
     
 def train(first_train):
@@ -53,7 +56,7 @@ def train(first_train):
     #global epochs_completed
     if first_train == True:
        # epochs_completed = torch.load(paths.PATH_epochs_completed_load)['epochs_completed']
-        global model_load # trained
+        # global model_load # commented out but may have to uncomment!
         global best_loss # trained
         #global epochs_completed # trained
         best_loss = torch.load(paths.PATH_val_loss_load)['best_val_loss']
