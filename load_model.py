@@ -45,7 +45,7 @@ def init():
     scheduler = lr_scheduler.StepLR(optimizer_load, step_size=20000, gamma=0.1)
     
 def freeze_layers():
-    for name, param in model_load_in.parameters():
+    for name, param in model_load_in.named_parameters():
         print(name, param)
         if (name != 'OutConv'):
             param.requires_grad = False
