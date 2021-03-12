@@ -58,7 +58,18 @@ class Transfer_model(nn.Module):
         self.out = network.OutConv(s_channels, n_classes)
 
     def forward(self, x):
-        x1 = self.pre_trained(x)
+        x1 = self.pre_trained.conv(x)
+        x1 = self.pre_trained[0](x)
+        x1 = self.conv(x)
+        x2 = self.enc1(x1)
+        x3 = self.enc2(x2)
+        x4 = self.enc3(x3)
+        x5 = self.enc4(x4)
+
+        x6 = self.dec1(x5, x4)
+        x7 = self.dec2(x6, x3)
+        x8 = self.dec3(x7, x2)
+        x9 = self.dec4(x8, x1)
         output = self.out(x1)
         return output 
     
