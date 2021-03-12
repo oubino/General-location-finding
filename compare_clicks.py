@@ -125,9 +125,9 @@ for k in landmarks:
 # calculate mean of aaron and oli from arrays
 for j in range(len(list_1)):
     for k in landmarks:
-        mean_x = ((com_list_aaron['%1.0f' % k][j][2] + com_list_oli['%1.0f' % k][j][2])/2)*(x_mm)
-        mean_y = ((com_list_aaron['%1.0f' % k][j][1] + com_list_oli['%1.0f' % k][j][1])/2)*(y_mm)
-        mean_z = ((com_list_aaron['%1.0f' % k][j][0] + com_list_oli['%1.0f' % k][j][0])/2)*(z_mm)
+        mean_x = ((com_list_aaron['%1.0f' % k][j][2] + com_list_oli['%1.0f' % k][j][2])/2)
+        mean_y = ((com_list_aaron['%1.0f' % k][j][1] + com_list_oli['%1.0f' % k][j][1])/2)
+        mean_z = ((com_list_aaron['%1.0f' % k][j][0] + com_list_oli['%1.0f' % k][j][0])/2)
         coords = [mean_x, mean_y, mean_z]
         mean_list['%1.0f' % k].append(coords)
         
