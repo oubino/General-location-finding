@@ -51,6 +51,7 @@ def freeze_layers():
         if (name != 'out.conv.bias' and name != 'out.conv.weight'):
             param.requires_grad = False
     model_froze = nn.Sequential(
+        *list(model_load_in.children())[:-1],
         model_load_in,
         network.OutConv(10,10).to(S.device)
         )
