@@ -157,8 +157,8 @@ def init():
         print(error) 
     
     # load model path
-    run_folder_load = "run_12_print_ct_oli"
-    epoch_load = str(1) 
+    run_folder_load = "run_11_mar_32_ft"
+    epoch_load = str(25) 
 
     
     # create tensorboard writer
@@ -197,7 +197,7 @@ def init():
     error_counter = 0
     
     # whether to print all CTs as a check
-    print_CT_check = True
+    print_CT_check = False
     
     
     
