@@ -46,14 +46,8 @@ def init():
     
 def freeze_layers():
     for name, param in model_load_in.named_parameters():
-        #print(name, param)
-        #print(name,param)
         if (name != 'out.conv.bias' and name != 'out.conv.weight'):
             param.requires_grad = False
-    for name, param in model_load_in.named_parameters():
-        if param.requires_grad:
-            print (name, param.data)
-    
     
 def train(first_train):
     # load in val loss
