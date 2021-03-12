@@ -46,43 +46,23 @@ def init():
     scaler_load.load_state_dict(torch.load(paths.PATH_scaler_load))
     scheduler = lr_scheduler.StepLR(optimizer_load, step_size=20000, gamma=0.1)
 
-class Transfer_model(nn.Module):
-    def __init__(self, n_classes, s_channels, pre_trained_model):
-        super().__init__()
-        self.n_classes = n_classes
-        self.s_channels = s_channels
-        
-        self.pre_trained = nn.Sequential(
-        *list(pre_trained_model.children())[:-1])
-        print(*list(pre_trained_model.children())[:-1])
-        self.out = network.OutConv(s_channels, n_classes)
-
-    def forward(self, x): 
-        x1 = self.pre_trained[0](x)
-        x2 = self.pre_trained[1](x1)
-        x3 = self.pre_trained[2](x2)
-        x4 = self.pre_trained[3](x3)
-        x5 = self.pre_trained[4](x4)
-        
-        x6 = self.pre_trained[5](x5,x4)
-        x7 = self.pre_trained[6](x6, x3)
-        x8 = self.pre_trained[7](x7, x2)
-        x9 = self.pre_trained[8](x8, x1)
-        
-        output = self.out(x9)
-        return output 
     
-def freeze_layers():
+def freeze_final_layers():
     for name, param in model_load_in.named_parameters():
         if (name != 'out.conv.bias' and name != 'out.conv.weight'):
             param.requires_grad = False
-    model_froze = Transfer_model(15,32,model_load_in)
-    model_froze = model_froze.to(S.device)
-    summary(model_froze, input_size=(1, S.in_y, S.in_x, S.in_z))
     
-def train(first_train):
+def transfer_learn_final_layer(class_number, features):
+    global model_transfer
+    model_transfer = network.Transfer_model(class_number, features, model_load_in)
+    model_transfer = model_transfer.to(S.device)
+    summary(model_transfer, input_size=(1, S.in_y, S.in_x, S.in_z))
+    
+    
+    
+def train(first_train, transfer_learn_decision):
     # load in val loss
-    #global epochs_completed
+    # global epochs_completed
     if first_train == True:
        # epochs_completed = torch.load(paths.PATH_epochs_completed_load)['epochs_completed']
         global model_load # commented out but may have to uncomment!
@@ -92,12 +72,15 @@ def train(first_train):
         global epochs_completed
         epochs_completed = torch.load(paths.PATH_epochs_completed_load)['epochs_completed']
 
-        
+    
     # may have to specify these if == False
     print('best loss is ')
     print(best_loss)
     data_loaders.train_set.dataset.__train__() 
-    model_load, best_loss, epochs_completed = train_function.train_model(model_load_in, scaler_load, optimizer_load, scheduler, S.alpha,S.reg,S.gamma,S.sigmas, num_epochs=S.epoch_batch, best_loss = best_loss, epochs_completed = epochs_completed)
+    if transfer_learn_decision == True:
+         model_load, best_loss, epochs_completed = train_function.train_model(model_transfer, scaler_load, optimizer_load, scheduler, S.alpha,S.reg,S.gamma,S.sigmas, num_epochs=S.epoch_batch, best_loss = best_loss, epochs_completed = epochs_completed)
+    else:
+        model_load, best_loss, epochs_completed = train_function.train_model(model_load_in, scaler_load, optimizer_load, scheduler, S.alpha,S.reg,S.gamma,S.sigmas, num_epochs=S.epoch_batch, best_loss = best_loss, epochs_completed = epochs_completed)
     # trained x 3
 
 def evaluate_post_train():
