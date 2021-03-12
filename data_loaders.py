@@ -89,7 +89,9 @@ if S.print_CT_check == True:
         for landmark in S.landmarks:
             structure = train_set.__getitem__(i)['structure'].squeeze(0)
             locations = np.nonzero(np.round(structure) == landmark)
-            if (len(locations[0])== 0):
+            print('locations size')
+            print(locations.size)
+            if (locations.size == 0):
                 x = 0
                 y = 0
                 z = 0
@@ -115,7 +117,9 @@ if S.print_CT_check == True:
         for landmark in S.landmarks:
             structure = val_set.__getitem__(i)['structure'].squeeze(0)
             locations = np.nonzero(np.round(structure) == landmark)
-            if (len(locations[0])== 0):
+            print('locations size')
+            print(locations.size)
+            if (locations.size == 0):
                 x = 0
                 y = 0
                 z = 0
@@ -141,7 +145,9 @@ if S.print_CT_check == True:
         for landmark in S.landmarks:
             structure = test_set.__getitem__(i)['structure'].squeeze(0)
             locations = np.nonzero(np.round(structure) == landmark)
-            if (len(locations[0])== 0):
+            print('locations size')
+            print(locations.size)
+            if (locations.size == 0):
                 x = 0
                 y = 0
                 z = 0
