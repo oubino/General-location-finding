@@ -131,15 +131,11 @@ if S.print_CT_check == True:
         for landmark in S.landmarks:
             structure = test_set.__getitem__(i)['structure'].squeeze(0)
             locations = np.nonzero(np.round(structure) == landmark)
-            if (locations.size == 0):
+            if (len(locations[0])== 0):
                 x = 0
                 y = 0
                 z = 0
             else:
-                print('locations size')
-                print(locations.size)
-                print('locations shape')
-                print(locations.shape)
                 x, y, z = locations[0][1], locations[0][0], locations[0][2]
             empty_struc = np.zeros((128,128,80))
             empty_struc[y][x][z] = landmark
