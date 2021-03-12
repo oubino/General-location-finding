@@ -55,6 +55,7 @@ elif initialise == False:
             class_number = input ("New number of classes")
             feature_number = input ("Enter number of features pre trained model trained with")
             class_number = int(class_number)
+            feature_number = int(feature_number)
             load_model.transfer_learn_final_layer(class_number, feature_number)
         print('Training model')
         print('------------')
