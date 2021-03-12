@@ -49,7 +49,7 @@ def freeze_layers():
     for name, param in model_load_in.named_parameters():
         if (name != 'out.conv.bias' and name != 'out.conv.weight'):
             param.requires_grad = False
-    model_froze = torch.nn.Sequential(*(list(model_load_in.children())[:-1]))
+    model_froze = model_load_in.children()[:-1]
     summary(model_froze, input_size=(1, S.in_y, S.in_x, S.in_z))
     
 def train(first_train):
