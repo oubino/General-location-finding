@@ -47,6 +47,9 @@ elif initialise == False:
     load_model.init()
     train_decision = yes_or_no.question('train loaded in model?')
     if train_decision == True:
+        freeze_decision = yes_or_no.question('freeze all but last layer?')
+        if freeze_decision == True:
+            load_model.freeze_layers()
         print('Training model')
         print('------------')
         load_model.train(True)
