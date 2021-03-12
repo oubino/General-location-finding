@@ -67,7 +67,7 @@ class Transfer_model(nn.Module):
         x6 = self.pre_trained[5](x5,x4)
         x7 = self.pre_trained[6](x6, x3)
         x8 = self.pre_trained[7](x7, x2)
-        x9 = self.pre_trained[9](x8, x1)
+        x9 = self.pre_trained[8](x8, x1)
         
         output = self.out(x9)
         return output 
