@@ -157,8 +157,8 @@ def init():
         print(error) 
     
     # load model path
-    run_folder_load = "run_11_mar_32_ft"
-    epoch_load = str(25) 
+    run_folder_load = "run_12_mar_aaron_model_test_my_data"
+    epoch_load = str(50) 
 
     
     # create tensorboard writer
