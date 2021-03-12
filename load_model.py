@@ -46,7 +46,9 @@ def init():
     
 def freeze_layers():
     for name, param in model_load_in.named_parameters():
-        print(name, param)
+        #print(name, param)
+        if name == 'OutConv':
+            print(name, param)
         if (name != 'OutConv'):
             param.requires_grad = False
     
