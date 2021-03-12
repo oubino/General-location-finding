@@ -19,18 +19,18 @@ def init():
       PATH_sigma_load = os.path.join(paths.epoch_load, "sigma_%1.0f.pt" % k)
       S.sigmas[k] = torch.load(PATH_sigma_load)['sigma'] # what value to initialise sigma
 
-    global model_load
+    global model_load_in
     global optimizer_load
     global scaler_load
     global scheduler
     
     # load in model/optimizer/scaler
     if S.UNET_model_user == True:
-        model_load = network.UNet3d(1,S.num_class, network.unet_feat)
+        model_load_in = network.UNet3d(1,S.num_class, network.unet_feat)
     else:
-        model_load = network.SCNET(1, S.num_class, S.scnet_feat)
+        model_load_in = network.SCNET(1, S.num_class, S.scnet_feat)
         
-    model_load = model_load.to(S.device)
+    model_load_in = model_load_in.to(S.device)
     optimizer_load = optim.Adam([
                     {'params': network.model.parameters()}
                    # {'params': S.sigmas[3]} # not general
@@ -39,13 +39,13 @@ def init():
         optimizer_load.add_param_group({'params': S.sigmas[k]})
     scaler_load = torch.cuda.amp.GradScaler()
     
-    model_load.load_state_dict(torch.load(paths.PATH_load))
+    model_load_in.load_state_dict(torch.load(paths.PATH_load))
     optimizer_load.load_state_dict(torch.load(paths.PATH_opt_load))
     scaler_load.load_state_dict(torch.load(paths.PATH_scaler_load))
     scheduler = lr_scheduler.StepLR(optimizer_load, step_size=20000, gamma=0.1)
     
 def freeze_layers():
-    for name, param in model_load.parameters():
+    for name, param in model_load_in.parameters():
         print(name, param)
         if (name != 'OutConv'):
             param.requires_grad = False
@@ -56,7 +56,7 @@ def train(first_train):
     #global epochs_completed
     if first_train == True:
        # epochs_completed = torch.load(paths.PATH_epochs_completed_load)['epochs_completed']
-        # global model_load # commented out but may have to uncomment!
+        global model_load # commented out but may have to uncomment!
         global best_loss # trained
         #global epochs_completed # trained
         best_loss = torch.load(paths.PATH_val_loss_load)['best_val_loss']
@@ -68,7 +68,7 @@ def train(first_train):
     print('best loss is ')
     print(best_loss)
     data_loaders.train_set.dataset.__train__() 
-    model_load, best_loss, epochs_completed = train_function.train_model(model_load, scaler_load, optimizer_load, scheduler, S.alpha,S.reg,S.gamma,S.sigmas, num_epochs=S.epoch_batch, best_loss = best_loss, epochs_completed = epochs_completed)
+    model_load, best_loss, epochs_completed = train_function.train_model(model_load_in, scaler_load, optimizer_load, scheduler, S.alpha,S.reg,S.gamma,S.sigmas, num_epochs=S.epoch_batch, best_loss = best_loss, epochs_completed = epochs_completed)
     # trained x 3
 
 def evaluate_post_train():
@@ -81,10 +81,10 @@ def evaluate_post_train():
 def evaluate_pre_train():
     best_loss = torch.load(paths.PATH_val_loss_load)['best_val_loss']
     print(best_loss)
-    model_load.eval()
+    model_load_in.eval()
     epochs_completed = torch.load(paths.PATH_epochs_completed_load)['epochs_completed']
     data_loaders.test_set.dataset.__test__() # sets whole dataset to test mode means it doesn't augment images
-    evaluate_functions.performance_metrics(model_load,S.sigmas,S.gamma, epochs_completed)
+    evaluate_functions.performance_metrics(model_load_in,S.sigmas,S.gamma, epochs_completed)
 
 def save():
     
