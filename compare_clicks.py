@@ -149,6 +149,7 @@ for i in list_1:
     np.save(os.path.join(save_structure_folder,i), structure)
     # save ct
     np.save(os.path.join(save_ct_folder,i), ct)
+    
 '''
 
 # deviations per landmark per image
