@@ -45,15 +45,28 @@ def init():
     optimizer_load.load_state_dict(torch.load(paths.PATH_opt_load))
     scaler_load.load_state_dict(torch.load(paths.PATH_scaler_load))
     scheduler = lr_scheduler.StepLR(optimizer_load, step_size=20000, gamma=0.1)
+
+class Transfer_model(nn.Module):
+    def __init__(self, n_classes, s_channels, pre_trained_model):
+        super().__init__()
+        self.n_classes = n_classes
+        self.s_channels = s_channels
+        
+        self.pre_trained = nn.Sequential(
+        *list(pre_trained_model.children())[:-1])
+        self.out = network.OutConv(s_channels, n_classes)
+
+    def forward(self, x):
+        x1 = self.pre_trained(x)
+        output = self.out(x1)
+        return output 
     
 def freeze_layers():
     for name, param in model_load_in.named_parameters():
         if (name != 'out.conv.bias' and name != 'out.conv.weight'):
             param.requires_grad = False
-    model_froze = nn.Sequential(
-        *list(model_load_in.children())[:-1],
-        network.OutConv(10,10).to(S.device)
-        )
+    model_froze = Transfer_model(15,32,model_load_in)
+    model_froze = model_froze.to(S.device)
     summary(model_froze, input_size=(1, S.in_y, S.in_x, S.in_z))
     
 def train(first_train):
