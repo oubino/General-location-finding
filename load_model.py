@@ -54,6 +54,7 @@ class Transfer_model(nn.Module):
         
         self.pre_trained = nn.Sequential(
         *list(pre_trained_model.children())[:-1])
+        print(*list(pre_trained_model.children())[:-1])
         self.out = network.OutConv(s_channels, n_classes)
 
     def forward(self, x):
