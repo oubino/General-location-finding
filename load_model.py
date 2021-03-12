@@ -52,7 +52,6 @@ def freeze_layers():
             param.requires_grad = False
     model_froze = nn.Sequential(
         *list(model_load_in.children())[:-1],
-        model_load_in,
         network.OutConv(10,10).to(S.device)
         )
     summary(model_froze, input_size=(1, S.in_y, S.in_x, S.in_z))
