@@ -158,7 +158,7 @@ def init():
     
     # load model path
     run_folder_load = "run_13_mar_my_model_50_epochs"
-    epoch_load = str(70) 
+    epoch_load = str(50) 
 
     
     # create tensorboard writer
