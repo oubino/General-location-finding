@@ -144,7 +144,11 @@ for i in list_1:
         z = int(mean_list['%1.0f' % k][index][0])
         y = int(mean_list['%1.0f' % k][index][1])
         x = int(mean_list['%1.0f' % k][index][2])
-        structure[z][y][x] = k # z y x
+        # create small block
+        for a in range(5):
+            for b in range(5):
+                for c in range(5):
+                    structure[z-2+c][y-2+b][x-2+a] = k # z y x
     # save image
     np.save(os.path.join(save_structure_folder,i), structure)
     # save ct
