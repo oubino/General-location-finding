@@ -66,7 +66,7 @@ elif initialise == False:
         for i in range(settings.num_epoch_batches - 1):
             print('Training model')
             print('------------')
-            load_model.train(False)
+            load_model.train(False, transfer_learn_decision)
             print('Saving model to files')
             print('------------')
             load_model.save()
