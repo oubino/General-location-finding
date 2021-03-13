@@ -111,8 +111,7 @@ class Transfer_model(nn.Module):
         self.s_channels = s_channels
         
         self.pre_trained = nn.Sequential(
-        *list(pre_trained_model.children())[:-1])
-        print(*list(pre_trained_model.children())[:-1])
+        *list(pre_trained_model.children())[:-1]) # think asterix is unpacking
         self.out = OutConv(s_channels, n_classes)
 
     def forward(self, x): 

@@ -58,9 +58,11 @@ def transfer_learn_final_layer(class_number, features):
     model_transfer = model_transfer.to(S.device)
     summary(model_transfer, input_size=(1, S.in_y, S.in_x, S.in_z))
     # check which params have 
+    """
     for name, param in model_transfer.named_parameters():
         if param.requires_grad == True:
             print(name,param)
+    """
     
     
     
