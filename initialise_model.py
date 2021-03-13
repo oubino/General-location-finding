@@ -45,7 +45,7 @@ class initialise_model:
         self.model, self.best_loss, self.epochs_completed = train_function.train_model(self.model, self.scaler, self.optimizer, self.scheduler, S.alpha,S.reg,S.gamma,S.sigmas, num_epochs=S.epoch_batch, best_loss = self.best_loss, epochs_completed = self.epochs_completed)
     
     def evaluate(self):
-        self.model_trained.eval()   # Set model to the evaluation mode
+        self.model.eval()   # Set model to the evaluation mode
         data_loaders.test_set.dataset.__test__() # sets whole dataset to test mode means it doesn't augment images
         evaluate_functions.performance_metrics(self.model,S.sigmas,S.gamma, self.epochs_completed)
         
