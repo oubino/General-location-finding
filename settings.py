@@ -58,15 +58,29 @@ def init():
         # use server paths for data and code for Aaron/Oli
         aaron_or_oli = yes_or_no.question('aaron(y) / oli (n)')
         if aaron_or_oli == True:
-            # Aaron paths
-            coding_path = r'/home/rankinaaron98/General-location-finding'
-            root = r'/home/rankinaaron98/data/Facial_asymmetry_aaron'
-            save_data_path = r'/home/rankinaaron98/data/results/Aaron'
+            combined_data = yes_or_no.question('combined_data (y) / solo_data (n)')
+            if combined_data == True:
+                # Aaron paths
+                coding_path = r'/home/rankinaaron98/General-location-finding'
+                root = r'/home/rankinaaron98/data/Facial_asymmetry_combined'
+                save_data_path = r'/home/rankinaaron98/data/results/Aaron'
+            elif combined_data == False:
+                # Aaron paths
+                coding_path = r'/home/rankinaaron98/General-location-finding'
+                root = r'/home/rankinaaron98/data/Facial_asymmetry_aaron'
+                save_data_path = r'/home/rankinaaron98/data/results/Aaron'
         elif aaron_or_oli == False:
-            # Oli paths
-            coding_path = r'/home/olive/GitHub/General-location-finding'
-            root = r'/home/olive/data/Facial_asymmetry_oli'
-            save_data_path = r'/home/olive/data/results/Oli'
+            combined_data = yes_or_no.question('combined_data (y) / solo_data (n)')
+            if combined_data == True:         
+                # Oli paths
+                coding_path = r'/home/olive/GitHub/General-location-finding'
+                root = r'/home/olive/data/Facial_asymmetry_combined'
+                save_data_path = r'/home/olive/data/results/Oli'
+            elif combined_data == False:   
+                # Oli paths
+                coding_path = r'/home/olive/GitHub/General-location-finding'
+                root = r'/home/olive/data/Facial_asymmetry_oli'
+                save_data_path = r'/home/olive/data/results/Oli'
             
         
         
