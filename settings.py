@@ -65,7 +65,7 @@ def init():
         elif aaron_or_oli == False:
             # Oli paths
             coding_path = r'/home/olive/GitHub/General-location-finding'
-            root = r'/home/olive/data/Facial_asymmetry_oli'
+            root = r'/home/olive/data/Facial_asymmetry_aaron'
             save_data_path = r'/home/olive/data/results/Oli'
             
         
