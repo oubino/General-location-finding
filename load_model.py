@@ -26,11 +26,11 @@ class loaded_model:
         
         # load in model/optimizer/scaler
         if S.UNET_model_user == True:
-            self.model_load_in = network.UNet3d(1,S.num_class, network.unet_feat)
+            self.model_load = network.UNet3d(1,S.num_class, network.unet_feat)
         else:
-            self.model_load_in = network.SCNET(1, S.num_class, S.scnet_feat)
+            self.model_load = network.SCNET(1, S.num_class, S.scnet_feat)
             
-        self.model_load_in = self.model_load_in.to(S.device)
+        self.model_load = self.model_load.to(S.device)
         self.optimizer_load = optim.Adam([
                         {'params': network.model.parameters()}
                        # {'params': S.sigmas[3]} # not general
@@ -39,22 +39,21 @@ class loaded_model:
             self.optimizer_load.add_param_group({'params': S.sigmas[k]})
         self.scaler_load = torch.cuda.amp.GradScaler()
         
-        self.model_load_in.load_state_dict(torch.load(paths.PATH_load))
+        self.model_load.load_state_dict(torch.load(paths.PATH_load))
         self.optimizer_load.load_state_dict(torch.load(paths.PATH_opt_load))
         self.scaler_load.load_state_dict(torch.load(paths.PATH_scaler_load))
         self.scheduler = lr_scheduler.StepLR(self.optimizer_load, step_size=20000, gamma=0.1)
     
         
-    def freeze_final_layers():
-        for name, param in model_load_in.named_parameters():
+    def freeze_final_layers(self):
+        for name, param in self.model_load.named_parameters():
             if (name != 'out.conv.bias' and name != 'out.conv.weight'):
                 param.requires_grad = False
         
-    def transfer_learn_final_layer(class_number, features):
-        global model_transfer
-        model_transfer = network.Transfer_model(class_number, features, model_load_in)
-        model_transfer = model_transfer.to(S.device)
-        summary(model_transfer, input_size=(1, S.in_y, S.in_x, S.in_z))
+    def transfer_learn_final_layer(self, class_number, features):
+        self.model_load = network.Transfer_model(class_number, features, self.model_load)
+        self.model_load = self.model_load.to(S.device)
+        summary(self.model_load, input_size=(1, S.in_y, S.in_x, S.in_z))
         # check which params have 
         """
         for name, param in model_transfer.named_parameters():
@@ -62,49 +61,38 @@ class loaded_model:
                 print(name,param)
         """
         
-        
-        
-    def train(first_train, transfer_learn_decision):
+    
+    def train(self, first_train, transfer_learn_decision):
         # load in val loss
         # global epochs_completed
         if first_train == True:
-           # epochs_completed = torch.load(paths.PATH_epochs_completed_load)['epochs_completed']
-            global model_load # commented out but may have to uncomment!
-            global best_loss # trained
-            #global epochs_completed # trained
-            best_loss = torch.load(paths.PATH_val_loss_load)['best_val_loss']
-            global epochs_completed
-            epochs_completed = torch.load(paths.PATH_epochs_completed_load)['epochs_completed']
-    
-        
+            self.best_loss = torch.load(paths.PATH_val_loss_load)['best_val_loss']
+            self.epochs_completed = torch.load(paths.PATH_epochs_completed_load)['epochs_completed']
+      
         # may have to specify these if == False
         print('best loss is ')
-        print(best_loss)
+        print(self.best_loss)
         data_loaders.train_set.dataset.__train__() 
-        if transfer_learn_decision == True:
-             model_load, best_loss, epochs_completed = train_function.train_model(model_transfer, scaler_load, optimizer_load, scheduler, S.alpha,S.reg,S.gamma,S.sigmas, num_epochs=S.epoch_batch, best_loss = best_loss, epochs_completed = epochs_completed)
-        else:
-            model_load, best_loss, epochs_completed = train_function.train_model(model_load_in, scaler_load, optimizer_load, scheduler, S.alpha,S.reg,S.gamma,S.sigmas, num_epochs=S.epoch_batch, best_loss = best_loss, epochs_completed = epochs_completed)
-        # trained x 3
-    
-    def evaluate_post_train():
+        self.model_load, self.best_loss, self.epochs_completed = train_function.train_model(self.model_load, self.scaler_load, self.optimizer_load, self.scheduler, S.alpha,S.reg,S.gamma,S.sigmas, num_epochs=S.epoch_batch, best_loss = self.best_loss, epochs_completed = self.epochs_completed)
+        
+    def evaluate_post_train(self):
     #    best_loss = torch.load(paths.PATH_val_loss_load)['best_val_loss']
     #    print(best_loss)
-        model_load.eval() # trained
+        self.model_load.eval() # trained
         data_loaders.test_set.dataset.__test__() # sets whole dataset to test mode means it doesn't augment images
-        evaluate_functions.performance_metrics(model_load,S.sigmas,S.gamma, epochs_completed) # trained x 2
+        evaluate_functions.performance_metrics(self.model_load,S.sigmas,S.gamma, self.epochs_completed) # trained x 2
     
-    def evaluate_pre_train():
-        best_loss = torch.load(paths.PATH_val_loss_load)['best_val_loss']
-        print(best_loss)
-        model_load_in.eval()
-        epochs_completed = torch.load(paths.PATH_epochs_completed_load)['epochs_completed']
+    def evaluate_pre_train(self):
+        self.best_loss = torch.load(paths.PATH_val_loss_load)['best_val_loss']
+        print(self.best_loss)
+        self.model_load.eval()
+        self.epochs_completed = torch.load(paths.PATH_epochs_completed_load)['epochs_completed']
         data_loaders.test_set.dataset.__test__() # sets whole dataset to test mode means it doesn't augment images
-        evaluate_functions.performance_metrics(model_load_in,S.sigmas,S.gamma, epochs_completed)
+        evaluate_functions.performance_metrics(self.model_load_in,S.sigmas,S.gamma, self.epochs_completed)
     
-    def save():
+    def save(self):
         
-        epochs_completed_string = str(epochs_completed) # trained
+        epochs_completed_string = str(self.epochs_completed) # trained
         file_name = "train_" + epochs_completed_string
         train_path = os.path.join(S.run_path, file_name) # directory labelled with epochs_completed
         
@@ -120,13 +108,13 @@ class loaded_model:
         PATH_val_loss_save = os.path.join(train_path,"val_loss.pt")
         PATH_epochs_completed_save  = os.path.join(train_path,"epochs_completed.pt")
         
-        torch.save(model_load.state_dict(), PATH_save)
-        torch.save(optimizer_load.state_dict(), PATH_opt_save)
+        torch.save(self.model_load.state_dict(), PATH_save)
+        torch.save(self.optimizer_load.state_dict(), PATH_opt_save)
         for k in S.landmarks:
             PATH_sigma_save = os.path.join(train_path,"sigma_%1.0f.pt" % k)
             torch.save({'sigma': S.sigmas[k]}, PATH_sigma_save) 
-        torch.save(scaler_load.state_dict(), PATH_scaler_save)
-        torch.save({'best_val_loss': best_loss}, PATH_val_loss_save) # trained
-        torch.save({'epochs_completed': epochs_completed}, PATH_epochs_completed_save) # trained
+        torch.save(self.scaler_load.state_dict(), PATH_scaler_save)
+        torch.save({'best_val_loss': self.best_loss}, PATH_val_loss_save) # trained
+        torch.save({'epochs_completed': self.epochs_completed}, PATH_epochs_completed_save) # trained
 
     
