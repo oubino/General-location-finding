@@ -132,7 +132,7 @@ for j in range(len(list_1)):
         mean_list['%1.0f' % k].append(coords)
         
 # ------ return a structure with just one point at the mean  ----- #
-'''
+
 # for each image create an array
 for i in list_1:
     py_array_load = np.load(os.path.join(aaron_folder,i))
@@ -150,7 +150,7 @@ for i in list_1:
     # save ct
     np.save(os.path.join(save_ct_folder,i), ct)
     
-'''
+
 
 # deviations per landmark per image
 #print('deviations per landmark per image')
