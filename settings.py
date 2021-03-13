@@ -67,7 +67,7 @@ def init():
             elif combined_data == False:
                 # Aaron paths
                 coding_path = r'/home/rankinaaron98/General-location-finding'
-                root = r'/home/rankinaaron98/data/Facial_asymmetry_aaron'
+                root = r'/home/rankinaaron98/data/Facial_asymmetry_oli'
                 save_data_path = r'/home/rankinaaron98/data/results/Aaron'
         elif aaron_or_oli == False:
             combined_data = yes_or_no.question('combined_data (y) / solo_data (n)')
@@ -123,7 +123,7 @@ def init():
     
     # training parameters
     epoch_batch = 5
-    num_epoch_batches = 10
+    num_epoch_batches = 5
     net_features = 32
     scnet_feat = 64
     
@@ -163,7 +163,7 @@ def init():
     downsample_user = True
     
     # run folder
-    run_folder = "run_13_mar_my_model_50_epochs"
+    run_folder = "run_11_mar_32_ft_trial_25"
     run_path = os.path.join(save_data_path, run_folder) 
     try:  
         os.mkdir(run_path)  
@@ -171,8 +171,8 @@ def init():
         print(error) 
     
     # load model path
-    run_folder_load = "run_13_mar_my_model_50_epochs"
-    epoch_load = str(50) 
+    run_folder_load = "run_11_mar_32_ft_trial_25"
+    epoch_load = str(100) 
 
     
     # create tensorboard writer
