@@ -79,7 +79,7 @@ def init():
             elif combined_data == False:   
                 # Oli paths
                 coding_path = r'/home/olive/GitHub/General-location-finding'
-                root = r'/home/olive/data/Facial_asymmetry_oli'
+                root = r'/home/olive/data/Facial_asymmetry_aaron'
                 save_data_path = r'/home/olive/data/results/Oli'
             
         
@@ -163,7 +163,7 @@ def init():
     downsample_user = True
     
     # run folder
-    run_folder = "run_13_mar_combined_data_test_oli_data"
+    run_folder = "run_13_mar_combined_data_test_aaron_data"
     run_path = os.path.join(save_data_path, run_folder) 
     try:  
         os.mkdir(run_path)  
@@ -171,7 +171,7 @@ def init():
         print(error) 
     
     # load model path
-    run_folder_load = "run_13_mar_combined_data_test_oli_data"
+    run_folder_load = "run_13_mar_combined_data_test_aaron_data"
     epoch_load = str(100) 
 
 
