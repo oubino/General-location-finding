@@ -19,7 +19,7 @@ class load_model:
     def __init__(self):    
         super().__init__()
         # load in sigmas
-        for k in S.landmarks:
+        for k in S.landmarks_load:
           PATH_sigma_load = os.path.join(paths.epoch_load, "sigma_%1.0f.pt" % k)
           S.sigmas[k] = torch.load(PATH_sigma_load)['sigma'] # what value to initialise sigma
         

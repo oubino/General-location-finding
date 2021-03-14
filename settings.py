@@ -38,6 +38,7 @@ def init():
     global error_counter
     global print_CT_check
     global landmarks_total, landmarks_total_loc
+    global landmarks_load, landmarks_load_loc
         
     
     # data path
@@ -101,6 +102,10 @@ def init():
     norm_std = 180
     
     batch_size = 1
+    
+    # specify landmarks + region was trained on (iff loading in model)
+    landmarks_load = [1,3,5,7,9] # brainstem # not general
+    landmarks_load_loc = {1:'com', 3: 'com', 5:'com', 7: 'com', 9:'com', } 
     
     # specify landmarks + region want to train for
     landmarks = [1,2,3,4,5,6,7,8,9,10] # brainstem # not general
