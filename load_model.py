@@ -25,9 +25,9 @@ class load_model:
         
         # load in model/optimizer/scaler
         if S.UNET_model_user == True:
-            self.model_load = network.UNet3d(1,S.num_class, network.unet_feat)
+            self.model_load = network.UNet3d(1,S.num_class_load, S.net_features_load)
         else:
-            self.model_load = network.SCNET(1, S.num_class, S.scnet_feat)
+            self.model_load = network.SCNET(1, S.num_class_load, S.scnet_feat_load)
         self.model_load = self.model_load.to(S.device)  
         self.optimizer_load = optim.Adam([
                         {'params': network.model.parameters()}
