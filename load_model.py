@@ -46,16 +46,9 @@ class load_model:
         
         # add into optimizer any sigmas in sigmas but not in sigmas_load
         list_sigma = [x for x in S.sigmas if x not in S.sigmas_load]
-        print('prints')
-        print(list_sigma)
-        print(S.landmarks)
-        prit()
-        for k in S.landmarks:
-            if S.sigmas[k] != S.sigmas_load[k]:
-                self.optimizer_load.add_param_group({'params': S.sigmas_load[k]}) 
-        
-        
-        
+        for k in list_sigma:
+            self.optimizer_load.add_param_group({'params': S.sigmas[k]}) 
+         
         self.scheduler = lr_scheduler.StepLR(self.optimizer_load, step_size=20000, gamma=0.1)
         
         
