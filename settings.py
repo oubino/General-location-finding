@@ -39,6 +39,10 @@ def init():
     global print_CT_check
     global landmarks_total, landmarks_total_loc
     global landmarks_load, landmarks_load_loc
+    global num_class_load 
+    global net_features_load 
+    global scnet_feat_load 
+    
         
     
     # data path
@@ -103,9 +107,19 @@ def init():
     
     batch_size = 1
     
+    # needed for transfer learning 
+    
+    # ---- begin -----
+    
     # specify landmarks + region was trained on (iff loading in model)
     landmarks_load = [1,3,5,7,9] # brainstem # not general
-    landmarks_load_loc = {1:'com', 3: 'com', 5:'com', 7: 'com', 9:'com', } 
+    landmarks_load_loc = {1:'com', 3: 'com', 5:'com', 7: 'com', 9:'com', }
+    
+    num_class_load = len(landmarks_load)
+    net_features_load = 32
+    scnet_feat_load = 64
+    
+    # ----- end -----
     
     # specify landmarks + region want to train for
     landmarks = [1,2,3,4,5,6,7,8,9,10] # brainstem # not general
