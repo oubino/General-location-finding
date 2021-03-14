@@ -123,7 +123,7 @@ def init():
     
     # training parameters
     epoch_batch = 10
-    num_epoch_batches = 1
+    num_epoch_batches = 5
     net_features = 32
     scnet_feat = 64
     
@@ -172,7 +172,7 @@ def init():
     
     # load model path
     run_folder_load = "run_13_mar_combined_data"
-    epoch_load = str(40) 
+    epoch_load = str(50) 
 
     
     # create tensorboard writer
