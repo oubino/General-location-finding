@@ -109,6 +109,7 @@ def init():
     # specify all structures which are actually in image
     
     # structures near the top which can be used for flipping
+    # "AMl", "AMr","HMl", "HMr", "FZl", "FZr", "FNl", "FNr", "SOl", "SOr"
     landmarks_total = [1,2,3,4,5,6,7,8,9,10]
     landmarks_total_loc = {1:'com', 2:'com', 3: 'com', 4:'com', 5:'com',6:'com', 7: 'com',8:'com', 9:'com',10:'com', } 
     top_structures = [5,6]
@@ -134,7 +135,7 @@ def init():
     
     # training parameters
     epoch_batch = 10
-    num_epoch_batches = 5
+    num_epoch_batches = 7
     net_features = 32
     scnet_feat = 64
     
@@ -174,7 +175,7 @@ def init():
     downsample_user = True
     
     # run folder
-    run_folder = "run_14_mar_combined_data_transfer"
+    run_folder = "run_14_mar_aaron_data_transfer"
     run_path = os.path.join(save_data_path, run_folder) 
     try:  
         os.mkdir(run_path)  
@@ -182,8 +183,8 @@ def init():
         print(error) 
     
     # load model path
-    run_folder_load = "run_14_mar_combined_data_transfer"
-    epoch_load = str(50) 
+    run_folder_load = "run_14_mar_aaron_data_transfer"
+    epoch_load = str(70) 
 
 
     
