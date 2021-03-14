@@ -36,6 +36,9 @@ class load_model:
         
         self.scaler_load = torch.cuda.amp.GradScaler()
         
+        print('loaded optimizer')
+        print(self.optimizer_load)
+        
         # load in current state from files
         self.model_load.load_state_dict(torch.load(paths.PATH_load))
         self.optimizer_load.load_state_dict(torch.load(paths.PATH_opt_load))
