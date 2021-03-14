@@ -134,7 +134,7 @@ def init():
     
     # training parameters
     epoch_batch = 10
-    num_epoch_batches = 8
+    num_epoch_batches = 5
     net_features = 32
     scnet_feat = 64
     
@@ -174,7 +174,7 @@ def init():
     downsample_user = True
     
     # run folder
-    run_folder = "run_14_mar_aaron_data_transfer"
+    run_folder = "run_14_mar_combined_data_transfer"
     run_path = os.path.join(save_data_path, run_folder) 
     try:  
         os.mkdir(run_path)  
@@ -182,8 +182,8 @@ def init():
         print(error) 
     
     # load model path
-    run_folder_load = "run_14_mar_aaron_data_transfer"
-    epoch_load = str(80) 
+    run_folder_load = "run_14_mar_combined_data_transfer"
+    epoch_load = str(50) 
 
 
     
