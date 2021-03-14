@@ -37,6 +37,7 @@ def init():
     global p2p_reg_term
     global error_counter
     global print_CT_check
+    global landmarks_total, landmarks_total_loc
         
     
     # data path
@@ -101,10 +102,20 @@ def init():
     
     batch_size = 1
     
+    # specify landmarks + region want to train for
     landmarks = [1,3,5,7,9] # brainstem # not general
     landmarks_loc = {1:'com', 3: 'com', 5:'com', 7: 'com', 9:'com', } 
-
-        # define which part of OAR to find
+    
+    # specify all structures which are actually in image
+    
+    # structures near the top which can be used for flipping
+    landmarks_total = [1,2,3,4,5,6,7,8,9,10]
+    landmarks_total_loc = {1:'com', 2:'com', 3: 'com', 4:'com', 5:'com',6:'com', 7: 'com',8:'com', 9:'com',10:'com', } 
+    top_structures = [5,6]
+    bot_structures = [1,2]
+    # L/R structures
+    left_structures = [1,3,5,7,9]
+    right_structures = [2,4,6,8,10]
 
     # sigmas = defaultdict(float) ?
     sigmas = {} # sigma per landmark
@@ -185,13 +196,6 @@ def init():
     img_counter_1 = 0
     img_counter_2 = 0
     img_counter_3 = 0
-    
-    # structures near the top which can be used for flipping
-    top_structures = [5,6]
-    bot_structures = [1,2]
-    # L/R structures
-    left_structures = [1,3,5,7,9]
-    right_structures = [2,4,6,8,10]
 
     
     # adaptive wing loss

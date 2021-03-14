@@ -103,10 +103,10 @@ class Extract_landmark_location(object):
     def __call__(self,sample):
         image, structure, idx, patient = sample['image'], sample['structure'], sample['idx'], sample['patient']
         structure_mod = np.zeros(structure.shape)
-        for l in S.landmarks:
+        for l in S.landmarks_total:
             # structure is z, y, x
             # need it in y, x, z
-            coords = numpy_loc.landmark_loc_np(S.landmarks_loc[l],structure,l, patient)[0]
+            coords = numpy_loc.landmark_loc_np(S.landmarks_total_loc[l],structure,l, patient)[0]
             if sum(coords) != 0 :
                 x, y, z = coords[0], coords[1], coords[2]
                 structure_mod[z][y][x] = l
