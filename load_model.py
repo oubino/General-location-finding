@@ -33,8 +33,7 @@ class load_model:
                         {'params': self.model_load.parameters()}
                        # {'params': S.sigmas[3]} # not general
                     ], lr=1e-3, weight_decay = 0.05) # use adam lr optimiser
-        for k in S.landmarks:
-            self.optimizer_load.add_param_group({'params': S.sigmas[k]}) 
+        
         self.scaler_load = torch.cuda.amp.GradScaler()
         
         # load in current state from files
@@ -42,6 +41,9 @@ class load_model:
         self.optimizer_load.load_state_dict(torch.load(paths.PATH_opt_load))
         self.scaler_load.load_state_dict(torch.load(paths.PATH_scaler_load))
         self.scheduler = lr_scheduler.StepLR(self.optimizer_load, step_size=20000, gamma=0.1)
+        
+        for k in S.landmarks:
+            self.optimizer_load.add_param_group({'params': S.sigmas[k]}) 
     
         
     def freeze_final_layers(self):
