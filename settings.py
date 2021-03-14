@@ -163,7 +163,7 @@ def init():
     downsample_user = True
     
     # run folder
-    run_folder = "run_13_mar_combined_data"
+    run_folder = "run_11_march_32_ft_trial_25"
     run_path = os.path.join(save_data_path, run_folder) 
     try:  
         os.mkdir(run_path)  
@@ -171,8 +171,8 @@ def init():
         print(error) 
     
     # load model path
-    run_folder_load = "run_13_mar_combined_data"
-    epoch_load = str(40) 
+    run_folder_load = "run_11_mar_32_ft_trial_25"
+    epoch_load = str(100) 
 
     
     # create tensorboard writer
