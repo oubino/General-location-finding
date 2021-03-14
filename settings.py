@@ -42,6 +42,7 @@ def init():
     global num_class_load 
     global net_features_load 
     global scnet_feat_load 
+    global sigmas_load
     
         
     
@@ -118,6 +119,12 @@ def init():
     num_class_load = len(landmarks_load)
     net_features_load = 32
     scnet_feat_load = 64
+    
+    sigmas_load = {} # sigma per landmark
+    for k in landmarks_load:
+      sigmas_load[k] = nn.Parameter(torch.tensor([20.]).to(device))# device = 'cuda'))#.to(device) # what value to initialise sigma
+      sigmas_load[k].requires_grad = True
+      #print(sigmas[k])
     
     # ----- end -----
     

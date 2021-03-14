@@ -36,18 +36,27 @@ class load_model:
         
         self.scaler_load = torch.cuda.amp.GradScaler()
         
-        print('loaded optimizer')
-        print(self.optimizer_load)
-        
+        for k in S.landmarks_load:
+            self.optimizer_load.add_param_group({'params': S.sigmas_load[k]}) 
+            
         # load in current state from files
         self.model_load.load_state_dict(torch.load(paths.PATH_load))
         self.optimizer_load.load_state_dict(torch.load(paths.PATH_opt_load))
         self.scaler_load.load_state_dict(torch.load(paths.PATH_scaler_load))
+        
+        # add into optimizer any sigmas in sigmas but not in sigmas_load
+        list_sigma = [x for x in S.sigmas if x not in S.sigmas_load]
+        print('LIST')
+        print(list_sigma)
+        prit()
+        for k in S.landmarks:
+            if S.sigmas[k] != S.sigmas_load[k]:
+                self.optimizer_load.add_param_group({'params': S.sigmas_load[k]}) 
+        
+        
+        
         self.scheduler = lr_scheduler.StepLR(self.optimizer_load, step_size=20000, gamma=0.1)
         
-        for k in S.landmarks:
-            self.optimizer_load.add_param_group({'params': S.sigmas[k]}) 
-    
         
     def freeze_final_layers(self):
         for name, param in self.model_load.named_parameters():
