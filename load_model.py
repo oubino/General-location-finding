@@ -46,8 +46,9 @@ class load_model:
         
         # add into optimizer any sigmas in sigmas but not in sigmas_load
         list_sigma = [x for x in S.sigmas if x not in S.sigmas_load]
-        print('LIST')
+        print('prints')
         print(list_sigma)
+        print(S.landmarks)
         prit()
         for k in S.landmarks:
             if S.sigmas[k] != S.sigmas_load[k]:
