@@ -30,7 +30,7 @@ class load_model:
             self.model_load = network.SCNET(1, S.num_class_load, S.scnet_feat_load)
         self.model_load = self.model_load.to(S.device)  
         self.optimizer_load = optim.Adam([
-                        {'params': network.model.parameters()}
+                        {'params': self.model_load.parameters()}
                        # {'params': S.sigmas[3]} # not general
                     ], lr=1e-3, weight_decay = 0.05) # use adam lr optimiser
         for k in S.landmarks:
