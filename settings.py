@@ -43,7 +43,6 @@ def init():
     global net_features_load 
     global scnet_feat_load 
     global sigmas_load
-    global initialised_new_model
     
         
     
