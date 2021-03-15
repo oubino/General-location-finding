@@ -240,8 +240,7 @@ class Flips_scipy(object):
         random_number = random.random()
         angle = random.randint(-10, 10)
         if random_number <= 0.33:
-            print('flip 1/2')
-            structure = scipy.ndimage.rotate(structure, angle, axes = [1,0], reshape = False, order = 0)
+            #structure = scipy.ndimage.rotate(structure, angle, axes = [1,0], reshape = False, order = 0)
             for l in S.landmarks:
                 x,y, z = coords[l][0] - (S.in_x-1)/2, coords[l][1] - (S.in_y-1)/2, coords[l][2] - (S.in_z-1)/2 
                 y_new = math.cos(math.radians(-angle)) * y - math.sin(math.radians(-angle)) * z
@@ -259,8 +258,7 @@ class Flips_scipy(object):
                 
 
         elif (random_number > 0.33) and (random_number <= 0.66):
-            print('flip 1/2')
-            structure = scipy.ndimage.rotate(structure, angle, axes = [1,2], reshape = False, order = 0)
+            #structure = scipy.ndimage.rotate(structure, angle, axes = [1,2], reshape = False, order = 0)
             for l in S.landmarks:
                 x,y, z = coords[l][0] - (S.in_x-1)/2, coords[l][1] - (S.in_y-1)/2, coords[l][2] - (S.in_z-1)/2 
                 x_new = math.cos(math.radians(-angle)) * x - math.sin(math.radians(-angle)) * y
@@ -277,7 +275,7 @@ class Flips_scipy(object):
                     coords[l][0], coords[l][1], coords[l][2] = x + (S.in_x-1)/2, y + (S.in_y-1)/2, z + (S.in_z-1)/2
 
         else:
-            structure = scipy.ndimage.rotate(structure, angle, axes = [2,0], reshape = False, order = 0)
+            #structure = scipy.ndimage.rotate(structure, angle, axes = [2,0], reshape = False, order = 0)
             for l in S.landmarks:
                 x,y, z = coords[l][0] - (S.in_x-1)/2, coords[l][1] - (S.in_y-1)/2, coords[l][2] - (S.in_z-1)/2 
                 x_new = math.cos(math.radians(angle)) * x + math.sin(math.radians(angle)) * z
@@ -343,8 +341,8 @@ class Horizontal_flip(object):
         random_number = random.random()
         if random_number <= 0.5:
             image = np.flip(image, axis = 2).copy()
-            structure = np.flip(structure, axis = 2).copy() # get rid
-            structure = Flip_left_right_structures(structure) # get rid
+            #structure = np.flip(structure, axis = 2).copy() # get rid
+            #structure = Flip_left_right_structures(structure) # get rid
             # flip coordinate in x axis only
             for l in S.landmarks:
                 x,y,z = coords[l][0], coords[l][1], coords[l][2] 
