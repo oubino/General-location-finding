@@ -51,6 +51,11 @@ class load_model:
          
         self.scheduler = lr_scheduler.StepLR(self.optimizer_load, step_size=20000, gamma=0.1)
         
+        # Model summary       
+        print('Network structure')
+        print('-----------------')
+        summary(self.model_load, input_size=(1, S.in_y, S.in_x, S.in_z))
+        
         
     def freeze_final_layers(self):
         for name, param in self.model_load.named_parameters():

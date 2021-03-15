@@ -10,7 +10,7 @@ import os
 import torch.optim as optim
 from torch.optim import lr_scheduler
 import train_function
-
+from torchsummary import summary
 
 class initialise_model:
     """Initialised model is a class"""
@@ -23,6 +23,11 @@ class initialise_model:
         else:
             self.model = network.SCNET(1, S.num_class, S.scnet_feat)
         self.model = self.model.to(S.device)
+        
+        # Model summary       
+        print('Network structure')
+        print('-----------------')
+        summary(self.model, input_size=(1, S.in_y, S.in_x, S.in_z))
         
         # initialise optimizer/scheduler/scaler
         self.optimizer = optim.Adam([
