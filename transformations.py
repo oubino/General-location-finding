@@ -240,7 +240,8 @@ class Flips_scipy(object):
         random_number = random.random()
         angle = random.randint(-10, 10)
         if random_number <= 0.33:
-            structure = scipy.ndimage.rotate(structure, angle, axes = [1,2], reshape = False, order = 0)
+            print('flip 1/2')
+            structure = scipy.ndimage.rotate(structure, angle, axes = [1,0], reshape = False, order = 0)
             for l in S.landmarks:
                 x,y, z = coords[l][0] - S.in_x/2, coords[l][1] - S.in_y/2, coords[l][2] - S.in_z/2 
                 y_new = math.cos(math.radians(-angle)) * y - math.sin(math.radians(-angle)) * z
@@ -258,6 +259,7 @@ class Flips_scipy(object):
                 
 
         elif (random_number > 0.33) and (random_number <= 0.66):
+            print('flip 1/2')
             structure = scipy.ndimage.rotate(structure, angle, axes = [1,2], reshape = False, order = 0)
             for l in S.landmarks:
                 x,y, z = coords[l][0] - S.in_x/2, coords[l][1] - S.in_y/2, coords[l][2] - S.in_z/2 
@@ -267,7 +269,7 @@ class Flips_scipy(object):
                 coords[l][1] = int(y_new + S.in_y/2)
                 
             if x_new > -S.in_x/2 and x_new < S.in_x/2 and y_new > -S.in_y/2 and y_new < S.in_y/2 and z > -S.in_z/2 and z < S.in_z/2:
-                image = scipy.ndimage.rotate(image, angle, axes = [1,0],reshape = False, order = 0)
+                image = scipy.ndimage.rotate(image, angle, axes = [1,2],reshape = False, order = 0)
             else:
                 print('ROTATION OUT OF BOUNDS')
                 # if not then need to flip landmarks back
@@ -284,7 +286,7 @@ class Flips_scipy(object):
                 coords[l][2] = int(z_new + S.in_z/2)
                 
             if x_new > -S.in_x/2 and x_new < S.in_x/2 and y > -S.in_y/2 and y < S.in_y/2 and z_new > -S.in_z/2 and z_new < S.in_z/2:
-               image = scipy.ndimage.rotate(image, angle, axes = [1,0],reshape = False, order = 0)
+               image = scipy.ndimage.rotate(image, angle, axes = [2,0],reshape = False, order = 0)
             else:
                 print('ROTATION OUT OF BOUNDS')
                 # if not then need to flip landmarks back
