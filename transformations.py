@@ -236,8 +236,8 @@ class Flips_scipy(object):
             print(coords)
             for l in S.landmarks:
                 x,y, z = coords[l][0] - S.in_x/2, coords[l][1] - S.in_y/2, coords[l][2] - S.in_z/2 
-                y_new = math.cos(math.radians(angle)) * y - math.sin(math.radians(angle)) * z
-                z_new = math.cos(math.radians(angle)) * z + math.sin(math.radians(angle)) * y 
+                y_new = math.cos(math.radians(-angle)) * y - math.sin(math.radians(-angle)) * z
+                z_new = math.cos(math.radians(-angle)) * z + math.sin(math.radians(-angle)) * y 
                 coords[l][1] = int(y_new + S.in_y/2)
                 coords[l][2] = int(z_new + S.in_z/2)  
             print('coordinates post 1,0 flips for')
@@ -250,8 +250,8 @@ class Flips_scipy(object):
             print(coords)
             for l in S.landmarks:
                 x,y, z = coords[l][0] - S.in_x/2, coords[l][1] - S.in_y/2, coords[l][2] - S.in_z/2 
-                x_new = math.cos(math.radians(angle)) * x - math.sin(math.radians(angle)) * y
-                y_new = math.cos(math.radians(angle)) * y + math.sin(math.radians(angle)) * x
+                x_new = math.cos(math.radians(-angle)) * x - math.sin(math.radians(-angle)) * y
+                y_new = math.cos(math.radians(-angle)) * y + math.sin(math.radians(-angle)) * x
                 coords[l][0] = int(x_new + S.in_x/2)
                 coords[l][1] = int(y_new + S.in_y/2)
             print('coordinates post 1,2 flips for')
@@ -264,8 +264,8 @@ class Flips_scipy(object):
             print(coords)
             for l in S.landmarks:
                 x,y, z = coords[l][0] - S.in_x/2, coords[l][1] - S.in_y/2, coords[l][2] - S.in_z/2 
-                x_new = math.cos(math.radians(angle)) * x + math.sin(math.radians(angle)) * z
-                z_new = math.cos(math.radians(angle)) * z - math.sin(math.radians(angle)) * x
+                x_new = math.cos(math.radians(-angle)) * x + math.sin(math.radians(-angle)) * z
+                z_new = math.cos(math.radians(-angle)) * z - math.sin(math.radians(-angle)) * x
                 coords[l][0] = int(x_new + S.in_x/2)
                 coords[l][2] = int(z_new + S.in_z/2)
             print('coordinates post 2,0 flips for')
