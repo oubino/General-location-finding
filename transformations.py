@@ -245,8 +245,8 @@ class Flips_scipy(object):
             # check if still within bounds due to rotation!
             if x > -S.in_x/2 and x < S.in_x/2 and y_new > -S.in_y/2 and y_new < S.in_y/2 and z_new > -S.in_z/2 and z_new < S.in_z/2:
                 image = scipy.ndimage.rotate(image, angle, axes = [1,0],reshape = False, order = 0)
-                print('within bounds')
             else:
+                print('ROTATION OUT OF BOUNDS')
                 # if not then need to flip landmarks back
                 for l in S.landmarks:
                     coords[l][0], coords[l][1], coords[l][2] = x + S.in_x/2, y + S.in_y/2, z + S.in_z/2
@@ -263,8 +263,8 @@ class Flips_scipy(object):
                 
             if x_new > -S.in_x/2 and x_new < S.in_x/2 and y_new > -S.in_y/2 and y_new < S.in_y/2 and z > -S.in_z/2 and z < S.in_z/2:
                 image = scipy.ndimage.rotate(image, angle, axes = [1,0],reshape = False, order = 0)
-                print('within bounds')
             else:
+                print('ROTATION OUT OF BOUNDS')
                 # if not then need to flip landmarks back
                 for l in S.landmarks:
                     coords[l][0], coords[l][1], coords[l][2] = x + S.in_x/2, y + S.in_y/2, z + S.in_z/2
@@ -280,8 +280,8 @@ class Flips_scipy(object):
                 
             if x_new > -S.in_x/2 and x_new < S.in_x/2 and y > -S.in_y/2 and y < S.in_y/2 and z_new > -S.in_z/2 and z_new < S.in_z/2:
                image = scipy.ndimage.rotate(image, angle, axes = [1,0],reshape = False, order = 0)
-               print('within bounds')
             else:
+                print('ROTATION OUT OF BOUNDS')
                 # if not then need to flip landmarks back
                 for l in S.landmarks:
                     coords[l][0], coords[l][1], coords[l][2] = x + S.in_x/2, y + S.in_y/2, z + S.in_z/2
