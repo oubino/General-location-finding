@@ -124,7 +124,7 @@ class Check_landmark_still_there(object):
             # structure is z, y, x
             # need it in y, x, z
             coords = numpy_loc.landmark_loc_np(S.landmarks_total_loc[l],structure,l, patient)[0]
-            if sum(coords) != 0 :
+            if sum(coords) != 0 and self.location == 'flips scipy' :
                 print('coordinates from rotation normal')
                 print(coords[0], coords[1], coords[2])
             if sum(coords) == 0:
@@ -234,20 +234,24 @@ class Flips_scipy(object):
             x,y, z = coords[0], coords[1], coords[2] 
             coords[1] = math.cos(math.radians(angle)) * y - math.sin(math.radians(angle)) * z
             coords[2] = math.cos(math.radians(angle)) * z + math.sin(math.radians(angle)) * y
+            print('coordinates post 1,0 flips')
+            print(coords)
         elif (random_number > 0.33) and (random_number <= 0.66):
             image = scipy.ndimage.rotate(image, angle, axes = [1,2], reshape = False, order = 0)
             structure = scipy.ndimage.rotate(structure, angle, axes = [1,2], reshape = False, order = 0)
             x,y, z = coords[0], coords[1], coords[2] 
             coords[0] = math.cos(math.radians(angle)) * x - math.sin(math.radians(angle)) * y
             coords[1] = math.cos(math.radians(angle)) * y + math.sin(math.radians(angle)) * x
+            print('coordinates post 1,2 flips')
+            print(coords)
         else:
             image = scipy.ndimage.rotate(image, angle, axes = [2,0], reshape = False, order = 0)
             structure = scipy.ndimage.rotate(structure, angle, axes = [2,0], reshape = False, order = 0)
             x,y, z = coords[0], coords[1], coords[2] 
             coords[0] = math.cos(math.radians(angle)) * x + math.sin(math.radians(angle)) * z
             coords[2] = math.cos(math.radians(angle)) * z - math.sin(math.radians(angle)) * x
-        print('coordinates post flips')
-        print(coords)
+            print('coordinates post 2,0 flips')
+            print(coords)
         return {'image': image, 'structure': structure, 'idx': idx, 'patient':patient, 'coords':coords}
     
 def Flip_left_right_structures(structure):
