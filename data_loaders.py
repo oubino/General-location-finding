@@ -20,7 +20,7 @@ os.chdir(S.root) # change to data path and change back at end
 
 if S.downsample_user == True:
     trans_plain = transforms.Compose([T.Resize(S.in_z,S.in_x,S.in_y),T.Upsidedown_scipy(), T.Extract_landmark_location(), T.Fix_base_value(), T.Normalise(S.normal_min, S.normal_max, S.normal_window), T.Check_left_right(), T.ToTensor()])
-    trans_augment = transforms.Compose([T.Resize(S.in_z,S.in_x,S.in_y),T.Upsidedown_scipy(), T.Extract_landmark_location(), T.Check_landmark_still_there('pre'), T.Fix_base_value(), T.Normalise(S.normal_min, S.normal_max, S.normal_window), T.Flips_scipy(), T.Horizontal_flip(), T.Check_left_right(),T.Check_landmark_still_there('post'), T.ToTensor()])
+    trans_augment = transforms.Compose([T.Resize(S.in_z,S.in_x,S.in_y),T.Upsidedown_scipy(), T.Extract_landmark_location(), T.Fix_base_value(), T.Normalise(S.normal_min, S.normal_max, S.normal_window),  T.Check_landmark_still_there('pre'), T.Flips_scipy(), T.Check_landmark_still_there('post'), T.Horizontal_flip(), T.Check_left_right(), T.ToTensor()])
 #trans_plain = transforms.Compose([Normalise(normal_min, normal_max, normal_window), Depth(100,256,256), Upsidedown_scipy(), ToTensor()])
 #trans_augment = transforms.Compose([Normalise(normal_min, normal_max, normal_window),Depth(100,256,256), Upsidedown_scipy(), Flips_scipy(), ToTensor()])#, Pre_Transpose(), Check_com_present('bob'), Post_Transpose()])#,  Upsidedown(),Flips(), CentreCrop(), Affine(), Post_Transpose()])#HorizontalFlip()Noise(),, Affine() CentreCrop()CentreCrop(), Flips(), Affine(),
 # torch image: C X H X W x D -> this is output and what we deal with from now on
