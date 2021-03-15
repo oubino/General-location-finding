@@ -63,6 +63,10 @@ class load_model:
         self.model_load = self.model_load.to(S.device)
         print('Transferred model')
         summary(self.model_load, input_size=(1, S.in_y, S.in_x, S.in_z))
+        for name, param in self.model_load.named_parameters():
+            if (param.requires_grad == True):
+                print(name, param)
+        
         # check which params have 
         """
         for name, param in model_transfer.named_parameters():
