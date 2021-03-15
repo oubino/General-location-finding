@@ -136,7 +136,7 @@ def init():
         except OSError as error:  
                 print(error) 
         run_folder_load = "run_14_mar_combined_data_transfer"
-        epoch_load = str(50)
+        epoch_load = str(70)
         
     norm_mean = 180
     norm_std = 180
