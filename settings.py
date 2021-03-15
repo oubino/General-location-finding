@@ -43,6 +43,7 @@ def init():
     global net_features_load 
     global scnet_feat_load 
     global sigmas_load
+    global initialised_new_model
     
         
     
@@ -271,6 +272,8 @@ def init():
     
     # whether to print all CTs as a check
     print_CT_check = False
+    
+    
     
     
     
