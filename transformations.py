@@ -241,7 +241,7 @@ class Flips_scipy(object):
         angle = random.randint(-10, 10)
         if random_number <= 0.33:
             #structure = scipy.ndimage.rotate(structure, angle, axes = [1,0], reshape = False, order = 0)
-            for l in S.landmarks:
+            for l in S.landmarks_total:
                 x,y, z = coords[l][0] - (S.in_x-1)/2, coords[l][1] - (S.in_y-1)/2, coords[l][2] - (S.in_z-1)/2 
                 y_new = math.cos(math.radians(-angle)) * y - math.sin(math.radians(-angle)) * z
                 z_new = math.cos(math.radians(-angle)) * z + math.sin(math.radians(-angle)) * y 
@@ -253,13 +253,13 @@ class Flips_scipy(object):
             else:
                 print('ROTATION OUT OF BOUNDS')
                 # if not then need to flip landmarks back
-                for l in S.landmarks:
+                for l in S.landmarks_total:
                     coords[l][0], coords[l][1], coords[l][2] = x + (S.in_x-1)/2, y + (S.in_y-1)/2, z + (S.in_z-1)/2
                 
 
         elif (random_number > 0.33) and (random_number <= 0.66):
             #structure = scipy.ndimage.rotate(structure, angle, axes = [1,2], reshape = False, order = 0)
-            for l in S.landmarks:
+            for l in S.landmarks_total:
                 x,y, z = coords[l][0] - (S.in_x-1)/2, coords[l][1] - (S.in_y-1)/2, coords[l][2] - (S.in_z-1)/2 
                 x_new = math.cos(math.radians(-angle)) * x - math.sin(math.radians(-angle)) * y
                 y_new = math.cos(math.radians(-angle)) * y + math.sin(math.radians(-angle)) * x
@@ -271,12 +271,12 @@ class Flips_scipy(object):
             else:
                 print('ROTATION OUT OF BOUNDS')
                 # if not then need to flip landmarks back
-                for l in S.landmarks:
+                for l in S.landmarks_total:
                     coords[l][0], coords[l][1], coords[l][2] = x + (S.in_x-1)/2, y + (S.in_y-1)/2, z + (S.in_z-1)/2
 
         else:
             #structure = scipy.ndimage.rotate(structure, angle, axes = [2,0], reshape = False, order = 0)
-            for l in S.landmarks:
+            for l in S.landmarks_total:
                 x,y, z = coords[l][0] - (S.in_x-1)/2, coords[l][1] - (S.in_y-1)/2, coords[l][2] - (S.in_z-1)/2 
                 x_new = math.cos(math.radians(angle)) * x + math.sin(math.radians(angle)) * z
                 z_new = math.cos(math.radians(angle)) * z - math.sin(math.radians(angle)) * x
@@ -288,7 +288,7 @@ class Flips_scipy(object):
             else:
                 print('ROTATION OUT OF BOUNDS')
                 # if not then need to flip landmarks back
-                for l in S.landmarks:
+                for l in S.landmarks_total:
                     coords[l][0], coords[l][1], coords[l][2] = x + (S.in_x-1)/2, y + (S.in_y-1)/2, z + (S.in_z-1)/2
 
         return {'image': image, 'structure': structure, 'idx': idx, 'patient':patient, 'coords':coords}
@@ -344,7 +344,7 @@ class Horizontal_flip(object):
             #structure = np.flip(structure, axis = 2).copy() # get rid
             #structure = Flip_left_right_structures(structure) # get rid
             # flip coordinate in x axis only
-            for l in S.landmarks:
+            for l in S.landmarks_total:
                 x,y,z = coords[l][0], coords[l][1], coords[l][2] 
                 x_new = S.in_x - 1 - x # 0 to 127
                 coords[l][0] = x_new
