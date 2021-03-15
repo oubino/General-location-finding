@@ -161,8 +161,8 @@ def init():
     if aaron_or_oli == True:
         # aaron
         # training parameters
-        epoch_batch = 5
-        num_epoch_batches = 5
+        epoch_batch = 10
+        num_epoch_batches = 3
         net_features = 32
         scnet_feat = 64
     elif aaron_or_oli == False:
@@ -211,7 +211,7 @@ def init():
     if aaron_or_oli == True:
     # aaron folders
         # run folder
-        run_folder = "run_14_mar_combined_data_transfer"
+        run_folder = "run_14_mar_aaron_data_transfer"
         run_path = os.path.join(save_data_path, run_folder) 
         try:  
             os.mkdir(run_path)  
@@ -220,7 +220,7 @@ def init():
         
         # load model path
     
-        run_folder_load = "run_14_mar_combined_data_transfer"
+        run_folder_load = "run_14_mar_aaron_data_transfer"
         epoch_load = str(50) 
     elif aaron_or_oli == False:
         # oli folders
