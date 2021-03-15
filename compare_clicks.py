@@ -121,6 +121,13 @@ for k in landmarks:
         mean_dev_temp += dev_list['%1.0f' % k][j]
     mean_dev_temp /= len(list_1)
     mean_dev['%1.0f' % k].append(mean_dev_temp)
+    print('mean dev temp')
+    print(mean_dev_temp)
+    print('numpy mean')
+    print(np.mean(dev_list['%1.0f' % k][j]))
+    print('numpy error')
+    print(np.std(dev_list['%1.0f' % k][j],ddof =1)*(len(dev_list['%1.0f' % k][j]))**-0.5)
+    
     
 # calculate mean of aaron and oli from arrays
 for j in range(len(list_1)):
@@ -132,6 +139,8 @@ for j in range(len(list_1)):
         mean_list['%1.0f' % k].append(coords)
         
 # ------ return a structure with just one point at the mean  ----- #
+
+"""
 
 # for each image create an array
 for i in list_1:
@@ -154,7 +163,7 @@ for i in list_1:
     # save ct
     np.save(os.path.join(save_ct_folder,i), ct)
     
-
+"""
 
 # deviations per landmark per image
 #print('deviations per landmark per image')
