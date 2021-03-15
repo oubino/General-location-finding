@@ -40,6 +40,8 @@ if initialise == True:
     model.evaluate()   
     print('error counter')
     print(settings.error_counter)
+    print('params')
+    model.print_params()
         
 
 elif initialise == False:
@@ -57,6 +59,8 @@ elif initialise == False:
             class_number = int(class_number)
             feature_number = int(feature_number)
             model.transfer_learn_final_layer(class_number, feature_number)
+            print('params')
+            model.print_params()
         print('Training model')
         print('------------')
         model.train(True, transfer_learn_decision)
@@ -81,3 +85,4 @@ elif initialise == False:
         model.evaluate_pre_train()
     print('error counter')
     print(settings.error_counter)
+

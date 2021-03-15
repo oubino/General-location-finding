@@ -88,3 +88,7 @@ class initialise_model:
         torch.save(self.scaler.state_dict(), PATH_scaler_save)
         torch.save({'best_val_loss': self.best_loss}, PATH_val_loss_save)
         torch.save({'epochs_completed': self.epochs_completed}, PATH_epochs_completed_save)
+    
+    def print_params(self):
+        for name, param in self.model.named_parameters():
+            print(name,param)
