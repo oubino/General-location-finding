@@ -44,7 +44,8 @@ if initialise == True:
 
 elif initialise == False:
     import load_model
-    model = load_model.load_model()
+    load_transfered_model = yes_or_no.question('are you loading in a model which was saved as a transfered model')
+    model = load_model.load_model(load_transfered_model)
     train_decision = yes_or_no.question('train loaded in model?')
     if train_decision == True:
         freeze_decision = yes_or_no.question('freeze all but last layer?')
@@ -56,7 +57,7 @@ elif initialise == False:
             feature_number = input ("Enter number of features pre trained model trained with")
             class_number = int(class_number)
             feature_number = int(feature_number)
-            model.transfer_learn_final_layer(class_number, feature_number)
+            model.transfer_learn_unet_final_layer(class_number, feature_number)
         print('Training model')
         print('------------')
         model.train(True, transfer_learn_decision)
