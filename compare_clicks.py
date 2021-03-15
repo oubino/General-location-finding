@@ -126,7 +126,7 @@ for k in landmarks:
     print('numpy mean')
     print(np.mean(dev_list['%1.0f' % k][j]))
     print('numpy error')
-    print(np.std(dev_list['%1.0f' % k][j],ddof =1)*(len(list_1)**-0.5))
+    print(np.std(dev_list['%1.0f' % k][j])*(len(list_1)**-0.5))
     
     
 # calculate mean of aaron and oli from arrays
