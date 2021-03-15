@@ -114,11 +114,11 @@ def calc_loss_gauss(img, pred, target, idx, metrics_landmarks, alpha, reg, gamma
         # regularization term
         squ_weights = torch.tensor(0,dtype=torch.float64).to(S.device)
         if S.initialised_new_model == True:
-            for model_param_name, model_param_value in initialise_model.model.named_parameters():
+            for model_param_name, model_param_value in initialise_model.initialise_model.model.named_parameters():
               if model_param_name.endswith('weight'):
                 squ_weights += (model_param_value.norm())**2
         elif S.initialised_new_model == False:
-            for model_param_name, model_param_value in load_model.model_load.named_parameters():
+            for model_param_name, model_param_value in load_model.load_model.model_load.named_parameters():
               if model_param_name.endswith('weight'):
                 squ_weights += (model_param_value.norm())**2
             
