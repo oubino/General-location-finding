@@ -151,8 +151,8 @@ def init():
    # landmarks_load = [1,2,3,4,5,6,7,8,9,10] # brainstem # not general
    # landmarks_load_loc = {1:'com',2:'com', 3: 'com',4:'com', 5:'com',6:'com', 7: 'com',8:'com',9:'com',10:'com', }
 
-    #landmarks_load = [1,3,5,7,9] # brainstem # not general
-    #landmarks_load_loc = {1:'com', 3: 'com', 5:'com', 7: 'com', 9:'com', }
+    landmarks_load = [1,3,5,7,9] # brainstem # not general
+    landmarks_load_loc = {1:'com', 3: 'com', 5:'com', 7: 'com', 9:'com', }
     
     num_class_load = len(landmarks_load)
     net_features_load = 32
