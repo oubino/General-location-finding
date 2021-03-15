@@ -65,7 +65,22 @@ def init():
         # use server paths for data and code for Aaron/Oli
         aaron_or_oli = yes_or_no.question('aaron(y) / oli (n)')
         if aaron_or_oli == True:
+            
+            # aaron settings
+            epoch_batch = 10
+            num_epoch_batches = 3
+            net_features = 32
+            scnet_feat = 64
+            run_folder = "run_14_mar_aaron_data_transfer"
+            run_path = os.path.join(save_data_path, run_folder) 
+            
             combined_data = yes_or_no.question('combined_data (y) / solo_data (n)')
+            try:  
+                os.mkdir(run_path)  
+            except OSError as error:  
+                    print(error) 
+            run_folder_load = "run_14_mar_aaron_data_transfer"
+            epoch_load = str(50)
             if combined_data == True:
                 # Aaron paths
                 coding_path = r'/home/rankinaaron98/General-location-finding'
@@ -76,18 +91,24 @@ def init():
                 coding_path = r'/home/rankinaaron98/General-location-finding'
                 root = r'/home/rankinaaron98/data/Facial_asymmetry_aaron'
                 save_data_path = r'/home/rankinaaron98/data/results/Aaron'
-                run_folder = "run_14_mar_aaron_data_transfer"
-                run_path = os.path.join(save_data_path, run_folder) 
-                try:  
-                    os.mkdir(run_path)  
-                except OSError as error:  
-                        print(error) 
-                run_folder_load = "run_14_mar_aaron_data_transfer"
-                epoch_load = str(50)
         # load model path
     
-         
         elif aaron_or_oli == False:
+            
+            # oli settings
+            epoch_batch = 10
+            num_epoch_batches = 2
+            net_features = 32
+            scnet_feat = 64
+            run_folder = "run_14_mar_combined_data_transfer"
+            run_path = os.path.join(save_data_path, run_folder) 
+            try:  
+                os.mkdir(run_path)  
+            except OSError as error:  
+                    print(error) 
+            run_folder_load = "run_14_mar_combined_data_transfer"
+            epoch_load = str(50)
+            
             combined_data = yes_or_no.question('combined_data (y) / solo_data (n)')
             if combined_data == True:         
                 # Oli paths
@@ -169,20 +190,6 @@ def init():
     in_y = 128
     in_z = 80
     
-    if aaron_or_oli == True:
-        # aaron
-        # training parameters
-        epoch_batch = 10
-        num_epoch_batches = 3
-        net_features = 32
-        scnet_feat = 64
-    elif aaron_or_oli == False:
-        # oli
-        # training parameters
-        epoch_batch = 5
-        num_epoch_batches = 5
-        net_features = 32
-        scnet_feat = 64
     
     alpha = 1/25000
     reg = 0.01 # reg = 0.001
