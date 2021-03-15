@@ -111,7 +111,7 @@ def init():
     if aaron_or_oli == True:
         # aaron settings
         epoch_batch = 10
-        num_epoch_batches = 2
+        num_epoch_batches = 5
         net_features = 32
         scnet_feat = 64
         run_folder = "run_14_mar_aaron_data_transfer"
