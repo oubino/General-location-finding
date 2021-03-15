@@ -61,6 +61,7 @@ class load_model:
         # model becomes new model with different last layer
         self.model_load = network.Transfer_model(class_number, features, self.model_load)
         self.model_load = self.model_load.to(S.device)
+        print('Transferred model')
         summary(self.model_load, input_size=(1, S.in_y, S.in_x, S.in_z))
         # check which params have 
         """

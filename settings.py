@@ -160,8 +160,8 @@ def init():
     
     
     # training parameters
-    epoch_batch = 10
-    num_epoch_batches = 1
+    epoch_batch = 5
+    num_epoch_batches = 5
     net_features = 32
     scnet_feat = 64
     
