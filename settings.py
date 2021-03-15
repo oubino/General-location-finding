@@ -125,18 +125,18 @@ def init():
         epoch_load = str(50)
     elif aaron_or_oli == False:
     # oli settings
-        epoch_batch = 10
-        num_epoch_batches = 2
+        epoch_batch = 1
+        num_epoch_batches = 1
         net_features = 32
         scnet_feat = 64
-        run_folder = "run_14_mar_combined_data_transfer"
+        run_folder = "run_15_mar_test_transfer"
         run_path = os.path.join(save_data_path, run_folder) 
         try:  
             os.mkdir(run_path)  
         except OSError as error:  
                 print(error) 
-        run_folder_load = "run_14_mar_combined_data_transfer"
-        epoch_load = str(50)
+        run_folder_load = "run_15_mar_test_transfer"
+        epoch_load = str(1)
         
     norm_mean = 180
     norm_std = 180
@@ -164,11 +164,11 @@ def init():
     # ----- end -----
     
     # specify landmarks + region want to train for
-    #landmarks = [1,3,5,7,9] # brainstem # not general
-    #landmarks_loc = {1:'com', 3: 'com', 5:'com', 7:'com', 9:'com' } 
+    landmarks = [1,3,5,7,9] # brainstem # not general
+    landmarks_loc = {1:'com', 3: 'com', 5:'com', 7:'com', 9:'com' } 
     
-    landmarks = [1,2,3,4,5,6,7,8,9,10]
-    landmarks_loc = {1:'com',2:'com', 3: 'com',4:'com', 5:'com',6:'com', 7:'com',8:'com', 9:'com',10:'com', } 
+    #landmarks = [1,2,3,4,5,6,7,8,9,10]
+    #landmarks_loc = {1:'com',2:'com', 3: 'com',4:'com', 5:'com',6:'com', 7:'com',8:'com', 9:'com',10:'com', } 
     
     # specify all structures which are actually in image
     
