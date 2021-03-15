@@ -232,6 +232,8 @@ class Flips_scipy(object):
         if random_number <= 0.33:
             image = scipy.ndimage.rotate(image, angle, axes = [1,0],reshape = False, order = 0)
             structure = scipy.ndimage.rotate(structure, angle, axes = [1,0], reshape = False, order = 0)
+            print('coords pre rotation')
+            print(coords)
             for l in S.landmarks:
                 x,y, z = coords[l][0], coords[l][1], coords[l][2] 
                 coords[l][1] = math.cos(math.radians(angle)) * y - math.sin(math.radians(angle)) * z
@@ -242,6 +244,8 @@ class Flips_scipy(object):
         elif (random_number > 0.33) and (random_number <= 0.66):
             image = scipy.ndimage.rotate(image, angle, axes = [1,2], reshape = False, order = 0)
             structure = scipy.ndimage.rotate(structure, angle, axes = [1,2], reshape = False, order = 0)
+            print('coords pre rotation')
+            print(coords)
             for l in S.landmarks:
                 x,y, z = coords[l][0], coords[l][1], coords[l][2] 
                 coords[l][0] = math.cos(math.radians(angle)) * x - math.sin(math.radians(angle)) * y
@@ -252,6 +256,8 @@ class Flips_scipy(object):
         else:
             image = scipy.ndimage.rotate(image, angle, axes = [2,0], reshape = False, order = 0)
             structure = scipy.ndimage.rotate(structure, angle, axes = [2,0], reshape = False, order = 0)
+            print('coords pre rotation')
+            print(coords)
             for l in S.landmarks:
                 x,y, z = coords[l][0], coords[l][1], coords[l][2] 
                 coords[l][0] = math.cos(math.radians(angle)) * x + math.sin(math.radians(angle)) * z
