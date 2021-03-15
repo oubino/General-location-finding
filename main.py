@@ -13,7 +13,6 @@ initialise = yes_or_no.question('initialise new network?')
 #save_model = functions.yes_or_no('would you like to save model at end?')
 
 if initialise == True:
-    settings.initialised_new_model = True
     import initialise_model
     model = initialise_model.initialise_model()
     print('Training model')
@@ -44,7 +43,6 @@ if initialise == True:
         
 
 elif initialise == False:
-    settings.initialised_new_model = False
     import load_model
     model = load_model.load_model()
     train_decision = yes_or_no.question('train loaded in model?')
