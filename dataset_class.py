@@ -51,7 +51,8 @@ class CTDataset(Dataset):
         sample = {'image': img, 'structure': structure} # both are nd.arrays, stored in sample dataset
         sample['idx'] = idx # should print out which image is problematic
         sample['patient'] = self.imgs[idx]
-        
+
+        sample['coords'] = {}
         for k in settings.landmarks_total:
             sample['coords'][k] = [0,0,0] # x,y,z
         
