@@ -234,18 +234,20 @@ class Flips_scipy(object):
             structure = scipy.ndimage.rotate(structure, angle, axes = [1,0], reshape = False, order = 0)
             for l in S.landmarks:
                 x,y, z = coords[l][0], coords[l][1], coords[l][2] 
-                coords[l][1] = math.cos(math.radians(angle)) * y - math.sin(math.radians(-angle)) * z
-                coords[l][2] = math.cos(math.radians(angle)) * z + math.sin(math.radians(-angle)) * y    
+                coords[l][1] = math.cos(math.radians(angle)) * y - math.sin(math.radians(angle)) * z
+                coords[l][2] = math.cos(math.radians(angle)) * z + math.sin(math.radians(angle)) * y    
             print('coordinates post 1,0 flips for')
+            print(angle)
             print(coords)
         elif (random_number > 0.33) and (random_number <= 0.66):
             image = scipy.ndimage.rotate(image, angle, axes = [1,2], reshape = False, order = 0)
             structure = scipy.ndimage.rotate(structure, angle, axes = [1,2], reshape = False, order = 0)
             for l in S.landmarks:
                 x,y, z = coords[l][0], coords[l][1], coords[l][2] 
-                coords[l][0] = math.cos(math.radians(angle)) * x - math.sin(math.radians(-angle)) * y
-                coords[l][1] = math.cos(math.radians(angle)) * y + math.sin(math.radians(-angle)) * x
+                coords[l][0] = math.cos(math.radians(angle)) * x - math.sin(math.radians(angle)) * y
+                coords[l][1] = math.cos(math.radians(angle)) * y + math.sin(math.radians(angle)) * x
             print('coordinates post 1,2 flips for')
+            print(angle)
             print(coords)
         else:
             image = scipy.ndimage.rotate(image, angle, axes = [2,0], reshape = False, order = 0)
@@ -255,6 +257,7 @@ class Flips_scipy(object):
                 coords[l][0] = math.cos(math.radians(angle)) * x + math.sin(math.radians(angle)) * z
                 coords[l][2] = math.cos(math.radians(angle)) * z - math.sin(math.radians(angle)) * x
             print('coordinates post 2,0 flips for')
+            print(angle)
             print(coords)
         return {'image': image, 'structure': structure, 'idx': idx, 'patient':patient, 'coords':coords}
     
