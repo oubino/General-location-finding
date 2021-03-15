@@ -52,6 +52,10 @@ class CTDataset(Dataset):
         sample['idx'] = idx # should print out which image is problematic
         sample['patient'] = self.imgs[idx]
         
+        for k in settings.landmarks_total:
+            sample['coords'][k] = [0,0,0] # x,y,z
+        
+        
         if (self.transform_train) and (self.test == False):
             sample = self.transform_train(sample) # if transforms present, act on sample
         if (self.transform_test) and (self.test == True):

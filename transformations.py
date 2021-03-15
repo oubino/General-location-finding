@@ -9,6 +9,7 @@ import numpy as np
 import functions
 import settings as S
 import numpy_loc
+import math
 
 class Rescale(object): 
     # need to change rescale so longer side is matched to int and then pad
@@ -26,7 +27,7 @@ class Rescale(object):
 
     def __call__(self, sample):
         # image, structure, structure_centre = sample['image'], sample['structure'], sample['structure_centre'] 
-        image, structure, idx, patient = sample['image'], sample['structure'], sample['idx'], sample['patient']
+        image, structure, idx, patient, coords = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords']
         #print(mask.max())
         #print(mask.min())
         d, h, w = image.shape[:3] # define image height, width, depth as first 3 values
@@ -49,7 +50,7 @@ class Rescale(object):
         #print(mask.max())
         #print(mask.min())
 
-        return {'image': img, 'structure': structure, 'idx': idx, 'patient': patient}
+        return {'image': img, 'structure': structure, 'idx': idx, 'patient': patient, 'coords': coords}
 
 class Resize(object):
 
@@ -59,7 +60,7 @@ class Resize(object):
       self.height = height
                           
   def __call__(self, sample):
-      image, structure, idx, patient = sample['image'], sample['structure'], sample['idx'], sample['patient']
+      image, structure, idx, patient, coords = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords']
       depth = self.depth # 256 - new width(128)
       width = self.width
       height = self.height
@@ -86,22 +87,22 @@ class Resize(object):
               new_x = int(old_index[2] * w_post/w_pre)
               structure_new[new_z][new_y][new_x] = l
         '''
-      return {'image':image,'structure': structure , 'idx': idx, 'patient':patient} # note note !'structure': structure_new
+      return {'image':image,'structure': structure , 'idx': idx, 'patient':patient, 'coords':coords} # note note !'structure': structure_new
   
 class Fix_base_value(object):  
   """ Some images start from -1024, others from 0 make sure all start from 0 """
                             
   def __call__(self, sample):
-      image, structure, idx, patient = sample['image'], sample['structure'], sample['idx'], sample['patient']
+      image, structure, idx, patient, coords = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords']
       if np.round(np.amin(image)) < -1000:
           image = image + np.abs(np.round(np.amin(image)))
-      return {'image':image, 'structure': structure, 'idx': idx, 'patient':patient} # note note !
+      return {'image':image, 'structure': structure, 'idx': idx, 'patient':patient, 'coords': coords} # note note !
   
 class Extract_landmark_location(object):
     """ Convert structure to tensor of zeros with one value at the desired landmark location """
     
     def __call__(self,sample):
-        image, structure, idx, patient = sample['image'], sample['structure'], sample['idx'], sample['patient']
+        image, structure, idx, patient, coordinates = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords']
         structure_mod = np.zeros(structure.shape)
         for l in S.landmarks_total:
             # structure is z, y, x
@@ -110,21 +111,25 @@ class Extract_landmark_location(object):
             if sum(coords) != 0 :
                 x, y, z = coords[0], coords[1], coords[2]
                 structure_mod[z][y][x] = l
-        return {'image':image, 'structure': structure_mod, 'idx': idx, 'patient':patient} # note note !
+                coordinates = [x,y,z]
+        return {'image':image, 'structure': structure_mod, 'idx': idx, 'patient':patient, 'coords': coordinates} # note note !
     
 class Check_landmark_still_there(object):
     """ Check landmark still present during transformations """
     def __init__(self, location):
         self.location = location
     def __call__(self, sample):
-        image, structure, idx, patient = sample['image'], sample['structure'], sample['idx'], sample['patient']
+        image, structure, idx, patient, coordinates = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords']
         for l in S.landmarks_total:
             # structure is z, y, x
             # need it in y, x, z
             coords = numpy_loc.landmark_loc_np(S.landmarks_total_loc[l],structure,l, patient)[0]
+            if sum(coords) != 0 :
+                print('coordinates from rotation normal')
+                print(coords[0], coords[1], coords[2])
             if sum(coords) == 0:
                 print('landarks not present post %s' % self.location)
-        return {'image':image, 'structure': structure, 'idx': idx, 'patient':patient} # note note !
+        return {'image':image, 'structure': structure, 'idx': idx, 'patient':patient, 'coords':coordinates} # note note !
         
         
 class Normalise(object):  
@@ -137,7 +142,7 @@ class Normalise(object):
       self.window = window
                           
   def __call__(self, sample):
-      image, structure, idx, patient = sample['image'], sample['structure'], sample['idx'], sample['patient']
+      image, structure, idx, patient, coords = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords']
       # need to normalise around different values
       if np.round(np.amin(image)) < 0:
           print("MIN VALUE LESS THAN 0")
@@ -150,7 +155,7 @@ class Normalise(object):
       img_norm = np.clip(image, minval, maxval)
       img_norm -= minval
       img_norm /= self.window
-      return {'image':img_norm, 'structure': structure, 'idx': idx, 'patient':patient} # note note !
+      return {'image':img_norm, 'structure': structure, 'idx': idx, 'patient':patient, 'coords': coords} # note note !
 
 class CentreCrop(object):    
   def __init__(self, depth, width, height):
@@ -159,7 +164,7 @@ class CentreCrop(object):
       self.height = height
                           
   def __call__(self, sample):
-      image, structure, idx, patient = sample['image'], sample['structure'], sample['idx'], sample['patient']
+      image, structure, idx, patient, coords = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords']
 
       d, h, w = image.shape[:3] # define image height, width, depth as first 3 values
 
@@ -194,7 +199,7 @@ class CentreCrop(object):
 
       d, h, w = image.shape[:3] # define image height, width, depth as first 3 values
 
-      return {'image':image, 'structure': structure, 'idx':idx, 'patient':patient} # note note !
+      return {'image':image, 'structure': structure, 'idx':idx, 'patient':patient, 'coords':coords} # note note !
 
     
     
@@ -204,7 +209,7 @@ class ToTensor(object):
     """Convert ndarrays in sample to Tensors."""
 
     def __call__(self, sample):
-        image, structure, idx, patient = sample['image'], sample['structure'], sample['idx'], sample['patient']
+        image, structure, idx, patient, coords = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords']
         # swap color axis because
         # numpy image: D x H x W 
         # torch image: C X H X W x D
@@ -214,25 +219,36 @@ class ToTensor(object):
         structure = torch.from_numpy(structure).float()
         structure = structure.unsqueeze(0) # force mask to have extra dimension i.e. (1xHxWxD)
         image = image.unsqueeze(0)
-        return {'image': image,'structure': structure, 'idx': idx, 'patient':patient}
+        return {'image': image,'structure': structure, 'idx': idx, 'patient':patient, 'coords':coords}
 
 
 
 class Flips_scipy(object):
     def __call__(self,sample):
-        image, structure, idx, patient = sample['image'], sample['structure'], sample['idx'], sample['patient']
+        image, structure, idx, patient, coords = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords']
         random_number = random.random()
         angle = random.randint(-10, 10)
         if random_number <= 0.33:
             image = scipy.ndimage.rotate(image, angle, axes = [1,0],reshape = False, order = 0)
             structure = scipy.ndimage.rotate(structure, angle, axes = [1,0], reshape = False, order = 0)
-        if (random_number > 0.33) and (random_number <= 0.66):
+            x,y, z = coords[0], coords[1], coords[2] 
+            coords[1] = math.cos(math.radians(angle)) * y - math.sin(math.radians(angle)) * z
+            coords[2] = math.cos(math.radians(angle)) * z + math.sin(math.radians(angle)) * y
+        elif (random_number > 0.33) and (random_number <= 0.66):
             image = scipy.ndimage.rotate(image, angle, axes = [1,2], reshape = False, order = 0)
             structure = scipy.ndimage.rotate(structure, angle, axes = [1,2], reshape = False, order = 0)
+            x,y, z = coords[0], coords[1], coords[2] 
+            coords[0] = math.cos(math.radians(angle)) * x - math.sin(math.radians(angle)) * y
+            coords[1] = math.cos(math.radians(angle)) * y + math.sin(math.radians(angle)) * x
         else:
             image = scipy.ndimage.rotate(image, angle, axes = [2,0], reshape = False, order = 0)
             structure = scipy.ndimage.rotate(structure, angle, axes = [2,0], reshape = False, order = 0)
-        return {'image': image, 'structure': structure, 'idx': idx, 'patient':patient}
+            x,y, z = coords[0], coords[1], coords[2] 
+            coords[0] = math.cos(math.radians(angle)) * x + math.sin(math.radians(angle)) * z
+            coords[2] = math.cos(math.radians(angle)) * z - math.sin(math.radians(angle)) * x
+        print('coordinates post flips')
+        print(coords)
+        return {'image': image, 'structure': structure, 'idx': idx, 'patient':patient, 'coords':coords}
     
 def Flip_left_right_structures(structure):
     
@@ -254,7 +270,7 @@ def Flip_left_right_structures(structure):
 
 class Check_left_right(object):
     def __call__(self,sample):
-        image, structure, idx, patient = sample['image'], sample['structure'], sample['idx'], sample['patient']
+        image, structure, idx, patient, coords = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords']
         for i in range(len(S.left_structures)):
             indices_left = np.round(structure) == S.left_structures[i]
             indices_right = np.round(structure) == S.right_structures[i]
@@ -264,23 +280,23 @@ class Check_left_right(object):
                 if min_right > max_left:
                     print('ERROR LEFT AND RIGHT WRONG WAy RouND')
                     S.error_counter += 1
-        return {'image': image, 'structure': structure, 'idx': idx, 'patient':patient}
+        return {'image': image, 'structure': structure, 'idx': idx, 'patient':patient, 'coords':coords}
     
     
 class Horizontal_flip(object):
     def __call__(self,sample):
-        image, structure, idx, patient = sample['image'], sample['structure'], sample['idx'], sample['patient']
+        image, structure, idx, patient, coords = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords']
         random_number = random.random()
         if random_number <= 0.5:
             image = np.flip(image, axis = 2).copy()
             structure = np.flip(structure, axis = 2).copy()
             structure = Flip_left_right_structures(structure) # need to flip L/R structures
-        return {'image': image, 'structure': structure, 'idx': idx, 'patient':patient}
+        return {'image': image, 'structure': structure, 'idx': idx, 'patient':patient, 'coords':coords }
        
     
 class Upsidedown_scipy(object):
     def __call__(self,sample):
-        image, structure, idx, patient = sample['image'], sample['structure'], sample['idx'], sample['patient']
+        image, structure, idx, patient, coords = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords']
         # if upside down need to flip
         # if left cochlea landmark = 5 above 1/2
         # data is y, x, z
@@ -293,7 +309,7 @@ class Upsidedown_scipy(object):
                 landmark_loc_top = np.where(structure == S.top_structures[counter_top])
             except:
                 print('ERROR NONE OF THE TOP STRUCTURES FOUND IN IMAGE- returning unflipped image')
-                return {'image': image, 'structure': structure, 'idx': idx, 'patient':patient}
+                return {'image': image, 'structure': structure, 'idx': idx, 'patient':patient, 'coords':coords}
 
         counter_bot = 0
         landmark_loc_bot = np.where(structure == S.bot_structures[counter_bot])
@@ -303,7 +319,7 @@ class Upsidedown_scipy(object):
                 landmark_loc_bot = np.where(structure == S.bot_structures[counter_bot])
             except:
                 print('ERROR NONE OF THE BOTTOM STRUCTURES FOUND IN IMAGE- returning unflipped image')
-                return {'image': image, 'structure': structure, 'idx': idx, 'patient':patient}
+                return {'image': image, 'structure': structure, 'idx': idx, 'patient':patient, 'coords':coords}
 
         z_landmark_top = landmark_loc_top[0][0]
         z_landmark_bot = landmark_loc_bot[0][0]
@@ -313,14 +329,14 @@ class Upsidedown_scipy(object):
             image = scipy.ndimage.rotate(image, angle, axes = [2,0], reshape = False, order =0)
             structure = scipy.ndimage.rotate(structure, angle, axes = [2,0], reshape = False, order =0)
             structure = Flip_left_right_structures(structure) # need to flip left/right structures
-            return {'image': image, 'structure': structure, 'idx': idx, 'patient':patient}
+            return {'image': image, 'structure': structure, 'idx': idx, 'patient':patient, 'coords':coords}
         else:
-            return {'image': image, 'structure': structure, 'idx': idx, 'patient':patient}
+            return {'image': image, 'structure': structure, 'idx': idx, 'patient':patient, 'coords':coords}
         
     
 class Upsidedown(object):
   def __call__(self,sample):
-    image, structure, idx = sample['image'], sample['structure'], sample['idx']
+    image, structure, idx, coords = sample['image'], sample['structure'], sample['idx'], sample['coords']
     # if upside down need to flip
     # if left cochlea landmark = 5 above 1/2
     # note that cause kornea takes in z, y, x between pre and post tranpose
@@ -336,14 +352,14 @@ class Upsidedown(object):
       image = flip(image)
       structure = flip(structure)
     #structure = torch.squeeze(structure,0)
-    return {'image': image, 'structure': structure, 'idx': idx, 'patient':patient}
+    return {'image': image, 'structure': structure, 'idx': idx, 'patient':patient, 'coords':coords}
 
 class Unsqueeze(object):
   def __call__(self,sample):
-    image, structure, idx = sample['image'], sample['structure'], sample['idx']
+    image, structure, idx, coords = sample['image'], sample['structure'], sample['idx'], sample['coords']
     image = image.unsqueeze(0)
     structure = structure.unsqueeze(0)
-    return {'image': image, 'structure': structure, 'idx': idx}
+    return {'image': image, 'structure': structure, 'idx': idx, 'coords':coords}
 
 
 
@@ -351,7 +367,7 @@ class Unsqueeze(object):
 # for now not going to use below because not sure if it acts on image and structure equally
 class Affine(object):
   def __call__(self, sample):
-    image, structure, idx = sample['image'], sample['structure'], sample['idx']
+    image, structure, idx, coords = sample['image'], sample['structure'], sample['idx'], sample['coords']
     if random.random() <= 0.3:
       affine = transforms.Compose([aug.RandomAffine3D(degrees=(0,10,10), translate=(0,0.05,0.05), same_on_batch=True, p=1)])
       image = affine(image)
@@ -359,7 +375,7 @@ class Affine(object):
       structure = affine(structure)
 
 
-    return{'image': image, 'structure': structure, 'idx': idx}
+    return{'image': image, 'structure': structure, 'idx': idx, 'coords':coords}
 
 class Noise(object):  # helps prevent overfitting
   #Random noise images
