@@ -111,8 +111,19 @@ class Extract_landmark_location(object):
                 x, y, z = coords[0], coords[1], coords[2]
                 structure_mod[z][y][x] = l
         return {'image':image, 'structure': structure_mod, 'idx': idx, 'patient':patient} # note note !
+    
+class Check_landmark_still_there(object):
+    """ Check landmark still present during transformations """
+    def __call__(self, sample, location):
+        image, structure, idx, patient = sample['image'], sample['structure'], sample['idx'], sample['patient']
+        for l in S.landmarks_total:
+            # structure is z, y, x
+            # need it in y, x, z
+            coords = numpy_loc.landmark_loc_np(S.landmarks_total_loc[l],structure,l, patient)[0]
+            print('landarks still present post %s' % location)
+        return {'image':image, 'structure': structure, 'idx': idx, 'patient':patient} # note note !
         
-
+        
 class Normalise(object):  
   """ Normalise CT scan in the desired examination window
       takes in image as numpy """
