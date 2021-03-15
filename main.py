@@ -40,6 +40,7 @@ if initialise == True:
     model.evaluate()   
     print('error counter')
     print(settings.error_counter)
+
         
 
 elif initialise == False:
@@ -82,3 +83,4 @@ elif initialise == False:
         model.evaluate_pre_train()
     print('error counter')
     print(settings.error_counter)
+

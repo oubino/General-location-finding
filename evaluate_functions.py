@@ -330,7 +330,7 @@ def performance_metrics(model,sigmas,gamma, epochs_completed):
             # now need to choose first in batch i.e. # image[0]
             #print('3D plots for landmark %1.0f' % l)
             #print_3D_heatmap(image[i], structure[i], pred[i], l, eval_path, patient[i])
-            print_3D_gauss_heatmap(image[i], structure_max_x, structure_max_y, structure_max_z, pred[i], l, sigmas[l], eval_path, patient[i])
+            #print_3D_gauss_heatmap(image[i], structure_max_x, structure_max_y, structure_max_z, pred[i], l, sigmas[l], eval_path, patient[i])
             print('\n')
             print('Structure LOC for landmark %1.0f:' % l)
             print(structure_max_x, structure_max_y, structure_max_z)
