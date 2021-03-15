@@ -114,13 +114,15 @@ class Extract_landmark_location(object):
     
 class Check_landmark_still_there(object):
     """ Check landmark still present during transformations """
+    def __init__(self, location):
+        self.location = location
     def __call__(self, sample, location):
         image, structure, idx, patient = sample['image'], sample['structure'], sample['idx'], sample['patient']
         for l in S.landmarks_total:
             # structure is z, y, x
             # need it in y, x, z
             coords = numpy_loc.landmark_loc_np(S.landmarks_total_loc[l],structure,l, patient)[0]
-            print('landarks still present post %s' % location)
+            print('landarks still present post %s' % self.location)
         return {'image':image, 'structure': structure, 'idx': idx, 'patient':patient} # note note !
         
         
