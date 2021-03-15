@@ -124,7 +124,7 @@ class Check_landmark_still_there(object):
             # structure is z, y, x
             # need it in y, x, z
             coords = numpy_loc.landmark_loc_np(S.landmarks_total_loc[l],structure,l, patient)[0]
-            if sum(coords) != 0 and self.location == 'flips scipy' :
+            if sum(coords) != 0:
                 print('coordinates from rotation normal')
                 print(coords[0], coords[1], coords[2])
             if sum(coords) == 0:
@@ -233,7 +233,7 @@ class Flips_scipy(object):
             structure = scipy.ndimage.rotate(structure, angle, axes = [1,0], reshape = False, order = 0)
             x,y, z = coords[0], coords[1], coords[2] 
             coords[1] = math.cos(math.radians(angle)) * y - math.sin(math.radians(angle)) * z
-            coords[2] = math.cos(math.radians(angle)) * z + math.sin(math.radians(angle)) * y
+            coords[2] = math.cos(math.radians(angle)) * z + math.sin(math.radians(angle)) * y    
             print('coordinates post 1,0 flips')
             print(coords)
         elif (random_number > 0.33) and (random_number <= 0.66):
