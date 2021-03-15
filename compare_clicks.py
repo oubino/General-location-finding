@@ -125,6 +125,13 @@ for k in landmarks:
     print(mean_dev_temp)
     print('numpy mean')
     print(np.mean(dev_list['%1.0f' % k][j]))
+    a = dev_list['%1.0f' % k]
+    print('a')
+    print(a)
+    print('mean a')
+    print(np.mean(a))
+    print('std a')
+    print(np.std(a))
     print('numpy error')
     print(np.std(dev_list['%1.0f' % k][j])*(len(list_1)**-0.5))
     
