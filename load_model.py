@@ -19,30 +19,38 @@ class load_model:
     def __init__(self):    
         super().__init__()
         # load in sigmas
-        for k in S.landmarks:
+        for k in S.landmarks_load:
           PATH_sigma_load = os.path.join(paths.epoch_load, "sigma_%1.0f.pt" % k)
           S.sigmas[k] = torch.load(PATH_sigma_load)['sigma'] # what value to initialise sigma
         
         # load in model/optimizer/scaler
         if S.UNET_model_user == True:
-            self.model_load = network.UNet3d(1,S.num_class, network.unet_feat)
+            self.model_load = network.UNet3d(1,S.num_class_load, S.net_features_load)
         else:
-            self.model_load = network.SCNET(1, S.num_class, S.scnet_feat)
+            self.model_load = network.SCNET(1, S.num_class_load, S.scnet_feat_load)
         self.model_load = self.model_load.to(S.device)  
         self.optimizer_load = optim.Adam([
-                        {'params': network.model.parameters()}
+                        {'params': self.model_load.parameters()}
                        # {'params': S.sigmas[3]} # not general
                     ], lr=1e-3, weight_decay = 0.05) # use adam lr optimiser
-        for k in S.landmarks:
-            self.optimizer_load.add_param_group({'params': S.sigmas[k]}) 
+        
         self.scaler_load = torch.cuda.amp.GradScaler()
         
+        for k in S.landmarks_load:
+            self.optimizer_load.add_param_group({'params': S.sigmas_load[k]}) 
+            
         # load in current state from files
         self.model_load.load_state_dict(torch.load(paths.PATH_load))
         self.optimizer_load.load_state_dict(torch.load(paths.PATH_opt_load))
         self.scaler_load.load_state_dict(torch.load(paths.PATH_scaler_load))
+        
+        # add into optimizer any sigmas in sigmas but not in sigmas_load
+        list_sigma = [x for x in S.sigmas if x not in S.sigmas_load]
+        for k in list_sigma:
+            self.optimizer_load.add_param_group({'params': S.sigmas[k]}) 
+         
         self.scheduler = lr_scheduler.StepLR(self.optimizer_load, step_size=20000, gamma=0.1)
-    
+        
         
     def freeze_final_layers(self):
         for name, param in self.model_load.named_parameters():

@@ -38,6 +38,12 @@ def init():
     global error_counter
     global print_CT_check
     global landmarks_total, landmarks_total_loc
+    global landmarks_load, landmarks_load_loc
+    global num_class_load 
+    global net_features_load 
+    global scnet_feat_load 
+    global sigmas_load
+    
         
     
     # data path
@@ -102,9 +108,29 @@ def init():
     
     batch_size = 1
     
+    # needed for transfer learning 
+    
+    # ---- begin -----
+    
+    # specify landmarks + region was trained on (iff loading in model)
+    landmarks_load = [1,3,5,7,9] # brainstem # not general
+    landmarks_load_loc = {1:'com', 3: 'com', 5:'com', 7: 'com', 9:'com', }
+    
+    num_class_load = len(landmarks_load)
+    net_features_load = 32
+    scnet_feat_load = 64
+    
+    sigmas_load = {} # sigma per landmark
+    for k in landmarks_load:
+      sigmas_load[k] = nn.Parameter(torch.tensor([20.]).to(device))# device = 'cuda'))#.to(device) # what value to initialise sigma
+      sigmas_load[k].requires_grad = True
+      #print(sigmas[k])
+    
+    # ----- end -----
+    
     # specify landmarks + region want to train for
-    landmarks = [1,3,5,7,9] # brainstem # not general
-    landmarks_loc = {1:'com', 3: 'com', 5:'com', 7: 'com', 9:'com', } 
+    landmarks = [1,2,3,4,5,6,7,8,9,10] # brainstem # not general
+    landmarks_loc = {1:'com',2:'com', 3: 'com',4:'com', 5:'com',6:'com', 7: 'com',8:'com', 9:'com',10:'com', } 
     
     # specify all structures which are actually in image
     
@@ -175,7 +201,7 @@ def init():
     downsample_user = True
     
     # run folder
-    run_folder = "run_14_mar_aaron_data_transfer"
+    run_folder = "run_14_mar_combined_data_transfer"
     run_path = os.path.join(save_data_path, run_folder) 
     try:  
         os.mkdir(run_path)  
@@ -183,6 +209,7 @@ def init():
         print(error) 
     
     # load model path
+
     run_folder_load = "run_14_mar_aaron_data_transfer"
     epoch_load = str(50) 
 
