@@ -72,12 +72,14 @@ for i in list_1:
 dev_list = {}
 dev_upper_limit_list = {}
 mean_dev = {}
+mean_dev_std = {}
 mean_list = {}
 
 for k in landmarks:
     dev_list['%1.0f' % k] = []
     dev_upper_limit_list['%1.0f' % k] = []
     mean_dev['%1.0f' % k] = []
+    mean_dev_std['%1.0f' % k] = []
     mean_list['%1.0f' % k] = []
     
 def pixel_to_mm(patient):
@@ -116,16 +118,10 @@ for j in range(len(list_1)):
 
 # average deviation per landmark
 for k in landmarks:
-    mean_dev_temp = 0
-    for j in range(len(list_1)):
-        mean_dev_temp += dev_list['%1.0f' % k][j]
-    mean_dev_temp /= len(list_1)
-    mean_dev['%1.0f' % k].append(mean_dev_temp)
     a = dev_list['%1.0f' % k]
-    print('mean')
-    print(np.mean(a))
-    print('std')
-    print(np.std(a)*(len(list_1)**-0.5))
+    mean = np.mean(a)
+    mean_dev['%1.0f' % k].append(mean)
+    mean_dev_std['%1.0f' % k].append(np.std(a)*(len(list_1)**-0.5))
 
     
 # calculate mean of aaron and oli from arrays
@@ -175,4 +171,8 @@ print(dev_upper_limit_list)
 # mean deviation per landmark
 print('mean deviation per landmark')
 print(mean_dev)
+
+# std of mean deviation per landmark
+print('std of mean deviation per landmark')
+print(mean_dev_std)
             
