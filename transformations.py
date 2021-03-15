@@ -124,10 +124,10 @@ class Check_landmark_still_there(object):
             # structure is z, y, x
             # need it in y, x, z
             coords = numpy_loc.landmark_loc_np(S.landmarks_total_loc[l],structure,l, patient)[0]
-            if sum(coords) != 0:
-                print('coordinates from rotation normal for')
-                print(l)
-                print(coords[0], coords[1], coords[2])
+            #if sum(coords) != 0:
+            #    print('coordinates from rotation normal for')
+            #    print(l)
+            #    print(coords[0], coords[1], coords[2])
             if sum(coords) == 0:
                 print('landarks not present post %s' % self.location)
         return {'image':image, 'structure': structure, 'idx': idx, 'patient':patient, 'coords':coordinates} # note note !
@@ -211,6 +211,12 @@ class ToTensor(object):
 
     def __call__(self, sample):
         image, structure, idx, patient, coords = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords']
+        structure = np.zeros(structure.shape)
+        for l in S.landmarks_total:
+            # structure is z, y, x
+            # need it in y, x, z                
+            x, y, z = coords[l][0], coords[l][1], coords[l][2]
+            structure[z][y][x] = l
         # swap color axis because
         # numpy image: D x H x W 
         # torch image: C X H X W x D
@@ -231,46 +237,31 @@ class Flips_scipy(object):
         angle = random.randint(-10, 10)
         if random_number <= 0.33:
             image = scipy.ndimage.rotate(image, angle, axes = [1,0],reshape = False, order = 0)
-            structure = scipy.ndimage.rotate(structure, angle, axes = [1,0], reshape = False, order = 0)
-            print('coords pre rotation')
-            print(coords)
+            #structure = scipy.ndimage.rotate(structure, angle, axes = [1,0], reshape = False, order = 0)
             for l in S.landmarks:
                 x,y, z = coords[l][0] - S.in_x/2, coords[l][1] - S.in_y/2, coords[l][2] - S.in_z/2 
                 y_new = math.cos(math.radians(-angle)) * y - math.sin(math.radians(-angle)) * z
                 z_new = math.cos(math.radians(-angle)) * z + math.sin(math.radians(-angle)) * y 
                 coords[l][1] = int(y_new + S.in_y/2)
                 coords[l][2] = int(z_new + S.in_z/2)  
-            print('coordinates post 1,0 flips for')
-            print(angle)
-            print(coords)
         elif (random_number > 0.33) and (random_number <= 0.66):
             image = scipy.ndimage.rotate(image, angle, axes = [1,2], reshape = False, order = 0)
-            structure = scipy.ndimage.rotate(structure, angle, axes = [1,2], reshape = False, order = 0)
-            print('coords pre rotation')
-            print(coords)
+            #structure = scipy.ndimage.rotate(structure, angle, axes = [1,2], reshape = False, order = 0)
             for l in S.landmarks:
                 x,y, z = coords[l][0] - S.in_x/2, coords[l][1] - S.in_y/2, coords[l][2] - S.in_z/2 
                 x_new = math.cos(math.radians(-angle)) * x - math.sin(math.radians(-angle)) * y
                 y_new = math.cos(math.radians(-angle)) * y + math.sin(math.radians(-angle)) * x
                 coords[l][0] = int(x_new + S.in_x/2)
                 coords[l][1] = int(y_new + S.in_y/2)
-            print('coordinates post 1,2 flips for')
-            print(angle)
-            print(coords)
         else:
             image = scipy.ndimage.rotate(image, angle, axes = [2,0], reshape = False, order = 0)
-            structure = scipy.ndimage.rotate(structure, angle, axes = [2,0], reshape = False, order = 0)
-            print('coords pre rotation')
-            print(coords)
+            #structure = scipy.ndimage.rotate(structure, angle, axes = [2,0], reshape = False, order = 0)
             for l in S.landmarks:
                 x,y, z = coords[l][0] - S.in_x/2, coords[l][1] - S.in_y/2, coords[l][2] - S.in_z/2 
                 x_new = math.cos(math.radians(angle)) * x + math.sin(math.radians(angle)) * z
                 z_new = math.cos(math.radians(angle)) * z - math.sin(math.radians(angle)) * x
                 coords[l][0] = int(x_new + S.in_x/2)
                 coords[l][2] = int(z_new + S.in_z/2)
-            print('coordinates post 2,0 flips for')
-            print(angle)
-            print(coords)
         return {'image': image, 'structure': structure, 'idx': idx, 'patient':patient, 'coords':coords}
     
 def Flip_left_right_structures(structure):
@@ -295,6 +286,14 @@ class Check_left_right(object):
     def __call__(self,sample):
         image, structure, idx, patient, coords = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords']
         for i in range(len(S.left_structures)):
+            left_structure = S.left_structures[i]
+            right_structure = S.right_structures[i]
+            left_location = coords[left_structure]
+            right_location = coords[right_structure]
+            if right_location[0] > left_location[0]: # if right x is greater than left x
+                print('ERROR LEFT AND RIGHT WRONG WAy RouND')
+                S.error_counter += 1
+            """
             indices_left = np.round(structure) == S.left_structures[i]
             indices_right = np.round(structure) == S.right_structures[i]
             if (np.nonzero(indices_left)[2].size != 0) and (np.nonzero(indices_right)[2].size != 0):
@@ -303,6 +302,7 @@ class Check_left_right(object):
                 if min_right > max_left:
                     print('ERROR LEFT AND RIGHT WRONG WAy RouND')
                     S.error_counter += 1
+                    """
         return {'image': image, 'structure': structure, 'idx': idx, 'patient':patient, 'coords':coords}
     
     
@@ -312,8 +312,20 @@ class Horizontal_flip(object):
         random_number = random.random()
         if random_number <= 0.5:
             image = np.flip(image, axis = 2).copy()
-            structure = np.flip(structure, axis = 2).copy()
-            structure = Flip_left_right_structures(structure) # need to flip L/R structures
+            # flip coordinate in x axis only
+            for l in S.landmarks:
+                x,y,z = coords[l][0], coords[l][1], coords[l][2] 
+                x_new = S.in_x - x
+                coords[l][0] = x_new
+            # flip left right structures left becomes right and vice versa
+            for k in range(len(S.left_structures)):
+                left_structure = S.left_structures[k]
+                right_structure = S.right_structures[k]
+                left_location = coords[left_structure]
+                right_location = coords[right_structure]
+                coords[left_structure] = right_location
+                coords[right_structure] = left_location
+
         return {'image': image, 'structure': structure, 'idx': idx, 'patient':patient, 'coords':coords }
        
     
