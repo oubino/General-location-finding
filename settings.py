@@ -65,22 +65,7 @@ def init():
         # use server paths for data and code for Aaron/Oli
         aaron_or_oli = yes_or_no.question('aaron(y) / oli (n)')
         if aaron_or_oli == True:
-            
-            # aaron settings
-            epoch_batch = 10
-            num_epoch_batches = 3
-            net_features = 32
-            scnet_feat = 64
-            run_folder = "run_14_mar_aaron_data_transfer"
-            run_path = os.path.join(save_data_path, run_folder) 
-            
             combined_data = yes_or_no.question('combined_data (y) / solo_data (n)')
-            try:  
-                os.mkdir(run_path)  
-            except OSError as error:  
-                    print(error) 
-            run_folder_load = "run_14_mar_aaron_data_transfer"
-            epoch_load = str(50)
             if combined_data == True:
                 # Aaron paths
                 coding_path = r'/home/rankinaaron98/General-location-finding'
@@ -93,22 +78,7 @@ def init():
                 save_data_path = r'/home/rankinaaron98/data/results/Aaron'
         # load model path
     
-        elif aaron_or_oli == False:
-            
-            # oli settings
-            epoch_batch = 10
-            num_epoch_batches = 2
-            net_features = 32
-            scnet_feat = 64
-            run_folder = "run_14_mar_combined_data_transfer"
-            run_path = os.path.join(save_data_path, run_folder) 
-            try:  
-                os.mkdir(run_path)  
-            except OSError as error:  
-                    print(error) 
-            run_folder_load = "run_14_mar_combined_data_transfer"
-            epoch_load = str(50)
-            
+        elif aaron_or_oli == False:           
             combined_data = yes_or_no.question('combined_data (y) / solo_data (n)')
             if combined_data == True:         
                 # Oli paths
@@ -134,6 +104,39 @@ def init():
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     print('Device working on: ')
     print(device)
+    
+    # oli vs aaron settings
+    
+     
+    if aaron_or_oli == True:
+        # aaron settings
+        epoch_batch = 10
+        num_epoch_batches = 3
+        net_features = 32
+        scnet_feat = 64
+        run_folder = "run_14_mar_aaron_data_transfer"
+        run_path = os.path.join(save_data_path, run_folder) 
+        
+        try:  
+            os.mkdir(run_path)  
+        except OSError as error:  
+                print(error) 
+        run_folder_load = "run_14_mar_aaron_data_transfer"
+        epoch_load = str(50)
+    elif aaron_or_oli == False:
+    # oli settings
+        epoch_batch = 10
+        num_epoch_batches = 2
+        net_features = 32
+        scnet_feat = 64
+        run_folder = "run_14_mar_combined_data_transfer"
+        run_path = os.path.join(save_data_path, run_folder) 
+        try:  
+            os.mkdir(run_path)  
+        except OSError as error:  
+                print(error) 
+        run_folder_load = "run_14_mar_combined_data_transfer"
+        epoch_load = str(50)
         
     norm_mean = 180
     norm_std = 180
