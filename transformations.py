@@ -111,7 +111,7 @@ class Extract_landmark_location(object):
             if sum(coords) != 0 :
                 x, y, z = coords[0], coords[1], coords[2]
                 structure_mod[z][y][x] = l
-                coordinates = [x,y,z]
+                coordinates[l] = [x,y,z]
         return {'image':image, 'structure': structure_mod, 'idx': idx, 'patient':patient, 'coords': coordinates} # note note !
     
 class Check_landmark_still_there(object):
@@ -125,7 +125,8 @@ class Check_landmark_still_there(object):
             # need it in y, x, z
             coords = numpy_loc.landmark_loc_np(S.landmarks_total_loc[l],structure,l, patient)[0]
             if sum(coords) != 0:
-                print('coordinates from rotation normal')
+                print('coordinates from rotation normal for')
+                print(l)
                 print(coords[0], coords[1], coords[2])
             if sum(coords) == 0:
                 print('landarks not present post %s' % self.location)
@@ -231,27 +232,33 @@ class Flips_scipy(object):
         if random_number <= 0.33:
             image = scipy.ndimage.rotate(image, angle, axes = [1,0],reshape = False, order = 0)
             structure = scipy.ndimage.rotate(structure, angle, axes = [1,0], reshape = False, order = 0)
-            x,y, z = coords[0], coords[1], coords[2] 
-            coords[1] = math.cos(math.radians(angle)) * y - math.sin(math.radians(angle)) * z
-            coords[2] = math.cos(math.radians(angle)) * z + math.sin(math.radians(angle)) * y    
-            print('coordinates post 1,0 flips')
-            print(coords)
+            for l in S.landmarks:
+                x,y, z = coords[l][0], coords[l][1], coords[l][2] 
+                coords[l][1] = math.cos(math.radians(angle)) * y - math.sin(math.radians(angle)) * z
+                coords[l][2] = math.cos(math.radians(angle)) * z + math.sin(math.radians(angle)) * y    
+                print('coordinates post 1,0 flips for')
+                print(l)
+                print(coords)
         elif (random_number > 0.33) and (random_number <= 0.66):
             image = scipy.ndimage.rotate(image, angle, axes = [1,2], reshape = False, order = 0)
             structure = scipy.ndimage.rotate(structure, angle, axes = [1,2], reshape = False, order = 0)
-            x,y, z = coords[0], coords[1], coords[2] 
-            coords[0] = math.cos(math.radians(angle)) * x - math.sin(math.radians(angle)) * y
-            coords[1] = math.cos(math.radians(angle)) * y + math.sin(math.radians(angle)) * x
-            print('coordinates post 1,2 flips')
-            print(coords)
+            for l in S.landmarks:
+                x,y, z = coords[l][0], coords[l][1], coords[l][2] 
+                coords[l][0] = math.cos(math.radians(angle)) * x - math.sin(math.radians(angle)) * y
+                coords[l][1] = math.cos(math.radians(angle)) * y + math.sin(math.radians(angle)) * x
+                print('coordinates post 1,2 flips for')
+                print(l)
+                print(coords)
         else:
             image = scipy.ndimage.rotate(image, angle, axes = [2,0], reshape = False, order = 0)
             structure = scipy.ndimage.rotate(structure, angle, axes = [2,0], reshape = False, order = 0)
-            x,y, z = coords[0], coords[1], coords[2] 
-            coords[0] = math.cos(math.radians(angle)) * x + math.sin(math.radians(angle)) * z
-            coords[2] = math.cos(math.radians(angle)) * z - math.sin(math.radians(angle)) * x
-            print('coordinates post 2,0 flips')
-            print(coords)
+            for l in S.landmarks:
+                x,y, z = coords[l][0], coords[l][1], coords[l][2] 
+                coords[l][0] = math.cos(math.radians(angle)) * x + math.sin(math.radians(angle)) * z
+                coords[l][2] = math.cos(math.radians(angle)) * z - math.sin(math.radians(angle)) * x
+                print('coordinates post 2,0 flips for')
+                print(l)
+                print(coords)
         return {'image': image, 'structure': structure, 'idx': idx, 'patient':patient, 'coords':coords}
     
 def Flip_left_right_structures(structure):
