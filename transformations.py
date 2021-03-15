@@ -343,6 +343,8 @@ class Horizontal_flip(object):
         random_number = random.random()
         if random_number <= 0.5:
             image = np.flip(image, axis = 2).copy()
+            structure = np.flip(structure, axis = 2).copy() # get rid
+            structure = Flip_left_right_structures(structure) # get rid
             # flip coordinate in x axis only
             for l in S.landmarks:
                 x,y,z = coords[l][0], coords[l][1], coords[l][2] 
