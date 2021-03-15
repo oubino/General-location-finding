@@ -116,7 +116,7 @@ class Check_landmark_still_there(object):
     """ Check landmark still present during transformations """
     def __init__(self, location):
         self.location = location
-    def __call__(self, sample, location):
+    def __call__(self, sample):
         image, structure, idx, patient = sample['image'], sample['structure'], sample['idx'], sample['patient']
         for l in S.landmarks_total:
             # structure is z, y, x
