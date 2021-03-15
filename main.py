@@ -46,7 +46,8 @@ if initialise == True:
 
 elif initialise == False:
     import load_model
-    model = load_model.load_model()
+    load_transfered_model = yes_or_no.question('are you loading in a model which was saved as a transfered model')
+    model = load_model.load_model(load_transfered_model)
     train_decision = yes_or_no.question('train loaded in model?')
     if train_decision == True:
         freeze_decision = yes_or_no.question('freeze all but last layer?')

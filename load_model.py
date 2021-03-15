@@ -16,7 +16,7 @@ from torch import nn
 class load_model:
     """Loaded in model is now a class"""
 
-    def __init__(self):    
+    def __init__(self, load_transfered_model):    
         super().__init__()
         # load in sigmas
         for k in S.landmarks_load:
@@ -25,7 +25,12 @@ class load_model:
         
         # load in model/optimizer/scaler
         if S.UNET_model_user == True:
-            self.model_load = network.UNet3d(1,S.num_class_load, S.net_features_load)
+            # if model was saved as a transfered model it has different keys
+            if load_transfered_model == False: 
+                self.model_load = network.UNet3d(1,S.num_class_load, S.net_features_load)
+            elif load_transfered_model == True:
+                # load in a transfered model with dummy UNET, which can load params into
+                self.model_load = network.Transfer_model(S.num_class_load, S.net_features_load, network.UNet3d(1,S.num_class_load, S.net_features_load))
         else:
             self.model_load = network.SCNET(1, S.num_class_load, S.scnet_feat_load)
         self.model_load = self.model_load.to(S.device)  
@@ -62,7 +67,7 @@ class load_model:
             if (name != 'out.conv.bias' and name != 'out.conv.weight'):
                 param.requires_grad = False
         
-    def transfer_learn_final_layer(self, class_number, features):
+    def transfer_learn_unet_final_layer(self, class_number, features):
         # model becomes new model with different last layer
         self.model_load = network.Transfer_model(class_number, features, self.model_load)
         self.model_load = self.model_load.to(S.device)
@@ -78,6 +83,7 @@ class load_model:
             if param.requires_grad == True:
                 print(name,param)
         """
+        
         
     def train(self, first_train, transfer_learn_decision):
         # for first train load in best loss and epochs completed
