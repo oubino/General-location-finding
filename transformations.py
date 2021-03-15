@@ -128,8 +128,12 @@ class Check_landmark_still_there(object):
             #    print('coordinates from rotation normal for')
             #    print(l)
             #    print(coords[0], coords[1], coords[2])
+            print('coordinates old')
+            print(l, coords)
             if sum(coords) == 0:
                 print('landarks not present post %s' % self.location)
+        print('coordinates new')
+        print(coordinates)
         return {'image':image, 'structure': structure, 'idx': idx, 'patient':patient, 'coords':coordinates} # note note !
         
         
