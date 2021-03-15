@@ -111,7 +111,7 @@ def init():
     if aaron_or_oli == True:
         # aaron settings
         epoch_batch = 10
-        num_epoch_batches = 3
+        num_epoch_batches = 2
         net_features = 32
         scnet_feat = 64
         run_folder = "run_14_mar_aaron_data_transfer"
@@ -122,7 +122,7 @@ def init():
         except OSError as error:  
                 print(error) 
         run_folder_load = "run_14_mar_aaron_data_transfer"
-        epoch_load = str(50)
+        epoch_load = str(80)
     elif aaron_or_oli == False:
     # oli settings
         epoch_batch = 10
@@ -148,8 +148,8 @@ def init():
     # ---- begin -----
     
     # specify landmarks + region was trained on (iff loading in model)
-    landmarks_load = [1,2,3,4,5,6,7,8,9,10] # brainstem # not general
-    landmarks_load_loc = {1:'com',2:'com', 3: 'com',4:'com', 5:'com',6:'com', 7: 'com',8:'com',9:'com',10:'com', }
+   # landmarks_load = [1,2,3,4,5,6,7,8,9,10] # brainstem # not general
+   # landmarks_load_loc = {1:'com',2:'com', 3: 'com',4:'com', 5:'com',6:'com', 7: 'com',8:'com',9:'com',10:'com', }
 
     #landmarks_load = [1,3,5,7,9] # brainstem # not general
     #landmarks_load_loc = {1:'com', 3: 'com', 5:'com', 7: 'com', 9:'com', }
@@ -167,8 +167,8 @@ def init():
     # ----- end -----
     
     # specify landmarks + region want to train for
-    #landmarks = [1,3,5,7,9] # brainstem # not general
-    #landmarks_loc = {1:'com', 3: 'com', 5:'com', 7:'com', 9:'com' } 
+    landmarks = [1,2,3,4,5,6,7,8,9,10] # brainstem # not general
+    landmarks_loc = {1:'com',2:'com', 3: 'com',4:'com', 5:'com',6:'com', 7:'com',8:'com', 9:'com',10:'com' }
     
     landmarks = [1,2,3,4,5,6,7,8,9,10]
     landmarks_loc = {1:'com',2:'com', 3: 'com',4:'com', 5:'com',6:'com', 7:'com',8:'com', 9:'com',10:'com', } 
