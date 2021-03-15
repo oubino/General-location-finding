@@ -78,15 +78,15 @@ def init():
                 save_data_path = r'/home/rankinaaron98/data/results/Aaron'
                 run_folder = "run_14_mar_aaron_data_transfer"
                 run_path = os.path.join(save_data_path, run_folder) 
-                    try:  
-                        os.mkdir(run_path)  
-                        except OSError as error:  
+                try:  
+                    os.mkdir(run_path)  
+                except OSError as error:  
                         print(error) 
-        
+                run_folder_load = "run_14_mar_aaron_data_transfer"
+                epoch_load = str(50)
         # load model path
     
-        run_folder_load = "run_14_mar_aaron_data_transfer"
-        epoch_load = str(50) 
+         
         elif aaron_or_oli == False:
             combined_data = yes_or_no.question('combined_data (y) / solo_data (n)')
             if combined_data == True:         
