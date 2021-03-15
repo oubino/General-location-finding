@@ -158,12 +158,20 @@ def init():
     in_y = 128
     in_z = 80
     
-    
-    # training parameters
-    epoch_batch = 5
-    num_epoch_batches = 5
-    net_features = 32
-    scnet_feat = 64
+    if aaron_or_oli == True:
+        # aaron
+        # training parameters
+        epoch_batch = 5
+        num_epoch_batches = 5
+        net_features = 32
+        scnet_feat = 64
+    elif aaron_or_oli == False:
+        # oli
+        # training parameters
+        epoch_batch = 5
+        num_epoch_batches = 5
+        net_features = 32
+        scnet_feat = 64
     
     alpha = 1/25000
     reg = 0.01 # reg = 0.001
@@ -200,18 +208,35 @@ def init():
     # decision on whether to crop or downsample
     downsample_user = True
     
-    # run folder
-    run_folder = "run_14_mar_combined_data_transfer"
-    run_path = os.path.join(save_data_path, run_folder) 
-    try:  
-        os.mkdir(run_path)  
-    except OSError as error:  
-        print(error) 
+    if aaron_or_oli == True:
+    # aaron folders
+        # run folder
+        run_folder = "run_14_mar_combined_data_transfer"
+        run_path = os.path.join(save_data_path, run_folder) 
+        try:  
+            os.mkdir(run_path)  
+        except OSError as error:  
+            print(error) 
+        
+        # load model path
     
-    # load model path
-
-    run_folder_load = "run_14_mar_combined_data_transfer"
-    epoch_load = str(50) 
+        run_folder_load = "run_14_mar_combined_data_transfer"
+        epoch_load = str(50) 
+    elif aaron_or_oli == False:
+        # oli folders
+        # run folder
+        run_folder = "run_14_mar_combined_data_transfer"
+        run_path = os.path.join(save_data_path, run_folder) 
+        try:  
+            os.mkdir(run_path)  
+        except OSError as error:  
+            print(error) 
+        
+        # load model path
+    
+        run_folder_load = "run_14_mar_combined_data_transfer"
+        epoch_load = str(50) 
+        
 
 
     
