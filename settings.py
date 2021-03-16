@@ -111,7 +111,7 @@ def init():
     if aaron_or_oli == True:
         # aaron settings
         epoch_batch = 10
-        num_epoch_batches = 1
+        num_epoch_batches = 2
         net_features = 32
         scnet_feat = 64
         run_folder = "run_14_mar_aaron_data_transfer"
@@ -122,7 +122,7 @@ def init():
         except OSError as error:  
                 print(error) 
         run_folder_load = "run_14_mar_aaron_data_transfer"
-        epoch_load = str(40)
+        epoch_load = str(50)
     elif aaron_or_oli == False:
     # oli settings
         epoch_batch = 1
