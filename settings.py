@@ -114,7 +114,7 @@ def init():
         num_epoch_batches = 2
         net_features = 32
         scnet_feat = 64
-        run_folder = "run_16_mar_aaron_data_transfer"
+        run_folder = "run_16_mar_aaron_combined_test"
         run_path = os.path.join(save_data_path, run_folder) 
         
         try:  
