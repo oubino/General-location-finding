@@ -122,7 +122,7 @@ def init():
         except OSError as error:  
                 print(error) 
         run_folder_load = "run_14_mar_aaron_data_transfer"
-        epoch_load = str(70)
+        epoch_load = str(50)
     elif aaron_or_oli == False:
     # oli settings
         epoch_batch = 10
