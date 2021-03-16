@@ -168,8 +168,8 @@ def init():
     # ----- end -----
     
     # specify landmarks + region want to train for
-    landmarks = [1,3,5,7,9,10] # brainstem # not general
-    landmarks_loc = {1:'com', 3: 'com', 5:'com', 7:'com', 9:'com', 10:'com'} 
+    landmarks = [1,3,5,7,9] # brainstem # not general
+    landmarks_loc = {1:'com', 3: 'com', 5:'com', 7:'com', 9:'com'} 
     
    # landmarks = [1,2,3,4,5,6,7,8,9,10]
     #landmarks_loc = {1:'com',2:'com', 3: 'com',4:'com', 5:'com',6:'com', 7:'com',8:'com', 9:'com',10:'com', } 
