@@ -94,6 +94,10 @@ class load_model:
         print('best loss is ')
         print(self.best_loss)
         data_loaders.train_set.dataset.__train__() 
+        print('scaler')
+        print(self.scaler_load)
+        print('optimizer')
+        print(self.optimizer_load)
         self.model_load, self.best_loss, self.epochs_completed = train_function.train_model(self.model_load, self.scaler_load, self.optimizer_load, self.scheduler, S.alpha,S.reg,S.gamma,S.sigmas, num_epochs=S.epoch_batch, best_loss = self.best_loss, epochs_completed = self.epochs_completed)
         
     def evaluate_post_train(self):
