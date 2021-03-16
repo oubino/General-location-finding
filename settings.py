@@ -125,18 +125,18 @@ def init():
         epoch_load = str(70)
     elif aaron_or_oli == False:
     # oli settings
-        epoch_batch = 1
+        epoch_batch = 10
         num_epoch_batches = 1
         net_features = 32
         scnet_feat = 64
-        run_folder = "run_15_mar_test_transfer"
+        run_folder = "run_15_mar_tl"
         run_path = os.path.join(save_data_path, run_folder) 
         try:  
             os.mkdir(run_path)  
         except OSError as error:  
                 print(error) 
-        run_folder_load = "run_15_mar_test_transfer"
-        epoch_load = str(1)
+        run_folder_load = "run_15_mar_tl"
+        epoch_load = str(50)
 
         
     norm_mean = 180
