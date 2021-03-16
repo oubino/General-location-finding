@@ -82,13 +82,13 @@ def init():
             combined_data = yes_or_no.question('combined_data (y) / solo_data (n)')
             if combined_data == True:         
                 # Oli paths
-                coding_path = r'/home/oliver_umney/GitHub/General-location-finding' # r'/home/olive/GitHub/General-location-finding'
-                root = r'/home/oliver_umney/data/Facial_asymmetry_combined' # r'/home/olive/data/Facial_asymmetry_combined'
-                save_data_path = r'/home/oliver_umney/data/results/oliver_umney_web' #  r'/home/olive/data/results/Oli'
+                coding_path =  r'/home/olive/GitHub/General-location-finding' # r'/home/oliver_umney/GitHub/General-location-finding'
+                root = r'/home/olive/data/Facial_asymmetry_combined' # r'/home/oliver_umney/data/Facial_asymmetry_combined'
+                save_data_path =  r'/home/olive/data/results/Oli' # r'/home/oliver_umney/data/results/oliver_umney_web' 
             elif combined_data == False:   
                 # Oli paths
                 coding_path = r'/home/olive/GitHub/General-location-finding'
-                root = r'/home/olive/data/Facial_asymmetry_aaron'
+                root = r'/home/olive/data/Facial_asymmetry_oli'
                 save_data_path = r'/home/olive/data/results/Oli'
             
         
