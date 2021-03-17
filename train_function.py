@@ -38,7 +38,7 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
               metrics_landmarks[i] = defaultdict(float) 
             # i.e. metrics_landmarks[3]['loss'] is loss for landmark denoted by 3
 
-            epoch_samples = 0
+            imgs_in_set = 0 # i.e. counts total number of images in train or val or test set
       
             batch_number = 1
             for batch in data_loaders.dataloaders[phase]:
@@ -63,10 +63,10 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
                         with torch.cuda.amp.autocast(enabled = S.use_amp):
                             outputs = model((inputs))
                             # 1. convert masks to heatmaps inside loss function (allows sigma optimisation)
-                            loss = loss_func.calc_loss_gauss(model, inputs, outputs, labels, idx, metrics_landmarks,alpha,reg,gamma,epoch_samples,sigmas)
+                            loss = loss_func.calc_loss_gauss(model, inputs, outputs, labels, idx, metrics_landmarks,alpha,reg,gamma,imgs_in_set,sigmas)
                         
                         # print image for comparison
-                        if epoch_samples == 0:
+                        if imgs_in_set == 0:
                           # plot image
                           print(' ---- first image of set ---- (end)')
                         # 2. vs convert to heatmap here means no sigma optimisation
@@ -86,16 +86,20 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
 
 
                     # statistics
-                    epoch_samples += inputs.size(0)
+                    imgs_in_set += inputs.size(0)
                     batch_number += 1
                 
-            print('EPOCH SAMPLES')    
-            print(epoch_samples)
+            print('Images in set')    
+            print(imgs_in_set)
 
             print('')
             print('Summary on %s dataset' % phase)
             print('')
-            functions.print_metrics(metrics_landmarks, epoch_samples, phase)
+            functions.print_metrics(metrics_landmarks, imgs_in_set, phase)
+            # print metrics divides the values by number of images
+            # i.e. when values added to metrics it creates a total sum over all images in the set
+            # within print metrics it divides by the total number of images so all values are means
+            
             #print('The following have zero requires grad:')
             #all_have_grad = True
             #for name, param in model.named_parameters():
@@ -107,18 +111,21 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
             print('Sigmas are')
             for l in S.landmarks:
               print(sigmas[l])
-          
+              
+              
+            # here metrics_landmarks[l]['loss'] is divided by imgs_in_set so loss is defined as average per image!!
+            
             epoch_loss = 0
             for l in S.landmarks:
                 epoch_loss += metrics_landmarks[l]['loss'] # total loss i.e. each batch loss summed
                 
                 # add loss per landmark to tensorboard
-                S.writer.add_scalar('%s loss for landmark %1.0f' % (phase,l), metrics_landmarks[l]['loss']/epoch_samples, epochs_completed + epoch + 1)
+                S.writer.add_scalar('%s loss for landmark %1.0f' % (phase,l), metrics_landmarks[l]['loss']/imgs_in_set, epochs_completed + epoch + 1)
                 if phase == 'train':
                     S.writer.add_scalar('sigma for landmark %1.0f' % l, sigmas[l][0].item(),epochs_completed + epoch + 1)
                 #print('writing to tensorboard')
             
-            epoch_loss /= epoch_samples
+            epoch_loss /= imgs_in_set
             
             
 
