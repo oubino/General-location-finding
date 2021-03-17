@@ -74,7 +74,12 @@ for i in range(1):
         print(functions.landmark_loc(train_set.__getitem__(i)['structure'].unsqueeze(0),l))
 
 """
-        
+# print split
+print('Number of images:')
+print('Train: %1.0f' % len(train_set))
+print('Val: %1.0f' % len(val_set) )        
+print('Test: %1.0f' % len(test_set) )  
+
 # print all images as CT scans to view them
 if S.print_CT_check == True:
     
