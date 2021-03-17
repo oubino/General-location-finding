@@ -88,6 +88,9 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
                     # statistics
                     epoch_samples += inputs.size(0)
                     batch_number += 1
+                
+            print('EPOCH SAMPLES')    
+            print(epoch_samples)
 
             print('')
             print('Summary on %s dataset' % phase)
@@ -107,7 +110,7 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
           
             epoch_loss = 0
             for l in S.landmarks:
-                epoch_loss += metrics_landmarks[l]['loss']
+                epoch_loss += metrics_landmarks[l]['loss'] # total loss i.e. each batch loss summed
                 
                 # add loss per landmark to tensorboard
                 S.writer.add_scalar('%s loss for landmark %1.0f' % (phase,l), metrics_landmarks[l]['loss']/epoch_samples, epochs_completed + epoch + 1)

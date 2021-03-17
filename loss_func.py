@@ -52,9 +52,6 @@ def calc_loss_gauss(model, img, pred, target, idx, metrics_landmarks, alpha, reg
       total_point_to_point_landmark = 0
     
       # for every image in batch
-      print('BATCH SIZEEEEEE')
-      print(batch_size)
-      print(target.size()[0])
       for i in range(batch_size): 
 
         img_number = epoch_samples + i # epoch_samples is 0, 32, 64 e.g. if batch is size 32
@@ -151,7 +148,8 @@ def calc_loss_gauss(model, img, pred, target, idx, metrics_landmarks, alpha, reg
         metrics_landmarks[l]['mean z targ'] += structure_com_z.cpu().numpy() # z targ per image per landmark
         metrics_landmarks[l]['mean point to point'] += img_landmark_point_to_point.data.cpu().numpy() # p2p per image per landmark
       
-      # average per landmark over one batch
+      # metrics_landmarks is total for batch - print metrics divides everything by total number of images
+      """
       metrics_landmarks[l]['loss'] /= batch_size #* target.size()[0] # loss per batch per landmark
       metrics_landmarks[l]['sum loss'] /= batch_size #* target.size()[0]# sum loss per batch per landmark
       metrics_landmarks[l]['reg loss'] /= batch_size #* target.size()[0]# reg loss per batch per landmark
@@ -164,7 +162,7 @@ def calc_loss_gauss(model, img, pred, target, idx, metrics_landmarks, alpha, reg
       metrics_landmarks[l]['mean y targ'] /= batch_size #* target.size()[0] # y targ per batch per landmark
       metrics_landmarks[l]['mean z targ'] /= batch_size #* target.size()[0] # z targ per batch per landmark
       metrics_landmarks[l]['mean point to point'] /= batch_size #* target.size()[0] # p2p per batch per landmark
-
+      """
 
       # print for every epoch_samples = 0 -> i.e first image in epoch
       if epoch_samples == 0:
