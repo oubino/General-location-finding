@@ -74,7 +74,7 @@ def init():
             elif combined_data == False:
                 # Aaron paths
                 coding_path = r'/home/rankinaaron98/General-location-finding'
-                root = r'/home/rankinaaron98/data/Facial_asymmetry_aaron'
+                root = r'/home/rankinaaron98/data/Facial_asymmetry_aaron_common'
                 save_data_path = r'/home/rankinaaron98/data/results/Aaron'
         # load model path
     
@@ -88,7 +88,7 @@ def init():
             elif combined_data == False:   
                 # Oli paths
                 coding_path = r'/home/olive/GitHub/General-location-finding'
-                root = r'/home/olive/data/Facial_asymmetry_oli'
+                root = r'/home/olive/data/Facial_asymmetry_oli_common'
                 save_data_path = r'/home/olive/data/results/Oli'
             
         
