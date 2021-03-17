@@ -142,7 +142,7 @@ def init():
     norm_mean = 180
     norm_std = 180
     
-    batch_size = 10
+    batch_size = 6
     
     # needed for transfer learning 
     
