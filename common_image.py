@@ -26,6 +26,8 @@ files_oli = list(sorted(os.listdir(oli_structures_load)))
 # common files
 list_1 = [x for x in files_aaron if x in files_oli]
 
+"""
+
 # for common structures save CT into folder and structure
 for i in list_1:
     # load cts
@@ -40,6 +42,8 @@ for i in list_1:
     # save structures
     np.save(os.path.join(oli_structures_save,i), oli_structure)
     np.save(os.path.join(aaron_structures_save,i), aaron_structure)  
+    
+"""
     
         
 # still need to add in CSV for both
