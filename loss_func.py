@@ -183,6 +183,8 @@ def calc_loss_gauss(model, img, pred, target, idx, metrics_landmarks, alpha, reg
     # return mean batch loss
     mean_batch_loss = (total_batch_loss/batch_size)
     
+    # mean loss per image
+    
     return mean_batch_loss
 
 # metrics was here in chain previously
