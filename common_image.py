@@ -43,3 +43,5 @@ for i in list_1:
     
         
 # still need to add in CSV for both
+print('number of common images')
+print(len(list_1))
