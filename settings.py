@@ -125,24 +125,24 @@ def init():
         epoch_load = str(100)
     elif aaron_or_oli == False:
     # oli settings
-        epoch_batch = 1
-        num_epoch_batches = 1
+        epoch_batch = 10
+        num_epoch_batches = 10
         net_features = 32
         scnet_feat = 64
-        run_folder = "run_17_mar_tests"
+        run_folder = "run_17_mar_test_double_conv"
         run_path = os.path.join(save_data_path, run_folder) 
         try:  
             os.mkdir(run_path)  
         except OSError as error:  
                 print(error) 
-        run_folder_load = "run_17_mar_tests"
-        epoch_load = str(50)
+        run_folder_load = "run_17_mar_test_double_conv"
+        epoch_load = str(100)
 
         
     norm_mean = 180
     norm_std = 180
     
-    batch_size = 2
+    batch_size = 5
     
     # needed for transfer learning 
     
