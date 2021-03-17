@@ -5,6 +5,7 @@ import numpy as np
 import os
 import math
 import csv
+import yes_or_no
 
 
 # paths
@@ -26,24 +27,27 @@ files_oli = list(sorted(os.listdir(oli_structures_load)))
 # common files
 list_1 = [x for x in files_aaron if x in files_oli]
 
-"""
+aaron_or_oli = yes_or_no.question('aaron(y)/oli(n)')
+save_images = yes_or_no.question('save images(y)/dont save images(n)')
 
-# for common structures save CT into folder and structure
-for i in list_1:
-    # load cts
-    aaron_ct = np.load(os.path.join(aaron_structures_load,i))
-    oli_ct = np.load(os.path.join(oli_structures_load,i))
-    # load structures
-    aaron_structure = np.load(os.path.join(aaron_cts_load,i))
-    oli_structure = np.load(os.path.join(oli_cts_load,i))
-    # save cts
-    np.save(os.path.join(oli_cts_save,i), oli_ct)
-    np.save(os.path.join(aaron_cts_save,i), aaron_ct)  
-    # save structures
-    np.save(os.path.join(oli_structures_save,i), oli_structure)
-    np.save(os.path.join(aaron_structures_save,i), aaron_structure)  
+
+if save_images == True:
+    # for common structures save CT into folder and structure
+    for i in list_1:
+        # aaron 
+        if aaron_or_oli == True:
+            aaron_ct = np.load(os.path.join(aaron_structures_load,i))
+            aaron_structure = np.load(os.path.join(aaron_cts_load,i))
+            np.save(os.path.join(aaron_cts_save,i), aaron_ct)  
+            np.save(os.path.join(aaron_structures_save,i), aaron_structure)   
+        # oli
+        elif aaron_or_oli == False:            
+            oli_ct = np.load(os.path.join(oli_structures_load,i))
+            oli_structure = np.load(os.path.join(oli_cts_load,i))
+            np.save(os.path.join(oli_cts_save,i), oli_ct)
+            np.save(os.path.join(oli_structures_save,i), oli_structure)
     
-"""
+
     
         
 # still need to add in CSV for both
