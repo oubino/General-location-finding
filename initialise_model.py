@@ -27,7 +27,7 @@ class initialise_model:
         # Model summary       
         print('Network structure')
         print('-----------------')
-        summary(self.model, input_size=(1, S.in_y, S.in_x, S.in_z))
+        summary(self.model, input_size=(1, S.in_y, S.in_x, S.in_z), batch_size = S.batch_size)
         
         # initialise optimizer/scheduler/scaler
         self.optimizer = optim.Adam([
