@@ -59,7 +59,7 @@ class load_model:
         # Model summary       
         print('Network structure')
         print('-----------------')
-        summary(self.model_load, input_size=(1, S.in_y, S.in_x, S.in_z))
+        summary(self.model_load, input_size=(1, S.in_y, S.in_x, S.in_z), batch_size = S.batch_size)
         
         
     def freeze_final_layers(self):
@@ -72,7 +72,7 @@ class load_model:
         self.model_load = network.Transfer_model(class_number, features, self.model_load)
         self.model_load = self.model_load.to(S.device)
         print('Transferred model')
-        summary(self.model_load, input_size=(1, S.in_y, S.in_x, S.in_z))
+        summary(self.model_load, input_size=(1, S.in_y, S.in_x, S.in_z), batch_size = S.batch_size)
         for name, param in self.model_load.named_parameters():
             if (param.requires_grad == True):
                 print(name)
