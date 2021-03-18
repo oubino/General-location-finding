@@ -18,7 +18,7 @@ def init(init_fold):
     train = []
     test = []
            
-    list_splits = kfold.split(data_loaders.dataset)
+    list_splits = list(kfold.split(data_loaders.dataset))
     print('list splits')
     print(list_splits)
                               
