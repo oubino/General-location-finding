@@ -54,10 +54,11 @@ class initialise_model:
         data_loaders.test_set.dataset.__test__() # sets whole dataset to test mode means it doesn't augment images
         evaluate_functions.performance_metrics(self.model,S.sigmas,S.gamma, self.epochs_completed)
         
-    def save(self):
+    def save(self, fold):
         
         epochs_completed_string = str(self.epochs_completed)
-        file_name = "train_" + epochs_completed_string
+        fold_string = str(fold)
+        file_name = "train_" + epochs_completed_string + fold_string 
         train_path = os.path.join(S.run_path, file_name) # directory labelled with epochs_completed
         
         try: 
