@@ -4,6 +4,7 @@ from scipy.optimize import curve_fit
 import csv, operator
 import settings as S
 import os
+import random
 
 def landmark_loc_np(locat, structure, landmark, patient):
     if locat == 'com':
@@ -40,6 +41,7 @@ def com_structure_np(structure, landmark, patient): # assumes 1 channel
     z_com /= len(locations[0])
   coords = [int(x_com),int(y_com),int(z_com)]
   return coords, landmark_present 
+
 
 def top_structure_np(structure, landmark, patient): # assumes 1 channel
   # structure is (D x H x W)
@@ -87,6 +89,32 @@ def bot_structure_np(structure, landmark, patient): # assumes 1 channel
     y_bot = locations[1][np.argmin(z_coords)]
     z_bot = locations[0][np.argmin(z_coords)]
   coords = [x_bot, y_bot, z_bot]
-  return coords, landmark_present  
+  return coords, landmark_present 
+
+def line_structure_np(structure, landmark, patient): # assumes 1 channel
+  # structure is (D x H x W)
+  # output is x,y,z
+  landmark_present = []
+  landmark = float(landmark) # ensure that comparison is made properly
+  locations = np.nonzero(np.round(structure) == landmark)
+  
+  if (len(locations[0]) == 0): # if no landmarks detected for structure
+    print('no structure found using np for %1.0f for image % s' % (landmark,patient))
+    landmark_present.append(False)
+    x = 0
+    y = 0
+    z = 0
+  else:
+    landmark_present.append(True)  
+    # generate random number in range
+    index = random.randint(0, locations.size()[1]) # could be len[locations[1]]
+    # trying to generate random number in range of the total number of locations where it equals the landmark
+    # i.e. if 5 points are found 
+    # generate random number between 0 and 5
+    x = locations[2][index]
+    y = locations[1][index]
+    z = locations[0][index]
+  coords = [int(x),int(y),int(z)]
+  return coords, landmark_present 
 
 

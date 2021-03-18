@@ -3,6 +3,8 @@ import numpy as np
 import os
 import math
 import csv
+from skimage.draw import line_nd
+
 
 def com_structure_np(structure, landmark): # assumes 1 channel
   # structure is (D x H x W)
@@ -158,6 +160,31 @@ for i in list_1:
     # save ct
     np.save(os.path.join(save_ct_folder,i), ct)
     
+
+
+# create line instead of one average point
+
+# for each image create an array
+for i in list_1:
+    py_array_load = np.load(os.path.join(aaron_folder,i))
+    ct = np.load(os.path.join(load_ct_folder,i))
+    structure = np.empty(py_array_load.shape)
+    # add number at location of x y z for each landmark
+    index = list_1.index(i)
+    for k in landmarks:
+        z_aaron = int(com_list_aaron['%1.0f' % k][index][0])
+        y_aaron = int(com_list_aaron['%1.0f' % k][index][1])
+        x_aaron = int(com_list_aaron['%1.0f' % k][index][2])
+        z_oli = int(com_list_oli['%1.0f' % k][index][0])
+        y_oli = int(com_list_oli['%1.0f' % k][index][1])
+        x_oli = int(com_list_oli['%1.0f' % k][index][2])          
+        line = line_nd((z_aaron, y_aaron, x_aaron), (z_oli, y_oli, x_oli), endpoint=True)
+        structure[line] = k
+    # save image
+    np.save(os.path.join(save_structure_folder,i), structure)
+    # save ct
+    np.save(os.path.join(save_ct_folder,i), ct)
+
 """
 
 # deviations per landmark per image

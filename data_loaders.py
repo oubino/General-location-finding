@@ -96,8 +96,9 @@ def init_load_no_k_fold():
 def init_load_k_fold(fold):
     # initialise dataloader 
     kfold = KFold(n_splits = S.folds_trained_with, shuffle = False)
-    train_ids = kfold.split(dataset)[fold][0]
-    test_ids = kfold.split(dataset)[fold][1]
+    kfold_list = list(kfold.split(dataset))
+    train_ids = kfold_list[fold][0]
+    test_ids = kfold_list[fold][1]
               
     # split train_ids into val and train
     index = int(len(train_ids)/10) # val ids are first 10 percent
@@ -118,6 +119,22 @@ def init_load_k_fold(fold):
     'train': DataLoader(dataset, batch_size=S.batch_size, sampler= train_subsampler),
     'test': DataLoader(dataset, batch_size=S.batch_size, sampler= test_subsampler),
     'val': DataLoader(dataset, batch_size=S.batch_size, sampler= val_subsampler)  
+    }
+    
+def init_reserved_test_set():
+    # data is entirely test set
+    test_set = dataset
+   
+    
+    global image_datasets
+    image_datasets = {
+        'test':test_set
+    }
+    
+    global dataloaders
+    # Load data in
+    dataloaders = {
+        'test': DataLoader(test_set,batch_size = S.batch_size, shuffle = False, num_workers=0)
     }
     
 
