@@ -97,20 +97,20 @@ class load_model:
         data_loaders.train_set.dataset.__train__() 
         self.model_load, self.best_loss, self.epochs_completed = train_function.train_model(self.model_load, self.scaler_load, self.optimizer_load, self.scheduler, S.alpha,S.reg,S.gamma,S.sigmas, num_epochs=S.epoch_batch, best_loss = self.best_loss, epochs_completed = self.epochs_completed)
         
-    def evaluate_post_train(self, fold):
+    def evaluate_post_train(self):
         # evaluate model
         self.model_load.eval() # trained
         data_loaders.test_set.dataset.__test__() # sets whole dataset to test mode means it doesn't augment images
-        evaluate_functions.performance_metrics(self.model_load,S.sigmas,S.gamma, self.epochs_completed, fold) # trained x 2
+        evaluate_functions.performance_metrics(self.model_load,S.sigmas,S.gamma, self.epochs_completed, S.fold_load) # trained x 2
     
-    def evaluate_pre_train(self, fold):
+    def evaluate_pre_train(self):
         # if not trained load in best loss and epochs completed 
         self.best_loss = torch.load(paths.PATH_val_loss_load)['best_val_loss']
         self.epochs_completed = torch.load(paths.PATH_epochs_completed_load)['epochs_completed']
         print(self.best_loss)
         self.model_load.eval()
         data_loaders.test_set.dataset.__test__() # sets whole dataset to test mode means it doesn't augment images
-        evaluate_functions.performance_metrics(self.model_load,S.sigmas,S.gamma, self.epochs_completed, fold)
+        evaluate_functions.performance_metrics(self.model_load,S.sigmas,S.gamma, self.epochs_completed, S.fold_load)
     
     def save(self):
         

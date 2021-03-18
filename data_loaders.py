@@ -47,12 +47,6 @@ def init(fold, train_ids, test_ids):
     index = int(len(train_ids)/10) # val ids are first 10 percent
     val_ids = train_ids[:index]
     train_ids = train_ids[index:]
-    print('train ids')
-    print(train_ids)
-    print('val ids')
-    print(val_ids)
-    print('test ids')
-    print(test_ids)
     val_subsampler = torch.utils.data.SubsetRandomSampler(val_ids)
     train_subsampler = torch.utils.data.SubsetRandomSampler(train_ids)
     test_subsampler = torch.utils.data.SubsetRandomSampler(test_ids)

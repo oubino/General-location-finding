@@ -42,6 +42,9 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
       
             batch_number = 1
             for batch in data_loaders.dataloaders[phase]:
+                    # print dataloader 
+                    print('dataloader')
+                    print(data_loaders.dataloaders[phase])
                     inputs = batch['image']
                     labels = batch['structure']
                     idx = batch['idx']
