@@ -278,6 +278,7 @@ def print_3D_gauss_heatmap(image, structure_com_x, structure_com_y, structure_co
 def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
   print('test ids check')
   print(data_loaders.print_ids)
+  """
   # create directory for this eval
   epochs_completed_string = str(epochs_completed)
   file_name = "eval_" + epochs_completed_string + '_' + functions.string(fold)
@@ -390,4 +391,4 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
         sigma_string = str(sigmas[l])
         writer.writerow(['%s' % S.run_folder, '%s' % epochs_completed_string, 'Landmark %1.0f' % l, 
              str(mean), str(std_mean),str(median),str(outliers_perc) + '%', sigma_string.replace("\n", " "), time.strftime("%Y%m%d-%H%M%S"), 'pred max used = %s' % S.pred_max])
-    
+    """
