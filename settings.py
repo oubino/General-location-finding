@@ -126,7 +126,7 @@ def init():
     elif aaron_or_oli == False:
     # oli settings
         epoch_batch = 10
-        num_epoch_batches = 10
+        num_epoch_batches = 2
         net_features = 32
         scnet_feat = 64
         run_folder = "run_17_mar_test_double_conv"
@@ -136,7 +136,7 @@ def init():
         except OSError as error:  
                 print(error) 
         run_folder_load = "run_17_mar_test_double_conv"
-        epoch_load = str(100)
+        epoch_load = str(80)
 
         
     norm_mean = 180
