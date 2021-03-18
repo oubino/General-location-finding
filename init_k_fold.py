@@ -59,6 +59,9 @@ def init():
     print(train)
     print('test ids')
     print(test)
+    
+    print('test ids from settings')
+    print(settings.k_fold_ids)
 
     
     

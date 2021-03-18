@@ -295,6 +295,10 @@ def init():
     # k folds
     k_folds = 5
     
+    # k fold test
+    global k_fold_ids
+    k_fold_ids = []
+    
     
     
     
