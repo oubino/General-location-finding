@@ -18,8 +18,8 @@ def init():
             model.freeze_final_layers()
         transfer_learn_decision = yes_or_no.question('transfer learn to new number of classes')
         if transfer_learn_decision == True:
-            class_number = input ("New number of classes")
-            feature_number = input ("Enter number of features pre trained model trained with")
+            class_number = input ("New number of classes ")
+            feature_number = input ("Enter number of features pre trained model trained with ")
             class_number = int(class_number)
             feature_number = int(feature_number)
             model.transfer_learn_unet_final_layer(class_number, feature_number)

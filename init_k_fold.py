@@ -10,14 +10,15 @@ import math
 import os
 
 
-def init():
+def init(init_fold):
     
     kfold = KFold(n_splits = settings.k_folds, shuffle = False)
 
     train = []
     test = []
            
-    for fold, (train_ids, test_ids) in enumerate(kfold.split(data_loaders.dataset)):
+    for fold, (train_ids, test_ids) in enumerate(kfold.split(data_loaders.dataset)[init_fold:]):
+        # i.e. if init fold is 1 then skips first fold when initialising
         start_time_fold = time.time()
         # different dataloader for each fold
         print('fold')
