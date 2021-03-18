@@ -36,14 +36,14 @@ if save_images == True:
     for i in list_1:
         # aaron 
         if aaron_or_oli == True:
-            aaron_ct = np.load(os.path.join(aaron_structures_load,i))
-            aaron_structure = np.load(os.path.join(aaron_cts_load,i))
+            aaron_ct = np.load(os.path.join(aaron_cts_load,i))
+            aaron_structure = np.load(os.path.join(aaron_structures_load,i))
             np.save(os.path.join(aaron_cts_save,i), aaron_ct)  
             np.save(os.path.join(aaron_structures_save,i), aaron_structure)   
         # oli
         elif aaron_or_oli == False:            
-            oli_ct = np.load(os.path.join(oli_structures_load,i))
-            oli_structure = np.load(os.path.join(oli_cts_load,i))
+            oli_ct = np.load(os.path.join(oli_cts_load,i))
+            oli_structure = np.load(os.path.join(oli_structures_load,i))
             np.save(os.path.join(oli_cts_save,i), oli_ct)
             np.save(os.path.join(oli_structures_save,i), oli_structure)
     
