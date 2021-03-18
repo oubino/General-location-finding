@@ -22,9 +22,9 @@ class ConvUnit(nn.Module):
             nn.BatchNorm3d(out_channels),
             nn.ReLU(inplace=True), # inplace=True means it changes the input directly, input is lost
 
-            nn.Conv3d(out_channels, out_channels, kernel_size = 3, padding = 1),
-            nn.BatchNorm3d(out_channels),
-            nn.ReLU(inplace=True)
+            #nn.Conv3d(out_channels, out_channels, kernel_size = 3, padding = 1),
+            #nn.BatchNorm3d(out_channels),
+            #nn.ReLU(inplace=True)
           )
 
     def forward(self,x):
