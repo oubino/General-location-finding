@@ -21,6 +21,26 @@ def init(init_fold):
     list_splits = list(kfold.split(data_loaders.dataset))
     print('list splits')
     print(list_splits)
+    
+    for fold, (train_ids, test_ids) in enumerate(itertools.islice(kfold.split(data_loaders.dataset),0)):
+        print(fold)
+        print(train_ids)
+        print(test_ids)
+        
+    for fold, (train_ids, test_ids) in enumerate(itertools.islice(kfold.split(data_loaders.dataset),1)):
+        print(fold)
+        print(train_ids)
+        print(test_ids)
+    
+    for fold, (train_ids, test_ids) in enumerate(itertools.islice(kfold.split(data_loaders.dataset),3)):
+        print(fold)
+        print(train_ids)
+        print(test_ids)
+        
+    for fold, (train_ids, test_ids) in enumerate(itertools.islice(kfold.split(data_loaders.dataset),4)):
+        print(fold)
+        print(train_ids)
+        print(test_ids)
                               
     for fold, (train_ids, test_ids) in enumerate(itertools.islice(kfold.split(data_loaders.dataset),int(init_fold))):
         # i.e. if init fold is 1 then skips first fold when initialising
