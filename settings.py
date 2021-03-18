@@ -136,7 +136,7 @@ def init():
         except OSError as error:  
                 print(error) 
         run_folder_load = "run_17_mar_test_double_conv"
-        epoch_load = str(80)
+        epoch_load = str(100)
 
         
     norm_mean = 180
