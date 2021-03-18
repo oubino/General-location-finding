@@ -22,51 +22,23 @@ def init(init_fold):
     print('list splits')
     print(list_splits)
     
-    print('islice 0')
     
-    for fold, (train_ids, test_ids) in enumerate(itertools.islice(kfold.split(data_loaders.dataset),0)):
+    # folds = 0,1,2,3,4
+    # start from fold 1
+    start = 1
+    
+    print('folds 1,2,3,4')
+    for fold, (train_ids, test_ids) in enumerate(list_splits[start:], start):
         print(fold)
         print(train_ids)
         print(test_ids)
         
-    print('islice 1')
-        
-    for fold, (train_ids, test_ids) in enumerate(itertools.islice(kfold.split(data_loaders.dataset),1)):
-        print(fold)
-        print(train_ids)
-        print(test_ids)
-    
-    print('islice 3')
-    
-    for fold, (train_ids, test_ids) in enumerate(itertools.islice(kfold.split(data_loaders.dataset),3)):
+    print('folds 3,4')
+    for fold, (train_ids, test_ids) in enumerate(list_splits[start+2:], start+2):
         print(fold)
         print(train_ids)
         print(test_ids)
         
-    print('islice 4')
-        
-    for fold, (train_ids, test_ids) in enumerate(itertools.islice(kfold.split(data_loaders.dataset),4)):
-        print(fold)
-        print(train_ids)
-        print(test_ids)
-    
-    print('islice 5')
-    for fold, (train_ids, test_ids) in enumerate(itertools.islice(kfold.split(data_loaders.dataset),5)):
-        print(fold)
-        print(train_ids)
-        print(test_ids)
-        
-    print('list attempt')
-    for fold, (train_ids, test_ids) in enumerate(list_splits):
-        print(fold)
-        print(train_ids)
-        print(test_ids)
-    
-    print('folds 2,3,4')
-    for fold, (train_ids, test_ids) in enumerate(list_splits[1:]):
-        print(fold)
-        print(train_ids)
-        print(test_ids)
         
     
                               
