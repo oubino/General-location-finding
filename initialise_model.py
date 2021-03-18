@@ -5,7 +5,7 @@ import network
 import data_loaders
 import evaluate_functions
 import torch
-import paths
+#import paths
 import os
 import torch.optim as optim
 from torch.optim import lr_scheduler

@@ -6,6 +6,8 @@ import time
 import dataset_class
 import data_loaders
 from sklearn.model_selection import KFold
+import math
+import os
 
 kfold = KFold(n_splits = settings.k_folds, shuffle = False)
 
@@ -42,8 +44,7 @@ def init():
     
 
     
-batch_accumulation = math.ceil(train_set.__len__()/S.batch_size) # rounds it up
     
-os.chdir(S.coding_path) # change to data path and change back at end
+os.chdir(settings.coding_path) # change to data path and change back at end
     #print(os.getcwd())
     

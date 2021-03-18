@@ -50,11 +50,15 @@ def init(fold, train_ids, test_ids):
     train_subsampler = torch.utils.data.SubsetRandomSampler(train_ids)
     test_subsampler = torch.utils.data.SubsetRandomSampler(test_ids)
     
+    batch_accumulation = math.ceil(train_set.__len__()/settings.batch_size) # rounds it up
+
+    
     dataloaders = {
     'train': DataLoader(dataset, batch_size=S.batch_size, sampler= train_subsampler),
     'test': DataLoader(dataset, batch_size=S.batch_size, sampler= test_subsampler),
     'val': DataLoader(dataset, batch_size=S.batch_size, sampler= val_subsampler)  
     }
+
 
 
 """
