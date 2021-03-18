@@ -276,8 +276,8 @@ def print_3D_gauss_heatmap(image, structure_com_x, structure_com_y, structure_co
 
 
 def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
-  print('val ids check')
-  print(data_loaders.val_ids)
+  print('test ids check')
+  print(data_loaders.print_ids)
   # create directory for this eval
   epochs_completed_string = str(epochs_completed)
   file_name = "eval_" + epochs_completed_string + '_' + functions.string(fold)

@@ -45,7 +45,8 @@ def init(fold, train_ids, test_ids):
     # initialise dataloader 
     # split train_ids into val and train
     index = int(len(train_ids)/10) # val ids are first 10 percent
-    global val_ids
+    global print_ids
+    print_ids = test_ids
     
     val_ids = train_ids[:index]
     train_ids = train_ids[index:]

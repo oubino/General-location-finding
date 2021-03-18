@@ -14,7 +14,9 @@ kfold = KFold(n_splits = settings.k_folds, shuffle = False)
 def init():
     train = []
     test = []
+           
     for fold, (train_ids, test_ids) in enumerate(kfold.split(data_loaders.dataset)):
+        start_time_fold = time.time()
         # different dataloader for each fold
         print('fold')
         print(fold)
@@ -45,6 +47,10 @@ def init():
         model.evaluate(fold)   
         print('error counter')
         print(settings.error_counter)
+        time_elapsed_fold = time.time() - start_time_fold
+        end_time_fold = time.ctime(time_elapsed_fold * (settings.k_fold - fold - 1) + time.time())
+        print('\n')
+        print('Estimated finish time of all folds: ', end_time_fold)
     
     # print folds
     train.append(train_ids)
