@@ -38,8 +38,8 @@ elif S.downsample_user == False:
 
 dataset = D.CTDataset(S.root, transform_train = trans_augment, transform_test = trans_plain, test = False )
 
-global dataloaders
-dataloaders= {}
+#global dataloaders
+#dataloaders= {}
 
 def init(fold, train_ids, test_ids):
     # initialise dataloader 
@@ -58,6 +58,8 @@ def init(fold, train_ids, test_ids):
     test_subsampler = torch.utils.data.SubsetRandomSampler(test_ids)
     
     batch_accumulation = math.ceil(len(train_ids)/S.batch_size) # rounds it up
+
+    global dataloaders
 
     dataloaders = {
     'train': DataLoader(dataset, batch_size=S.batch_size, sampler= train_subsampler),
