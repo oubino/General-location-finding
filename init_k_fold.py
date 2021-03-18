@@ -18,7 +18,7 @@ def init(init_fold):
     train = []
     test = []
            
-    for fold, (train_ids, test_ids) in enumerate(itertools.islice(kfold.split(data_loaders.dataset),init_fold)):
+    for fold, (train_ids, test_ids) in enumerate(itertools.islice(kfold.split(data_loaders.dataset),int(init_fold))):
         # i.e. if init fold is 1 then skips first fold when initialising
         start_time_fold = time.time()
         # different dataloader for each fold
