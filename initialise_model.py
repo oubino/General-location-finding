@@ -49,16 +49,16 @@ class initialise_model:
         data_loaders.dataset.__train__() 
         self.model, self.best_loss, self.epochs_completed = train_function.train_model(self.model, self.scaler, self.optimizer, self.scheduler, S.alpha,S.reg,S.gamma,S.sigmas, num_epochs=S.epoch_batch, best_loss = self.best_loss, epochs_completed = self.epochs_completed)
     
-    def evaluate(self):
+    def evaluate(self, fold):
         self.model.eval()   # Set model to the evaluation mode
         data_loaders.dataset.__test__() # sets whole dataset to test mode means it doesn't augment images
-        evaluate_functions.performance_metrics(self.model,S.sigmas,S.gamma, self.epochs_completed)
+        evaluate_functions.performance_metrics(self.model,S.sigmas,S.gamma, self.epochs_completed, fold)
         
     def save(self, fold):
         
         epochs_completed_string = str(self.epochs_completed)
         fold_string = str(fold)
-        file_name = "train_" + epochs_completed_string + fold_string 
+        file_name = "train_" + epochs_completed_string + '_' + fold_string 
         train_path = os.path.join(S.run_path, file_name) # directory labelled with epochs_completed
         
         try: 

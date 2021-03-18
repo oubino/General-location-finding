@@ -275,11 +275,11 @@ def print_3D_gauss_heatmap(image, structure_com_x, structure_com_y, structure_co
 
 
 
-def performance_metrics(model,sigmas,gamma, epochs_completed):
+def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
   
   # create directory for this eval
   epochs_completed_string = str(epochs_completed)
-  file_name = "eval_" + epochs_completed_string
+  file_name = "eval_" + epochs_completed_string + '_' + functions.string(fold)
   eval_path = os.path.join(S.run_path, file_name) # directory labelled with epochs_completed
   try: 
       os.mkdir(eval_path)

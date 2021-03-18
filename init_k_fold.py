@@ -40,7 +40,7 @@ def init():
         print('\n')
         print('Evaluating model')
         print('----------------')
-        model.evaluate()   
+        model.evaluate(fold)   
         print('error counter')
         print(settings.error_counter)
     

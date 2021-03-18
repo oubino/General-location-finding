@@ -48,12 +48,12 @@ elif initialise == False:
             print('\n')
             print('Evaluating model')
             print('----------------')
-        model.evaluate_post_train()
+        model.evaluate_post_train(fold)
     elif train_decision == False:
         print('\n')
         print('Evaluating model')
         print('----------------')
-        model.evaluate_pre_train()
+        model.evaluate_pre_train(fold)
     print('error counter')
     print(settings.error_counter)
 

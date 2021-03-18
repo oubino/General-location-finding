@@ -371,6 +371,11 @@ def weights_init(m):
     if isinstance(m, torch.nn.Conv2d):
         torch.nn.init.kaiming_normal_(m.weight, mode='fan_in', nonlinearity='relu') # change if switch to ReLU
         torch.nn.init.zeros_(m.bias)
+    
+def string(s):
+    if s is None:
+        return ''
+    return str(s)
         
         
 os.chdir(S.coding_path) # change to data path and change back at end

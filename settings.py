@@ -44,6 +44,7 @@ def init():
     global scnet_feat_load 
     global sigmas_load
     global k_folds
+    global fold_load
     
         
     
@@ -138,6 +139,7 @@ def init():
                 print(error) 
         run_folder_load = "run_18_mar_test_k_fold"
         epoch_load = str(100)
+        fold_load = None
 
         
     norm_mean = 180
