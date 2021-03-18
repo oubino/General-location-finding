@@ -48,7 +48,7 @@ def init():
         print('error counter')
         print(settings.error_counter)
         time_elapsed_fold = time.time() - start_time_fold
-        end_time_fold = time.ctime(time_elapsed_fold * (settings.k_fold - fold - 1) + time.time())
+        end_time_fold = time.ctime(time_elapsed_fold * (settings.k_folds - fold - 1) + time.time())
         print('\n')
         print('Estimated finish time of all folds: ', end_time_fold)
     
