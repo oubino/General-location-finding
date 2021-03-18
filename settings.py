@@ -128,7 +128,7 @@ def init():
     # oli settings
         epoch_batch = 1
         num_epoch_batches = 1
-        net_features = 32
+        net_features = 1
         scnet_feat = 64
         run_folder = "run_18_mar_test_k_fold"
         run_path = os.path.join(save_data_path, run_folder) 
@@ -143,7 +143,7 @@ def init():
     norm_mean = 180
     norm_std = 180
     
-    batch_size = 6
+    batch_size = 1
     
     # needed for transfer learning 
     

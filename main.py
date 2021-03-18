@@ -15,7 +15,7 @@ initialise = yes_or_no.question('initialise new network?')
 
 if initialise == True:
     init_k_fold.init()
-    
+
 elif initialise == False:
     import load_model
     load_transfered_model = yes_or_no.question('are you loading in a model which was saved as a transfered model')
