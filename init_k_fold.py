@@ -9,9 +9,11 @@ from sklearn.model_selection import KFold
 import math
 import os
 
-kfold = KFold(n_splits = settings.k_folds, shuffle = False)
 
 def init():
+    
+    kfold = KFold(n_splits = settings.k_folds, shuffle = False)
+
     train = []
     test = []
            
