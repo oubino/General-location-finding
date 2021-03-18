@@ -12,6 +12,7 @@ import evaluate_functions
 import os
 from torchsummary import summary
 from torch import nn
+import functions
 
 class load_model:
     """Loaded in model is now a class"""
@@ -100,7 +101,7 @@ class load_model:
         # evaluate model
         self.model_load.eval() # trained
         data_loaders.test_set.dataset.__test__() # sets whole dataset to test mode means it doesn't augment images
-        evaluate_functions.performance_metrics(self.model_load,S.sigmas,S.gamma, self.epochs_completed) # trained x 2
+        evaluate_functions.performance_metrics(self.model_load,S.sigmas,S.gamma, self.epochs_completed, S.fold_load) # trained x 2
     
     def evaluate_pre_train(self):
         # if not trained load in best loss and epochs completed 
@@ -109,12 +110,13 @@ class load_model:
         print(self.best_loss)
         self.model_load.eval()
         data_loaders.test_set.dataset.__test__() # sets whole dataset to test mode means it doesn't augment images
-        evaluate_functions.performance_metrics(self.model_load,S.sigmas,S.gamma, self.epochs_completed)
+        evaluate_functions.performance_metrics(self.model_load,S.sigmas,S.gamma, self.epochs_completed, S.fold_load)
     
     def save(self):
         
         epochs_completed_string = str(self.epochs_completed) # trained
-        file_name = "train_" + epochs_completed_string
+        fold_string = functions.string(S.fold_load)
+        file_name = "train_" + epochs_completed_string + '_' + fold_string
         train_path = os.path.join(S.run_path, file_name) # directory labelled with epochs_completed
         
         try: 

@@ -219,7 +219,8 @@ class ToTensor(object):
         for l in S.landmarks_total:
             # structure is z, y, x
             # need it in y, x, z                
-            x, y, z = coords[l][0], coords[l][1], coords[l][2]
+            x, y, z = int(coords[l][0]), int(coords[l][1]), int(coords[l][2])
+            
             structure[z][y][x] = l
         # swap color axis because
         # numpy image: D x H x W 

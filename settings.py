@@ -43,6 +43,9 @@ def init():
     global net_features_load 
     global scnet_feat_load 
     global sigmas_load
+    global k_folds
+    global fold_load
+    global folds_trained_with
     
         
     
@@ -111,7 +114,7 @@ def init():
     if aaron_or_oli == True:
         # aaron settings
         epoch_batch = 10
-        num_epoch_batches = 2
+        num_epoch_batches = 10
         net_features = 32
         scnet_feat = 64
         run_folder = "run_16_mar_aaron_combined_test"
@@ -129,20 +132,23 @@ def init():
         num_epoch_batches = 10
         net_features = 32
         scnet_feat = 64
-        run_folder = "run_18_mar_test_single_conv"
+        run_folder = "run_18_mar_k_fold_common_dataset"
         run_path = os.path.join(save_data_path, run_folder) 
         try:  
             os.mkdir(run_path)  
         except OSError as error:  
                 print(error) 
-        run_folder_load = "run_18_mar_test_single_conv"
-        epoch_load = str(100)
+        run_folder_load = "run_18_mar_k_fold_common_dataset"
+        epoch_load = str(80)
+        fold_load = None
+        folds_trained_with = 5
+
 
         
     norm_mean = 180
     norm_std = 180
     
-    batch_size = 6
+    batch_size = 1
     
     # needed for transfer learning 
     
@@ -289,7 +295,12 @@ def init():
     # whether to print all CTs as a check
     print_CT_check = False
     
+    # k folds
+    k_folds = 5
     
+    # k fold test
+    global k_fold_ids
+    k_fold_ids = []
     
     
     
