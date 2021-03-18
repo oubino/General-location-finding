@@ -303,16 +303,13 @@ def performance_metrics(model,sigmas,gamma, epochs_completed):
     
     for l in S.landmarks: # cycle over all landmarks
       
-      print('batch size')
-      print(S.batch_size)
-      for i in range(S.batch_size):
+      for i in range(structure.size()[0]):
         
         structure_loc = functions.landmark_loc(structure, l)[0]
         #structure_com = functions.com_structure(structure, l)[0]# [0] ensures extracts coords rather than True/False
         # change to top structure
         #if functions.com_structure(structure,1)[1][i] == True:
-        print('functions landmark loc')
-        print(functions.landmark_loc(structure,l)[1])
+
         if functions.landmark_loc(structure,l)[1][i] == True:
         # change to top structure
           dimension = 3
