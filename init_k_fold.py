@@ -60,8 +60,6 @@ def init():
     print('test ids')
     print(test)
     
-    print('test ids from settings')
-    print(settings.k_fold_ids)
 
     
     

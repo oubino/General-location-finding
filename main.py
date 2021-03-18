@@ -15,6 +15,8 @@ initialise = yes_or_no.question('initialise new network?')
 
 if initialise == True:
     init_k_fold.init()
+    print('test ids from settings')
+    print(settings.k_fold_ids)
 
 elif initialise == False:
     import load_model
