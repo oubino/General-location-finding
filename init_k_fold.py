@@ -22,22 +22,36 @@ def init(init_fold):
     print('list splits')
     print(list_splits)
     
+    print('islice 0')
+    
     for fold, (train_ids, test_ids) in enumerate(itertools.islice(kfold.split(data_loaders.dataset),0)):
         print(fold)
         print(train_ids)
         print(test_ids)
+        
+    print('islice 1')
         
     for fold, (train_ids, test_ids) in enumerate(itertools.islice(kfold.split(data_loaders.dataset),1)):
         print(fold)
         print(train_ids)
         print(test_ids)
     
+    print('islice 3')
+    
     for fold, (train_ids, test_ids) in enumerate(itertools.islice(kfold.split(data_loaders.dataset),3)):
         print(fold)
         print(train_ids)
         print(test_ids)
         
+    print('islice 4')
+        
     for fold, (train_ids, test_ids) in enumerate(itertools.islice(kfold.split(data_loaders.dataset),4)):
+        print(fold)
+        print(train_ids)
+        print(test_ids)
+    
+    print('islice 5')
+    for fold, (train_ids, test_ids) in enumerate(itertools.islice(kfold.split(data_loaders.dataset),5)):
         print(fold)
         print(train_ids)
         print(test_ids)
