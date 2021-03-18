@@ -18,6 +18,10 @@ def init(init_fold):
     train = []
     test = []
            
+    list_splits = kfold.split(data_loaders.dataset)
+    print('list splits')
+    print(list_splits)
+                              
     for fold, (train_ids, test_ids) in enumerate(itertools.islice(kfold.split(data_loaders.dataset),int(init_fold))):
         # i.e. if init fold is 1 then skips first fold when initialising
         start_time_fold = time.time()
