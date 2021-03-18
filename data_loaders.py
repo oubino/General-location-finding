@@ -49,6 +49,10 @@ def init(fold, train_ids, test_ids):
     val_ids = train_ids[:index]
     train_ids = train_ids[index:]
     
+    global print_ids
+    print_ids = test_ids
+    # so can print out test ids at end
+    
     val_subsampler = torch.utils.data.SubsetRandomSampler(val_ids)
     train_subsampler = torch.utils.data.SubsetRandomSampler(train_ids)
     test_subsampler = torch.utils.data.SubsetRandomSampler(test_ids)

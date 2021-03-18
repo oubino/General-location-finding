@@ -17,6 +17,8 @@ initialise = yes_or_no.question('initialise new network?')
 
 if initialise == True:
     init_k_fold.init()
+    print('test ids for each fold')
+    print(settings.k_fold_ids)
 
 elif initialise == False:
     load_k_fold = yes_or_no.question('load in fold')
