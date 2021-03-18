@@ -12,6 +12,8 @@ import os
 kfold = KFold(n_splits = settings.k_folds, shuffle = False)
 
 def init():
+    train = []
+    test = []
     for fold, (train_ids, test_ids) in enumerate(kfold.split(data_loaders.dataset)):
         # different dataloader for each fold
         print('fold')
@@ -44,6 +46,13 @@ def init():
         print('error counter')
         print(settings.error_counter)
     
+    # print folds
+    train.append(train_ids)
+    test.append(test_ids)
+    print('train ids')
+    print(train)
+    print('test ids')
+    print(test)
 
     
     
