@@ -52,13 +52,7 @@ def init():
         print('\n')
         print('Estimated finish time of all folds: ', end_time_fold)
     
-    # print folds
-    train.append(train_ids)
-    test.append(test_ids)
-    print('train ids')
-    print(train)
-    print('test ids')
-    print(test)
+
     
 
     

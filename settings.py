@@ -45,6 +45,7 @@ def init():
     global sigmas_load
     global k_folds
     global fold_load
+    global folds_trained_with
     
         
     
@@ -127,19 +128,20 @@ def init():
         epoch_load = str(100)
     elif aaron_or_oli == False:
     # oli settings
-        epoch_batch = 1
-        num_epoch_batches = 1
-        net_features = 1
+        epoch_batch = 10
+        num_epoch_batches = 2
+        net_features = 32
         scnet_feat = 64
-        run_folder = "run_18_mar_test_k_fold"
+        run_folder = "run_17_mar_test_double_conv"
         run_path = os.path.join(save_data_path, run_folder) 
         try:  
             os.mkdir(run_path)  
         except OSError as error:  
                 print(error) 
-        run_folder_load = "run_18_mar_test_k_fold"
-        epoch_load = str(100)
+        run_folder_load = "run_17_mar_test_double_conv"
+        epoch_load = str(80)
         fold_load = None
+        folds_trained_with = 5
 
         
     norm_mean = 180
@@ -152,11 +154,11 @@ def init():
     # ---- begin -----
     
     # specify landmarks + region was trained on (iff loading in model)
-    #landmarks_load = [1,2,3,4,5,6,7,8,9,10] # brainstem # not general
-    #landmarks_load_loc = {1:'com',2:'com', 3: 'com',4:'com', 5:'com',6:'com', 7: 'com',8:'com',9:'com',10:'com', }
+    landmarks_load = [1,2,3,4,5,6,7,8,9,10] # brainstem # not general
+    landmarks_load_loc = {1:'com',2:'com', 3: 'com',4:'com', 5:'com',6:'com', 7: 'com',8:'com',9:'com',10:'com', }
 
-    landmarks_load = [1,3,5,7,9] # brainstem # not general
-    landmarks_load_loc = {1:'com', 3: 'com', 5:'com', 7: 'com', 9:'com', }
+    #landmarks_load = [1,3,5,7,9] # brainstem # not general
+    #landmarks_load_loc = {1:'com', 3: 'com', 5:'com', 7: 'com', 9:'com', }
     
     num_class_load = len(landmarks_load)
     net_features_load = 32
@@ -174,20 +176,20 @@ def init():
     #landmarks = [1,2,3,5,7,9] # brainstem # not general
     #landmarks_loc = {1:'com',2:'com', 3: 'com', 5:'com', 7:'com', 9:'com'} 
     
-    landmarks = [1,2,3,4,5,6]#,7,8,9,10]
-    landmarks_loc = {1:'com',2:'com', 3: 'com',4:'com', 5:'com',6:'com'}#, 7:'com',8:'com', 9:'com',10:'com', } 
+    landmarks = [1,2,3,4,5,6,7,8,9,10]
+    landmarks_loc = {1:'com',2:'com', 3: 'com',4:'com', 5:'com',6:'com', 7:'com',8:'com', 9:'com',10:'com', } 
     
     # specify all structures which are actually in image
     
     # structures near the top which can be used for flipping
     # "AMl", "AMr","HMl", "HMr", "FZl", "FZr", "FNl", "FNr", "SOl", "SOr"
-    landmarks_total = [1,2,3,4,5,6]#,7,8,9,10]
-    landmarks_total_loc = {1:'com', 2:'com', 3: 'com', 4:'com', 5:'com',6:'com'}#, 7: 'com',8:'com', 9:'com',10:'com', } 
+    landmarks_total = [1,2,3,4,5,6,7,8,9,10]
+    landmarks_total_loc = {1:'com', 2:'com', 3: 'com', 4:'com', 5:'com',6:'com', 7: 'com',8:'com', 9:'com',10:'com', } 
     top_structures = [5,6]
     bot_structures = [1,2]
     # L/R structures
-    left_structures = [1,3,5]#,7,9]
-    right_structures = [2,4,6]#,8,10]
+    left_structures = [1,3,5,7,9]
+    right_structures = [2,4,6,8,10]
 
     # sigmas = defaultdict(float) ?
     sigmas = {} # sigma per landmark
