@@ -114,7 +114,7 @@ def init():
     if aaron_or_oli == True:
         # aaron settings
         epoch_batch = 10
-        num_epoch_batches = 2
+        num_epoch_batches = 10
         net_features = 32
         scnet_feat = 64
         run_folder = "run_16_mar_aaron_combined_test"
@@ -129,16 +129,16 @@ def init():
     elif aaron_or_oli == False:
     # oli settings
         epoch_batch = 10
-        num_epoch_batches = 2
+        num_epoch_batches = 10
         net_features = 32
         scnet_feat = 64
-        run_folder = "run_17_mar_test_double_conv"
+        run_folder = "run_18_mar_k_fold_common_dataset"
         run_path = os.path.join(save_data_path, run_folder) 
         try:  
             os.mkdir(run_path)  
         except OSError as error:  
                 print(error) 
-        run_folder_load = "run_17_mar_test_double_conv"
+        run_folder_load = "run_18_mar_k_fold_common_dataset"
         epoch_load = str(80)
         fold_load = None
         folds_trained_with = 5
