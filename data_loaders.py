@@ -44,8 +44,6 @@ dataloaders= {}
 def init(fold, train_ids, test_ids):
     # initialise dataloader 
     # split train_ids into val and train
-    print('train ids')
-    print(train_ids)
     index = int(len(train_ids)/10) # val ids are first 10 percent
     val_ids = train_ids[:index]
     train_ids = train_ids[index:]
@@ -53,19 +51,19 @@ def init(fold, train_ids, test_ids):
     print(train_ids)
     print('val ids')
     print(val_ids)
+    print('test ids')
+    print(test_ids)
     val_subsampler = torch.utils.data.SubsetRandomSampler(val_ids)
     train_subsampler = torch.utils.data.SubsetRandomSampler(train_ids)
     test_subsampler = torch.utils.data.SubsetRandomSampler(test_ids)
     
-    batch_accumulation = math.ceil(train_set.__len__()/settings.batch_size) # rounds it up
+    batch_accumulation = math.ceil(len(train_ids)/S.batch_size) # rounds it up
 
-    
     dataloaders = {
     'train': DataLoader(dataset, batch_size=S.batch_size, sampler= train_subsampler),
     'test': DataLoader(dataset, batch_size=S.batch_size, sampler= test_subsampler),
     'val': DataLoader(dataset, batch_size=S.batch_size, sampler= val_subsampler)  
     }
-
 
 
 """

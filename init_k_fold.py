@@ -14,6 +14,8 @@ kfold = KFold(n_splits = settings.k_folds, shuffle = False)
 def init():
     for fold, (train_ids, test_ids) in enumerate(kfold.split(data_loaders.dataset)):
         # different dataloader for each fold
+        print('fold')
+        print(fold)
         data_loaders.init(fold, train_ids, test_ids)     
         model = initialise_model.initialise_model()
         print('Training model')
@@ -21,7 +23,7 @@ def init():
         model.train(True)
         print('Saving model to files')
         print('------------')
-        model.save()
+        model.save(fold)
         for i in range(settings.num_epoch_batches - 1):
             start_time = time.time()
             print('Training model')
@@ -34,7 +36,7 @@ def init():
             print('\n')
             print('Saving model to files')
             print('------------')
-            model.save()
+            model.save(fold)
         print('\n')
         print('Evaluating model')
         print('----------------')
