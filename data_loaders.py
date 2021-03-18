@@ -10,6 +10,7 @@ import os
 import numpy
 import evaluate_functions as eval_func
 import numpy as np
+from sklearn.model_selection import KFold
 
 
 import settings as S
@@ -37,6 +38,26 @@ elif S.downsample_user == False:
 
 dataset = D.CTDataset(S.root, transform_train = trans_augment, transform_test = trans_plain, test = False )
 
+global dataloaders
+dataloaders= {}
+
+def init(fold, train_ids, test_ids):
+    # initialise dataloader 
+    # split train_ids into val and train
+    print('train ids')
+    print(train_ids)
+    val_subsampler = torch.utils.data.SubsetRandomSampler(val_ids)
+    train_subsampler = torch.utils.data.SubsetRandomSampler(train_ids)
+    test_subsampler = torch.utils.data.SubsetRandomSampler(test_ids)
+    
+    dataloaders = {
+    'train': DataLoader(dataset, batch_size=S.batch_size, sampler= train_subsampler),
+    'test': DataLoader(dataset, batch_size=S.batch_size, sampler= test_subsampler),
+    'val': DataLoader(dataset, batch_size=S.batch_size, sampler= val_subsampler)  
+    }
+
+
+"""
 # split data in train/val/test
 train_size = int(0.8 * len(dataset))
 val_size = int(0.1 * len(dataset))
@@ -61,7 +82,8 @@ dataloaders = {
 #print(train_set.__getitem__(0)['image'].size()) # i.e. 1 x 224 x 224 as torch tensor (C x H x W)
 #print(train_set.__getitem__(0)['structure'].size()) 
 
-"""
+
+
 print('Example training image')
 print('----------------------')
 for i in range(1):
@@ -73,7 +95,7 @@ for i in range(1):
     for l in S.landmarks:
         print(functions.landmark_loc(train_set.__getitem__(i)['structure'].unsqueeze(0),l))
 
-"""
+
 # print split
 print('Number of images:')
 print('Train: %1.0f' % len(train_set))
@@ -159,14 +181,9 @@ if S.print_CT_check == True:
             eval_func.plot_3d_pred_img_no_pred(test_set.__getitem__(i)['image'].squeeze(0).cpu().numpy(), empty_struc, S.threshold_img_print, test_path_ct, test_set.__getitem__(i)['patient'], landmark)
         print(test_set.__getitem__(i)['patient'])
     
-    
+"""    
     #img = dataset.__getitem__(10)['image']
     #idx = dataset.__getitem__(10)['idx']
     #print(idx)
-    
-    batch_accumulation = math.ceil(train_set.__len__()/S.batch_size) # rounds it up
-    
-    os.chdir(S.coding_path) # change to data path and change back at end
-    #print(os.getcwd())
-    
+
     

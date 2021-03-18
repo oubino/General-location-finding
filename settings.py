@@ -43,6 +43,7 @@ def init():
     global net_features_load 
     global scnet_feat_load 
     global sigmas_load
+    global k_folds
     
         
     
@@ -289,7 +290,8 @@ def init():
     # whether to print all CTs as a check
     print_CT_check = False
     
-    
+    # k folds
+    k_folds = 5
     
     
     

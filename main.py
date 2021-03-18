@@ -6,6 +6,7 @@ settings.init()
 #import functions
 import time
 import yes_or_no
+import init_k_fold
 
 
 # initialise or load model
@@ -13,36 +14,8 @@ initialise = yes_or_no.question('initialise new network?')
 #save_model = functions.yes_or_no('would you like to save model at end?')
 
 if initialise == True:
-    import initialise_model
-    model = initialise_model.initialise_model()
-    print('Training model')
-    print('--------------')
-    model.train(True)
-    print('Saving model to files')
-    print('------------')
-    model.save()
-    for i in range(settings.num_epoch_batches - 1):
-        start_time = time.time()
-        print('Training model')
-        print('--------------')
-        model.train(False)
-        time_elapsed = time.time() - start_time
-        end_time = time.ctime(time_elapsed * (settings.num_epoch_batches - i - 2) + time.time())
-        print('\n')
-        print('Estimated finish time: ', end_time)
-        print('\n')
-        print('Saving model to files')
-        print('------------')
-        model.save()
-    print('\n')
-    print('Evaluating model')
-    print('----------------')
-    model.evaluate()   
-    print('error counter')
-    print(settings.error_counter)
-
-        
-
+    init_k_fold.init()
+    
 elif initialise == False:
     import load_model
     load_transfered_model = yes_or_no.question('are you loading in a model which was saved as a transfered model')
