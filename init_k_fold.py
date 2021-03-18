@@ -3,46 +3,19 @@
 import settings
 import initialise_model
 import time
-import dataset_class
 import data_loaders
 from sklearn.model_selection import KFold
-import math
-import os
-import itertools
+
 
 
 def init(init_fold):
     
     kfold = KFold(n_splits = settings.k_folds, shuffle = False)
-
-    train = []
-    test = []
-           
     list_splits = list(kfold.split(data_loaders.dataset))
     print('list splits')
     print(list_splits)
-    
-    
-    # folds = 0,1,2,3,4
-    # start from fold 1
-    start = 1
-    
-    print('folds 1,2,3,4')
-    for fold, (train_ids, test_ids) in enumerate(list_splits[start:], start):
-        print(fold)
-        print(train_ids)
-        print(test_ids)
-        
-    print('folds 3,4')
-    for fold, (train_ids, test_ids) in enumerate(list_splits[start+2:], start+2):
-        print(fold)
-        print(train_ids)
-        print(test_ids)
-        
-        
-    
-                              
-    for fold, (train_ids, test_ids) in enumerate(itertools.islice(kfold.split(data_loaders.dataset),int(init_fold))):
+         
+    for fold, (train_ids, test_ids) in enumerate(list_splits[init_fold:], init_fold):
         # i.e. if init fold is 1 then skips first fold when initialising
         start_time_fold = time.time()
         # different dataloader for each fold
