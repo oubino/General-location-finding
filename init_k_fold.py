@@ -55,6 +55,20 @@ def init(init_fold):
         print(fold)
         print(train_ids)
         print(test_ids)
+        
+    print('list attempt')
+    for fold, (train_ids, test_ids) in enumerate(list_splits):
+        print(fold)
+        print(train_ids)
+        print(test_ids)
+    
+    print('folds 2,3,4')
+    for fold, (train_ids, test_ids) in enumerate(list_splits[1:]):
+        print(fold)
+        print(train_ids)
+        print(test_ids)
+        
+    
                               
     for fold, (train_ids, test_ids) in enumerate(itertools.islice(kfold.split(data_loaders.dataset),int(init_fold))):
         # i.e. if init fold is 1 then skips first fold when initialising
