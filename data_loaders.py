@@ -64,6 +64,9 @@ def init(fold, train_ids, test_ids):
     'val': DataLoader(dataset, batch_size=S.batch_size, sampler= val_subsampler)  
     }
 
+os.chdir(S.coding_path) # change to data path and change back at end
+print('Coding directory: ')
+print(os.getcwd())
 
 """
 # split data in train/val/test

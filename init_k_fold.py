@@ -63,6 +63,4 @@ def init():
 
     
     
-os.chdir(settings.coding_path) # change to data path and change back at end
-    #print(os.getcwd())
     
