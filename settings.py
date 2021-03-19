@@ -10,7 +10,7 @@ import yes_or_no
 
 def init():
     global norm_mean, norm_std, batch_size, landmarks, sigmas, num_class
-    global in_x, in_y, in_z, epoch_batch, alpha, reg, gamma, lr_max, lr_min
+    global in_x, in_y, in_z, alpha, reg, gamma, lr_max, lr_min
     global step_size, threshold_img_print, normal_min, normal_max
     global normal_window, use_amp, downsample_ratio_h, downsample_ratio_w
     global downsample_ratio_d, downsample_idx_list
@@ -21,16 +21,10 @@ def init():
     global time_stamp
     global UNET_model_user  
     global downsample_user
-    global run_path 
-    global num_epoch_batches
-    global run_folder
-    global run_folder_load
-    global epoch_load 
     global writer
     global img_counter_1, img_counter_2, img_counter_3
     global save_data_path
     global landmarks_loc
-    global net_features, scnet_feat
     global top_structures, bot_structures
     global left_structures, right_structures
     global wing_loss, wing_omega, wing_epsilon, wing_alpha, wing_theta
@@ -44,11 +38,9 @@ def init():
     global scnet_feat_load 
     global sigmas_load
     global k_folds
-    global fold_load
-    global folds_trained_with
+    global aaron_or_oli
     
-        
-    
+          
     # data path
     locally_or_server = yes_or_no.question('locally(y) / server(n)')
     if locally_or_server == True:
@@ -98,49 +90,11 @@ def init():
     print('Results directory:')
     print(save_data_path)
     
-    
     # device
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     print('Device working on: ')
     print(device)
     
-    # oli vs aaron settings
-    
-     
-    if aaron_or_oli == True:
-        # aaron settings
-        epoch_batch = 10
-        num_epoch_batches = 10
-        net_features = 32
-        scnet_feat = 64
-        run_folder = "run_19_mar_k_fold_aaron"
-        run_path = os.path.join(save_data_path, run_folder) 
-        try:  
-            os.mkdir(run_path)  
-        except OSError as error:  
-                print(error) 
-        run_folder_load = "run_19_mar_k_fold_aaron"
-        epoch_load = input ("epoch to load in: ") # str(100)
-        folds_trained_with = 5
-        fold_load = input ("Fold to load in: None for no folds, 0 for fold 0, 1 for fold 1 etc.: ")
-    elif aaron_or_oli == False:
-    # oli settings
-        epoch_batch = 10
-        num_epoch_batches = 2
-        net_features = 32
-        scnet_feat = 64
-        run_folder = "run_18_mar_k_fold_common_dataset"
-        run_path = os.path.join(save_data_path, run_folder) 
-        try:  
-            os.mkdir(run_path)  
-        except OSError as error:  
-                print(error) 
-        run_folder_load = "run_18_mar_k_fold_common_dataset"
-        epoch_load = input ("epoch to load in: ") # str(100)
-        folds_trained_with = 5
-        fold_load = input ("Fold to load in: None for no folds, 0 for fold 0, 1 for fold 1 etc.: ")
-
-
         
     norm_mean = 180
     norm_std = 180
@@ -276,6 +230,60 @@ def init():
     # k fold test
     global k_fold_ids
     k_fold_ids = []
+    
+def init_new():
+    # oli vs aaron settings 
+    global epoch_batch, num_epoch_batches
+    global net_features, scnet_feat
+    global run_path, run_folder, run_folder_load
+    global epoch_load, folds_trained_with, fold_load
+    
+    epoch_batch = int(input ("Epoch batch: "))
+    num_epoch_batches = int(input ("Num epoch batch: "))
+    net_features = 32
+    scnet_feat = 64
+    
+    if aaron_or_oli == True:
+        run_folder = "run_19_mar_k_fold_aaron"
+        run_folder_load = "run_19_mar_k_fold_aaron"
+    elif aaron_or_oli == False:
+        run_folder = "run_18_mar_k_fold_common_dataset"
+        run_folder_load = "run_18_mar_k_fold_common_dataset"
+        
+    run_path = os.path.join(save_data_path, run_folder) 
+    try:  
+        os.mkdir(run_path)  
+    except OSError as error:  
+            print(error) 
+
+def init_load():
+    # oli vs aaron settings 
+    global epoch_batch, num_epoch_batches
+    global net_features, scnet_feat
+    global run_path, run_folder, run_folder_load
+    global epoch_load, folds_trained_with, fold_load
+    
+    epoch_batch = int(input ("Epoch batch: "))
+    num_epoch_batches = int(input ("Num epoch batch: "))
+    net_features = 32
+    scnet_feat = 64
+    
+    if aaron_or_oli == True:
+        run_folder = "run_19_mar_k_fold_aaron"
+        run_folder_load = "run_19_mar_k_fold_aaron"
+    elif aaron_or_oli == False:
+        run_folder = "run_18_mar_k_fold_common_dataset"
+        run_folder_load = "run_18_mar_k_fold_common_dataset"
+        
+    run_path = os.path.join(save_data_path, run_folder) 
+    try:  
+        os.mkdir(run_path)  
+    except OSError as error:  
+            print(error) 
+
+    epoch_load = input ("epoch to load in: ")
+    folds_trained_with = 5
+    fold_load = input ("Fold to load in: None for no folds, 0 for fold 0, 1 for fold 1 etc.: ")
     
     
     
