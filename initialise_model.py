@@ -11,6 +11,7 @@ import torch.optim as optim
 from torch.optim import lr_scheduler
 import train_function
 from torchsummary import summary
+import functions
 
 class initialise_model:
     """Initialised model is a class"""
@@ -57,8 +58,8 @@ class initialise_model:
     def save(self, fold):
         
         epochs_completed_string = str(self.epochs_completed)
-        fold_string = str(fold)
-        file_name = "train_" + epochs_completed_string + '_' + fold_string 
+        fold_string = functions.string(fold)
+        file_name = "train_" + epochs_completed_string + fold_string 
         train_path = os.path.join(S.run_path, file_name) # directory labelled with epochs_completed
         
         try: 

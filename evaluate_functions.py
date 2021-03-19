@@ -280,7 +280,7 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
   S.k_fold_ids.append(data_loaders.print_ids)
   # create directory for this eval
   epochs_completed_string = str(epochs_completed)
-  file_name = "eval_" + epochs_completed_string + '_' + functions.string(fold)
+  file_name = "eval_" + epochs_completed_string + functions.string(fold)
   eval_path = os.path.join(S.run_path, file_name) # directory labelled with epochs_completed
   try: 
       os.mkdir(eval_path)

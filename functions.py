@@ -375,7 +375,7 @@ def weights_init(m):
 def string(s):
     if s is None:
         return ''
-    return str(s)
+    return '_' + str(s)
         
         
 os.chdir(S.coding_path) # change to data path and change back at end

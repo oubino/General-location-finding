@@ -6,9 +6,14 @@ import yes_or_no
 import settings
 
 def init():
-    # initialise data loader
-    data_loaders.init_load_k_fold(settings.fold_load)
     
+    # initialise data loader
+    load_k_fold = yes_or_no.question('load in fold')
+    if load_k_fold == True:
+        data_loaders.init_load_k_fold(settings.fold_load)
+    elif load_k_fold == False:
+        data_loaders.init_load_no_k_fold()
+
     load_transfered_model = yes_or_no.question('are you loading in a model which was saved as a transfered model')
     model = load_model.load_model(load_transfered_model)
     train_decision = yes_or_no.question('train loaded in model?')
@@ -18,8 +23,8 @@ def init():
             model.freeze_final_layers()
         transfer_learn_decision = yes_or_no.question('transfer learn to new number of classes')
         if transfer_learn_decision == True:
-            class_number = input ("New number of classes")
-            feature_number = input ("Enter number of features pre trained model trained with")
+            class_number = input ("New number of classes ")
+            feature_number = input ("Enter number of features pre trained model trained with ")
             class_number = int(class_number)
             feature_number = int(feature_number)
             model.transfer_learn_unet_final_layer(class_number, feature_number)
