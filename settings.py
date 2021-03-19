@@ -93,11 +93,7 @@ def init():
                 coding_path = r'/home/olive/GitHub/General-location-finding'
                 root = r'/home/olive/data/Facial_asymmetry_oli_common'
                 save_data_path = r'/home/olive/data/results/Oli'
-            
-        
-        
-   
-    
+
     
     print('Results directory:')
     print(save_data_path)
@@ -117,15 +113,16 @@ def init():
         num_epoch_batches = 10
         net_features = 32
         scnet_feat = 64
-        run_folder = "run_16_mar_aaron_combined_test"
+        run_folder = "run_19_mar_k_fold_aaron"
         run_path = os.path.join(save_data_path, run_folder) 
-        
         try:  
             os.mkdir(run_path)  
         except OSError as error:  
                 print(error) 
-        run_folder_load = "run_11_mar_32_ft_trial_25"
-        epoch_load = str(100)
+        run_folder_load = "run_19_mar_k_fold_aaron"
+        epoch_load = input ("epoch to load in: ") # str(100)
+        folds_trained_with = 5
+        fold_load = input ("Fold to load in: None for no folds, 0 for fold 0, 1 for fold 1 etc.: ")
     elif aaron_or_oli == False:
     # oli settings
         epoch_batch = 10
@@ -241,29 +238,7 @@ def init():
     
     # decision on whether to crop or downsample
     downsample_user = True
-    '''
-    if aaron_or_oli == True:
-    # aaron folders
-        # run folder
-        
-    elif aaron_or_oli == False:
-        # oli folders
-        # run folder
-        run_folder = "run_14_mar_combined_data_transfer"
-        run_path = os.path.join(save_data_path, run_folder) 
-        try:  
-            os.mkdir(run_path)  
-        except OSError as error:  
-            print(error) 
-        
-        # load model path
-    
-        run_folder_load = "run_14_mar_combined_data_transfer"
-        epoch_load = str(50) 
-        
-'''
-
-    
+ 
     # create tensorboard writer
     tensor_folder = os.path.join(save_data_path, 'tensorboard')
     tensorboard_loc = os.path.join(tensor_folder, '%s-%s' % (time_stamp,run_folder_load))
