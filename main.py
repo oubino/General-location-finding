@@ -24,5 +24,7 @@ if initialise == True:
 
 elif initialise == False:
     load_k_fold.init(settings.fold_load)
+    print('test ids for fold (i.e. double check)')
+    print(settings.k_fold_ids)
     
 
