@@ -2,9 +2,6 @@
 import settings as S
 import functions
 import torch
-import network
-import initialise_model
-import load_model
 
 def calc_loss_gauss(model, img, pred, target, idx, metrics_landmarks, alpha, reg, gamma, epoch_samples, sigma): 
 
