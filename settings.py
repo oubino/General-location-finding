@@ -139,7 +139,7 @@ def init():
         except OSError as error:  
                 print(error) 
         run_folder_load = "run_18_mar_k_fold_common_dataset"
-        epoch_load = str(100)
+        epoch_load = input ("epoch to load in: ") # str(100)
         folds_trained_with = 5
         fold_load = input ("Fold to load in: None for no folds, 0 for fold 0, 1 for fold 1 etc.: ")
 
