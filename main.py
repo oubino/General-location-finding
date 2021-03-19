@@ -23,6 +23,6 @@ if initialise == True:
     print(settings.k_fold_ids)
 
 elif initialise == False:
-    load_k_fold.init()
+    load_k_fold.init(settings.fold_load)
     
 

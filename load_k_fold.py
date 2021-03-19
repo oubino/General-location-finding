@@ -4,15 +4,15 @@ import load_model
 import data_loaders
 import yes_or_no
 import settings
+import paths
 
-def init():
+def init(fold):
     
     # initialise data loader
-    load_k_fold = yes_or_no.question('load in fold')
-    if load_k_fold == True:
-        data_loaders.init_load_k_fold(settings.fold_load)
-    elif load_k_fold == False:
+    if fold == None:
         data_loaders.init_load_no_k_fold()
+    else:
+        data_loaders.init_load_k_fold(int(fold))  
 
     load_transfered_model = yes_or_no.question('are you loading in a model which was saved as a transfered model')
     model = load_model.load_model(load_transfered_model)
@@ -33,22 +33,22 @@ def init():
         model.train(True, transfer_learn_decision)
         print('Saving model to files')
         print('------------')
-        model.save()
+        model.save(fold)
         for i in range(settings.num_epoch_batches - 1):
             print('Training model')
             print('------------')
             model.train(False, transfer_learn_decision)
             print('Saving model to files')
             print('------------')
-            model.save()
+            model.save(fold)
             print('\n')
             print('Evaluating model')
             print('----------------')
-        model.evaluate_post_train()
+        model.evaluate_post_train(fold)
     elif train_decision == False:
         print('\n')
         print('Evaluating model')
         print('----------------')
-        model.evaluate_pre_train()
+        model.evaluate_pre_train(fold)
     print('error counter')
     print(settings.error_counter)
