@@ -276,6 +276,9 @@ def print_3D_gauss_heatmap(image, structure_com_x, structure_com_y, structure_co
 
 
 def performance_metrics(model,sigmas,gamma, epochs_completed, fold): 
+  # switch batch size to 1 for evaluation then switch back to original at end
+  batch_size_original = S.batch_size
+  S.batch_size = 1
   # so can print out test ids for each fold at end
   S.k_fold_ids.append(data_loaders.print_ids)
   # create directory for this eval
@@ -391,4 +394,6 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
         sigma_string = str(sigmas[l])
         writer.writerow(['%s' % S.run_folder, '%s' % epochs_completed_string, 'Landmark %1.0f' % l, 
              str(mean), str(std_mean),str(median),str(outliers_perc) + '%', sigma_string.replace("\n", " "), time.strftime("%Y%m%d-%H%M%S"), 'pred max used = %s' % S.pred_max])
+   
+  S.batch_size = batch_size_original
     
