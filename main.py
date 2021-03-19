@@ -7,7 +7,6 @@ settings.init()
 import time
 import yes_or_no
 import init_k_fold
-import load_no_k_fold
 import load_k_fold
 
 
