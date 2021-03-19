@@ -129,7 +129,7 @@ def init():
     elif aaron_or_oli == False:
     # oli settings
         epoch_batch = 10
-        num_epoch_batches = 10
+        num_epoch_batches = 6
         net_features = 32
         scnet_feat = 64
         run_folder = "run_18_mar_k_fold_common_dataset"
