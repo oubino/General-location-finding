@@ -220,7 +220,9 @@ class ToTensor(object):
             # structure is z, y, x
             # need it in y, x, z                
             x, y, z = int(coords[l][0]), int(coords[l][1]), int(coords[l][2])
-            
+            # if z is 80 round to 79
+            if z == 80:
+                z = 79
             structure[z][y][x] = l
         # swap color axis because
         # numpy image: D x H x W 
