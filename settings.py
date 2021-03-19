@@ -21,7 +21,6 @@ def init():
     global time_stamp
     global UNET_model_user  
     global downsample_user
-    global writer
     global img_counter_1, img_counter_2, img_counter_3
     global save_data_path
     global landmarks_loc
@@ -193,10 +192,6 @@ def init():
     # decision on whether to crop or downsample
     downsample_user = True
  
-    # create tensorboard writer
-    tensor_folder = os.path.join(save_data_path, 'tensorboard')
-    tensorboard_loc = os.path.join(tensor_folder, '%s-%s' % (time_stamp,run_folder_load))
-    writer = SummaryWriter(tensorboard_loc) # may need to amend
     
     # image saved coutner
     img_counter_1 = 0
@@ -237,6 +232,7 @@ def init_new():
     global net_features, scnet_feat
     global run_path, run_folder, run_folder_load
     global epoch_load, folds_trained_with, fold_load
+    global writer
     
     epoch_batch = int(input ("Epoch batch: "))
     num_epoch_batches = int(input ("Num epoch batch: "))
@@ -255,6 +251,11 @@ def init_new():
         os.mkdir(run_path)  
     except OSError as error:  
             print(error) 
+        
+    # create tensorboard writer
+    tensor_folder = os.path.join(save_data_path, 'tensorboard')
+    tensorboard_loc = os.path.join(tensor_folder, '%s-%s' % (time_stamp,run_folder_load))
+    writer = SummaryWriter(tensorboard_loc) # may need to amend
 
 def init_load():
     # oli vs aaron settings 
@@ -262,6 +263,7 @@ def init_load():
     global net_features, scnet_feat
     global run_path, run_folder, run_folder_load
     global epoch_load, folds_trained_with, fold_load
+    global writer
     
     epoch_batch = int(input ("Epoch batch: "))
     num_epoch_batches = int(input ("Num epoch batch: "))
@@ -284,6 +286,11 @@ def init_load():
     epoch_load = input ("epoch to load in: ")
     folds_trained_with = 5
     fold_load = input ("Fold to load in: None for no folds, 0 for fold 0, 1 for fold 1 etc.: ")
+    
+    # create tensorboard writer
+    tensor_folder = os.path.join(save_data_path, 'tensorboard')
+    tensorboard_loc = os.path.join(tensor_folder, '%s-%s' % (time_stamp,run_folder_load))
+    writer = SummaryWriter(tensorboard_loc) # may need to amend
     
     
     
