@@ -51,9 +51,16 @@ class initialise_model:
         self.model, self.best_loss, self.epochs_completed = train_function.train_model(self.model, self.scaler, self.optimizer, self.scheduler, S.alpha,S.reg,S.gamma,S.sigmas, num_epochs=S.epoch_batch, best_loss = self.best_loss, epochs_completed = self.epochs_completed)
     
     def evaluate(self, fold):
+        
+        # set batch size to 1 for eval then back to original after
+        batch_size_original = S.batch_size
+        S.batch_size = 1
+        
         self.model.eval()   # Set model to the evaluation mode
         data_loaders.dataset.__test__() # sets whole dataset to test mode means it doesn't augment images
         evaluate_functions.performance_metrics(self.model,S.sigmas,S.gamma, self.epochs_completed, fold)
+        
+        S.batch_size = batch_size_original
         
     def save(self, fold):
         
