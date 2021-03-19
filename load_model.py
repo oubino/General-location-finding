@@ -98,21 +98,14 @@ class load_model:
         self.model_load, self.best_loss, self.epochs_completed = train_function.train_model(self.model_load, self.scaler_load, self.optimizer_load, self.scheduler, S.alpha,S.reg,S.gamma,S.sigmas, num_epochs=S.epoch_batch, best_loss = self.best_loss, epochs_completed = self.epochs_completed)
         
     def evaluate_post_train(self, fold):
-        # set batch size to 1 for eval then back to original after
-        batch_size_original = S.batch_size
-        S.batch_size = 1
         
         # evaluate model
         self.model_load.eval() # trained
         data_loaders.dataset.__test__() # sets whole dataset to test mode means it doesn't augment images
         evaluate_functions.performance_metrics(self.model_load,S.sigmas,S.gamma, self.epochs_completed, fold) # trained x 2
         
-        S.batch_size = batch_size_original
     
     def evaluate_pre_train(self, fold):
-        # set batch size to 1 for eval then back to original after
-        batch_size_original = S.batch_size
-        S.batch_size = 1
         
         # if not trained load in best loss and epochs completed 
         self.best_loss = torch.load(paths.PATH_val_loss_load)['best_val_loss']
@@ -122,7 +115,6 @@ class load_model:
         data_loaders.dataset.__test__() # sets whole dataset to test mode means it doesn't augment images
         evaluate_functions.performance_metrics(self.model_load,S.sigmas,S.gamma, self.epochs_completed, fold)
         
-        S.batch_size = batch_size_original
     
     def save(self, fold):
         
