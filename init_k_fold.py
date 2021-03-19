@@ -43,9 +43,16 @@ def init(init_fold):
 
     else:  
         kfold = KFold(n_splits = settings.k_folds, shuffle = False)
+        
         list_splits = list(kfold.split(data_loaders.dataset))
-        print('list splits')
-        print(list_splits)
+        
+        for fold, (train_ids, test_ids) in enumerate(list_splits[int(init_fold):], int(init_fold)):
+            print('------')
+            print('fold')
+            print(fold)
+            print('------')
+            print('train ids/test ids')
+            print(train_ids, test_ids)
              
         # in case want to initialise from not fold 0
         for fold, (train_ids, test_ids) in enumerate(list_splits[int(init_fold):], int(init_fold)):
