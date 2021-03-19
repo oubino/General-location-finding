@@ -68,7 +68,7 @@ def init():
             elif combined_data == False:
                 # Aaron paths
                 coding_path = r'/home/rankinaaron98/General-location-finding'
-                root = r'/home/rankinaaron98/data/Facial_asymmetry_aaron_testset'
+                root = r'/home/rankinaaron98/data/Facial_asymmetry_aaron_commons'
                 save_data_path = r'/home/rankinaaron98/data/results/Aaron'
         # load model path
     
@@ -98,7 +98,7 @@ def init():
     norm_mean = 180
     norm_std = 180
     
-    batch_size = 1
+    batch_size = 6
     
     # needed for transfer learning 
     
@@ -217,7 +217,7 @@ def init():
     error_counter = 0
     
     # whether to print all CTs as a check
-    print_CT_check = True
+    print_CT_check = False
     
     # k folds
     k_folds = 5
