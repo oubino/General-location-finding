@@ -37,7 +37,11 @@ def init(init_fold):
         print('\n')
         print('Evaluating model')
         print('----------------')
+        # change batch size to 1 pre eval back to original after
+        batch_size_original = settings.batch_size
+        settings.batch_size = 1
         model.evaluate(None)   
+        settings.batch_size = batch_size_original
         print('error counter')
         print(settings.error_counter)
 
