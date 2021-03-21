@@ -82,7 +82,7 @@ def init():
             elif combined_data == False:   
                 # Oli paths
                 coding_path = r'/home/olive/GitHub/General-location-finding'
-                root = r'/home/olive/data/Facial_asymmetry_oli_common'
+                root = r'/home/olive/data/Facial_asymmetry_oli_testset'
                 save_data_path = r'/home/olive/data/results/Oli'
 
     
@@ -217,7 +217,7 @@ def init():
     error_counter = 0
     
     # whether to print all CTs as a check
-    print_CT_check = False
+    print_CT_check = True
     
     # k folds
     k_folds = 5
