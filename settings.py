@@ -271,6 +271,7 @@ def init_load():
     net_features = 32
     scnet_feat = 64
     
+    
     if aaron_or_oli == True:
         run_folder = "run_19_mar_k_fold_aaron"
         run_folder_load = "run_19_mar_k_fold_aaron"

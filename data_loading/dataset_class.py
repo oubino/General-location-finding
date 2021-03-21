@@ -7,7 +7,7 @@ import numpy as np
 
 import settings
 
-os.chdir(settings.root) # change to data path and change back at end
+#os.chdir(settings.root) # change to data path and change back at end
 
 # CTDataset
 class CTDataset(Dataset):
@@ -91,4 +91,4 @@ class DatasetFromSubset(Dataset):
 
 # --------------------------------------------
 
-os.chdir(settings.coding_path) # change to data path and change back at end
+#os.chdir(settings.coding_path) # change to data path and change back at end

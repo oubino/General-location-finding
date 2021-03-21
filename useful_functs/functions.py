@@ -6,7 +6,7 @@ import os
 
 import settings as S
 
-os.chdir(S.root) # change to data path and change back at end
+#os.chdir(S.root) # change to data path and change back at end
 print('Data directory: ')
 print(os.getcwd())
 
@@ -379,6 +379,6 @@ def string(s):
     return '_' + str(s)
         
         
-os.chdir(S.coding_path) # change to data path and change back at end
+#os.chdir(S.coding_path) # change to data path and change back at end
 print('Coding directory: ')
 print(os.getcwd())

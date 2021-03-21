@@ -13,7 +13,7 @@ from data_loading import dataset_class as D
 import settings as S
 from data_loading import transformations as T
 
-os.chdir(S.root) # change to data path and change back at end
+#os.chdir(S.root) # change to data path and change back at end
 #print(os.getcwd())
 
 if S.downsample_user == True:
@@ -153,7 +153,7 @@ def init_reserved_test_set():
     
 
     
-os.chdir(S.coding_path) # change to data path and change back at end
+#os.chdir(S.coding_path) # change to data path and change back at end
 print('Coding directory: ')
 print(os.getcwd())
 
