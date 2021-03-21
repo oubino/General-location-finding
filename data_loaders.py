@@ -171,6 +171,33 @@ os.chdir(S.coding_path) # change to data path and change back at end
 print('Coding directory: ')
 print(os.getcwd())
 
+# print all images as CT scans to view them
+if S.print_CT_check == True:
+    
+    # training set
+    file_name_print = "print_cts"
+    path_print_ct = os.path.join(S.run_path, file_name_print)
+    try: 
+        os.mkdir(path_print_ct)
+    except OSError as error:
+        print(error)
+    
+    for i in range(len(dataset)):
+        for landmark in S.landmarks:
+            structure = dataset.__getitem__(i)['structure'].squeeze(0)
+            locations = np.nonzero(np.round(structure) == landmark)
+            try:
+                x, y, z = locations[0][1], locations[0][0], locations[0][2]
+            except IndexError as error:
+                    x = 0
+                    y = 0
+                    z = 0
+            empty_struc = np.zeros((128,128,80))
+            empty_struc[y][x][z] = landmark
+            #structure_extrac = eval_func.extract_landmark_for_structure_np(structure, landmark)
+            eval_func.plot_3d_pred_img_no_pred(dataset.__getitem__(i)['image'].squeeze(0).cpu().numpy(), empty_struc, S.threshold_img_print, path_print_ct, dataset.__getitem__(i)['patient'], landmark)
+        print(dataset.__getitem__(i)['patient'])
+
 """
 # split data in train/val/test
 train_size = int(0.8 * len(dataset))
