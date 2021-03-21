@@ -1,8 +1,8 @@
 # script to test on images
 
-import data_loaders
-import load_model
-import yes_or_no
+from data_loading import data_loaders
+from model import load_model
+from useful_functs import yes_or_no
 import settings
 
 settings.init()

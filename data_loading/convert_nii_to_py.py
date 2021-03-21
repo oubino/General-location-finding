@@ -3,6 +3,7 @@
 import SimpleITK as sitk
 import numpy as np
 import os
+import csv
 
 # paths
 nii_path = r'C:\Users\ranki_252uikw\Documents\MPhysS2\Facial_asymmetry\landmarks_aaron'
@@ -12,7 +13,7 @@ csv_path = r'C:\Users\ranki_252uikw\Documents\MPhysS2\Facial_asymmetry\img_dimen
 #nii_path = r'/home/rankinaaron98/data/Facial_asymmetry/CTs'
 #numpy_path = r'/home/rankinaaron98/data/Facial_asymmetry/CTs_np'
 
-with open(csv_dimensions_path, 'w',newline='') as csvfile:
+with open(csv_path, 'w',newline='') as csvfile:
     writer = csv.writer(csvfile)
     writer.writerow(['Patient','In-plane dimension (mm)','Slice thickness (mm)'])
     # loop opver nii images

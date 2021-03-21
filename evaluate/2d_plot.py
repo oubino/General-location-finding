@@ -1,8 +1,8 @@
 # plot 2D slice
-
-import data_loaders as D
 import matplotlib
 import matplotlib.pyplot as plt
+
+from data_loading import data_loaders as D
 
 image = D.train_set.__getitem__(0)['image']
 structure = D.train_set.__getitem__(0)['structure']

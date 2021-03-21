@@ -1,8 +1,8 @@
 # load k fold
 
-import load_model
-import data_loaders
-import yes_or_no
+from model import load_model
+from data_loading import data_loaders
+from useful_functs import yes_or_no
 import settings
 
 def init(fold):

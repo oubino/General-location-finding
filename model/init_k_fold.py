@@ -1,10 +1,11 @@
 # init_k_fold
 
-import settings
-import initialise_model
 import time
-import data_loaders
 from sklearn.model_selection import KFold
+
+import settings
+from model import initialise_model
+from data_loading import data_loaders
 
 
 

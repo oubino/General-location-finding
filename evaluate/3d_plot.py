@@ -2,11 +2,12 @@
 
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
-import data_loaders as D
 from skimage import measure
 import numpy as np
+
+from data_loading import data_loaders as D
 import settings as S
-import functions
+from useful_functs import functions
 
 
 def plot_3d(image, structure, threshold_img, threshold_structure):

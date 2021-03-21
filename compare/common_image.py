@@ -1,8 +1,7 @@
 # save common images for Aaron and Oli
-
 import numpy as np
 import os
-import yes_or_no
+from useful_functs import yes_or_no
 
 
 # paths

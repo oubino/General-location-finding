@@ -1,11 +1,11 @@
-
 import torch
 import torch.nn as nn
 import numpy as np
 import os
 import time
 from torch.utils.tensorboard import SummaryWriter
-import yes_or_no
+
+from useful_functs import yes_or_no
 
 
 def init():

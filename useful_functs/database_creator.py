@@ -1,7 +1,6 @@
 import os
 import csv
 
-
 root = r'C:\Users\olive\OneDrive\Documents\Photomed Essay'
 
 files = list(sorted(os.listdir(root)))
