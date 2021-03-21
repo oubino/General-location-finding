@@ -1,4 +1,3 @@
-import settings as S
 import numpy as np
 import os
 import math

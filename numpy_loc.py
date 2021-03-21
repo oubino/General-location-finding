@@ -1,9 +1,4 @@
-import torch
 import numpy as np
-from scipy.optimize import curve_fit
-import csv, operator
-import settings as S
-import os
 import random
 
 def landmark_loc_np(locat, structure, landmark, patient):

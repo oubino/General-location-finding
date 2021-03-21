@@ -4,7 +4,6 @@ import load_model
 import data_loaders
 import yes_or_no
 import settings
-import paths
 
 def init(fold):
     

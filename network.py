@@ -4,7 +4,6 @@ import torch
 from torch import nn
 import torch.nn.functional as F
 import settings as S
-from torchsummary import summary
 
 
 # UNET3D
@@ -339,20 +338,3 @@ class SCNET(nn.Module): # need to add bottleneck
         )
         return upsample_block_11
 
-"""
-# Model summary
-
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
-if S.UNET_model_user == True:
-    model = UNet3d(1,S.num_class, unet_feat)
-elif S.UNET_model_user == False:
-    model = SCNET(1, S.num_class, S.scnet_feat)
-
-model = model.to(device)
-
-print('Network structure')
-print('-----------------')
-summary(model, input_size=(1, S.in_y, S.in_x, S.in_z))
-
-"""

@@ -70,7 +70,6 @@ class initialise_model:
             
         PATH_save = os.path.join(train_path, "model.pt")
         PATH_opt_save = os.path.join(train_path, "opt.pt")
-        #PATH_sigma_save = os.path.join(train_path,"sigma.pt")
         PATH_scaler_save = os.path.join(train_path,"scaler.pt")
         PATH_val_loss_save = os.path.join(train_path,"val_loss.pt")
         PATH_epochs_completed_save  = os.path.join(train_path,"epochs_completed.pt")

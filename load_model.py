@@ -11,7 +11,6 @@ import train_function
 import evaluate_functions
 import os
 from torchsummary import summary
-from torch import nn
 import functions
 
 class load_model:

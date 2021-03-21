@@ -40,7 +40,7 @@ def init():
     global aaron_or_oli
     
           
-    # data path
+    # paths
     locally_or_server = yes_or_no.question('locally(y) / server(n)')
     if locally_or_server == True:
         # use local paths and ask Aaron/Oli for local paths 
@@ -94,10 +94,6 @@ def init():
     print('Device working on: ')
     print(device)
     
-        
-    norm_mean = 180
-    norm_std = 180
-    
     batch_size = 1
     
     # needed for transfer learning 
@@ -129,6 +125,8 @@ def init():
     
     landmarks = [1,2,3,4,5,6,7,8,9,10]
     landmarks_loc = {1:'com',2:'com', 3: 'com',4:'com', 5:'com',6:'com', 7:'com',8:'com', 9:'com',10:'com', } 
+    num_class = len(landmarks)
+
     
     # specify all structures which are actually in image
     
@@ -142,21 +140,19 @@ def init():
     left_structures = [1,3,5,7,9]
     right_structures = [2,4,6,8,10]
 
-    # sigmas = defaultdict(float) ?
     sigmas = {} # sigma per landmark
     for k in landmarks:
       sigmas[k] = nn.Parameter(torch.tensor([20.]).to(device))# device = 'cuda'))#.to(device) # what value to initialise sigma
       sigmas[k].requires_grad = True
       #print(sigmas[k])
     
-    num_class = len(landmarks)
-    
+      
     # input dimensions
     in_x = 128
     in_y = 128
     in_z = 80
     
-    
+    # learning params
     alpha = 1/25000
     reg = 0.01 # reg = 0.001
     gamma = 100000
@@ -164,6 +160,7 @@ def init():
     lr_min = 0.0001
     step_size = 64
     
+    # print params
     threshold_img_print = 0.5
     
     # normalise parameters
@@ -192,13 +189,11 @@ def init():
     # decision on whether to crop or downsample
     downsample_user = True
  
-    
-    # image saved coutner
+    # image saved counter
     img_counter_1 = 0
     img_counter_2 = 0
     img_counter_3 = 0
 
-    
     # adaptive wing loss
     wing_loss = False
     # our max for heatmap is pre_factor 
@@ -225,6 +220,12 @@ def init():
     # k fold test
     global k_fold_ids
     k_fold_ids = []
+    
+    # commenting out if still works then delete
+
+    # normalisation
+    # norm_mean = 180
+    # norm_std = 180
     
 def init_new():
     # oli vs aaron settings 

@@ -1,20 +1,12 @@
 # custom dataset class for the images and masks
 
-#import cv2
-#import sklearn
-#import skimage.transform as tr
-
 import torch
 from torch.utils.data import Dataset#, DataLoader
-#import torchvision
 import os
 import numpy as np
 import settings
-#import kornia 
 
-#print(os.getcwd())
 os.chdir(settings.root) # change to data path and change back at end
-#print(os.getcwd())
 
 # CTDataset
 class CTDataset(Dataset):
@@ -99,4 +91,3 @@ class DatasetFromSubset(Dataset):
 # --------------------------------------------
 
 os.chdir(settings.coding_path) # change to data path and change back at end
-#print(os.getcwd())

@@ -1,10 +1,7 @@
 # save common images for Aaron and Oli
 
-import settings as S
 import numpy as np
 import os
-import math
-import csv
 import yes_or_no
 
 
@@ -47,9 +44,7 @@ if save_images == True:
             np.save(os.path.join(oli_cts_save,i), oli_ct)
             np.save(os.path.join(oli_structures_save,i), oli_structure)
     
-
-    
-        
+   
 # still need to add in CSV for both
 print('number of common images')
 print(len(list_1))
