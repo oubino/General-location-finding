@@ -268,8 +268,8 @@ def init_load():
     global epoch_load, folds_trained_with, fold_load
     global writer
     
-    epoch_batch = int(input ("Epoch batch: "))
-    num_epoch_batches = int(input ("Num epoch batch: "))
+    #epoch_batch = int(input ("Epoch batch: "))
+    #num_epoch_batches = int(input ("Num epoch batch: "))
     net_features = 32
     scnet_feat = 64
     
