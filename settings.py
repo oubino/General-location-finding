@@ -109,7 +109,7 @@ def init():
     #landmarks_load_loc = {1:'com', 3: 'com', 5:'com', 7: 'com', 9:'com', }
     
     num_class_load = len(landmarks_load)
-    net_features_load = 32
+    net_features_load = 1
     scnet_feat_load = 64
     
     sigmas_load = {} # sigma per landmark
