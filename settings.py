@@ -214,7 +214,7 @@ def init():
     
     # whether to print all CTs as a check
     print_CT_check = True
-    ct_print = 72
+    ct_print = "0072.npy"
     
     # k folds
     k_folds = 5

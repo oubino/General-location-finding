@@ -190,6 +190,7 @@ if S.print_CT_check == True:
     for i in range(len(dataset)):
         print(dataset.__getitem__(i)['patient'])
         if dataset.__getitem__(i)['patient'] == S.ct_print:
+            print('--- printing ---')
             for landmark in S.landmarks:
                 structure = dataset.__getitem__(i)['structure'].squeeze(0)
                 locations = np.nonzero(np.round(structure) == landmark)
