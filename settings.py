@@ -83,7 +83,7 @@ def init():
             elif combined_data == False:   
                 # Oli paths
                 coding_path = r'/home/olive/GitHub/General-location-finding'
-                root = r'/home/olive/data/Facial_asymmetry_oli_common'
+                root = r'/home/olive/data/Facial_asymmetry_aaron_common'
                 save_data_path = r'/home/olive/data/results/Oli'
 
     
