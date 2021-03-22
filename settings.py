@@ -109,7 +109,7 @@ def init():
     #landmarks_load_loc = {1:'com', 3: 'com', 5:'com', 7: 'com', 9:'com', }
     
     num_class_load = len(landmarks_load)
-    net_features_load = 1
+    net_features_load = 32
     scnet_feat_load = 64
     
     sigmas_load = {} # sigma per landmark
@@ -239,7 +239,7 @@ def init_new():
     
     epoch_batch = int(input ("Epoch batch: "))
     num_epoch_batches = int(input ("Num epoch batch: "))
-    net_features = 1
+    net_features = 32
     scnet_feat = 64
     
     if aaron_or_oli == True:
@@ -270,7 +270,7 @@ def init_load():
     
     #epoch_batch = int(input ("Epoch batch: "))
     #num_epoch_batches = int(input ("Num epoch batch: "))
-    net_features = 1
+    net_features = 32
     scnet_feat = 64
     
     
