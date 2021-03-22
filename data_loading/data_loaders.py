@@ -168,6 +168,8 @@ if S.print_CT_check == True:
     except OSError as error:
         print(error)
     
+    # print all images 
+    """
     for i in range(len(dataset)):
         for landmark in S.landmarks:
             structure = dataset.__getitem__(i)['structure'].squeeze(0)
@@ -183,6 +185,24 @@ if S.print_CT_check == True:
             #structure_extrac = eval_func.extract_landmark_for_structure_np(structure, landmark)
             eval_func.plot_3d_pred_img_no_pred(dataset.__getitem__(i)['image'].squeeze(0).cpu().numpy(), empty_struc, S.threshold_img_print, path_print_ct, dataset.__getitem__(i)['patient'], landmark)
         print(dataset.__getitem__(i)['patient'])
+    """
+    # print single image
+    for i in range(len(dataset)):
+        if dataset.__getitem__(i)['patient'] == S.print_ct:
+            for landmark in S.landmarks:
+                structure = dataset.__getitem__(i)['structure'].squeeze(0)
+                locations = np.nonzero(np.round(structure) == landmark)
+                try:
+                    x, y, z = locations[0][1], locations[0][0], locations[0][2]
+                except IndexError as error:
+                        x = 0
+                        y = 0
+                        z = 0
+                empty_struc = np.zeros((128,128,80))
+                empty_struc[y][x][z] = landmark
+                #structure_extrac = eval_func.extract_landmark_for_structure_np(structure, landmark)
+                eval_func.plot_3d_pred_img_no_pred(dataset.__getitem__(i)['image'].squeeze(0).cpu().numpy(), empty_struc, S.threshold_img_print, path_print_ct, dataset.__getitem__(i)['patient'], landmark)
+            print(dataset.__getitem__(i)['patient'])
 
 
 

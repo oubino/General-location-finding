@@ -38,6 +38,7 @@ def init():
     global sigmas_load
     global k_folds
     global aaron_or_oli
+    global ct_print
     
           
     # paths
@@ -213,6 +214,7 @@ def init():
     
     # whether to print all CTs as a check
     print_CT_check = False
+    ct_print = 72
     
     # k folds
     k_folds = 5
