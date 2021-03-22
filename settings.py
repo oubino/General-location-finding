@@ -246,7 +246,7 @@ def init_new():
         run_folder = "run_19_mar_k_fold_aaron"
         #run_folder_load = "run_19_mar_k_fold_aaron"
     elif aaron_or_oli == False:
-        run_folder = "run_22_mar_test_aaron_my_data"
+        run_folder = "run_22_mar_test"
         #run_folder_load = "run_22_mar_test_aaron_my_data"
         
     run_path = os.path.join(save_data_path, run_folder) 
@@ -279,7 +279,7 @@ def init_load():
         run_folder = "run_22_mar_oli_kfold_eval"
     elif aaron_or_oli == False:
         #run_folder = "run_22_mar_test_aaron_my_data"
-        run_folder = "run_22_mar_test_aaron_my_data"
+        run_folder = "run_22_mar_test"
         
     run_path = os.path.join(save_data_path, run_folder) 
     #try:  
