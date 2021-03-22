@@ -281,11 +281,11 @@ def init_load():
         #run_folder = "run_22_mar_test_aaron_my_data"
         run_folder_load = "run_22_mar_test_aaron_my_data"
         
-    run_path = os.path.join(save_data_path, run_folder) 
-    try:  
-        os.mkdir(run_path)  
-    except OSError as error:  
-            print(error) 
+    #run_path = os.path.join(save_data_path, run_folder) 
+    #try:  
+    #    os.mkdir(run_path)  
+    #except OSError as error:  
+    #        print(error) 
 
     epoch_load = input ("epoch to load in: ")
     folds_trained_with = 5
