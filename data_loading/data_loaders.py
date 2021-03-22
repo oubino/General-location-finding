@@ -188,7 +188,7 @@ if S.print_CT_check == True:
     """
     # print single image
     for i in range(len(dataset)):
-        if dataset.__getitem__(i)['patient'] == S.print_ct:
+        if dataset.__getitem__(i)['patient'] == S.ct_print:
             for landmark in S.landmarks:
                 structure = dataset.__getitem__(i)['structure'].squeeze(0)
                 locations = np.nonzero(np.round(structure) == landmark)
