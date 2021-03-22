@@ -9,8 +9,6 @@ import settings as S
 
 # UNET3D
 
-unet_feat = S.net_features
-
 class ConvUnit(nn.Module):
     """
         Convolution Unit: (Conv3D -> BatchNorm -> ReLu) * 2
