@@ -33,12 +33,12 @@ def com_structure_np(structure, landmark): # assumes 1 channel
   return coords, landmark_present 
 
 # paths
-aaron_folder = r'/home/rankinaaron98/data/Facial_asymmetry_aaron_common/Structures'
-oli_folder = r'/home/olive/data/oli_amends/Structures'
+aaron_folder = r'/home/rankinaaron98/data/Facial_asymmetry_aaron/Structures'
+oli_folder = r'/home/olive/data/Facial_asymmetry_oli/Structures'
 save_structure_folder = r'/home/olive/data/Facial_asymmetry_combined_ajlksdf/Structures'
 save_ct_folder = r'/home/olive/data/Facial_asymmetry_combined_ajkdsf/CTs'
-load_ct_folder = r'/home/olive/data/Facial_asymmetry_aaron_common/CTs'
-csv_root = r'/home/rankinaaron98/data/Facial_asymmetry_aaron_common/'
+load_ct_folder = r'/home/olive/data/Facial_asymmetry_oli/CTs'
+csv_root = r'/home/rankinaaron98/data/Facial_asymmetry_oli/'
 
 # landmarks
 landmarks = [1,2,3,4,5,6,7,8,9,10]
