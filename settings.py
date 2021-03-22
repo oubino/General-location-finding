@@ -262,7 +262,7 @@ def init_new():
 
 def init_load():
     # oli vs aaron settings 
-    #global epoch_batch, num_epoch_batches
+    global epoch_batch, num_epoch_batches
     global net_features, scnet_feat
     global run_path, run_folder
     global epoch_load, folds_trained_with, fold_load
@@ -270,7 +270,7 @@ def init_load():
     
     #epoch_batch = int(input ("Epoch batch: "))
     #num_epoch_batches = int(input ("Num epoch batch: "))
-    net_features = 32
+    net_features = 1
     scnet_feat = 64
     
     
