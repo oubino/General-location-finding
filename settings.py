@@ -273,7 +273,7 @@ def init_load():
     
     if aaron_or_oli == True:
         #run_folder = "run_22_mar_oli_kfold_eval"
-        run_folder = "run_22_mar_oli_kfold_eval"
+        run_folder = "run_19_mar_k_fold_aaron"
     elif aaron_or_oli == False:
         #run_folder = "run_22_mar_test_aaron_my_data"
         run_folder = "run_22_mar_test"
