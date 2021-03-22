@@ -257,14 +257,14 @@ def init_new():
         
     # create tensorboard writer
     tensor_folder = os.path.join(save_data_path, 'tensorboard')
-    tensorboard_loc = os.path.join(tensor_folder, '%s-%s' % (time_stamp,run_folder_load))
+    tensorboard_loc = os.path.join(tensor_folder, '%s-%s' % (time_stamp,run_folder))
     writer = SummaryWriter(tensorboard_loc) # may need to amend
 
 def init_load():
     # oli vs aaron settings 
     #global epoch_batch, num_epoch_batches
     global net_features, scnet_feat
-    global run_path, run_folder_load
+    global run_path, run_folder
     global epoch_load, folds_trained_with, fold_load
     global writer
     
@@ -276,12 +276,12 @@ def init_load():
     
     if aaron_or_oli == True:
         #run_folder = "run_22_mar_oli_kfold_eval"
-        run_folder_load = "run_22_mar_oli_kfold_eval"
+        run_folder = "run_22_mar_oli_kfold_eval"
     elif aaron_or_oli == False:
         #run_folder = "run_22_mar_test_aaron_my_data"
-        run_folder_load = "run_22_mar_test_aaron_my_data"
+        run_folder = "run_22_mar_test_aaron_my_data"
         
-    run_path = os.path.join(save_data_path, run_folder_load) 
+    run_path = os.path.join(save_data_path, run_folder) 
     #try:  
     #    os.mkdir(run_path)  
     #except OSError as error:  
@@ -293,7 +293,7 @@ def init_load():
     
     # create tensorboard writer
     tensor_folder = os.path.join(save_data_path, 'tensorboard')
-    tensorboard_loc = os.path.join(tensor_folder, '%s-%s' % (time_stamp,run_folder_load))
+    tensorboard_loc = os.path.join(tensor_folder, '%s-%s' % (time_stamp,run_folder))
     writer = SummaryWriter(tensorboard_loc) # may need to amend
     
     
