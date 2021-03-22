@@ -233,7 +233,7 @@ def init_new():
     # oli vs aaron settings 
     global epoch_batch, num_epoch_batches
     global net_features, scnet_feat
-    global run_path, run_folder, run_folder_load
+    global run_path, run_folder
     global epoch_load, folds_trained_with, fold_load
     global writer
     
@@ -244,10 +244,10 @@ def init_new():
     
     if aaron_or_oli == True:
         run_folder = "run_19_mar_k_fold_aaron"
-        run_folder_load = "run_19_mar_k_fold_aaron"
+        #run_folder_load = "run_19_mar_k_fold_aaron"
     elif aaron_or_oli == False:
         run_folder = "run_22_mar_test_aaron_my_data"
-        run_folder_load = "run_22_mar_test_aaron_my_data"
+        #run_folder_load = "run_22_mar_test_aaron_my_data"
         
     run_path = os.path.join(save_data_path, run_folder) 
     try:  
@@ -264,7 +264,7 @@ def init_load():
     # oli vs aaron settings 
     #global epoch_batch, num_epoch_batches
     global net_features, scnet_feat
-    global run_path, run_folder, run_folder_load
+    global run_path, run_folder_load
     global epoch_load, folds_trained_with, fold_load
     global writer
     
@@ -281,7 +281,7 @@ def init_load():
         #run_folder = "run_22_mar_test_aaron_my_data"
         run_folder_load = "run_22_mar_test_aaron_my_data"
         
-    #run_path = os.path.join(save_data_path, run_folder) 
+    run_path = os.path.join(save_data_path, run_folder_load) 
     #try:  
     #    os.mkdir(run_path)  
     #except OSError as error:  
