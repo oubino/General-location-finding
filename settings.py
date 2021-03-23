@@ -65,7 +65,7 @@ def init():
             elif combined_data == False:
                 # Aaron paths
                 coding_path = r'/home/rankinaaron98/General-location-finding'
-                root = r'/home/rankinaaron98/data/Facial_asymmetry_oli_common'
+                root = r'/home/rankinaaron98/data/Facial_asymmetry_aaron_common'
                 save_data_path = r'/home/rankinaaron98/data/results/Aaron'
         # load model path
     
