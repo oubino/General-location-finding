@@ -138,7 +138,7 @@ for j in range(len(list_1)):
 def histogram(data, coord, landmark):
     # plot and save histogram
     n, bins, patches = plt.hist(x=data, bins='auto', color='#0504aa',
-                            alpha=0.7)
+                            alpha=0.7, rwidth=0.85)
     plt.grid(axis='y', alpha=0.75)
     plt.xlabel('Deviation/mm')
     plt.ylabel('Frequency')
@@ -148,7 +148,8 @@ def histogram(data, coord, landmark):
     # Set a clean upper y-axis limit.
     plt.ylim(ymax=np.ceil(maxfreq / 10) * 10 if maxfreq % 10 else maxfreq + 10)
     hist_name = os.path.join(hist_root, "%s_dev_%1.0f" % (coord, k))
-    plt.xticks(bins)
+    x_tiks = np.linspace(-10,10,num = 21)
+    plt.xticks(x_tiks)
     plt.savefig(hist_name)
 
 # average deviation per landmark
