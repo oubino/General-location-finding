@@ -138,7 +138,7 @@ for j in range(len(list_1)):
 def histogram(data, coord, landmark):
     # plot and save histogram
     n, bins, patches = plt.hist(x=data, bins='auto', color='#0504aa',
-                            alpha=0.7, rwidth=0.85)
+                            alpha=0.7)
     plt.grid(axis='y', alpha=0.75)
     plt.xlabel('Deviation/mm')
     plt.ylabel('Frequency')

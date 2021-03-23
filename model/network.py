@@ -81,6 +81,7 @@ class UNet3d(nn.Module):
         self.enc2 = EncoderUnit(2 * s_channels, 4 * s_channels)
         self.enc3 = EncoderUnit(4 * s_channels, 8 * s_channels)
         self.enc4 = EncoderUnit(8 * s_channels, 8 * s_channels)
+        self.enc5 = EncoderUnit()
 
         self.dec1 = DecoderUnit(16 * s_channels, 4 * s_channels)
         self.dec2 = DecoderUnit(8 * s_channels, 2 * s_channels)
@@ -118,6 +119,8 @@ class Transfer_model(nn.Module):
         x3 = self.pre_trained[2](x2)
         x4 = self.pre_trained[3](x3)
         x5 = self.pre_trained[4](x4)
+        
+        # missing extra enc5 and dec5 added in 23/3/21 19:27
         
         x6 = self.pre_trained[5](x5,x4)
         x7 = self.pre_trained[6](x6, x3)
