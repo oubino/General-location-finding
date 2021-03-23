@@ -137,13 +137,13 @@ for j in range(len(list_1)):
             
 def histogram(data, coord, landmark):
     # plot and save histogram
-    data_list = list(data)
+    #data_list = list(data)
     print('data pre')
-    data = np.array(data_list)
+    data = np.array(data)
     print(data)
     print('data')
     data = np.sort(data)
-    data = data.flatten()
+    #data = data.flatten()
     print(data)
     print(data.shape)
     bins = np.arange(data.min(), data.max())
