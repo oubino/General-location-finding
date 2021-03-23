@@ -139,7 +139,7 @@ def histogram(data, coord, landmark):
     # plot and save histogram
     print('data')
     print(data)
-    data_list = list(data.items())
+    data_list = list(data)
     print('data list')
     print(data_list)
     print('python array')
