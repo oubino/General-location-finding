@@ -3,6 +3,7 @@ import os
 import math
 import csv
 from skimage.draw import line_nd
+import matplotlib.pyplot as plt
 
 
 def com_structure_np(structure, landmark): # assumes 1 channel
@@ -40,6 +41,8 @@ save_ct_folder = r'/home/olive/data/Facial_asymmetry_combined_ajkdsf/CTs'
 load_ct_folder = r'/home/olive/data/Facial_asymmetry_oli/CTs'
 csv_root = r'/home/rankinaaron98/data/Facial_asymmetry_oli/'
 
+hist_root = r'/home/olive/data/Compare/Histograms/'
+
 # landmarks
 landmarks = [1,2,3,4,5,6,7,8,9,10]
 
@@ -71,15 +74,27 @@ for i in list_1:
         com_list_oli['%1.0f' % k].append(com_structure_np(py_array_oli,k)[0])
         
 dev_list = {}
+dev_list_x = {}
+dev_list_y = {}
+dev_list_z = {}
 dev_upper_limit_list = {}
 mean_dev = {}
+mean_dev_x = {}
+mean_dev_y = {}
+mean_dev_z = {}
 mean_dev_std = {}
 mean_list = {}
 
 for k in landmarks:
     dev_list['%1.0f' % k] = []
+    dev_list_x['%1.0f' % k] = []
+    dev_list_y['%1.0f' % k] = []
+    dev_list_z['%1.0f' % k] = []
     dev_upper_limit_list['%1.0f' % k] = []
     mean_dev['%1.0f' % k] = []
+    mean_dev_x['%1.0f' % k] = []
+    mean_dev_y['%1.0f' % k] = []
+    mean_dev_z['%1.0f' % k] = [] 
     mean_dev_std['%1.0f' % k] = []
     mean_list['%1.0f' % k] = []
     
@@ -110,12 +125,30 @@ for j in range(len(list_1)):
         dev_z = abs(com_list_aaron['%1.0f' % k][j][0] - com_list_oli['%1.0f' % k][j][0])*(z_mm)
         dev = math.sqrt(dev_x**2 + dev_y**2 + dev_z**2)
         dev_list['%1.0f' % k].append(dev)
+        dev_list_x['%1.0f' % k].append(dev_x)
+        dev_list_y['%1.0f' % k].append(dev_y)
+        dev_list_z['%1.0f' % k].append(dev_z)
         if dev > limit:
             dev_upper_limit_list['%1.0f' % k].append(list_1[j])
             print('image: %s' % list_1[j])
             print('landmark: %1.0f' % k)
             print(dev)
             print('------------')
+            
+def histogram(data, coord, landmark):
+    # plot and save histogram
+    n, bins, patches = plt.hist(x=data, bins='auto', color='#0504aa',
+                            alpha=0.7, rwidth=0.85)
+    plt.grid(axis='y', alpha=0.75)
+    plt.xlabel('Value')
+    plt.ylabel('Frequency')
+    plt.title('Histogram')
+    #plt.text(23, 45, r'$\mu=15, b=3$')
+    maxfreq = n.max()
+    # Set a clean upper y-axis limit.
+    plt.ylim(ymax=np.ceil(maxfreq / 10) * 10 if maxfreq % 10 else maxfreq + 10)
+    hist_name = os.path.join(hist_root, "%s_dev_%1.0f" % (coord, k))
+    plt.savefig(hist_name)
 
 # average deviation per landmark
 for k in landmarks:
@@ -123,7 +156,22 @@ for k in landmarks:
     mean = np.mean(a)
     mean_dev['%1.0f' % k].append(mean)
     mean_dev_std['%1.0f' % k].append(np.std(a)*(len(list_1)**-0.5))
-
+    # for x y and z
+    x = dev_list_x['%1.0f' % k]
+    y = dev_list_y['%1.0f' % k]
+    z = dev_list_z['%1.0f' % k]
+    mean_x = np.mean(x)
+    mean_y = np.mean(y)
+    mean_z = np.mean(z)
+    mean_dev_x['%1.0f' % k].append(mean_x)
+    mean_dev_y['%1.0f' % k].append(mean_y)
+    mean_dev_z['%1.0f' % k].append(mean_z)
+    
+    # plot and save histogram
+    histogram(x, 'x', k)
+    histogram(y, 'y', k)
+    histogram(z, 'z', k)
+    
     
 # calculate mean of aaron and oli from arrays
 for j in range(len(list_1)):
@@ -201,4 +249,9 @@ print(mean_dev)
 # std of mean deviation per landmark
 print('std of mean deviation per landmark')
 print(mean_dev_std)
+
+print('x y z mean dev')
+print(mean_dev_x)
+print(mean_dev_y)
+print(mean_dev_z)
             
