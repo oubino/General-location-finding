@@ -139,6 +139,7 @@ def histogram(data, coord, landmark):
     # plot and save histogram
     data = np.array(data)
     data = np.sort(data)
+    plt.figure()
     n, bins, patches = plt.hist(x=data, bins='auto', color='#0504aa',
                             alpha=0.7)
     plt.grid(axis='y', alpha=0.75)
