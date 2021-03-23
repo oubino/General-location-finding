@@ -20,7 +20,7 @@ class initialise_model:
         
         # initialise model
         if S.UNET_model_user == True:
-            self.model = network.UNet3d(1,S.num_class, network.unet_feat)
+            self.model = network.UNet3d(1,S.num_class, S.net_features)
         else:
             self.model = network.SCNET(1, S.num_class, S.scnet_feat)
         self.model = self.model.to(S.device)

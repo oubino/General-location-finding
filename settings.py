@@ -71,8 +71,8 @@ def init():
     
         elif aaron_or_oli == False:           
             combined_data = yes_or_no.question('combined_data (y) / solo_data (n)')
-            sdk_oli = yes_or_no.question('are you accessing through: sdk (y)/google (n)')
-            if sdk_oli == True:
+            google_oli = yes_or_no.question('are you accessing through: sdk (n)/google (y)')
+            if google_oli == False:
                 if combined_data == True:         
                     # Oli paths
                     coding_path =  r'/home/olive/GitHub/General-location-finding' 
@@ -83,7 +83,7 @@ def init():
                     coding_path = r'/home/olive/GitHub/General-location-finding'
                     root = r'/home/olive/data/Facial_asymmetry_oli_common'
                     save_data_path = r'/home/olive/data/results/Oli'
-            elif sdk_oli == False:
+            elif google_oli == True:
                 # paths for oli through google
                 if combined_data == True:         
                     # google Oli paths
