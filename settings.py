@@ -65,7 +65,7 @@ def init():
             elif combined_data == False:
                 # Aaron paths
                 coding_path = r'/home/rankinaaron98/General-location-finding'
-                root = r'/home/rankinaaron98/data/Facial_asymmetry_aaron_common'
+                root = r'/home/rankinaaron98/data/Facial_asymmetry_oli_common'
                 save_data_path = r'/home/rankinaaron98/data/results/Aaron'
         # load model path
     
@@ -91,7 +91,7 @@ def init():
     print('Device working on: ')
     print(device)
         
-    change_batch_size = yes_or_no.question('Would you like to change batch size from default')
+    change_batch_size = yes_or_no.question('Would you like to change batch size from default(6): ')
     if change_batch_size == True:
         batch_size = int(input ("Batch size: "))
     else:
