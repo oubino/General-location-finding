@@ -151,8 +151,10 @@ def histogram(data, coord, landmark):
     # Set a clean upper y-axis limit.
     plt.ylim(ymax=np.ceil(maxfreq / 10) * 10 if maxfreq % 10 else maxfreq + 10)
     hist_name = os.path.join(hist_root, "%s_dev_%1.0f" % (coord, landmark))
-    #x_tiks = np.linspace(-10,10,num = 21)
-    #plt.xticks(x_tiks)
+    # set x lim to centre around 0
+    data_abs = abs(data)
+    max_val = data_abs.max()
+    plt.xlim(-max_val, max_val)  
     plt.savefig(hist_name)
 
 # average deviation per landmark
