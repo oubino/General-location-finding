@@ -306,6 +306,8 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
     
     for l in S.landmarks: # cycle over all landmarks
       
+      print('structure size')
+      print(structure.size()[0])
       for i in range(structure.size()[0]):
         
         structure_loc = functions.landmark_loc(structure, l)[0]
