@@ -112,7 +112,7 @@ def init():
     else:
         batch_size = 5
         
-    batch_size_test
+    batch_size_test = 1
     
     # specify landmarks + region want to train for
     
