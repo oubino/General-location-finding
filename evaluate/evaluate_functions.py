@@ -355,6 +355,9 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
 
     batch_number += 1 # not sure where to put
     
+    # try and free memory
+    torch.cuda.empty_cache()
+    
   print('\n')
   print('Results summary')    
   print('---------------')
