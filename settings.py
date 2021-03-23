@@ -109,7 +109,9 @@ def init():
     if change_batch_size == True:
         batch_size = int(input ("Batch size: "))
     else:
-        batch_size = 6
+        batch_size = 5
+        
+    batch_size_test
     
     # specify landmarks + region want to train for
     

@@ -50,7 +50,7 @@ def init(fold, train_ids, test_ids):
 
     dataloaders = {
     'train': DataLoader(dataset, batch_size=S.batch_size, sampler= train_subsampler),
-    'test': DataLoader(dataset, batch_size=S.batch_size, sampler= test_subsampler),
+    'test': DataLoader(dataset, batch_size=S.batch_size_test, sampler= test_subsampler),
     'val': DataLoader(dataset, batch_size=S.batch_size, sampler= val_subsampler)  
     }
     
@@ -76,7 +76,7 @@ def init_no_k_fold():
     dataloaders = {
         'train': DataLoader(train_set, batch_size=S.batch_size, shuffle=True, num_workers=0),
         'val': DataLoader(val_set, batch_size=S.batch_size, shuffle=True, num_workers=0),
-        'test': DataLoader(test_set,batch_size = S.batch_size, shuffle = False, num_workers=0)
+        'test': DataLoader(test_set,batch_size = S.batch_size_test, shuffle = False, num_workers=0)
     }
 
 def init_load_no_k_fold():
@@ -101,7 +101,7 @@ def init_load_no_k_fold():
     dataloaders = {
         'train': DataLoader(train_set, batch_size=S.batch_size, shuffle=True, num_workers=0),
         'val': DataLoader(val_set, batch_size=S.batch_size, shuffle=True, num_workers=0),
-        'test': DataLoader(test_set,batch_size = S.batch_size, shuffle = False, num_workers=0)
+        'test': DataLoader(test_set,batch_size = S.batch_size_test, shuffle = False, num_workers=0)
     }
     
 def init_load_k_fold(fold):
@@ -131,7 +131,7 @@ def init_load_k_fold(fold):
 
     dataloaders = {
     'train': DataLoader(dataset, batch_size=S.batch_size, sampler= train_subsampler),
-    'test': DataLoader(dataset, batch_size=S.batch_size, sampler= test_subsampler),
+    'test': DataLoader(dataset, batch_size=S.batch_size_test, sampler= test_subsampler),
     'val': DataLoader(dataset, batch_size=S.batch_size, sampler= val_subsampler)  
     }
     
@@ -148,7 +148,7 @@ def init_reserved_test_set():
     global dataloaders
     # Load data in
     dataloaders = {
-        'test': DataLoader(test_set,batch_size = S.batch_size, shuffle = False, num_workers=0)
+        'test': DataLoader(test_set,batch_size = S.batch_size_test, shuffle = False, num_workers=0)
     }
     
 
