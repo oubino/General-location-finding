@@ -120,9 +120,9 @@ def pixel_to_mm(patient):
 for j in range(len(list_1)):
     for k in landmarks:
         x_mm, y_mm, z_mm = pixel_to_mm(list_1[j])
-        dev_x = com_list_aaron['%1.0f' % k][j][2] - com_list_oli['%1.0f' % k][j][2]*(x_mm)
-        dev_y = com_list_aaron['%1.0f' % k][j][1] - com_list_oli['%1.0f' % k][j][1]*(y_mm)
-        dev_z = com_list_aaron['%1.0f' % k][j][0] - com_list_oli['%1.0f' % k][j][0]*(z_mm)
+        dev_x = (com_list_aaron['%1.0f' % k][j][2] - com_list_oli['%1.0f' % k][j][2])*(x_mm)
+        dev_y = (com_list_aaron['%1.0f' % k][j][1] - com_list_oli['%1.0f' % k][j][1])*(y_mm)
+        dev_z = (com_list_aaron['%1.0f' % k][j][0] - com_list_oli['%1.0f' % k][j][0])*(z_mm)
         dev = math.sqrt(abs(dev_x)**2 + abs(dev_y)**2 + abs(dev_z)**2)
         dev_list['%1.0f' % k].append(dev)
         dev_list_x['%1.0f' % k].append(dev_x)
@@ -140,9 +140,9 @@ def histogram(data, coord, landmark):
     n, bins, patches = plt.hist(x=data, bins='auto', color='#0504aa',
                             alpha=0.7, rwidth=0.85)
     plt.grid(axis='y', alpha=0.75)
-    plt.xlabel('Value')
+    plt.xlabel('Deviation/mm')
     plt.ylabel('Frequency')
-    plt.title('Histogram')
+    plt.title("%s deviation for landmark %1.0f" % (coord, k))
     #plt.text(23, 45, r'$\mu=15, b=3$')
     maxfreq = n.max()
     # Set a clean upper y-axis limit.
