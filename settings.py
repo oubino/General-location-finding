@@ -35,6 +35,7 @@ def init():
     global aaron_or_oli
     global ct_print
     global k_fold_ids
+    global batch_size_test
 
          
     # paths
@@ -105,7 +106,7 @@ def init():
     print('Device working on: ')
     print(device)
         
-    change_batch_size = yes_or_no.question('Would you like to change batch size from default(6): ')
+    change_batch_size = yes_or_no.question('Would you like to change batch size from default(5): ')
     if change_batch_size == True:
         batch_size = int(input ("Batch size: "))
     else:
