@@ -148,6 +148,7 @@ def histogram(data, coord, landmark):
     # Set a clean upper y-axis limit.
     plt.ylim(ymax=np.ceil(maxfreq / 10) * 10 if maxfreq % 10 else maxfreq + 10)
     hist_name = os.path.join(hist_root, "%s_dev_%1.0f" % (coord, k))
+    plt.xticks(bins)
     plt.savefig(hist_name)
 
 # average deviation per landmark
@@ -241,17 +242,27 @@ for i in list_1:
 # for each landmark, list of the images with deviations greater than ceratin distance
 print('for each landmark, list of the images with deviations greater than certain distance')
 print(dev_upper_limit_list)
+print('\n')
             
 # mean deviation per landmark
 print('mean deviation per landmark')
 print(mean_dev)
+print('\n')
 
 # std of mean deviation per landmark
 print('std of mean deviation per landmark')
 print(mean_dev_std)
+print('\n')
 
-print('x y z mean dev')
+print('x mean dev')
 print(mean_dev_x)
+print('\n')
+
+print('y mean dev')
 print(mean_dev_y)
+print('\n')
+
+print('z mean dev')
 print(mean_dev_z)
+print('\n')
             
