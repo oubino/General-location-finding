@@ -145,6 +145,10 @@ def histogram(data, coord, landmark):
     print('python array')
     data = np.array(data_list)
     print(data)
+    print('data')
+    np.sort(data)
+    print(data)
+    print(data.shape)
     bins = np.arange(data.min(), data.max())
     n, bins, patches = plt.hist(x=data, bins=bins, color='#0504aa',
                             alpha=0.7)

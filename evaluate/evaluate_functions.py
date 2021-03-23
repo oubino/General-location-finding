@@ -306,8 +306,6 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
     
     for l in S.landmarks: # cycle over all landmarks
       
-      print('structure size')
-      print(structure.size()[0])
       for i in range(structure.size()[0]):
         
         structure_loc = functions.landmark_loc(structure, l)[0]
@@ -355,13 +353,8 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
           if img_landmark_point_to_point > 20:
             outliers_landmarks[l] = np.append(outliers_landmarks[l],1)
             
-          print('here 1')
 
     batch_number += 1 # not sure where to put
-    
-    # try and free memory
-    print('here')
-    #torch.cuda.empty_cache()
     
   print('\n')
   print('Results summary')    
