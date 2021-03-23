@@ -266,3 +266,4 @@ print('z mean dev')
 print(mean_dev_z)
 print('\n')
             
+print(' deviations are AARON - OLI')
