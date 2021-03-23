@@ -137,7 +137,7 @@ for j in range(len(list_1)):
             
 def histogram(data, coord, landmark):
     # plot and save histogram
-    bins = np.arange(data.values.min(), data.values.max())
+    bins = np.arange(data.min(), data.max())
     n, bins, patches = plt.hist(x=data, bins=bins, color='#0504aa',
                             alpha=0.7)
     plt.grid(axis='y', alpha=0.75)
