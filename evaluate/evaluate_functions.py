@@ -361,7 +361,7 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
     
     # try and free memory
     print('here')
-    torch.cuda.empty_cache()
+    #torch.cuda.empty_cache()
     
   print('\n')
   print('Results summary')    

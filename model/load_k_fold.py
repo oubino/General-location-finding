@@ -46,11 +46,17 @@ def init(fold):
             print('\n')
             print('Evaluating model')
             print('----------------')
+        batch_size_original = settings.batch_size
+        settings.batch_size = 1
         model.evaluate_post_train(fold)
+        settings.batch_size = batch_size_original
     elif train_decision == False:
         print('\n')
         print('Evaluating model')
         print('----------------')
+        batch_size_original = settings.batch_size
+        settings.batch_size = 1
         model.evaluate_pre_train(fold)
+        settings.batch_size = batch_size_original
     print('error counter')
     print(settings.error_counter)
