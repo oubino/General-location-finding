@@ -259,6 +259,10 @@ if save_images == True:
             x_oli = int(com_list_oli['%1.0f' % k][index][2]) 
             line = line_nd((z_aaron, y_aaron, x_aaron), (z_oli, y_oli, x_oli), endpoint=True)
             structure[line] = k
+            print('line')
+            print(line)
+            print('line +1')
+            print(line+1)
         # save image
         np.save(os.path.join(save_structure_folder,i), structure)
         # save ct
