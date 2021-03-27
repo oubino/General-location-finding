@@ -77,7 +77,7 @@ def init():
                 if combined_data == True:         
                     # Oli paths
                     coding_path =  r'/home/olive/GitHub/General-location-finding' 
-                    root = r'/home/olive/data/Facial_asymmetry_combined' 
+                    root = r'/home/olive/data/Facial_asymmetry_combined_line' 
                     save_data_path =  r'/home/olive/data/results/Oli'
                 elif combined_data == False:   
                     # Oli paths
@@ -89,7 +89,7 @@ def init():
                 if combined_data == True:         
                     # google Oli paths
                     coding_path = r'/home/oliver_umney/GitHub/General-location-finding'
-                    root = r'/home/oliver_umney/data/Facial_asymmetry_combined'
+                    root = r'/home/oliver_umney/data/Facial_asymmetry_combined_line'
                     save_data_path =  r'/home/oliver_umney/data/results/oliver_umney_web' 
                 elif combined_data == False:   
                     # google Oli paths
@@ -239,7 +239,7 @@ def init_new():
         run_folder = "run_19_mar_k_fold_aaron"
         #run_folder_load = "run_19_mar_k_fold_aaron"
     elif aaron_or_oli == False:
-        run_folder = "run_23_mar_no_extra_enc_dec_combined_dataset"
+        run_folder = "run_27_mar_train_line"
         #run_folder_load = "run_22_mar_test_aaron_my_data"
         
     run_path = os.path.join(save_data_path, run_folder) 
