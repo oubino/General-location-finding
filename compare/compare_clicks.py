@@ -260,14 +260,18 @@ if save_images == True:
             line = line_nd((z_aaron, y_aaron, x_aaron), (z_oli, y_oli, x_oli), endpoint=True)
             # make line thicker
             line_mod = line
-            for a in range(3):
-               for b in range(3):
-                   for c in range(3):
-                       x = np.concatenate((line_mod[2],line[2] + a - 1))
-                       y = np.concatenate((line_mod[1],line[1] + b - 1))
-                       z = np.concatenate((line_mod[0],line[0] + c - 1))
-                       line_mod = (z,y,x)
+            for a in range(5):
+               for b in range(5):
+                   for c in range(5):
+                       x = np.concatenate((line_mod[2],line[2] + a - 2))
+                       y = np.concatenate((line_mod[1],line[1] + b - 2))
+                       z = np.concatenate((line_mod[0],line[0] + c - 2))
+                       line_mod = (z,y,x)                     
             # clip array
+            #x = [ (line_mod[2] < py_array_load.shape[2]) & (line_mod[2] > 0 ]
+            #y = [(line_mod[1] < py_array_load.shape[1]) & (line_mod[1] > 0 ] 
+            #z = [(line_mod[0] < py_array_load.shape[0]) & (line_mod[0] > 0 ]
+            #line_mod = (z,y,x)
             #line_mod[0] = np.clip(line_mod[0], )
             structure[line_mod] = k
         # save image

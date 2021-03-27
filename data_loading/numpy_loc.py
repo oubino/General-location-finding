@@ -119,6 +119,8 @@ def line_structure_np(structure, landmark, patient): # assumes 1 channel
     y = locations[1][index]
     z = locations[0][index]
   coords = [int(x),int(y),int(z)]
+  print('coords')
+  print(coords)
   return coords, landmark_present, coords
 
 

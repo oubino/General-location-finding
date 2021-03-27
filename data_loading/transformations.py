@@ -229,8 +229,15 @@ class ToTensor(object):
             # need it in y, x, z                
             x, y, z = int(coords[l][0]), int(coords[l][1]), int(coords[l][2])
             # if z is 80 round to 79
-            if z == 80:
+            if z > 80:
+                print('z bigger than 80')
                 z = 79
+            if y > 120:
+                print('y bigger than 80')
+                 y = 119
+            if x > 120:
+                print('x bigger than 80')
+                x = 119
             structure[z][y][x] = l
         # swap color axis because
         # numpy image: D x H x W 
