@@ -3,9 +3,15 @@ import os
 import math
 import csv
 from skimage.draw import line_nd
-from useful_functs import yes_or_no
 import matplotlib.pyplot as plt
 
+def question(question):
+    while "the answer is invalid":
+        reply = str(input(question+' (y/n): ')).lower().strip()
+        if reply[:1] == 'y':
+            return True
+        if reply[:1] == 'n':
+            return False
 
 def com_structure_np(structure, landmark): # assumes 1 channel
   # structure is (D x H x W)
@@ -137,9 +143,9 @@ for k in landmarks:
     mean_list['%1.0f' % k] = []
     
 
-save_images = yes_or_no.question('save images(y) / or not (n)')
-plot_histograms = yes_or_no.question('histograms(y) / or not (n)')
-calc_deviations = yes_or_no.question('calc deviations(y) / or not (n)')
+save_images = question('save images(y) / or not (n)')
+plot_histograms = question('histograms(y) / or not (n)')
+calc_deviations = question('calc deviations(y) / or not (n)')
 
 # for common structures add mean to array for both aaron and oli
 for i in list_1:
