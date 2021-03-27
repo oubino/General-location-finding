@@ -8,6 +8,8 @@ def landmark_loc_np(locat, structure, landmark, patient):
         return top_structure_np(structure,landmark, patient)
     elif locat == 'bot':
         return bot_structure_np(structure,landmark, patient)
+    elif locat == 'line':
+        return line_structure_np(structure, landmark, patient)
         
 def com_structure_np(structure, landmark, patient): # assumes 1 channel
   # structure is (D x H x W)
@@ -110,6 +112,6 @@ def line_structure_np(structure, landmark, patient): # assumes 1 channel
     y = locations[1][index]
     z = locations[0][index]
   coords = [int(x),int(y),int(z)]
-  return coords, landmark_present 
+  return coords, landmark_present, coords
 
 
