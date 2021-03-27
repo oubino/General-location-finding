@@ -107,7 +107,11 @@ def line_structure_np(structure, landmark, patient): # assumes 1 channel
   else:
     landmark_present.append(True)  
     # generate random number in range
-    index = random.randint(0, locations.size()[1]) # could be len[locations[1]]
+    print('locations')
+    print(locations)
+    print('len')
+    print(len(locations[0]))
+    index = random.randint(0, len(locations[0])) # could be len[locations[1]]
     # trying to generate random number in range of the total number of locations where it equals the landmark
     # i.e. if 5 points are found 
     # generate random number between 0 and 5
