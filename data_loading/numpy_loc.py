@@ -1,7 +1,7 @@
 import numpy as np
 import random
 
-def landmark_loc_np(locat, structure, landmark, patient):
+def landmark_loc_np(locat, structure, landmark, patient, test):
     if locat == 'com':
         return com_structure_np(structure,landmark, patient)
     elif locat == 'top':
@@ -9,7 +9,10 @@ def landmark_loc_np(locat, structure, landmark, patient):
     elif locat == 'bot':
         return bot_structure_np(structure,landmark, patient)
     elif locat == 'line':
-        return line_structure_np(structure, landmark, patient)
+        if test == False:
+            return line_structure_np(structure, landmark, patient)
+        elif test == True:
+            return com_structure_np(structure,landmark, patient)
         
 def com_structure_np(structure, landmark, patient): # assumes 1 channel
   # structure is (D x H x W)

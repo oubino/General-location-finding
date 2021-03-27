@@ -120,7 +120,7 @@ def init():
     #landmarks_loc = {1:'com',2:'com', 3: 'com', 5:'com', 7:'com', 9:'com'} 
     
     landmarks = [1,2,3,4,5,6,7,8,9,10]
-    landmarks_loc = {1:'com',2:'com', 3: 'com',4:'com', 5:'com',6:'com', 7:'com',8:'com', 9:'com',10:'com', } 
+    landmarks_loc = {1:'line',2:'line', 3: 'line',4:'line', 5:'line',6:'line', 7:'line',8:'line', 9:'line',10:'line', } 
     num_class = len(landmarks)
     
     # specify all structures which are actually in image
@@ -128,7 +128,7 @@ def init():
     # structures near the top which can be used for flipping
     # "AMl", "AMr","HMl", "HMr", "FZl", "FZr", "FNl", "FNr", "SOl", "SOr"
     landmarks_total = [1,2,3,4,5,6,7,8,9,10]
-    landmarks_total_loc = {1:'com', 2:'com', 3: 'com', 4:'com', 5:'com',6:'com', 7: 'com',8:'com', 9:'com',10:'com', } 
+    landmarks_total_loc = {1:'line', 2:'line', 3: 'line', 4:'line', 5:'line',6:'line', 7: 'line',8:'line', 9:'line',10:'line', } 
     top_structures = [5,6]
     bot_structures = [1,2]
     # L/R structures
@@ -272,7 +272,7 @@ def init_load():
     
     # specify landmarks + region was trained on (iff loading in model)
     landmarks_load = [1,2,3,4,5,6,7,8,9,10] # brainstem # not general
-    landmarks_load_loc = {1:'com',2:'com', 3: 'com',4:'com', 5:'com',6:'com', 7: 'com',8:'com',9:'com',10:'com', }
+    landmarks_load_loc = {1:'line',2:'line', 3: 'line',4:'line', 5:'line',6:'line', 7: 'line',8:'line',9:'line',10:'line', }
 
     #landmarks_load = [1,3,5,7,9] # brainstem # not general
     #landmarks_load_loc = {1:'com', 3: 'com', 5:'com', 7: 'com', 9:'com', }

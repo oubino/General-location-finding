@@ -102,14 +102,18 @@ class Fix_base_value(object):
   
 class Extract_landmark_location(object):
     """ Convert structure to tensor of zeros with one value at the desired landmark location """
+    def __init__(self, test):
+        self.test = test
     
     def __call__(self,sample):
         image, structure, idx, patient, coordinates = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords']
         structure_mod = np.zeros(structure.shape)
+        
         for l in S.landmarks_total:
             # structure is z, y, x
             # need it in y, x, z
-            coords = numpy_loc.landmark_loc_np(S.landmarks_total_loc[l],structure,l, patient)[0]
+            # if train then returns point on line, if test returns COM of line (halfway between Aaron and Oli)
+            coords = numpy_loc.landmark_loc_np(S.landmarks_total_loc[l],structure,l, patient, self.test)[0]
             if sum(coords) != 0 :
                 x, y, z = coords[0], coords[1], coords[2]
                 structure_mod[z][y][x] = l
@@ -118,14 +122,16 @@ class Extract_landmark_location(object):
     
 class Check_landmark_still_there(object):
     """ Check landmark still present during transformations """
-    def __init__(self, location):
+    def __init__(self, location, test):
         self.location = location
+        self.test = test
     def __call__(self, sample):
         image, structure, idx, patient, coordinates = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords']
         for l in S.landmarks_total:
             # structure is z, y, x
             # need it in y, x, z
-            coords = numpy_loc.landmark_loc_np(S.landmarks_total_loc[l],structure,l, patient)[0]
+            # the false at the end doesn't really matter here
+            coords = numpy_loc.landmark_loc_np(S.landmarks_total_loc[l],structure,l, patient, self.test)[0]
             #if sum(coords) != 0:
             #    print('coordinates from rotation normal for')
             #    print(l)
