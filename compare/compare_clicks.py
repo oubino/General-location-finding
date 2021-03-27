@@ -256,8 +256,14 @@ if save_images == True:
             x_aaron = int(com_list_aaron['%1.0f' % k][index][2])
             z_oli = int(com_list_oli['%1.0f' % k][index][0])
             y_oli = int(com_list_oli['%1.0f' % k][index][1])
-            x_oli = int(com_list_oli['%1.0f' % k][index][2])          
+            x_oli = int(com_list_oli['%1.0f' % k][index][2]) 
+            print('oli')
+            print(x_oli, y_oli, z_oli)
+            print('aaron')
+            print(x_aaron, y_aaron, z_aaron)
             line = line_nd((z_aaron, y_aaron, x_aaron), (z_oli, y_oli, x_oli), endpoint=True)
+            print('line')
+            print(line)
             structure[line] = k
         # save image
         np.save(os.path.join(save_structure_folder,i), structure)
