@@ -263,10 +263,12 @@ if save_images == True:
             for a in range(3):
                for b in range(3):
                    for c in range(3):
-                       x = np.concatenate((line_mod[0],line[0] + a - 1))
+                       x = np.concatenate((line_mod[2],line[2] + a - 1))
                        y = np.concatenate((line_mod[1],line[1] + b - 1))
-                       z = np.concatenate((line_mod[2],line[2] + c - 1))
+                       z = np.concatenate((line_mod[0],line[0] + c - 1))
                        line_mod = (x,y,z)
+            # clip array
+            #line_mod[0] = np.clip(line_mod[0], )
             structure[line_mod] = k
         # save image
         np.save(os.path.join(save_structure_folder,i), structure)
