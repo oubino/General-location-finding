@@ -258,11 +258,16 @@ if save_images == True:
             y_oli = int(com_list_oli['%1.0f' % k][index][1])
             x_oli = int(com_list_oli['%1.0f' % k][index][2]) 
             line = line_nd((z_aaron, y_aaron, x_aaron), (z_oli, y_oli, x_oli), endpoint=True)
-            structure[line] = k
-            print('line')
-            print(line)
-            print('line +1')
-            print(line+1)
+            # make line thicker
+            line_mod = line
+            for a in range(3):
+               for b in range(3):
+                   for c in range(3):
+                       x = np.concatenate((line_mod[0],line[0] + a - 1))
+                       y = np.concatenate((line_mod[1],line[1] + b - 1))
+                       z = np.concatenate((line_mod[2],line[2] + c - 1))
+                       line_mod = (x,y,z)
+            structure[line_mod] = k
         # save image
         np.save(os.path.join(save_structure_folder,i), structure)
         # save ct
