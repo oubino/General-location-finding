@@ -266,7 +266,7 @@ if save_images == True:
                        x = np.concatenate((line_mod[2],line[2] + a - 1))
                        y = np.concatenate((line_mod[1],line[1] + b - 1))
                        z = np.concatenate((line_mod[0],line[0] + c - 1))
-                       line_mod = (x,y,z)
+                       line_mod = (z,y,x)
             # clip array
             #line_mod[0] = np.clip(line_mod[0], )
             structure[line_mod] = k
