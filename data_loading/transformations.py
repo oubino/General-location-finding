@@ -234,7 +234,7 @@ class ToTensor(object):
                 z = 79
             if y > 120:
                 print('y bigger than 80')
-                 y = 119
+                y = 119
             if x > 120:
                 print('x bigger than 80')
                 x = 119
