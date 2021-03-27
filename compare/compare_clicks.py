@@ -37,7 +37,7 @@ def com_structure_np(structure, landmark): # assumes 1 channel
     x_com /= len(locations[0])
     y_com /= len(locations[0])
     z_com /= len(locations[0])
-  coords = [int(x_com),int(y_com),int(z_com)]
+  coords = [int(z_com),int(y_com),int(x_com)]
   return coords, landmark_present 
 
 def pixel_to_mm(patient):
