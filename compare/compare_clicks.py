@@ -83,6 +83,17 @@ csv_root = r'/home/rankinaaron98/data/Facial_asymmetry_oli/'
 
 hist_root = r'/home/olive/data/Compare/Histograms/'
 
+# make folders
+try:  
+    os.mkdir(save_structure_folder)  
+except OSError as error:  
+    print(error) 
+    
+try:  
+    os.mkdir(save_ct_folder)  
+except OSError as error:  
+    print(error) 
+
 # landmarks
 landmarks = [1,2,3,4,5,6,7,8,9,10]
 
