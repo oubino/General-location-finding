@@ -267,7 +267,10 @@ if save_images == True:
                        y = np.concatenate((line_mod[1],line[1] + b - 2))
                        z = np.concatenate((line_mod[0],line[0] + c - 2))
                        line_mod = (z,y,x)                     
-            # clip array
+            # clip line between x,y,z
+            line_mod[0] = np.clip(line_mod[0],min(z_aaron,z_oli), max(z_aaron,z_oli)) # clip z values between min and max of aaron/oli
+            line_mod[1] = np.clip(line_mod[1],min(y_aaron,y_oli), max(y_aaron,y_oli))
+            line_mod[2] = np.clip(line_mod[2],min(x_aaron,x_oli), max(x_aaron,x_oli))
             #x = [ (line_mod[2] < py_array_load.shape[2]) & (line_mod[2] > 0 ]
             #y = [(line_mod[1] < py_array_load.shape[1]) & (line_mod[1] > 0 ] 
             #z = [(line_mod[0] < py_array_load.shape[0]) & (line_mod[0] > 0 ]
