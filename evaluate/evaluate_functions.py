@@ -395,3 +395,126 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
         writer.writerow(['%s' % S.run_folder, '%s' % epochs_completed_string, 'Landmark %1.0f' % l, 
              str(mean), str(std_mean),str(median),str(outliers_perc) + '%', sigma_string.replace("\n", " "), time.strftime("%Y%m%d-%H%M%S"), 'pred max used = %s' % S.pred_max])
        
+def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold, clicker, images, preds): 
+  # so can print out test ids for each fold at end
+  S.k_fold_ids.append(data_loaders.print_ids)
+  # create directory for this eval
+  epochs_completed_string = str(epochs_completed)
+  file_name = "eval_" + epochs_completed_string + functions.string(fold) + clicker
+  eval_path = os.path.join(S.run_path, file_name) # directory labelled with epochs_completed
+  try: 
+      os.mkdir(eval_path)
+  except OSError as error:
+      print(error)
+      
+  p2p_landmarks = defaultdict(float)
+  outliers_landmarks = defaultdict(float)
+  for l in S.landmarks:
+    p2p_landmarks[l] = np.empty((0), float)
+    outliers_landmarks[l] = np.empty((0), float)
+    
+  counter = 0
+  for batch in data_loaders.dataloaders['test']:
+    structure = batch['structure'].to(S.device)
+    patient = batch['patient']
+    image = images[counter]
+    pred = preds[counter]
+    counter += 1
+    
+  
+    batch_number = 0
+    
+    for l in S.landmarks: # cycle over all landmarks
+      
+      for i in range(structure.size()[0]):
+        
+        structure_loc = functions.landmark_loc(structure, l)[0]
+        #structure_com = functions.com_structure(structure, l)[0]# [0] ensures extracts coords rather than True/False
+        # change to top structure
+        #if functions.com_structure(structure,1)[1][i] == True:
+
+        if functions.landmark_loc(structure,l)[1][i] == True:
+        # change to top structure
+          dimension = 3
+          height_guess = ((gamma) * (2*np.pi)**(-dimension/2) * sigmas[l].item() ** (-dimension)) 
+          
+          if S.pred_max == True:
+              pred_coords_max = functions.pred_max(pred, l, S.landmarks) # change to gauss fit
+          else:
+              pred_coords_max = functions.gauss_max(pred,l,height_guess,sigmas[l].item(), S.in_x, S.in_y, S.in_z, S.landmarks)  
+
+          #print(pred.shape)
+          
+          structure_max_x, structure_max_y, structure_max_z = structure_loc[i][0],structure_loc[i][1], structure_loc[i][2] 
+          pred_max_x, pred_max_y, pred_max_z =  pred_coords_max[i][0], pred_coords_max[i][1], pred_coords_max[i][2] 
+          
+          print('predicted x,y,z (check consistnetn)')
+          print(pred_max_x, pred_max_y, pred_max_z)
+
+
+          # print out 3D images for first one in batch
+          if batch_number == 0 and i == 0: # for first batch 
+            # now need to choose first in batch i.e. # image[0]
+            #print('3D plots for landmark %1.0f' % l)
+            #print_3D_heatmap(image[i], structure[i], pred[i], l, eval_path, patient[i])
+            #print_3D_gauss_heatmap(image[i], structure_max_x, structure_max_y, structure_max_z, pred[i], l, sigmas[l], eval_path, patient[i])
+            print('\n')
+            print('Structure LOC for landmark %1.0f:' % l)
+            print(structure_max_x, structure_max_y, structure_max_z)
+            print('Predicted LOC for landmark %1.0f:' % l)
+            print(pred_max_x, pred_max_y, pred_max_z)
+            print('\n')
+            # print 2D slice
+            print('2D slice for landmark %1.0f' % l)
+            print_2D_slice(image[i], structure[i], pred[i], l, pred_max_z, eval_path, patient[i])
+            
+
+          #img_landmark_point_to_point = point_to_point(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z)
+          img_landmark_point_to_point = functions.point_to_point_mm(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z, patient)
+          p2p_landmarks[l] = np.append(p2p_landmarks[l],img_landmark_point_to_point.cpu())
+          # if img_point_to_point > 20mm is an outlier
+          if img_landmark_point_to_point > 20:
+            outliers_landmarks[l] = np.append(outliers_landmarks[l],1)
+            
+
+    batch_number += 1 # not sure where to put
+    
+  print('\n')
+  print('Results summary')    
+  print('---------------')
+  
+  for l in S.landmarks:
+    print('\n')
+    print('Landmark %1.0f' % l)
+    mean = np.mean(p2p_landmarks[l])
+    std_mean = np.std(p2p_landmarks[l],ddof =1)*(len(p2p_landmarks[l]))**-0.5
+    median = np.median(p2p_landmarks[l])
+    outliers_perc = outliers_landmarks[l].sum()/len(p2p_landmarks[l]) * 100
+    print('    mean point to point error is ' + str(mean) + '+/-' + str(std_mean))
+    print('    median point to point error is ' + str(median))
+    print('    percentage of images which were outliers is ' + str(outliers_perc) + '%')
+    print('    sigma is ' + str(sigmas[l]))
+    print('    trained for ' + str(epochs_completed) + ' epochs')
+    print('    pred max used = %s' % S.pred_max)
+    print('\n')
+  
+    name_of_file = os.path.join(eval_path, "results.txt")
+    file = open(name_of_file, "a")
+    L = ['\n','Landmark %1.0f' % l, '\n', 
+         '  mean point to point error is ' + str(mean) + '+/-' + str(std_mean), '\n',
+         '  median point to point error is ' + str(median), '\n', 
+         '  percentage of images which were outliers is ' + str(outliers_perc) + '%', '\n',
+         '  sigma is ' + str(sigmas[l]), '\n', 
+         '  pred max used = ' + str(S.pred_max), '\n',
+         '  trained for ' + str(epochs_completed) + ' epochs\n']
+    file.writelines(L)
+    file.close()
+    
+    # add to csv file
+    csv_name = os.path.join(S.save_data_path, 'results_summary.csv')
+    with open(csv_name, 'a', newline = '') as file:
+        writer = csv.writer(file)
+        sigma_string = str(sigmas[l])
+        writer.writerow(['%s' % S.run_folder, '%s' % epochs_completed_string, 'Landmark %1.0f' % l, 
+             str(mean), str(std_mean),str(median),str(outliers_perc) + '%', sigma_string.replace("\n", " "), time.strftime("%Y%m%d-%H%M%S"), 'pred max used = %s' % S.pred_max])
+       

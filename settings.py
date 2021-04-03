@@ -311,6 +311,61 @@ def init_load():
     tensorboard_loc = os.path.join(tensor_folder, '%s-%s' % (time_stamp,run_folder))
     writer = SummaryWriter(tensorboard_loc) # may need to amend
     
+def init_load_eval_line():
+    # oli vs aaron settings 
+    global epoch_batch, num_epoch_batches
+    global net_features, scnet_feat
+    global run_path, run_folder
+    global epoch_load, folds_trained_with, fold_load
+    global writer
+    global landmarks_load, landmarks_load_loc
+    global num_class_load, net_features_load, scnet_feat_load, sigmas_load
+
+    net_features_load = 32
+    scnet_feat_load = 64
+    
+    # needed for transfer learning 
+    
+    # ---- begin -----
+    
+    # specify landmarks + region was trained on (iff loading in model)
+    landmarks_load = [1,2,3,4,5,6,7,8,9,10] # brainstem # not general
+    # think if put 'line' or 'com' makes no difference - should only eval using COM
+    landmarks_load_loc = {1:'line',2:'line', 3: 'line',4:'line', 5:'line',6:'line', 7: 'line',8:'line',9:'line',10:'line', }
+
+    #landmarks_load = [1,3,5,7,9] # brainstem # not general
+    #landmarks_load_loc = {1:'com', 3: 'com', 5:'com', 7: 'com', 9:'com', }
+    
+    num_class_load = len(landmarks_load)
+    
+    sigmas_load = {} # sigma per landmark
+    for k in landmarks_load:
+      sigmas_load[k] = nn.Parameter(torch.tensor([20.]).to(device))# device = 'cuda'))#.to(device) # what value to initialise sigma
+      sigmas_load[k].requires_grad = True
+      #print(sigmas[k])
+    
+    # ----- end -----
+    
+    
+    if aaron_or_oli == True:
+        run_folder = "run_eval_line"
+    elif aaron_or_oli == False:
+        run_folder = "run_eval_line"
+        
+    run_path = os.path.join(save_data_path, run_folder) 
+    #try:  
+    #    os.mkdir(run_path)  
+    #except OSError as error:  
+    #        print(error) 
+
+    epoch_load = input ("epoch to load in: ")
+    folds_trained_with = 5
+    
+    # create tensorboard writer
+    tensor_folder = os.path.join(save_data_path, 'tensorboard')
+    tensorboard_loc = os.path.join(tensor_folder, '%s-%s' % (time_stamp,run_folder))
+    writer = SummaryWriter(tensorboard_loc) # may need to amend
+    
     
     
     
