@@ -88,7 +88,7 @@ def init():
                 if combined_data == True:         
                     # google Oli paths
                     coding_path = r'/home/oliver_umney/GitHub/General-location-finding'
-                    root = r'/home/oliver_umney/data/Facial_asymmetry_combined_line'
+                    root = r'/home/oliver_umney/data/Facial_asymmetry_combined'
                     save_data_path =  r'/home/oliver_umney/data/results/oliver_umney_web' 
                 elif combined_data == False:   
                     # google Oli paths
