@@ -144,8 +144,8 @@ def init():
     
       
     # input dimensions
-    in_x = 256
-    in_y = 256 
+    in_x = 192
+    in_y = 192 
     in_z = 80
     
     # learning params
