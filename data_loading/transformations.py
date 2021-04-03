@@ -104,7 +104,10 @@ class Extract_landmark_location(object):
     """ Convert structure to tensor of zeros with one value at the desired landmark location """
     def __init__(self, test):
         self.test = test
-    
+        # test is only used if training on line!
+        # if train then returns point on line, if test returns COM of line (halfway between Aaron and Oli)
+        # see numpy_loc.py/landmark_loc_np
+
     def __call__(self,sample):
         image, structure, idx, patient, coordinates = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords']
         structure_mod = np.zeros(structure.shape)
@@ -112,7 +115,6 @@ class Extract_landmark_location(object):
         for l in S.landmarks_total:
             # structure is z, y, x
             # need it in y, x, z
-            # if train then returns point on line, if test returns COM of line (halfway between Aaron and Oli)
             coords = numpy_loc.landmark_loc_np(S.landmarks_total_loc[l],structure,l, patient, self.test)[0]
             if sum(coords) != 0 :
                 x, y, z = coords[0], coords[1], coords[2]
@@ -230,13 +232,13 @@ class ToTensor(object):
             x, y, z = int(coords[l][0]), int(coords[l][1]), int(coords[l][2])
             # if z is 80 round to 79
             if z > 80:
-                print('z bigger than 80')
+                print('Z BIGGER THAN 80')
                 z = 79
             if y > 120:
-                print('y bigger than 80')
+                print('Y BIGGER THAN 120')
                 y = 119
             if x > 120:
-                print('x bigger than 80')
+                print('X BIGGER THAN 120')
                 x = 119
             structure[z][y][x] = l
         # swap color axis because
