@@ -69,7 +69,6 @@ def init():
                 root = r'/home/rankinaaron98/data/Facial_asymmetry_aaron_common'
                 save_data_path = r'/home/rankinaaron98/data/results/Aaron'
         # load model path
-    
         elif aaron_or_oli == False:           
             combined_data = yes_or_no.question('combined_data (y) / solo_data (n)')
             google_oli = yes_or_no.question('are you accessing through: sdk (n)/google (y)')
@@ -77,7 +76,7 @@ def init():
                 if combined_data == True:         
                     # Oli paths
                     coding_path =  r'/home/olive/GitHub/General-location-finding' 
-                    root = r'/home/olive/data/Facial_asymmetry_combined_line' 
+                    root = r'/home/olive/data/Facial_asymmetry_combined' 
                     save_data_path =  r'/home/olive/data/results/Oli'
                 elif combined_data == False:   
                     # Oli paths
@@ -120,7 +119,8 @@ def init():
     #landmarks_loc = {1:'com',2:'com', 3: 'com', 5:'com', 7:'com', 9:'com'} 
     
     landmarks = [1,2,3,4,5,6,7,8,9,10]
-    landmarks_loc = {1:'line',2:'line', 3: 'line',4:'line', 5:'line',6:'line', 7:'line',8:'line', 9:'line',10:'line', } 
+    #landmarks_loc = {1:'line',2:'line', 3: 'line',4:'line', 5:'line',6:'line', 7:'line',8:'line', 9:'line',10:'line', }
+    landmarks_loc = {1:'com',2:'com', 3: 'com',4:'com', 5:'com',6:'com', 7:'com',8:'com', 9:'com',10:'com', } 
     num_class = len(landmarks)
     
     # specify all structures which are actually in image
@@ -128,7 +128,8 @@ def init():
     # structures near the top which can be used for flipping
     # "AMl", "AMr","HMl", "HMr", "FZl", "FZr", "FNl", "FNr", "SOl", "SOr"
     landmarks_total = [1,2,3,4,5,6,7,8,9,10]
-    landmarks_total_loc = {1:'line', 2:'line', 3: 'line', 4:'line', 5:'line',6:'line', 7: 'line',8:'line', 9:'line',10:'line', } 
+    #landmarks_total_loc = {1:'line', 2:'line', 3: 'line', 4:'line', 5:'line',6:'line', 7: 'line',8:'line', 9:'line',10:'line', } 
+    landmarks_total_loc = {1:'com',2:'com', 3: 'com',4:'com', 5:'com',6:'com', 7:'com',8:'com', 9:'com',10:'com', } 
     top_structures = [5,6]
     bot_structures = [1,2]
     # L/R structures
@@ -143,8 +144,8 @@ def init():
     
       
     # input dimensions
-    in_x = 128
-    in_y = 128
+    in_x = 256
+    in_y = 256 
     in_z = 80
     
     # learning params
@@ -239,7 +240,7 @@ def init_new():
         run_folder = "run_19_mar_k_fold_aaron"
         #run_folder_load = "run_19_mar_k_fold_aaron"
     elif aaron_or_oli == False:
-        run_folder = "run_27_mar_train_line"
+        run_folder = "run_3_apr_256x256"
         #run_folder_load = "run_22_mar_test_aaron_my_data"
         
     run_path = os.path.join(save_data_path, run_folder) 
