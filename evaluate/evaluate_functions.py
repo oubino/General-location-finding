@@ -182,7 +182,7 @@ def print_2D_slice(image, structure, pred, landmark, pred_z, eval_path, patient)
     pred = pred[:, :, pred_z]
 
     plt.imshow(image,cmap = 'Greys_r', alpha = 0.5)
-    #plt.imshow(structure_l, cmap = 'Reds', alpha = 0.8 )
+    plt.imshow(structure_l, cmap = 'Reds', alpha = 0.8 )
     plt.imshow(pred, cmap = cm.jet, alpha = 0.5)
     
     print('image and structure')
@@ -342,8 +342,8 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
             print(pred_max_x, pred_max_y, pred_max_z)
             print('\n')
             # print 2D slice
-            #print('2D slice for landmark %1.0f' % l)
-            #print_2D_slice(image[i], structure[i], pred[i], l, pred_max_z, eval_path, patient[i])
+            print('2D slice for landmark %1.0f' % l)
+            print_2D_slice(image[i], structure[i], pred[i], l, pred_max_z, eval_path, patient[i])
             
 
           #img_landmark_point_to_point = point_to_point(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z)
