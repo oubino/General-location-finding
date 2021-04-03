@@ -77,7 +77,7 @@ def init():
                 if combined_data == True:         
                     # Oli paths
                     coding_path =  r'/home/olive/GitHub/General-location-finding' 
-                    root = r'/home/olive/data/Facial_asymmetry_combined' 
+                    root = r'/home/olive/data/Facial_asymmetry_combined_line' 
                     save_data_path =  r'/home/olive/data/results/Oli'
                 elif combined_data == False:   
                     # Oli paths
@@ -89,7 +89,7 @@ def init():
                 if combined_data == True:         
                     # google Oli paths
                     coding_path = r'/home/oliver_umney/GitHub/General-location-finding'
-                    root = r'/home/oliver_umney/data/Facial_asymmetry_combined'
+                    root = r'/home/oliver_umney/data/Facial_asymmetry_combined_line'
                     save_data_path =  r'/home/oliver_umney/data/results/oliver_umney_web' 
                 elif combined_data == False:   
                     # google Oli paths
@@ -120,7 +120,7 @@ def init():
     #landmarks_loc = {1:'com',2:'com', 3: 'com', 5:'com', 7:'com', 9:'com'} 
     
     landmarks = [1,2,3,4,5,6,7,8,9,10]
-    landmarks_loc = {1:'com',2:'com', 3: 'com',4:'com', 5:'com',6:'com', 7:'com',8:'com', 9:'com',10:'com', } 
+    landmarks_loc = {1:'line',2:'line', 3: 'line',4:'line', 5:'line',6:'line', 7:'line',8:'line', 9:'line',10:'line', } 
     num_class = len(landmarks)
     
     # specify all structures which are actually in image
@@ -128,7 +128,7 @@ def init():
     # structures near the top which can be used for flipping
     # "AMl", "AMr","HMl", "HMr", "FZl", "FZr", "FNl", "FNr", "SOl", "SOr"
     landmarks_total = [1,2,3,4,5,6,7,8,9,10]
-    landmarks_total_loc = {1:'com', 2:'com', 3: 'com', 4:'com', 5:'com',6:'com', 7: 'com',8:'com', 9:'com',10:'com', } 
+    landmarks_total_loc = {1:'line', 2:'line', 3: 'line', 4:'line', 5:'line',6:'line', 7: 'line',8:'line', 9:'line',10:'line', } 
     top_structures = [5,6]
     bot_structures = [1,2]
     # L/R structures
@@ -239,7 +239,7 @@ def init_new():
         run_folder = "run_19_mar_k_fold_aaron"
         #run_folder_load = "run_19_mar_k_fold_aaron"
     elif aaron_or_oli == False:
-        run_folder = "run_23_mar_no_extra_enc_dec_combined_dataset"
+        run_folder = "run_27_mar_train_line"
         #run_folder_load = "run_22_mar_test_aaron_my_data"
         
     run_path = os.path.join(save_data_path, run_folder) 
@@ -272,7 +272,7 @@ def init_load():
     
     # specify landmarks + region was trained on (iff loading in model)
     landmarks_load = [1,2,3,4,5,6,7,8,9,10] # brainstem # not general
-    landmarks_load_loc = {1:'com',2:'com', 3: 'com',4:'com', 5:'com',6:'com', 7: 'com',8:'com',9:'com',10:'com', }
+    landmarks_load_loc = {1:'line',2:'line', 3: 'line',4:'line', 5:'line',6:'line', 7: 'line',8:'line',9:'line',10:'line', }
 
     #landmarks_load = [1,3,5,7,9] # brainstem # not general
     #landmarks_load_loc = {1:'com', 3: 'com', 5:'com', 7: 'com', 9:'com', }

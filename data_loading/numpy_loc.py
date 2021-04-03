@@ -1,7 +1,7 @@
 import numpy as np
 import random
 
-def landmark_loc_np(locat, structure, landmark, patient):
+def landmark_loc_np(locat, structure, landmark, patient, test):
     if locat == 'com':
         return com_structure_np(structure,landmark, patient)
     elif locat == 'top':
@@ -9,7 +9,10 @@ def landmark_loc_np(locat, structure, landmark, patient):
     elif locat == 'bot':
         return bot_structure_np(structure,landmark, patient)
     elif locat == 'line':
-        return line_structure_np(structure, landmark, patient)
+        if test == False:
+            return line_structure_np(structure, landmark, patient)
+        elif test == True:
+            return com_structure_np(structure,landmark, patient)
         
 def com_structure_np(structure, landmark, patient): # assumes 1 channel
   # structure is (D x H x W)
@@ -104,7 +107,11 @@ def line_structure_np(structure, landmark, patient): # assumes 1 channel
   else:
     landmark_present.append(True)  
     # generate random number in range
-    index = random.randint(0, locations.size()[1]) # could be len[locations[1]]
+    print('locations')
+    print(locations)
+    print('len')
+    print(len(locations[0]) -1)
+    index = random.randint(0, len(locations[0])- 1) # could be len[locations[1]]
     # trying to generate random number in range of the total number of locations where it equals the landmark
     # i.e. if 5 points are found 
     # generate random number between 0 and 5
@@ -112,6 +119,8 @@ def line_structure_np(structure, landmark, patient): # assumes 1 channel
     y = locations[1][index]
     z = locations[0][index]
   coords = [int(x),int(y),int(z)]
+  print('coords')
+  print(coords)
   return coords, landmark_present, coords
 
 
