@@ -229,7 +229,7 @@ class ToTensor(object):
         for l in S.landmarks_total:
             # structure is z, y, x
             # need it in y, x, z                
-            x, y, z = int(coords[l][0]), int(coords[l][1]), int(coords[l][2])
+            x, y, z = int(round(coords[l][0])), int(round(coords[l][1])), int(round(coords[l][2]))
             # if z is 80 round to 79
             if z >= S.in_z:
                 print('Z BIGGER THAN Z MAX')
@@ -268,8 +268,8 @@ class Flips_scipy(object):
                 x,y, z = coords[l][0] - (S.in_x-1)/2, coords[l][1] - (S.in_y-1)/2, coords[l][2] - (S.in_z-1)/2 
                 y_new = math.cos(math.radians(-angle)) * y - math.sin(math.radians(-angle)) * z
                 z_new = math.cos(math.radians(-angle)) * z + math.sin(math.radians(-angle)) * y 
-                coords[l][1] = int(y_new + (S.in_y-1)/2)
-                coords[l][2] = int(z_new + (S.in_z-1)/2)  
+                coords[l][1] = y_new + (S.in_y-1)/2
+                coords[l][2] = z_new + (S.in_z-1)/2
             # check if still within bounds due to rotation!
             if x > -(S.in_x-1)/2 and x < (S.in_x-1)/2 and y_new > -(S.in_y-1)/2 and y_new < (S.in_y-1)/2 and z_new > -(S.in_z-1)/2 and z_new < (S.in_z-1)/2:
                 image = scipy.ndimage.rotate(image, angle, axes = [1,0],reshape = False, order = 0)
@@ -286,8 +286,8 @@ class Flips_scipy(object):
                 x,y, z = coords[l][0] - (S.in_x-1)/2, coords[l][1] - (S.in_y-1)/2, coords[l][2] - (S.in_z-1)/2 
                 x_new = math.cos(math.radians(-angle)) * x - math.sin(math.radians(-angle)) * y
                 y_new = math.cos(math.radians(-angle)) * y + math.sin(math.radians(-angle)) * x
-                coords[l][0] = int(x_new + (S.in_x-1)/2)
-                coords[l][1] = int(y_new + (S.in_y-1)/2)
+                coords[l][0] = x_new + (S.in_x-1)/2
+                coords[l][1] = y_new + (S.in_y-1)/2
                 
             if x_new > -(S.in_x-1)/2 and x_new < (S.in_x-1)/2 and y_new > -(S.in_y-1)/2 and y_new < (S.in_y-1)/2 and z > -(S.in_z-1)/2 and z < (S.in_z-1)/2:
                 image = scipy.ndimage.rotate(image, angle, axes = [1,2],reshape = False, order = 0)
@@ -303,8 +303,8 @@ class Flips_scipy(object):
                 x,y, z = coords[l][0] - (S.in_x-1)/2, coords[l][1] - (S.in_y-1)/2, coords[l][2] - (S.in_z-1)/2 
                 x_new = math.cos(math.radians(angle)) * x + math.sin(math.radians(angle)) * z
                 z_new = math.cos(math.radians(angle)) * z - math.sin(math.radians(angle)) * x
-                coords[l][0] = int(x_new + (S.in_x-1)/2)
-                coords[l][2] = int(z_new + (S.in_z-1)/2)
+                coords[l][0] = x_new + (S.in_x-1)/2
+                coords[l][2] = z_new + (S.in_z-1)/2
                 
             if x_new > -(S.in_x-1)/2 and x_new < (S.in_x-1)/2 and y > -(S.in_y-1)/2 and y < (S.in_y-1)/2 and z_new > -(S.in_z-1)/2 and z_new < (S.in_z-1)/2:
                image = scipy.ndimage.rotate(image, angle, axes = [2,0],reshape = False, order = 0)
