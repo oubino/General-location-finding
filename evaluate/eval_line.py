@@ -17,12 +17,28 @@ for fold in range(settings.folds_trained_with):
     print('\n')
     print('Evaluating model for fold %1.0f' % (fold))
     print('----------------')
+    
+    images = []
+    preds = []
+    
+    # need to get images and predictions here
+    for batch in data_loaders.dataloaders['test']:
+        image = batch['image']
+        pred = model(image)
+        images.append(image)
+        preds.append(pred)
+        
+    images.to(settings.device)
+    preds.to(settings.device)
+    
     # change root to Oli then eval
     settings.root = r'/home/olive/data/Facial_asymmetry_oli_common'
+    model.evaluate_line(fold, 'oli', images, preds)
     # change root to Aaron then eval
     settings.root = r'/home/olive/data/Facial_asymmetry_aaron_common'
+    model.evaluate_line(fold, 'aaron', images, preds)
     # change root to Combined then eval
     settings.root = r'/home/olive/data/Facial_asymmetry_combined' 
-    model.evaluate_pre_train(fold)
-    print('error counter')
-    print(settings.error_counter)
+    model.evaluate_line(fold, 'combined', images, preds)
+    #print('error counter')
+    #print(settings.error_counter)
