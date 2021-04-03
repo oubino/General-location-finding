@@ -231,15 +231,15 @@ class ToTensor(object):
             # need it in y, x, z                
             x, y, z = int(coords[l][0]), int(coords[l][1]), int(coords[l][2])
             # if z is 80 round to 79
-            if z > S.in_z:
+            if z >= S.in_z:
                 print('Z BIGGER THAN Z MAX')
                 print(z)
                 z = S.in_z - 1
-            if y > S.in_y:
+            if y >= S.in_y:
                 print('Y BIGGER THAN Y MAX')
                 print(y)
                 y = S.in_y - 1
-            if x > S.in_x:
+            if x >= S.in_x:
                 print('X BIGGER THAN X MAX')
                 print(x)
                 x = S.in_x - 1
