@@ -187,15 +187,15 @@ def print_2D_slice(image, structure, pred, landmark, pred_z, eval_path, patient)
     
     print('image and structure')
     
-    fig = plt.figure(figsize=(7, 7))
+    #fig = plt.figure(figsize=(7, 7))
 
-    plt.imshow(image,cmap = 'Greys_r', alpha = 1)
-    cmap = matplotlib.colors.ListedColormap(['0','r'])
+    #plt.imshow(image,cmap = 'Greys_r', alpha = 1)
+    #cmap = matplotlib.colors.ListedColormap(['0','r'])
     # create a normalize object the describes the limits of
     # each color
-    bounds = [0,0.5,6]
-    norm = matplotlib.colors.BoundaryNorm(bounds, cmap.N)
-    plt.imshow(structure_l, cmap = cmap, alpha = 0.5)
+    #bounds = [0,0.5,6]
+    #norm = matplotlib.colors.BoundaryNorm(bounds, cmap.N)
+    #plt.imshow(structure_l, cmap = cmap, alpha = 0.5)
 
     img_name = os.path.join(eval_path, "2d_slice_%s.png" % patient.replace('.npy', '_%1.0f') % landmark)
     S.img_counter_3 += 1
