@@ -183,7 +183,7 @@ def init():
     UNET_model_user = True
     
     # decision on whether to crop or downsample
-    downsample_user = False
+    downsample_user = True
  
     # image saved counter
     img_counter_1 = 0
@@ -240,7 +240,7 @@ def init_new():
         run_folder = "run_19_mar_k_fold_aaron"
         #run_folder_load = "run_19_mar_k_fold_aaron"
     elif aaron_or_oli == False:
-        run_folder = "run_4_apr_crop"
+        run_folder = "run_4_apr_k_fold_192x192"
         #run_folder_load = "run_22_mar_test_aaron_my_data"
         
     run_path = os.path.join(save_data_path, run_folder) 
@@ -294,7 +294,7 @@ def init_load():
         run_folder = "run_23_mar_eval_oli"
     elif aaron_or_oli == False:
         #run_folder = "run_22_mar_test_aaron_my_data"
-        run_folder = "run_4_apr_crop"
+        run_folder = "run_4_apr_k_fold_192x192"
         
     run_path = os.path.join(save_data_path, run_folder) 
     #try:  
