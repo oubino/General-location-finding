@@ -154,7 +154,7 @@ def plot_3d_pred_img_struc_no_img(structure, pred, eval_path):
     S.img_counter_2 += 1
     plt.savefig(img_name)
     
-def print_2D_slice(image, structure, pred, landmark, pred_x, pred_y, pred_z, eval_path, patient):
+def print_2D_slice(image, structure, pred, landmark, pred_x, pred_y, pred_z, struc_x, struc_y, struc_z, eval_path, patient):
     
     # image
     # - C x H x W x D needs to be cut down to H x W x D
@@ -190,10 +190,10 @@ def print_2D_slice(image, structure, pred, landmark, pred_x, pred_y, pred_z, eva
     
     # ---- if want to plot as point ------
     pred = pred[pred_y, pred_x, pred_z]
-    plt.imshow(image,cmap = 'Greys_r', alpha = 0.5)
-    plt.imshow(structure_l, cmap = 'Reds', alpha = 0.8 )
-    plt.plot(30, 60,color='green', marker='o')
-    #plt.plot(pred_y.cpu().numpy(), pred_x.cpu().numpy(),color='green', marker='o')
+    plt.imshow(image,cmap = 'Greys_r', alpha = 0.9)
+    plt.plot(struc_x.cpu().numpy(), struc_y.cpu().numpy(), color = 'red', marker = 'x', label = 'target')
+    plt.plot(pred_x.cpu().numpy(), pred_y.cpu().numpy(),color='green', marker='o', label = 'pred')
+    plt.legend()
     # ------------------------------------
     
     img_name = os.path.join(eval_path, "2d_slice_%s.png" % patient.replace('.npy', '_%1.0f') % landmark)
@@ -342,7 +342,7 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
             print('\n')
             # print 2D slice
             print('2D slice for landmark %1.0f' % l)
-            print_2D_slice(image[i], structure[i], pred[i], l, pred_max_x, pred_max_y, pred_max_z, eval_path, patient[i])
+            print_2D_slice(image[i], structure[i], pred[i], l, pred_max_x, pred_max_y, pred_max_z, structure_max_x, structure_max_y, structure_max_z ,eval_path, patient[i])
             
 
           #img_landmark_point_to_point = point_to_point(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z)
