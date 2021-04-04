@@ -193,6 +193,9 @@ def print_2D_slice(image, structure, pred, landmark, pred_x, pred_y, pred_z, str
     plt.imshow(image,cmap = 'Greys_r', alpha = 0.9)
     plt.plot(struc_x.cpu().numpy(), struc_y.cpu().numpy(), color = 'red', marker = 'x', label = 'target')
     plt.plot(pred_x.cpu().numpy(), pred_y.cpu().numpy(),color='green', marker='o', label = 'pred')
+    # add z annotation
+    plt.annotate("%1.0f" % pred_z.cpu().numpy(),(pred_x.cpu().numpy(), pred_y.cpu().numpy()))
+    plt.annotate("%1.0f" % int(struc_z.cpu().numpy()),(struc_x.cpu().numpy(), struc_y.cpu().numpy()))
     plt.legend()
     # ------------------------------------
     
