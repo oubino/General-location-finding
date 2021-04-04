@@ -121,6 +121,7 @@ def init():
     landmarks_loc = {1:'com',2:'com', 3: 'com',4:'com', 5:'com',6:'com', 7:'com',8:'com', 9:'com',10:'com', } 
     num_class = len(landmarks)
     # make user double check correct
+    print('\n')
     print('Landmarks training for')
     print(landmarks)
     print(landmarks_loc)
@@ -149,7 +150,7 @@ def init():
     # input dimensions
     in_x = 192
     in_y = 192 
-    in_z = 80
+    in_z = 100
     
     # learning params
     alpha = 1/25000
@@ -237,9 +238,10 @@ def init_new():
         run_folder = "run_19_mar_k_fold_aaron"
         #run_folder_load = "run_19_mar_k_fold_aaron"
     elif aaron_or_oli == False:
-        run_folder = "run_4_apr_k_fold_192x192"
+        run_folder = "run_4_apr_test_downsample_ratio"
         #run_folder_load = "run_22_mar_test_aaron_my_data"
     # make user double check correct
+    print('\n')
     print('run folder')
     print(run_folder)
     input("Press Enter to continue...")
@@ -276,6 +278,7 @@ def init_load():
     #landmarks_load_loc = {1:'com', 3: 'com', 5:'com', 7: 'com', 9:'com', }
     num_class_load = len(landmarks_load)
     # make user double check correct
+    print('\n')
     print('Landmarks loaded in')
     print(landmarks_load)
     print(landmarks_load_loc)
@@ -295,6 +298,7 @@ def init_load():
         #run_folder = "run_22_mar_test_aaron_my_data"
         run_folder = "run_4_apr_k_fold_192x192"
     # make user double check correct
+    print('\n')
     print('run folder')
     print(run_folder)
     input("Press Enter to continue...")
@@ -339,6 +343,7 @@ def init_load_eval_line():
     #landmarks_load_loc = {1:'com', 3: 'com', 5:'com', 7: 'com', 9:'com', }
     num_class_load = len(landmarks_load)
     # make user double check correct
+    print('\n')
     print('Landmarks loaded in')
     print(landmarks_load)
     print(landmarks_load_loc)
@@ -356,6 +361,7 @@ def init_load_eval_line():
     elif aaron_or_oli == False:
         run_folder = "run_eval_line"
         # make user double check correct
+    print('\n')
     print('run folder')
     print(run_folder)
     input("Press Enter to continue...")
