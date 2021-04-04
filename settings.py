@@ -183,7 +183,7 @@ def init():
     UNET_model_user = True
     
     # decision on whether to crop or downsample
-    downsample_user = True
+    downsample_user = False
  
     # image saved counter
     img_counter_1 = 0
