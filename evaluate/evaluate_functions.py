@@ -192,7 +192,8 @@ def print_2D_slice(image, structure, pred, landmark, pred_x, pred_y, pred_z, eva
     pred = pred[pred_y, pred_x, pred_z]
     plt.imshow(image,cmap = 'Greys_r', alpha = 0.5)
     plt.imshow(structure_l, cmap = 'Reds', alpha = 0.8 )
-    plt.imshow(pred, cmap = 'Greens', alpha = 0.5)
+    plt.plot(pred_y, pred_x,color='green', marker='o')
+    #plt.imshow(pred, cmap = 'Greens', alpha = 0.5)
     # ------------------------------------
     
     img_name = os.path.join(eval_path, "2d_slice_%s.png" % patient.replace('.npy', '_%1.0f') % landmark)
