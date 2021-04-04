@@ -154,7 +154,7 @@ def plot_3d_pred_img_struc_no_img(structure, pred, eval_path):
     S.img_counter_2 += 1
     plt.savefig(img_name)
     
-def print_2D_slice(image, structure, pred, landmark, pred_z, eval_path, patient):
+def print_2D_slice(image, structure, pred, landmark, pred_x, pred_y, pred_z, eval_path, patient):
     
     # image
     # - C x H x W x D needs to be cut down to H x W x D
@@ -173,7 +173,7 @@ def print_2D_slice(image, structure, pred, landmark, pred_z, eval_path, patient)
     
     fig = plt.figure(figsize=(7, 7))
     
-    print('image and predicted heatmap')
+    #print('image and predicted heatmap')
     
     pred_z = int(pred_z) # convert to nearest int
 
@@ -181,22 +181,20 @@ def print_2D_slice(image, structure, pred, landmark, pred_z, eval_path, patient)
     structure_l = structure_l[:, :, pred_z]
     pred = pred[:, :, pred_z]
 
+    # ----  if want to plot heatmap ----- 
+    """
     plt.imshow(image,cmap = 'Greys_r', alpha = 0.5)
     plt.imshow(structure_l, cmap = 'Reds', alpha = 0.8 )
     plt.imshow(pred, cmap = cm.jet, alpha = 0.5)
+    """
+    # -----------------------------------
     
-    print('image and structure')
+    # ---- if want to plot as point ------
+    plt.imshow(image,cmap = 'Greys_r', alpha = 0.5)
+    plt.imshow(structure_l, cmap = 'Reds', alpha = 0.8 )
+    plt.imshow(pred[pred_x, pred_y,:], cmap = 'Greens', alpha = 0.5)
+    # ------------------------------------
     
-    #fig = plt.figure(figsize=(7, 7))
-
-    #plt.imshow(image,cmap = 'Greys_r', alpha = 1)
-    #cmap = matplotlib.colors.ListedColormap(['0','r'])
-    # create a normalize object the describes the limits of
-    # each color
-    #bounds = [0,0.5,6]
-    #norm = matplotlib.colors.BoundaryNorm(bounds, cmap.N)
-    #plt.imshow(structure_l, cmap = cmap, alpha = 0.5)
-
     img_name = os.path.join(eval_path, "2d_slice_%s.png" % patient.replace('.npy', '_%1.0f') % landmark)
     S.img_counter_3 += 1
     plt.savefig(img_name)
@@ -343,7 +341,7 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
             print('\n')
             # print 2D slice
             print('2D slice for landmark %1.0f' % l)
-            print_2D_slice(image[i], structure[i], pred[i], l, pred_max_z, eval_path, patient[i])
+            print_2D_slice(image[i], structure[i], pred[i], l, pred_max_x, pred_max_y, pred_max_z, eval_path, patient[i])
             
 
           #img_landmark_point_to_point = point_to_point(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z)
