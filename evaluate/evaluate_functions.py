@@ -179,10 +179,9 @@ def print_2D_slice(image, structure, pred, landmark, pred_x, pred_y, pred_z, eva
 
     image = image[:, :, pred_z]
     structure_l = structure_l[:, :, pred_z]
-    pred = pred[:, :, pred_z]
-
     # ----  if want to plot heatmap ----- 
     """
+    pred = pred[:, :, pred_z]
     plt.imshow(image,cmap = 'Greys_r', alpha = 0.5)
     plt.imshow(structure_l, cmap = 'Reds', alpha = 0.8 )
     plt.imshow(pred, cmap = cm.jet, alpha = 0.5)
@@ -190,9 +189,10 @@ def print_2D_slice(image, structure, pred, landmark, pred_x, pred_y, pred_z, eva
     # -----------------------------------
     
     # ---- if want to plot as point ------
+    pred = pred[pred_y, pred_x, pred_z]
     plt.imshow(image,cmap = 'Greys_r', alpha = 0.5)
     plt.imshow(structure_l, cmap = 'Reds', alpha = 0.8 )
-    plt.imshow(pred[pred_x, pred_y,:], cmap = 'Greens', alpha = 0.5)
+    plt.imshow(pred, cmap = 'Greens', alpha = 0.5)
     # ------------------------------------
     
     img_name = os.path.join(eval_path, "2d_slice_%s.png" % patient.replace('.npy', '_%1.0f') % landmark)
