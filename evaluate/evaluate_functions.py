@@ -189,10 +189,12 @@ def print_2D_slice(image, structure, pred, landmark, pred_x, pred_y, pred_z, eva
     # -----------------------------------
     
     # ---- if want to plot as point ------
+    print('locs')
+    print(pred_y, pred_x)
     pred = pred[pred_y, pred_x, pred_z]
     plt.imshow(image,cmap = 'Greys_r', alpha = 0.5)
     plt.imshow(structure_l, cmap = 'Reds', alpha = 0.8 )
-    plt.plot(pred_y, pred_x,color='green', marker='o')
+    plt.plot(pred_y.cpu().numpy(), pred_x.cpu().numpy(),color='green', marker='o')
     #plt.imshow(pred, cmap = 'Greens', alpha = 0.5)
     # ------------------------------------
     
