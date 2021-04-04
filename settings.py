@@ -273,7 +273,7 @@ def init_load():
     
     # specify landmarks + region was trained on (iff loading in model)
     landmarks_load = [1,2,3,4,5,6,7,8,9,10] # brainstem # not general
-    landmarks_load_loc = {1:'line',2:'line', 3: 'line',4:'line', 5:'line',6:'line', 7: 'line',8:'line',9:'line',10:'line', }
+    landmarks_load_loc = {1:'com',2:'com', 3: 'com',4:'com', 5:'com',6:'com', 7: 'com',8:'com',9:'com',10:'com', }
 
     #landmarks_load = [1,3,5,7,9] # brainstem # not general
     #landmarks_load_loc = {1:'com', 3: 'com', 5:'com', 7: 'com', 9:'com', }
@@ -294,7 +294,7 @@ def init_load():
         run_folder = "run_23_mar_eval_oli"
     elif aaron_or_oli == False:
         #run_folder = "run_22_mar_test_aaron_my_data"
-        run_folder = "run_23_mar_no_extra_enc_dec_combined_dataset"
+        run_folder = "run_3_apr_256x256"
         
     run_path = os.path.join(save_data_path, run_folder) 
     #try:  
