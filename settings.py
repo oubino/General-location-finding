@@ -96,7 +96,7 @@ def init():
                     root = r'/home/oliver_umney/data/Facial_asymmetry_oli_common'
                     save_data_path =  r'/home/oliver_umney/data/results/oliver_umney_web' 
 
-    
+    # results directory
     print('Results directory:')
     print(save_data_path)
     
@@ -105,26 +105,29 @@ def init():
     print('Device working on: ')
     print(device)
         
+    # batch size
     change_batch_size = yes_or_no.question('Would you like to change batch size from default(5): ')
     if change_batch_size == True:
         batch_size = int(input ("Batch size: "))
     else:
-        batch_size = 5
-        
+        batch_size = 5       
     batch_size_test = 1
     
-    # specify landmarks + region want to train for
-    
+    # specify landmarks + region want to train for - AMEND
     #landmarks = [1,2,3,5,7,9] # brainstem # not general
     #landmarks_loc = {1:'com',2:'com', 3: 'com', 5:'com', 7:'com', 9:'com'} 
-    
     landmarks = [1,2,3,4,5,6,7,8,9,10]
     #landmarks_loc = {1:'line',2:'line', 3: 'line',4:'line', 5:'line',6:'line', 7:'line',8:'line', 9:'line',10:'line', }
     landmarks_loc = {1:'com',2:'com', 3: 'com',4:'com', 5:'com',6:'com', 7:'com',8:'com', 9:'com',10:'com', } 
     num_class = len(landmarks)
+    # make user double check correct
+    print('Landmarks training for')
+    print(landmarks)
+    print(landmarks_loc)
+    input("Press Enter to continue...")
+    
     
     # specify all structures which are actually in image
-    
     # structures near the top which can be used for flipping
     # "AMl", "AMr","HMl", "HMr", "FZl", "FZr", "FNl", "FNr", "SOl", "SOr"
     landmarks_total = [1,2,3,4,5,6,7,8,9,10]
@@ -136,13 +139,13 @@ def init():
     left_structures = [1,3,5,7,9]
     right_structures = [2,4,6,8,10]
 
-    sigmas = {} # sigma per landmark
+    # sigma per landmark
+    sigmas = {} 
     for k in landmarks:
       sigmas[k] = nn.Parameter(torch.tensor([20.]).to(device))# device = 'cuda'))#.to(device) # what value to initialise sigma
       sigmas[k].requires_grad = True
       #print(sigmas[k])
     
-      
     # input dimensions
     in_x = 192
     in_y = 192 
@@ -213,15 +216,8 @@ def init():
     
     # k folds
     k_folds = 5
-    
-    # k fold test
-    k_fold_ids = []
-    
-    # commenting out if still works then delete
+    k_fold_ids = []   # k fold test
 
-    # normalisation
-    # norm_mean = 180
-    # norm_std = 180
     
 def init_new():
     # oli vs aaron settings 
@@ -236,12 +232,17 @@ def init_new():
     net_features = 32
     scnet_feat = 64
     
+    # -- AMEND -- 
     if aaron_or_oli == True:
         run_folder = "run_19_mar_k_fold_aaron"
         #run_folder_load = "run_19_mar_k_fold_aaron"
     elif aaron_or_oli == False:
         run_folder = "run_4_apr_k_fold_192x192"
         #run_folder_load = "run_22_mar_test_aaron_my_data"
+    # make user double check correct
+    print('run folder')
+    print(run_folder)
+    input("Press Enter to continue...")
         
     run_path = os.path.join(save_data_path, run_folder) 
     try:  
@@ -252,7 +253,7 @@ def init_new():
     # create tensorboard writer
     tensor_folder = os.path.join(save_data_path, 'tensorboard')
     tensorboard_loc = os.path.join(tensor_folder, '%s-%s' % (time_stamp,run_folder))
-    writer = SummaryWriter(tensorboard_loc) # may need to amend
+    writer = SummaryWriter(tensorboard_loc) 
 
 def init_load():
     # oli vs aaron settings 
@@ -267,34 +268,36 @@ def init_load():
     net_features_load = 32
     scnet_feat_load = 64
     
-    # needed for transfer learning 
-    
-    # ---- begin -----
-    
-    # specify landmarks + region was trained on (iff loading in model)
+    # -- AMEND -- 
+    # specify landmarks + region was trained on
     landmarks_load = [1,2,3,4,5,6,7,8,9,10] # brainstem # not general
     landmarks_load_loc = {1:'com',2:'com', 3: 'com',4:'com', 5:'com',6:'com', 7: 'com',8:'com',9:'com',10:'com', }
-
     #landmarks_load = [1,3,5,7,9] # brainstem # not general
     #landmarks_load_loc = {1:'com', 3: 'com', 5:'com', 7: 'com', 9:'com', }
-    
     num_class_load = len(landmarks_load)
+    # make user double check correct
+    print('Landmarks loaded in')
+    print(landmarks_load)
+    print(landmarks_load_loc)
+    input("Press Enter to continue...")
     
     sigmas_load = {} # sigma per landmark
     for k in landmarks_load:
       sigmas_load[k] = nn.Parameter(torch.tensor([20.]).to(device))# device = 'cuda'))#.to(device) # what value to initialise sigma
       sigmas_load[k].requires_grad = True
       #print(sigmas[k])
-    
-    # ----- end -----
-    
-    
+        
+    # -- AMEND -- 
     if aaron_or_oli == True:
         #run_folder = "run_22_mar_oli_kfold_eval"
         run_folder = "run_23_mar_eval_oli"
     elif aaron_or_oli == False:
         #run_folder = "run_22_mar_test_aaron_my_data"
         run_folder = "run_4_apr_k_fold_192x192"
+    # make user double check correct
+    print('run folder')
+    print(run_folder)
+    input("Press Enter to continue...")
         
     run_path = os.path.join(save_data_path, run_folder) 
     #try:  
@@ -309,7 +312,10 @@ def init_load():
     # create tensorboard writer
     tensor_folder = os.path.join(save_data_path, 'tensorboard')
     tensorboard_loc = os.path.join(tensor_folder, '%s-%s' % (time_stamp,run_folder))
-    writer = SummaryWriter(tensorboard_loc) # may need to amend
+    writer = SummaryWriter(tensorboard_loc) 
+    
+# this is only used for final eval on Aaron, Oli, combined
+# implemented to ensure uses same prediction to compare to Aaron, Oli, Combined 
     
 def init_load_eval_line():
     # oli vs aaron settings 
@@ -324,33 +330,35 @@ def init_load_eval_line():
     net_features_load = 32
     scnet_feat_load = 64
     
-    # needed for transfer learning 
-    
-    # ---- begin -----
-    
-    # specify landmarks + region was trained on (iff loading in model)
+    # -- AMEND -- 
+    # specify landmarks + region was trained on
     landmarks_load = [1,2,3,4,5,6,7,8,9,10] # brainstem # not general
     # think if put 'line' or 'com' makes no difference - should only eval using COM
     landmarks_load_loc = {1:'line',2:'line', 3: 'line',4:'line', 5:'line',6:'line', 7: 'line',8:'line',9:'line',10:'line', }
-
     #landmarks_load = [1,3,5,7,9] # brainstem # not general
     #landmarks_load_loc = {1:'com', 3: 'com', 5:'com', 7: 'com', 9:'com', }
-    
     num_class_load = len(landmarks_load)
+    # make user double check correct
+    print('Landmarks loaded in')
+    print(landmarks_load)
+    print(landmarks_load_loc)
+    input("Press Enter to continue...")
     
     sigmas_load = {} # sigma per landmark
     for k in landmarks_load:
       sigmas_load[k] = nn.Parameter(torch.tensor([20.]).to(device))# device = 'cuda'))#.to(device) # what value to initialise sigma
       sigmas_load[k].requires_grad = True
       #print(sigmas[k])
-    
-    # ----- end -----
-    
-    
+        
+    # -- AMEND -- 
     if aaron_or_oli == True:
         run_folder = "run_eval_line"
     elif aaron_or_oli == False:
         run_folder = "run_eval_line"
+        # make user double check correct
+    print('run folder')
+    print(run_folder)
+    input("Press Enter to continue...")
         
     run_path = os.path.join(save_data_path, run_folder) 
     #try:  
@@ -364,7 +372,7 @@ def init_load_eval_line():
     # create tensorboard writer
     tensor_folder = os.path.join(save_data_path, 'tensorboard')
     tensorboard_loc = os.path.join(tensor_folder, '%s-%s' % (time_stamp,run_folder))
-    writer = SummaryWriter(tensorboard_loc) # may need to amend
+    writer = SummaryWriter(tensorboard_loc) 
     
     
     
