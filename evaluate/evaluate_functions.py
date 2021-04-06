@@ -303,7 +303,19 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
     structure = batch['structure'].to(S.device)
     structure_original = batch['structure_original'].to(S.device)
     patient = batch['patient']
-    pred = model(image)
+    
+    dataset.test_no_crop = true
+    image = batch.todevice
+    pred, location = model(image, crop = false) FILL
+    dataset.test_crop = true
+    test_location = location
+    image = batch to device - needs to use this location
+    pred = model (crop = true, )
+    ... crop = true
+    # need to convert location in croopped image to original location
+    # just use structure original and don't use structure. EASIER
+    
+    # needs to go through both models!!!
   
     batch_number = 0
     

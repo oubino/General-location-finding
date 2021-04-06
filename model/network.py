@@ -90,22 +90,28 @@ class UNet3d(nn.Module):
         self.dec3 = DecoderUnit(4 * s_channels, s_channels)
         self.dec4 = DecoderUnit(2 * s_channels, s_channels)
         self.out = OutConv(s_channels, n_classes)
+        
+        # initialise all but only goes through forward if 
+        FILL
 
-    def forward(self, x):
-        x1 = self.conv(x)
-        x2 = self.enc1(x1)
-        x3 = self.enc2(x2)
-        x4 = self.enc3(x3)
-        x5 = self.enc4(x4)
-        x10 = self.enc5(x5)
-
-        x11 = self.dec0(x5,x10)
-        x6 = self.dec1(x11, x4)
-        x7 = self.dec2(x6, x3)
-        x8 = self.dec3(x7, x2)
-        x9 = self.dec4(x8, x1)
-        output = self.out(x9)
-        return output 
+    def forward(self, x,CROP):
+        if crop == False:
+            x1 = self.conv(x)
+            x2 = self.enc1(x1)
+            x3 = self.enc2(x2)
+            x4 = self.enc3(x3)
+            x5 = self.enc4(x4)
+            x10 = self.enc5(x5)
+    
+            x11 = self.dec0(x5,x10)
+            x6 = self.dec1(x11, x4)
+            x7 = self.dec2(x6, x3)
+            x8 = self.dec3(x7, x2)
+            x9 = self.dec4(x8, x1)
+            output = self.out(x9)
+            return output, # return location of landmark only use if evaluating
+        elif:
+            return
     
     
 class Transfer_model(nn.Module):
