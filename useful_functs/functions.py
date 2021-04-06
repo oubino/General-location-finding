@@ -307,7 +307,7 @@ def point_to_point_mm(mask_x, mask_y, mask_z, pred_x, pred_y, pred_z, patient):
         # array not emtpy
         index = 0       
         for i in range(len(S.downsample_idx_list)):
-          if S.downsample_idx_list[i] == patient[0]:
+          if S.downsample_idx_list[i] == patient:
               index = i
         #index = S.downsample_idx_list.index(patient)
         #print('patient')
