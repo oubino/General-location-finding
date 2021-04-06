@@ -38,6 +38,7 @@ def init():
     global batch_size_test
     global switchover
     global landmark_locations_train_set, landmark_locations_test_set
+    global crop_size_z, crop_size_x, crop_size_y
 
          
     # paths
@@ -222,13 +223,18 @@ def init():
     k_fold_ids = []   # k fold test
     
     # switchover to crop
-    switchover = 50
+    switchover = 2
 
     # landmark locations train set
     landmark_locations_train_set = {}
     
     # landmark locations test set
     landmark_locations_test_set = {}
+    
+    # crop size
+    crop_size_z = 30 
+    crop_size_x = 50 
+    crop_size_y = 50
     
 def init_new():
     # oli vs aaron settings 
@@ -240,7 +246,7 @@ def init_new():
     
     epoch_batch = int(input ("Epoch batch: "))
     num_epoch_batches = int(input ("Num epoch batch: "))
-    net_features = 32
+    net_features = 1
     scnet_feat = 64
     
     # -- AMEND -- 

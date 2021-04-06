@@ -95,7 +95,7 @@ class UNet3d(nn.Module):
         self.conv_crop = nn.ModuleList()
         self.enc_1_crop = nn.ModuleList()
         self.dec_1_crop = nn.ModuleList()
-        self.out_corp = nn.ModuleList()
+        self.out_crop = nn.ModuleList()
         for i in range(len(S.landmarks)):
             self.conv_crop.append(ConvUnit(in_channels, 2*s_channels))
             self.enc_1_crop.append(EncoderUnit(2*s_channels, 2 * s_channels))
@@ -126,8 +126,8 @@ class UNet3d(nn.Module):
             for i in range(len(S.landmarks)):
                 x1 = self.conv_crop[i](x[i])
                 x2 = self.enc_1_crop[i](x1)
-                x3 = self.dec_1_crop(x1,x2)
-                output = self.out_crop(x3)
+                x3 = self.dec_1_crop[i](x1,x2)
+                output = self.out_crop[i](x3)
                 if i == 0:
                     outputs = output
                 # i am expecting output to have dimension batchsize x channels x h x w x d

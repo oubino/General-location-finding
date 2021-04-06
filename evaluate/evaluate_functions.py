@@ -311,9 +311,9 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
             pred_coords_max = functions.pred_max(pred, l, S.landmarks)
             pred_max_x, pred_max_y, pred_max_z =  pred_coords_max[i][0], pred_coords_max[i][1], pred_coords_max[i][2] 
             S.landmark_locations_test_set[patients[i]] = {}
-            S.landmark_locations_test_set[patients[i]['x']] = pred_max_x
-            S.landmark_locations_test_set[patients[i]['y']] = pred_max_y
-            S.landmark_locations_test_set[patients[i]['z']] = pred_max_z   
+            S.landmark_locations_test_set[patients[i]]['x'] = pred_max_x
+            S.landmark_locations_test_set[patients[i]]['y'] = pred_max_y
+            S.landmark_locations_test_set[patients[i]]['z'] = pred_max_z   
     data_loaders.dataset.__test_crop__()
     image = batch['image'].to(S.device)
     pred = model(image, crop = True)    
@@ -352,7 +352,7 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
           pred_max_x, pred_max_y, pred_max_z =  pred_coords_max[i][0], pred_coords_max[i][1], pred_coords_max[i][2] 
           
           # need to convert location in cropped image to original location
-          
+          pred_max_x, pred_max_y, pred_max_z = functions.crop_to_orig(pred_coords_max[i][0], pred_coords_max[i][1], pred_coords_max[i][2], patients[i])
 
           
 #          structure_orig_max_x, structure_orig_max_y, structure_orig_max_z = structure_orig_loc[i][0],structure_orig_loc[i][1], structure_orig_loc[i][2] 
@@ -505,7 +505,7 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold, clicker
 
           #img_landmark_point_to_point = point_to_point(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z)
           # point to point takes in original structure location!!
-          img_landmark_point_to_point = functions.point_to_point_mm(structure_orig_max_x, structure_orig_max_y, structure_orig_max_z, pred_max_x, pred_max_y, pred_max_z, patient)
+          img_landmark_point_to_point = functions.point_to_point_mm(structure_orig_max_x, structure_orig_max_y, structure_orig_max_z, pred_max_x, pred_max_y, pred_max_z, patients[i])
           p2p_landmarks[l] = np.append(p2p_landmarks[l],img_landmark_point_to_point.cpu())
           # if img_point_to_point > 20mm is an outlier
           if img_landmark_point_to_point > 20:

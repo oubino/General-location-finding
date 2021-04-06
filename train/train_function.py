@@ -75,9 +75,9 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
                                         pred_coords_max = functions.pred_max(pred, l, S.landmarks)
                                         pred_max_x, pred_max_y, pred_max_z =  pred_coords_max[i][0], pred_coords_max[i][1], pred_coords_max[i][2] 
                                         S.landmark_locations_train_set[patients[i]] = {}
-                                        S.landmark_locations_train_set[patients[i]['x']] = pred_max_x
-                                        S.landmark_locations_train_set[patients[i]['y']] = pred_max_y
-                                        S.landmark_locations_train_set[patients[i]['z']] = pred_max_z   
+                                        S.landmark_locations_train_set[patients[i]]['x'] = pred_max_x
+                                        S.landmark_locations_train_set[patients[i]]['y'] = pred_max_y
+                                        S.landmark_locations_train_set[patients[i]]['z'] = pred_max_z   
                                 data_loaders.dataset.__train_crop__()
                             elif epochs_completed > S.switchover:
                                 outputs = model(inputs, crop = True)

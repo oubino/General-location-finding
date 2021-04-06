@@ -182,15 +182,29 @@ class CentreCrop(object):
       image, structure, idx, patient, coords = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords']
 
       d, h, w = image.shape[:3] # define image height, width, depth as first 3 values
-
-      crop_w = (w - self.width) / 2  # 256 - new width(128)
-      w_min = w / 4
-      crop_h = (h - self.height) / 2
-      crop_d = (d - self.depth) / 2
-      d_min = crop_d / 4
-
-      image = skimage.util.crop(image, ((0,0),(crop_w, crop_w), (crop_h, crop_h)))
-      structure = skimage.util.crop(structure, ((0,0),(crop_w, crop_w),(crop_h,crop_h)))
+      
+      # need to define location around which to crop
+      if patient in S.landmark_locations_train_set:
+          x_crop = S.landmark_locations_train_set[patient]['x']
+          y_crop = S.landmark_locations_train_set[patient]['y']
+          z_crop = S.landmark_locations_train_set[patient]['z']
+      elif patient in S.landmark_locations_test_set:
+          x_crop = S.landmark_locations_test_set[patient]['x']
+          y_crop = S.landmark_locations_test_set[patient]['y']
+          z_crop = S.landmark_locations_test_set[patient]['z']
+          
+      # crop .. (30,100) removes first 30 pixels from LHS and last 100 pixels from RHS   
+      x_left = x_crop - self.width/2
+      x_right = w - (x_crop + self.width/2)
+      y_left = y_crop - self.height/2
+      y_right = h - (y_crop + self.height/2)   
+      z_left = z_crop - self.depth/2
+      z_right = d  - (z_crop + self.depth/2)
+          
+      image = skimage.util.crop(image, ((z_left,z_right),(x_left, x_right), (y_left, y_right)))
+      structure = skimage.util.crop(structure, ((z_left,z_right),(x_left, x_right), (y_left, y_right)))
+      
+      """
       if self.depth < d:
         # crop
         crop_d = (d - self.depth) / 2
@@ -212,7 +226,8 @@ class CentreCrop(object):
         image = skimage.util.pad(image,((0,pad_value),(0,0),(0,0)))
         structure = skimage.util.pad(structure,((0,pad_value),(0,0),(0,0)))  
 
-      d, h, w = image.shape[:3] # define image height, width, depth as first 3 values
+        """
+     # d, h, w = image.shape[:3] # define image height, width, depth as first 3 values
 
       return {'image':image, 'structure': structure, 'idx':idx, 'patient':patient, 'coords':coords} # note note !
 

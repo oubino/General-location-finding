@@ -295,7 +295,7 @@ def point_to_point_mm(mask_x, mask_y, mask_z, pred_x, pred_y, pred_z, patient):
   list_img = list(data)#, key=operator.itemgetter(0))
   # sortedlist[img_number][0 = name, 1 = x/y, 2 = z]
   #image_idx = int(image_idx)
-  pat_ind = patient[0].replace('.npy','')
+  pat_ind = patient.replace('.npy','')
   index = 0 
   for i in range(len(list_img)):
       if list_img[i][0] == pat_ind:
@@ -307,7 +307,7 @@ def point_to_point_mm(mask_x, mask_y, mask_z, pred_x, pred_y, pred_z, patient):
         # array not emtpy
         index = 0       
         for i in range(len(S.downsample_idx_list)):
-          if S.downsample_idx_list[i] == patient[0]:
+          if S.downsample_idx_list[i] == patient:
               index = i
         #index = S.downsample_idx_list.index(patient)
         #print('patient')
@@ -333,6 +333,16 @@ def point_to_point_mm(mask_x, mask_y, mask_z, pred_x, pred_y, pred_z, patient):
   point_to_point = (((pred_x - mask_x)*pixel_mm_x)**2 + ((pred_y - mask_y)*pixel_mm_y)**2 + ((pred_z - mask_z)*pixel_mm_z)**2)**0.5 
   return point_to_point
 
+def crop_to_orig(pred_x, pred_y, pred_z, patient):
+    x_crop = S.landmark_locations_test_set[patient]['x']
+    y_crop = S.landmark_locations_test_set[patient]['y']
+    z_crop = S.landmark_locations_test_set[patient]['z']
+    x = x_crop - S.crop_size_x/2 + pred_x
+    y = y_crop - S.crop_size_y/2 + pred_y
+    z = z_crop - S.crop_size_z/2 + pred_z
+    return x, y, z
+    
+    
 
 def gaussian(x,y,z, targ_coords, sigma, gamma, dimension = 3): # assumes in 2d space
   # x, y are general coords and targ_coords define mean of gaussian

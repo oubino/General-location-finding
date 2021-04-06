@@ -57,21 +57,21 @@ class CTDataset(Dataset):
         
         
         if (self.transform_train_resize) and (self.train_resize == True):
-            sample['image'] = self.transform_train_resize(sample['image']) # if transforms present, act on sample
-            sample['structure'] = self.transform_train_resize(sample['structure'])
+            sample = self.transform_train_resize(sample) # if transforms present, act on sample
+            #sample['structure'] = self.transform_train_resize(sample['structure'])
         elif (self.transform_test_resize) and (self.test_resize == True):
-            sample['structure_original'] = self.transform_test_no_ds(sample['structure'])
-            sample['img_original'] = self.transform_test_no_ds(sample['image'])
-            sample['image'] = self.transform_test_resize(sample['image'])
-            sample['structure'] = self.transform_test_resize(sample['structure'])
+            sample_orig = self.transform_test_no_ds(sample)
+            sample = self.transform_test_resize(sample)
+            sample['structure_original'],sample['img_original'] =  sample_orig['structure'], sample_orig['image']
+            #sample['structure'] = self.transform_test-resize(sample['structure'])
         elif (self.transform_train_crop) and (self.train_crop == True):
-            sample['image'] = self.transform_train_crop(sample['image']) # if transforms present, act on sample
-            sample['structure'] = self.transform_train_crop(sample['structure'])
+            sample = self.transform_train_crop(sample) # if transforms present, act on sample
+            #sample['structure'] = self.transform_train_crop(sample['structure'])
         elif (self.transform_test_crop) and (self.test_crop == True):
-            sample['structure_original'] = self.transform_test_no_ds(sample['structure'])
-            sample['img_original'] = self.transform_test_no_ds(sample['image'])
-            sample['image'] = self.transform_test_crop(sample['image'])
-            sample['structure'] = self.transform_test_crop(sample['structure'])
+            sample_orig = self.transform_test_no_ds(sample)
+            sample = self.transform_test_crop(sample)
+            sample['structure_original'],sample['img_original'] =  sample_orig['structure'], sample_orig['image']
+            #sample['structure'] = self.transform_test_crop(sample['structure'])
             
         
         #sample['idx'] = idx
