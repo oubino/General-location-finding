@@ -13,7 +13,7 @@ import settings
 class CTDataset(Dataset):
     """3D CT Scan dataset."""
 
-    def __init__(self, root, transform_train =None, transform_test = None, test = False):
+    def __init__(self, root, transform_train =None, transform_test = None, transform_test_no_ds = None, test = False):
         """
         Args:
             root (string): Directory with all the images.
@@ -26,6 +26,7 @@ class CTDataset(Dataset):
         # self.structure_centres = list(sorted(os.listdir(os.path.join(root, "Structure Centres"))))
         self.transform_train = transform_train
         self.transform_test = transform_test
+        self.transform_test_no_ds = transform_test_no_ds
         self.test = False
         
     def __getitem__(self, idx):
@@ -51,9 +52,12 @@ class CTDataset(Dataset):
         
         
         if (self.transform_train) and (self.test == False):
-            sample = self.transform_train(sample) # if transforms present, act on sample
+            sample['image'] = self.transform_train(sample['image']) # if transforms present, act on sample
+            sample['structure'] = self.transform_train(sample['structure'])
         if (self.transform_test) and (self.test == True):
-            sample = self.transform_test(sample) # if transforms present, act on sample
+            sample['structure_original'] = self.transform_test_no_ds(sample['structure'])
+            sample['image'] = self.transform_test(sample['image'])
+            sample['structure'] = self.transform_test(sample['structure'])
         
         #sample['idx'] = idx
         
@@ -70,9 +74,11 @@ class CTDataset(Dataset):
 
     def __test__(self):
       self.test = True
+      self.train = False
     
     def __train__(self):
-      self.train = False
+      self.train = True
+      self.test = False
 
 #  -------- think this is redundant ---------
 class DatasetFromSubset(Dataset):

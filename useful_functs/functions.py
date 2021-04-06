@@ -313,12 +313,16 @@ def point_to_point_mm(mask_x, mask_y, mask_z, pred_x, pred_y, pred_z, patient):
         #print('patient')
         #print(patient)
         #print('pre amendment pixel sizes', pixel_mm_x, pixel_mm_y, pixel_mm_z)
-        pixel_mm_x = float(pixel_mm_x) * S.downsample_ratio_w[index]
-        pixel_mm_y = float(pixel_mm_y) * S.downsample_ratio_h[index]
-        pixel_mm_z = float(pixel_mm_z) * S.downsample_ratio_d[index]
+        pixel_mm_x = float(pixel_mm_x) 
+        pixel_mm_y = float(pixel_mm_y) 
+        pixel_mm_z = float(pixel_mm_z) 
         pixel_mm_x = torch.tensor((pixel_mm_x)).to(S.device)
         pixel_mm_y = torch.tensor((pixel_mm_y)).to(S.device)
         pixel_mm_z = torch.tensor((pixel_mm_z)).to(S.device)
+        # convert pred_x, pred_y, pred_z to location in original image (512,512,z)
+        pred_x = pred_x * S.downsample_ratio_w[index]
+        pred_y = pred_y * S.downsample_ratio_h[index]
+        pred_z = pred_z * S.downsample_ratio_d[index]
         #print('downsample ratio x,y,z')
         #print(S.downsample_ratio_w[index], S.downsample_ratio_h[index], S.downsample_ratio_d[index])
         #print('post amendment pixel sizes', pixel_mm_x, pixel_mm_y, pixel_mm_z)
