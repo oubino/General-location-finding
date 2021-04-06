@@ -311,9 +311,10 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
             pred_coords_max = functions.pred_max(pred, l, S.landmarks)
             pred_max_x, pred_max_y, pred_max_z =  pred_coords_max[i][0], pred_coords_max[i][1], pred_coords_max[i][2] 
             S.landmark_locations_test_set[patients[i]] = {}
-            S.landmark_locations_test_set[patients[i]]['x'] = pred_max_x
-            S.landmark_locations_test_set[patients[i]]['y'] = pred_max_y
-            S.landmark_locations_test_set[patients[i]]['z'] = pred_max_z   
+            S.landmark_locations_test_set[patients[i]][l] = {}
+            S.landmark_locations_test_set[patients[i]][l]['x'] = pred_max_x
+            S.landmark_locations_test_set[patients[i]][l]['y'] = pred_max_y
+            S.landmark_locations_test_set[patients[i]][l]['z'] = pred_max_z   
     data_loaders.dataset.__test_crop__()
     image = batch['image'].to(S.device)
     pred = model(image, crop = True)    
@@ -352,7 +353,7 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
           pred_max_x, pred_max_y, pred_max_z =  pred_coords_max[i][0], pred_coords_max[i][1], pred_coords_max[i][2] 
           
           # need to convert location in cropped image to original location
-          pred_max_x, pred_max_y, pred_max_z = functions.crop_to_orig(pred_coords_max[i][0], pred_coords_max[i][1], pred_coords_max[i][2], patients[i])
+          pred_max_x, pred_max_y, pred_max_z = functions.crop_to_orig(pred_coords_max[i][0], pred_coords_max[i][1], pred_coords_max[i][2], patients[i], l)
 
           
 #          structure_orig_max_x, structure_orig_max_y, structure_orig_max_z = structure_orig_loc[i][0],structure_orig_loc[i][1], structure_orig_loc[i][2] 

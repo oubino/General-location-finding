@@ -333,10 +333,10 @@ def point_to_point_mm(mask_x, mask_y, mask_z, pred_x, pred_y, pred_z, patient):
   point_to_point = (((pred_x - mask_x)*pixel_mm_x)**2 + ((pred_y - mask_y)*pixel_mm_y)**2 + ((pred_z - mask_z)*pixel_mm_z)**2)**0.5 
   return point_to_point
 
-def crop_to_orig(pred_x, pred_y, pred_z, patient):
-    x_crop = S.landmark_locations_test_set[patient]['x']
-    y_crop = S.landmark_locations_test_set[patient]['y']
-    z_crop = S.landmark_locations_test_set[patient]['z']
+def crop_to_orig(pred_x, pred_y, pred_z, patient, landmark):
+    x_crop = S.landmark_locations_test_set[patient][landmark]['x']
+    y_crop = S.landmark_locations_test_set[patient][landmark]['y']
+    z_crop = S.landmark_locations_test_set[patient][landmark]['z']
     x = x_crop - S.crop_size_x/2 + pred_x
     y = y_crop - S.crop_size_y/2 + pred_y
     z = z_crop - S.crop_size_z/2 + pred_z

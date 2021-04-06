@@ -183,26 +183,37 @@ class CentreCrop(object):
 
       d, h, w = image.shape[:3] # define image height, width, depth as first 3 values
       
-      # need to define location around which to crop
-      if patient in S.landmark_locations_train_set:
-          x_crop = S.landmark_locations_train_set[patient]['x'].cpu().numpy()
-          y_crop = S.landmark_locations_train_set[patient]['y'].cpu().numpy()
-          z_crop = S.landmark_locations_train_set[patient]['z'].cpu().numpy()
-      elif patient in S.landmark_locations_test_set:
-          x_crop = S.landmark_locations_test_set[patient]['x'].cpu().numpy()
-          y_crop = S.landmark_locations_test_set[patient]['y'].cpu().numpy()
-          z_crop = S.landmark_locations_test_set[patient]['z'].cpu().numpy()
+      counter = 0
+      for l in S.landmarks:
+          # need to define location around which to crop
+          if patient in S.landmark_locations_train_set:
+              x_crop = S.landmark_locations_train_set[patient][l]['x'].cpu().numpy()
+              y_crop = S.landmark_locations_train_set[patient][l]['y'].cpu().numpy()
+              z_crop = S.landmark_locations_train_set[patient][l]['z'].cpu().numpy()
+          elif patient in S.landmark_locations_test_set:
+              x_crop = S.landmark_locations_test_set[patient][l]['x'].cpu().numpy()
+              y_crop = S.landmark_locations_test_set[patient][l]['y'].cpu().numpy()
+              z_crop = S.landmark_locations_test_set[patient][l]['z'].cpu().numpy()
+              
+          # crop .. (30,100) removes first 30 pixels from LHS and last 100 pixels from RHS   
+          x_left = max(x_crop - self.width/2, 0)
+          x_right = max(w - (x_crop + self.width/2), 0)
+          y_left = max(y_crop - self.height/2, 0)
+          y_right = max(h - (y_crop + self.height/2), 0) 
+          z_left = max(z_crop - self.depth/2, 0)
+          z_right = max(d  - (z_crop + self.depth/2), 0)
+              
+          image = skimage.util.crop(image, ((z_left,z_right),(x_left, x_right), (y_left, y_right)))
+          structure = skimage.util.crop(structure, ((z_left,z_right),(x_left, x_right), (y_left, y_right)))
           
-      # crop .. (30,100) removes first 30 pixels from LHS and last 100 pixels from RHS   
-      x_left = x_crop - self.width/2
-      x_right = w - (x_crop + self.width/2)
-      y_left = y_crop - self.height/2
-      y_right = h - (y_crop + self.height/2)   
-      z_left = z_crop - self.depth/2
-      z_right = d  - (z_crop + self.depth/2)
+          if counter == 0:
+              structure_output = np.concatenate((outputs,output), axis = 1)structure
+              image_output = image
+          elif counter != 0:
+              structure_output 
+              image_output 
           
-      image = skimage.util.crop(image, ((z_left,z_right),(x_left, x_right), (y_left, y_right)))
-      structure = skimage.util.crop(structure, ((z_left,z_right),(x_left, x_right), (y_left, y_right)))
+          
       
       """
       if self.depth < d:
@@ -229,7 +240,7 @@ class CentreCrop(object):
         """
      # d, h, w = image.shape[:3] # define image height, width, depth as first 3 values
 
-      return {'image':image, 'structure': structure, 'idx':idx, 'patient':patient, 'coords':coords} # note note !
+      return {'image':image_output, 'structure': structure_output, 'idx':idx, 'patient':patient, 'coords':coords} # note note !
 
     
     
