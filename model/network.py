@@ -91,10 +91,20 @@ class UNet3d(nn.Module):
         self.dec4 = DecoderUnit(2 * s_channels, s_channels)
         self.out = OutConv(s_channels, n_classes)
         
-        # initialise all but only goes through forward if 
-        FILL
+        # crop 
+        self.conv_crop = nn.ModuleList()
+        self.enc_1_crop = nn.ModuleList()
+        self.dec_1_crop = nn.ModuleList()
+        self.out_corp = nn.ModuleList()
+        for i in range(len(S.landmarks)):
+            self.conv_crop.append(ConvUnit(in_channels, 2*s_channels))
+            self.enc_1_crop.append(EncoderUnit(2*s_channels, 2 * s_channels))
+            self.dec_1_crop.append(DecoderUnit(4 * s_channels, s_channels))
+            self.out_crop.append(OutConv(s_channels, 1))
+        
 
-    def forward(self, x,CROP):
+    def forward(self, x, crop):
+        
         if crop == False:
             x1 = self.conv(x)
             x2 = self.enc1(x1)
@@ -109,10 +119,24 @@ class UNet3d(nn.Module):
             x8 = self.dec3(x7, x2)
             x9 = self.dec4(x8, x1)
             output = self.out(x9)
-            return output, # return location of landmark only use if evaluating
-        elif:
-            return
-    
+            return output
+        else:
+            # x = sample list
+            # i.e. x[0] is cropped image around landmark 0
+            for i in range(len(S.landmarks)):
+                x1 = self.conv_crop[i](x[i])
+                x2 = self.enc_1_crop[i](x1)
+                x3 = self.dec_1_crop(x1,x2)
+                output = self.out_crop(x3)
+                if i == 0:
+                    outputs = output
+                # i am expecting output to have dimension batchsize x channels x h x w x d
+                # 1 x 1 x 50 x 50 x 30
+                # therefore want to concatenate along the channel dimension = dim1
+                else:
+                    outputs = torch.cat([outputs,output], dim = 1)
+            return outputs
+            
     
 class Transfer_model(nn.Module):
     def __init__(self, n_classes, s_channels, pre_trained_model):

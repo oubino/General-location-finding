@@ -13,7 +13,7 @@ import settings
 class CTDataset(Dataset):
     """3D CT Scan dataset."""
 
-    def __init__(self, root, transform_train =None, transform_test = None, transform_test_no_ds = None, transform_train_crop = None, test = False):
+    def __init__(self, root, transform_train_resize =None, transform_test_resize = None, transform_test_no_ds = None, transform_train_crop = None, transform_test_crop = None):
         """
         Args:
             root (string): Directory with all the images.
@@ -24,11 +24,15 @@ class CTDataset(Dataset):
         self.imgs = list(sorted(os.listdir(os.path.join(root, "CTs")))) # ensure they're aligned & index them
         self.structures = list(sorted(os.listdir(os.path.join(root, "Structures"))))
         # self.structure_centres = list(sorted(os.listdir(os.path.join(root, "Structure Centres"))))
-        self.transform_train = transform_train
-        self.transform_test = transform_test
+        self.transform_train_resize = transform_train_resize
+        self.transform_test_resize = transform_test_resize
         self.transform_test_no_ds = transform_test_no_ds
         self.transform_train_crop = transform_train_crop
-        self.test = False
+        self.transform_test_crop = transform_test_crop
+        self.test_resize = False
+        self.train_resize = False
+        self.train_crop = False
+        self.test_crop = False
         
     def __getitem__(self, idx):
         if torch.is_tensor(idx): # convert tensor to list to index items
@@ -52,16 +56,22 @@ class CTDataset(Dataset):
             sample['coords'][k] = [0,0,0] # x,y,z
         
         
-        if (self.transform_train) and (self.test == False):
-            sample['image'] = self.transform_train(sample['image']) # if transforms present, act on sample
-            sample['structure'] = self.transform_train(sample['structure'])
-        elif (self.transform_test) and (self.test == True):
+        if (self.transform_train_resize) and (self.train_resize == True):
+            sample['image'] = self.transform_train_resize(sample['image']) # if transforms present, act on sample
+            sample['structure'] = self.transform_train_resize(sample['structure'])
+        elif (self.transform_test_resize) and (self.test_resize == True):
             sample['structure_original'] = self.transform_test_no_ds(sample['structure'])
-            sample['image'] = self.transform_test(sample['image'])
-            sample['structure'] = self.transform_test(sample['structure'])
+            sample['img_original'] = self.transform_test_no_ds(sample['image'])
+            sample['image'] = self.transform_test_resize(sample['image'])
+            sample['structure'] = self.transform_test_resize(sample['structure'])
         elif (self.transform_train_crop) and (self.train_crop == True):
             sample['image'] = self.transform_train_crop(sample['image']) # if transforms present, act on sample
             sample['structure'] = self.transform_train_crop(sample['structure'])
+        elif (self.transform_test_crop) and (self.test_crop == True):
+            sample['structure_original'] = self.transform_test_no_ds(sample['structure'])
+            sample['img_original'] = self.transform_test_no_ds(sample['image'])
+            sample['image'] = self.transform_test_crop(sample['image'])
+            sample['structure'] = self.transform_test_crop(sample['structure'])
             
         
         #sample['idx'] = idx
@@ -77,20 +87,35 @@ class CTDataset(Dataset):
     def __len__(self):
         return len(self.imgs) # get size of dataset
 
-    def __test__(self):
-      self.test = True
-      self.train = False
+    def __test_resize__(self):
+      self.test_resize = True
+      self.train_resize = False
       self.train_crop = False
-    
-    def __train__(self):
-      self.train = True
-      self.test = False
+      self.test_crop = False
+ 
+    def __train_resize__(self):
+      self.test_resize = False
+      self.train_resize = True
       self.train_crop = False
+      self.test_crop = False
       
+    def __test_crop__(self):
+      self.test_resize = False
+      self.train_resize = False
+      self.train_crop = False
+      self.test_crop = True
+    
     def __train_crop__(self):
-        self.train_crop = True
-        self.train = False
-        self.test = False
+      self.test_resize = False
+      self.train_resize = False
+      self.train_crop = True
+      self.test_crop = False
+     
+    def __test_no_ds__(self):
+      self.test_resize = False
+      self.train_resize = False
+      self.train_crop = False
+      self.test_crop = False
 
 #  -------- think this is redundant ---------
 class DatasetFromSubset(Dataset):

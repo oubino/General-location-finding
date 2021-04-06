@@ -47,17 +47,17 @@ class initialise_model:
             self.best_loss = 1e10
             self.epochs_completed = 0
     
-        if self.epochs_completed < switchover: FILL
+        if self.epochs_completed < S.switchover: 
             data_loaders.dataset.__train__() 
-            self.model, self.best_loss, self.epochs_completed = train_function.train_model(self.model, self.scaler, self.optimizer, self.scheduler, S.alpha,S.reg,S.gamma,S.sigmas, num_epochs=S.epoch_batch, best_loss = self.best_loss, epochs_completed = self.epochs_completed)
-        elif self.epochs_completed > switchover:
+            #self.model, self.best_loss, self.epochs_completed = train_function.train_model(self.model, self.scaler, self.optimizer, self.scheduler, S.alpha,S.reg,S.gamma,S.sigmas, num_epochs=S.epoch_batch, best_loss = self.best_loss, epochs_completed = self.epochs_completed)
+        elif self.epochs_completed > S.switchover:
             data_loaders.dataset.__train_crop__()
-            self.model, self.best_loss, self.epochs_completed = train_function.train_model(self.model, self.scaler, self.optimizer, self.scheduler, S.alpha,S.reg,S.gamma,S.sigmas, num_epochs=S.epoch_batch, best_loss = self.best_loss, epochs_completed = self.epochs_completed)
+        self.model, self.best_loss, self.epochs_completed = train_function.train_model(self.model, self.scaler, self.optimizer, self.scheduler, S.alpha,S.reg,S.gamma,S.sigmas, num_epochs=S.epoch_batch, best_loss = self.best_loss, epochs_completed = self.epochs_completed)
 
     def evaluate(self, fold):
         
         self.model.eval()   # Set model to the evaluation mode
-        data_loaders.dataset.__test__() # sets whole dataset to test mode means it doesn't augment images
+        #data_loaders.dataset.__test__() # sets whole dataset to test mode means it doesn't augment images
         evaluate_functions.performance_metrics(self.model,S.sigmas,S.gamma, self.epochs_completed, fold)
         
     def save(self, fold):

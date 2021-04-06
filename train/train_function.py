@@ -47,6 +47,7 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
                     inputs = batch['image']
                     labels = batch['structure']
                     idx = batch['idx']
+                    patients = batch['patient']
                    # print(labels.size())
                     inputs = inputs.float().to(S.device)
                     labels = labels.float().to(S.device)
@@ -63,11 +64,23 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
                     with torch.set_grad_enabled(phase == 'train'):
                         
                         with torch.cuda.amp.autocast(enabled = S.use_amp):
-                            if epochs_completed < switchover:
-                                outputs = model((inputs,CROP)) FILL
-                                CALCULATE LOCATION TO CROP AROUND AND ADD TO SETTINGS
-                            elif:
-                                ... FILL
+                            if epochs_completed < S.switchover:
+                                outputs = model(inputs,crop = False)
+                            elif epochs_completed == S.switchover:
+                                outputs = model(inputs,crop = False)
+                                data_loaders.dataset.__test_resize__() 
+                                pred = outputs
+                                for l in S.landmarks:
+                                    for i in range(inputs.size()[0]):
+                                        pred_coords_max = functions.pred_max(pred, l, S.landmarks)
+                                        pred_max_x, pred_max_y, pred_max_z =  pred_coords_max[i][0], pred_coords_max[i][1], pred_coords_max[i][2] 
+                                        S.landmark_locations_train_set[patients[i]] = {}
+                                        S.landmark_locations_train_set[patients[i]['x']] = pred_max_x
+                                        S.landmark_locations_train_set[patients[i]['y']] = pred_max_y
+                                        S.landmark_locations_train_set[patients[i]['z']] = pred_max_z   
+                                data_loaders.dataset.__train_crop__()
+                            elif epochs_completed > S.switchover:
+                                outputs = model(inputs, crop = True)
                             # 1. convert masks to heatmaps inside loss function (allows sigma optimisation)
                             loss = loss_func.calc_loss_gauss(model, inputs, outputs, labels, idx, metrics_landmarks,alpha,reg,gamma,imgs_in_set,sigmas)
                         

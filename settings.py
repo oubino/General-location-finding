@@ -36,6 +36,8 @@ def init():
     global ct_print
     global k_fold_ids
     global batch_size_test
+    global switchover
+    global landmark_locations_train_set, landmark_locations_test_set
 
          
     # paths
@@ -218,7 +220,15 @@ def init():
     # k folds
     k_folds = 5
     k_fold_ids = []   # k fold test
+    
+    # switchover to crop
+    switchover = 50
 
+    # landmark locations train set
+    landmark_locations_train_set = {}
+    
+    # landmark locations test set
+    landmark_locations_test_set = {}
     
 def init_new():
     # oli vs aaron settings 
