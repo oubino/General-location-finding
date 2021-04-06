@@ -50,7 +50,7 @@ class initialise_model:
         if self.epochs_completed < S.switchover: 
             data_loaders.dataset.__train_resize__() 
             #self.model, self.best_loss, self.epochs_completed = train_function.train_model(self.model, self.scaler, self.optimizer, self.scheduler, S.alpha,S.reg,S.gamma,S.sigmas, num_epochs=S.epoch_batch, best_loss = self.best_loss, epochs_completed = self.epochs_completed)
-        elif self.epochs_completed > S.switchover:
+        elif self.epochs_completed >= S.switchover:
             data_loaders.dataset.__train_crop__()
         self.model, self.best_loss, self.epochs_completed = train_function.train_model(self.model, self.scaler, self.optimizer, self.scheduler, S.alpha,S.reg,S.gamma,S.sigmas, num_epochs=S.epoch_batch, best_loss = self.best_loss, epochs_completed = self.epochs_completed)
 

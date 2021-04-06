@@ -185,13 +185,13 @@ class CentreCrop(object):
       
       # need to define location around which to crop
       if patient in S.landmark_locations_train_set:
-          x_crop = S.landmark_locations_train_set[patient]['x']
-          y_crop = S.landmark_locations_train_set[patient]['y']
-          z_crop = S.landmark_locations_train_set[patient]['z']
+          x_crop = S.landmark_locations_train_set[patient]['x'].cpu().numpy()
+          y_crop = S.landmark_locations_train_set[patient]['y'].cpu().numpy()
+          z_crop = S.landmark_locations_train_set[patient]['z'].cpu().numpy()
       elif patient in S.landmark_locations_test_set:
-          x_crop = S.landmark_locations_test_set[patient]['x']
-          y_crop = S.landmark_locations_test_set[patient]['y']
-          z_crop = S.landmark_locations_test_set[patient]['z']
+          x_crop = S.landmark_locations_test_set[patient]['x'].cpu().numpy()
+          y_crop = S.landmark_locations_test_set[patient]['y'].cpu().numpy()
+          z_crop = S.landmark_locations_test_set[patient]['z'].cpu().numpy()
           
       # crop .. (30,100) removes first 30 pixels from LHS and last 100 pixels from RHS   
       x_left = x_crop - self.width/2

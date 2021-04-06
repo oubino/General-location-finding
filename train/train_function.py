@@ -66,8 +66,9 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
                         with torch.cuda.amp.autocast(enabled = S.use_amp):
                             if epochs_completed < S.switchover:
                                 outputs = model(inputs,crop = False)
-                            elif epochs_completed == S.switchover:
-                                outputs = model(inputs,crop = False)
+                            #elif epochs_completed == S.switchover-1:
+                            #    outputs = model(inputs,crop = False)
+                            # ----- need to be smarter about when do this ---- 
                                 data_loaders.dataset.__test_resize__() 
                                 pred = outputs
                                 for l in S.landmarks:
@@ -78,8 +79,13 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
                                         S.landmark_locations_train_set[patients[i]]['x'] = pred_max_x
                                         S.landmark_locations_train_set[patients[i]]['y'] = pred_max_y
                                         S.landmark_locations_train_set[patients[i]]['z'] = pred_max_z   
-                                data_loaders.dataset.__train_crop__()
-                            elif epochs_completed > S.switchover:
+                                        print('locations')
+                                        print(S.landmark_locations_train_set)
+                                data_loaders.dataset.__train_resize__()
+                            # ----- need to be smarter about when do this ---- 
+                                print('here 1')
+                            elif epochs_completed >= S.switchover:
+                                print('here 2')
                                 outputs = model(inputs, crop = True)
                             # 1. convert masks to heatmaps inside loss function (allows sigma optimisation)
                             loss = loss_func.calc_loss_gauss(model, inputs, outputs, labels, idx, metrics_landmarks,alpha,reg,gamma,imgs_in_set,sigmas)

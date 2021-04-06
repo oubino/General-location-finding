@@ -425,7 +425,7 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
         writer.writerow(['%s' % S.run_folder, '%s' % epochs_completed_string, 'Landmark %1.0f' % l, 
              str(mean), str(std_mean),str(median),str(outliers_perc) + '%', sigma_string.replace("\n", " "), time.strftime("%Y%m%d-%H%M%S"), 'pred max used = %s' % S.pred_max])
        
-def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold, clicker, images, preds): 
+def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold, clicker, images, preds, original_imgs, structures): 
   # so can print out test ids for each fold at end
   S.k_fold_ids.append(data_loaders.print_ids)
   # create directory for this eval
@@ -445,12 +445,17 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold, clicker
     
   counter = 0
   for batch in data_loaders.dataloaders['test']:
-    structure = batch['structure'].to(S.device)
-    structure_original = batch['structure_original'].to(S.device)
+    #structure = batch['structure'].to(S.device)
+    structure = batch['structure_original'].to(S.device)
     patient = batch['patient']
     image = images[counter]
     pred = preds[counter]
+    #structure = structures[counter] 
+    original_img = original_imgs[counter]
     counter += 1
+    print('patient')
+    print(patient)
+    print('NEEDS TO MATCH THINK OF BETTER WAY TO CODE ')
     
   
     batch_number = 0
@@ -460,7 +465,7 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold, clicker
       for i in range(structure.size()[0]):
         
         structure_loc = functions.landmark_loc(structure, l)[0]
-        structure_orig_loc = functions.landmark_loc(structure_original, l)[0]
+  #      structure_orig_loc = functions.landmark_loc(structure_original, l)[0]
         #structure_com = functions.com_structure(structure, l)[0]# [0] ensures extracts coords rather than True/False
         # change to top structure
         #if functions.com_structure(structure,1)[1][i] == True:
@@ -480,7 +485,10 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold, clicker
           structure_max_x, structure_max_y, structure_max_z = structure_loc[i][0],structure_loc[i][1], structure_loc[i][2] 
           pred_max_x, pred_max_y, pred_max_z =  pred_coords_max[i][0], pred_coords_max[i][1], pred_coords_max[i][2] 
           
-          structure_orig_max_x, structure_orig_max_y, structure_orig_max_z = structure_orig_loc[i][0],structure_orig_loc[i][1], structure_orig_loc[i][2] 
+          # need to convert location in cropped image to original location
+          pred_max_x, pred_max_y, pred_max_z = functions.crop_to_orig(pred_coords_max[i][0], pred_coords_max[i][1], pred_coords_max[i][2], patient[i])
+          
+#          structure_orig_max_x, structure_orig_max_y, structure_orig_max_z = structure_orig_loc[i][0],structure_orig_loc[i][1], structure_orig_loc[i][2] 
           
           print('predicted x,y,z (check consistnetn)')
           print(pred_max_x, pred_max_y, pred_max_z)
@@ -500,12 +508,12 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold, clicker
             print('\n')
             # print 2D slice
             print('2D slice for landmark %1.0f' % l)
-            print_2D_slice(image[i], structure[i], pred[i], l, pred_max_z, eval_path, patient[i])
+            print_2D_slice(original_img[i], structure[i], pred[i], l, pred_max_x, pred_max_y, pred_max_z, structure_max_x, structure_max_y, structure_max_z ,eval_path, patient[i])
             
 
           #img_landmark_point_to_point = point_to_point(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z)
           # point to point takes in original structure location!!
-          img_landmark_point_to_point = functions.point_to_point_mm(structure_orig_max_x, structure_orig_max_y, structure_orig_max_z, pred_max_x, pred_max_y, pred_max_z, patients[i])
+          img_landmark_point_to_point = functions.point_to_point_mm(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z, patient[i])
           p2p_landmarks[l] = np.append(p2p_landmarks[l],img_landmark_point_to_point.cpu())
           # if img_point_to_point > 20mm is an outlier
           if img_landmark_point_to_point > 20:
