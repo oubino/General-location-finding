@@ -70,9 +70,11 @@ class CTDataset(Dataset):
 
     def __test__(self):
       self.test = True
+      self.train = False
     
     def __train__(self):
-      self.train = False
+      self.train = True
+      self.test = False
 
 #  -------- think this is redundant ---------
 class DatasetFromSubset(Dataset):
