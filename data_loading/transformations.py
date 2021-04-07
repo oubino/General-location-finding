@@ -262,8 +262,14 @@ class CentreCrop(object):
           image_crop = skimage.util.crop(image, ((z_left,z_right),(x_left, x_right), (y_left, y_right)))
           structure_crop = skimage.util.crop(structure, ((z_left,z_right),(x_left, x_right), (y_left, y_right)))
           
-          print('image shape, struc shape')
-          print(image_crop.shape, structure_crop.shape)
+          if structure_crop.size(0) != 30 or image_crop.size(0) != 30:
+              print('30 error')
+              print('image shape, struc shape')
+              print(image_crop.shape, structure_crop.shape)
+              print('zleft, z right')
+              print(z_left, z_right)
+              print('z_left+z_right vs d - self.depth')
+              print(z_left + z_right,d - self.depth )
           
           if counter == 0:
               structure_output = np.expand_dims(structure_crop, 0)
