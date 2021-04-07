@@ -94,12 +94,25 @@ class UNet3d(nn.Module):
         # crop 
         self.conv_crop = nn.ModuleList()
         self.enc_1_crop = nn.ModuleList()
+        self.enc_2_crop = nn.ModuleList()
+        self.enc_3_crop = nn.ModuleList()
+        self.enc_4_crop = nn.ModuleList()         
         self.dec_1_crop = nn.ModuleList()
+        self.dec_2_crop = nn.ModuleList()
+        self.dec_3_crop = nn.ModuleList()
+        self.dec_4_crop = nn.ModuleList()
         self.out_crop = nn.ModuleList()
         for i in range(len(S.landmarks)):
-            self.conv_crop.append(ConvUnit(in_channels, 2*s_channels))
-            self.enc_1_crop.append(EncoderUnit(2*s_channels, 2 * s_channels))
-            self.dec_1_crop.append(DecoderUnit(4 * s_channels, s_channels))
+            self.conv_crop.append(ConvUnit(in_channels, s_channels))
+            self.enc_1_crop.append(EncoderUnit(s_channels, 2 * s_channels))
+            self.enc_2_crop.append(EncoderUnit(2*s_channels, 2 * s_channels))
+            #self.enc_3_crop.append(EncoderUnit(4*s_channels, 8 * s_channels))
+            #self.enc_4_crop.append(EncoderUnit(8*s_channels, 8 * s_channels))
+            
+            #self.dec_1_crop.append(DecoderUnit(16*s_channels, 4 * s_channels))
+            #self.dec_2_crop.append(DecoderUnit(8*s_channels, 2 * s_channels))
+            self.dec_3_crop.append(DecoderUnit(4*s_channels, s_channels))
+            self.dec_4_crop.append(DecoderUnit(2 * s_channels, s_channels))
             self.out_crop.append(OutConv(s_channels, 1))
         
 
@@ -120,19 +133,27 @@ class UNet3d(nn.Module):
             x9 = self.dec4(x8, x1)
             output = self.out(x9)
             return output
+            
         else:
             # x = sample list
-            # i.e. x[0] is cropped image around landmark 0
+            # i.e. x[0] is cropped image around landmark 0    
+            # want channel axis to become landmark axis
             for i in range(len(S.landmarks)):
-                x1 = self.conv_crop[i](x[i])
+                x1 = self.conv_crop[i](x[:,i,:,:,:,:])
                 x2 = self.enc_1_crop[i](x1)
-                x3 = self.dec_1_crop[i](x1,x2)
-                output = self.out_crop[i](x3)
+                x3 = self.enc_2_crop[i](x2)
+                #x4 = self.enc_3_crop[i](x3)
+                #x5 = self.enc_4_crop[i](x4)
+
+                #x6 = self.dec_1_crop[i](x5, x4)
+                #x7 = self.dec_2_crop[i](x6, x3)
+                x8 = self.dec_3_crop[i](x3, x2)
+                x9 = self.dec_4_crop[i](x8, x1)
+                output = self.out_crop[i](x9)
+                
                 if i == 0:
-                    outputs = output
-                # i am expecting output to have dimension batchsize x channels x h x w x d
-                # 1 x 1 x 50 x 50 x 30
-                # therefore want to concatenate along the channel dimension = dim1
+                    # i am expecting output to have dimension B x C x H x W x D
+                    outputs = output #.unsqueeze(1)
                 else:
                     outputs = torch.cat([outputs,output], dim = 1)
             return outputs

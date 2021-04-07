@@ -189,7 +189,7 @@ def print_2D_slice(image, structure, pred, landmark, pred_x, pred_y, pred_z, str
     # -----------------------------------
     
     # ---- if want to plot as point ------
-    pred = pred[pred_y, pred_x, pred_z]
+    #pred = pred[pred_y.cpu().numpy(), pred_x.cpu().numpy(), pred_z]
     plt.imshow(image,cmap = 'Greys_r', alpha = 0.9)
     plt.plot(struc_x.cpu().numpy(), struc_y.cpu().numpy(), color = 'red', marker = 'x', label = 'target')
     plt.plot(pred_x.cpu().numpy(), pred_y.cpu().numpy(),color='green', marker='o', label = 'pred')
@@ -296,26 +296,30 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
   for l in S.landmarks:
     p2p_landmarks[l] = np.empty((0), float)
     outliers_landmarks[l] = np.empty((0), float)
-
-
+    
+    
+  # go through test set once to go through non cropped network
+  data_loaders.dataset.__test_resize__()
   for batch in data_loaders.dataloaders['test']:
     #image = batch['image'].to(S.device)
     #structure = batch['structure'].to(S.device)
     patients = batch['patient']
-    
-    data_loaders.dataset.__test_resize__()
+     
     image = batch['image'].to(S.device)
     pred = model(image, crop = False) 
-    for l in S.landmarks:
-        for i in range(image.size()[0]):
+    for i in range(image.size()[0]):
+        S.landmark_locations_test_set[patients[i]] = {}
+        for l in S.landmarks:
             pred_coords_max = functions.pred_max(pred, l, S.landmarks)
-            pred_max_x, pred_max_y, pred_max_z =  pred_coords_max[i][0], pred_coords_max[i][1], pred_coords_max[i][2] 
-            S.landmark_locations_test_set[patients[i]] = {}
+            pred_max_x, pred_max_y, pred_max_z =  pred_coords_max[i][0], pred_coords_max[i][1], pred_coords_max[i][2]     
             S.landmark_locations_test_set[patients[i]][l] = {}
-            S.landmark_locations_test_set[patients[i]][l]['x'] = pred_max_x
-            S.landmark_locations_test_set[patients[i]][l]['y'] = pred_max_y
-            S.landmark_locations_test_set[patients[i]][l]['z'] = pred_max_z   
-    data_loaders.dataset.__test_crop__()
+            S.landmark_locations_test_set[patients[i]][l]['x'] = pred_max_x * S.downsample_ratio_list[patients[i]]['w']
+            S.landmark_locations_test_set[patients[i]][l]['y'] = pred_max_y * S.downsample_ratio_list[patients[i]]['h']
+            S.landmark_locations_test_set[patients[i]][l]['z'] = pred_max_z    * S.downsample_ratio_list[patients[i]]['d']
+    
+  # go through test set again cropping this time
+  data_loaders.dataset.__test_crop__()
+  for batch in data_loaders.dataloaders['test']:
     image = batch['image'].to(S.device)
     pred = model(image, crop = True)    
     # just use structure original and don't use structure. EASIER

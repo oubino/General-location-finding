@@ -20,8 +20,8 @@ from data_loading import transformations as T
 trans_test_resize = transforms.Compose([T.Resize(S.in_z,S.in_x,S.in_y),T.Upsidedown_scipy(), T.Extract_landmark_location(test= True), T.Fix_base_value(), T.Normalise(S.normal_min, S.normal_max, S.normal_window), T.Check_left_right(), T.ToTensor()])
 trans_train_resize = transforms.Compose([T.Resize(S.in_z,S.in_x,S.in_y),T.Upsidedown_scipy(), T.Extract_landmark_location(test = False), T.Fix_base_value(), T.Normalise(S.normal_min, S.normal_max, S.normal_window),  T.Flips_scipy(), T.Horizontal_flip(),  T.Check_left_right(), T.ToTensor()])
 trans_test_no_ds = transforms.Compose([T.Upsidedown_scipy(), T.Extract_landmark_location(test= True), T.Fix_base_value(), T.Normalise(S.normal_min, S.normal_max, S.normal_window), T.Check_left_right(), T.ToTensor()])
-trans_train_crop = transforms.Compose([T.CentreCrop(S.crop_size_z,S.crop_size_x,S.crop_size_y),T.Upsidedown_scipy(), T.Extract_landmark_location(test = False), T.Fix_base_value(), T.Normalise(S.normal_min, S.normal_max, S.normal_window),  T.Flips_scipy(), T.Horizontal_flip(),  T.Check_left_right(), T.ToTensor()])
-trans_test_crop = transforms.Compose([T.CentreCrop(S.crop_size_z,S.crop_size_x,S.crop_size_y),T.Upsidedown_scipy(), T.Extract_landmark_location(test= True), T.Fix_base_value(), T.Normalise(S.normal_min, S.normal_max, S.normal_window), T.Check_left_right(), T.ToTensor()])
+trans_train_crop = transforms.Compose([T.Upsidedown_scipy(), T.Extract_landmark_location(test = False), T.Fix_base_value(), T.Normalise(S.normal_min, S.normal_max, S.normal_window), T.Flips_scipy(), T.Horizontal_flip(),  T.Check_left_right(),T.CentreCrop(S.crop_size_z,S.crop_size_x,S.crop_size_y), T.ToTensor_crop()])
+trans_test_crop = transforms.Compose([T.Upsidedown_scipy(), T.Extract_landmark_location(test= True), T.Fix_base_value(), T.Normalise(S.normal_min, S.normal_max, S.normal_window), T.Check_left_right(), T.CentreCrop(S.crop_size_z,S.crop_size_x,S.crop_size_y), T.ToTensor_crop()])
 # crop needs to take in crop location - saved in settings
 
 

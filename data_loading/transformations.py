@@ -62,7 +62,8 @@ class Resize(object):
       self.height = height
                           
   def __call__(self, sample):
-      image, structure, idx, patient, coords = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords']
+      #print('resized!')
+      image, structure, idx, patient, coords, crop_coords = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords'], sample['crop_coords']
       depth = self.depth # 256 - new width(128)
       width = self.width
       height = self.height
@@ -74,10 +75,15 @@ class Resize(object):
         
       d_post, h_post, w_post = image.shape[:3] 
     
-      S.downsample_ratio_h = np.append(S.downsample_ratio_h, h_pre/h_post)
-      S.downsample_ratio_w = np.append(S.downsample_ratio_w, w_pre/w_post)
-      S.downsample_ratio_d = np.append(S.downsample_ratio_d, d_pre/d_post)
-      S.downsample_idx_list.append(patient) 
+      #S.downsample_ratio_h = np.append(S.downsample_ratio_h, h_pre/h_post)
+      #S.downsample_ratio_w = np.append(S.downsample_ratio_w, w_pre/w_post)
+      #S.downsample_ratio_d = np.append(S.downsample_ratio_d, d_pre/d_post)
+      #.downsample_idx_list.append(patient) 
+      S.downsample_ratio_list[patient] = {}
+      S.downsample_ratio_list[patient]['h'] = h_pre/h_post
+      S.downsample_ratio_list[patient]['w'] = w_pre/w_post
+      S.downsample_ratio_list[patient]['d'] = d_pre/d_post
+      
       '''
       structure_new = np.zeros(image.shape)
       for l in S.landmarks:
@@ -89,16 +95,16 @@ class Resize(object):
               new_x = int(old_index[2] * w_post/w_pre)
               structure_new[new_z][new_y][new_x] = l
         '''
-      return {'image':image,'structure': structure , 'idx': idx, 'patient':patient, 'coords':coords} # note note !'structure': structure_new
+      return {'image':image,'structure': structure , 'idx': idx, 'patient':patient, 'coords':coords, 'crop_coords': crop_coords} # note note !'structure': structure_new
   
 class Fix_base_value(object):  
   """ Some images start from -1024, others from 0 make sure all start from 0 """
                             
   def __call__(self, sample):
-      image, structure, idx, patient, coords = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords']
+      image, structure, idx, patient, coords, crop_coords = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords'] , sample['crop_coords']
       if np.round(np.amin(image)) < -1000:
           image = image + np.abs(np.round(np.amin(image)))
-      return {'image':image, 'structure': structure, 'idx': idx, 'patient':patient, 'coords': coords} # note note !
+      return {'image':image, 'structure': structure, 'idx': idx, 'patient':patient, 'coords': coords, 'crop_coords': crop_coords} # note note !
   
 class Extract_landmark_location(object):
     """ Convert structure to tensor of zeros with one value at the desired landmark location """
@@ -109,7 +115,7 @@ class Extract_landmark_location(object):
         # see numpy_loc.py/landmark_loc_np
 
     def __call__(self,sample):
-        image, structure, idx, patient, coordinates = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords']
+        image, structure, idx, patient, coordinates, crop_coords = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords'], sample['crop_coords']
         structure_mod = np.zeros(structure.shape)
         
         for l in S.landmarks_total:
@@ -120,7 +126,7 @@ class Extract_landmark_location(object):
                 x, y, z = coords[0], coords[1], coords[2]
                 structure_mod[z][y][x] = l
                 coordinates[l] = [x,y,z]
-        return {'image':image, 'structure': structure_mod, 'idx': idx, 'patient':patient, 'coords': coordinates} # note note !
+        return {'image':image, 'structure': structure_mod, 'idx': idx, 'patient':patient, 'coords': coordinates, 'crop_coords':crop_coords} # note note !
     
 class Check_landmark_still_there(object):
     """ Check landmark still present during transformations """
@@ -128,14 +134,14 @@ class Check_landmark_still_there(object):
         self.location = location
         self.test = test
     def __call__(self, sample):
-        image, structure, idx, patient, coordinates = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords']
+        image, structure, idx, patient, coordinates, crop_coords = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords'], sample['crop_coords']
         for l in S.landmarks_total:
             # structure is z, y, x
             # need it in y, x, z
             # the false at the end doesn't really matter here
             coords = numpy_loc.landmark_loc_np(S.landmarks_total_loc[l],structure,l, patient, self.test)[0]
             #if sum(coords) != 0:
-            #    print('coordinates from rotation normal for')
+            #    print('coordinates from rotation for')
             #    print(l)
             #    print(coords[0], coords[1], coords[2])
             print('coordinates old')
@@ -144,7 +150,7 @@ class Check_landmark_still_there(object):
                 print('landarks not present post %s' % self.location)
         print('coordinates new')
         print(coordinates)
-        return {'image':image, 'structure': structure, 'idx': idx, 'patient':patient, 'coords':coordinates} # note note !
+        return {'image':image, 'structure': structure, 'idx': idx, 'patient':patient, 'coords':coordinates, 'crop_coords':crop_coords} # note note !
         
         
 class Normalise(object):  
@@ -157,7 +163,7 @@ class Normalise(object):
       self.window = window
                           
   def __call__(self, sample):
-      image, structure, idx, patient, coords = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords']
+      image, structure, idx, patient, coords, crop_coords = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords'], sample['crop_coords']
       # need to normalise around different values
       if np.round(np.amin(image)) < 0:
           print("MIN VALUE LESS THAN 0")
@@ -170,7 +176,7 @@ class Normalise(object):
       img_norm = np.clip(image, minval, maxval)
       img_norm -= minval
       img_norm /= self.window
-      return {'image':img_norm, 'structure': structure, 'idx': idx, 'patient':patient, 'coords': coords} # note note !
+      return {'image':img_norm, 'structure': structure, 'idx': idx, 'patient':patient, 'coords': coords, 'crop_coords':crop_coords} # note note !
 
 class CentreCrop(object):    
   def __init__(self, depth, width, height):
@@ -179,42 +185,108 @@ class CentreCrop(object):
       self.height = height
                           
   def __call__(self, sample):
-      image, structure, idx, patient, coords = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords']
+      #print('cropped')
+      image, structure, idx, patient, coords, crop_coords = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords'], sample['crop_coords']
 
       d, h, w = image.shape[:3] # define image height, width, depth as first 3 values
       
+      #print('depth height width')
+      #print(d,h,w)
+      
       counter = 0
-      for l in S.landmarks:
-          # need to define location around which to crop
-          if patient in S.landmark_locations_train_set:
-              x_crop = S.landmark_locations_train_set[patient][l]['x'].cpu().numpy()
-              y_crop = S.landmark_locations_train_set[patient][l]['y'].cpu().numpy()
-              z_crop = S.landmark_locations_train_set[patient][l]['z'].cpu().numpy()
-          elif patient in S.landmark_locations_test_set:
-              x_crop = S.landmark_locations_test_set[patient][l]['x'].cpu().numpy()
-              y_crop = S.landmark_locations_test_set[patient][l]['y'].cpu().numpy()
-              z_crop = S.landmark_locations_test_set[patient][l]['z'].cpu().numpy()
+      for l in S.landmarks:    
               
+          # need to amend coords of structure
+          x_crop, y_crop, z_crop = crop_coords[l][0], crop_coords[l][1], crop_coords[l][2]
+          x,y, z = coords[l][0], coords[l][1], coords[l][2]
+          #print('pre coords')
+          #print(x,y,z)
+          #print('crop coords')
+          #print(x_crop, y_crop, z_crop)
+             
+          
           # crop .. (30,100) removes first 30 pixels from LHS and last 100 pixels from RHS   
           x_left = max(x_crop - self.width/2, 0)
-          x_right = max(w - (x_crop + self.width/2), 0)
+          x_left = min(x_left, w - self.width) # e.g. x left max is 150, min is 0
+          x_right = w - x_left - self.width
+          
           y_left = max(y_crop - self.height/2, 0)
-          y_right = max(h - (y_crop + self.height/2), 0) 
+          y_left = min(y_left, h - self.height) # e.g. x left max is 150, min is 0
+          y_right = h - y_left - self.height
+          
           z_left = max(z_crop - self.depth/2, 0)
-          z_right = max(d  - (z_crop + self.depth/2), 0)
+          z_left = min(z_left, d - self.depth) # e.g. x left max is 150, min is 0
+          z_right = d - z_left - self.depth
+          
+          if x_left + x_right != w - self.width:
+              print('issue crop x')
+              print(x_left + x_right, w - self.width)
+              if x_left + x_right == w - self.width - 1:
+                  x_left = x_left + 1
+              elif x_left + x_right == w - self.width + 1:
+                  x_left = x_left - 1
+         
+          if y_left + y_right != h - self.height:
+              print('issue crop y')
+              print(y_left + y_right, h - self.height)
+              if y_left + y_right == h - self.height - 1:
+                  y_left = y_left + 1
+              elif y_left + y_right == h - self.height + 1:
+                  y_left = y_left - 1
               
-          image = skimage.util.crop(image, ((z_left,z_right),(x_left, x_right), (y_left, y_right)))
-          structure = skimage.util.crop(structure, ((z_left,z_right),(x_left, x_right), (y_left, y_right)))
+          if z_left + z_right != d - self.depth:
+              print('issue crop z')
+              print(z_left + z_right, d - self.depth)
+              if z_left + z_right == d - self.depth - 1:
+                  z_left = z_left + 1
+              elif z_left + z_right == d - self.depth + 1:
+                  z_left = z_left - 1
+          
+          # print 
+         # print('x left right y left right z left right')
+          #print(x_left, x_right, y_left, y_right, z_left, z_right)
+          
+          # post coords
+          x = x - x_left
+          y = y - y_left
+          z = z - z_left
+          coords[l][0] = x
+          coords[l][1] = y
+          coords[l][2] = z
+          
+          #print('post coords')
+          #print(x,y,z)
+          
+          
+              
+          image_crop = skimage.util.crop(image, ((z_left,z_right),(x_left, x_right), (y_left, y_right)))
+          structure_crop = skimage.util.crop(structure, ((z_left,z_right),(x_left, x_right), (y_left, y_right)))
+          
+          #print('image shape, struc shape')
+          #print(image_crop.shape, structure_crop.shape)
           
           if counter == 0:
-              structure_output = np.concatenate((outputs,output), axis = 1)structure
-              image_output = image
+              structure_output = np.expand_dims(structure_crop, 0)
+              image_output = np.expand_dims(image_crop, 0)
+              #print('image output shape')
+              #print(image_output.shape)
           elif counter != 0:
-              structure_output 
-              image_output 
+              structure_output = np.concatenate((structure_output,np.expand_dims(structure_crop, 0)), axis = 0)
+              #print('image output shape')
+              #print(image_output.shape)
+              image_output = np.concatenate((image_output,np.expand_dims(image_crop, 0)), axis = 0)
+              #print('image crop shape no expanded')
+              #print(image_crop.shape)
+              #print('image outputput shape')
+              #print(image_output.shape)
+          counter += 1
+          
+          # create image and structure array which has first dimension = number of landmarks
+          # shape should be 10xdxhxw
+      #print('image shape, struc shape')
+      #print(image_output.shape, structure_output.shape)
           
           
-      
       """
       if self.depth < d:
         # crop
@@ -240,7 +312,7 @@ class CentreCrop(object):
         """
      # d, h, w = image.shape[:3] # define image height, width, depth as first 3 values
 
-      return {'image':image_output, 'structure': structure_output, 'idx':idx, 'patient':patient, 'coords':coords} # note note !
+      return {'image':image_output, 'structure': structure_output, 'idx':idx, 'patient':patient, 'coords':coords, 'crop_coords':crop_coords} # note note !
 
     
     
@@ -280,67 +352,107 @@ class ToTensor(object):
         structure = structure.unsqueeze(0) # force mask to have extra dimension i.e. (1xHxWxD)
         image = image.unsqueeze(0)
         return {'image': image,'structure': structure, 'idx': idx, 'patient':patient, 'coords':coords}
+    
+class ToTensor_crop(object):
+    """Convert ndarrays in sample to Tensors."""
+
+    def __call__(self, sample):
+        image, structure, idx, patient, coords, crop_coords = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords'], sample['crop_coords']
+        structure = np.zeros(structure.shape)
+        counter = 0
+        for l in S.landmarks_total:
+            # structure is z, y, x
+            # need it in y, x, z                
+            x, y, z = int(round(coords[l][0])), int(round(coords[l][1])), int(round(coords[l][2]))
+            # if z is 80 round to 79
+            if z >= S.crop_size_z or z < 0:
+                print('Z COORD STRUCTURE OUTSIDE CROP')
+                print('need to think about off central heatmap')
+                print(z)
+                z = 0
+            if y >= S.crop_size_y or y < 0:
+                print('Y COORD STRUCTURE OUTSIDE CROP')
+                print('need to think about off central heatmap')
+                print(y)
+                y = 0
+            if x >= S.crop_size_x or x < 0:
+                print('X COORD STRUCTURE OUTSIDE CROP')
+                print('need to think about off central heatmap')
+                print(x)
+                x = 0 
+            structure[counter][z][y][x] = l
+            counter += 1
+        # swap color axis because
+        # numpy image: landmarks x D x H x W 
+        # torch image: landmarks x C X H X W x D
+        image = image.transpose(0,2,3,1) # L x H x W x D
+        structure = structure.transpose(0,2,3,1)
+        image = torch.from_numpy(image).float() # dont know why images/mask casted to float here but need to do it again later
+        structure = torch.from_numpy(structure).float()
+        structure = structure.unsqueeze(1) # # L x C x H x W x D (c = channels or batch {notation})
+        image = image.unsqueeze(1)
+        
+        return {'image': image,'structure': structure, 'idx': idx, 'patient':patient, 'coords':coords}
 
 
 
 class Flips_scipy(object):
     def __call__(self,sample):
-        image, structure, idx, patient, coords = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords']
+        image, structure, idx, patient, coords, crop_coords = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords'], sample['crop_coords']
         random_number = random.random()
         angle = random.randint(-10, 10)
         if random_number <= 0.33:
-            #structure = scipy.ndimage.rotate(structure, angle, axes = [1,0], reshape = False, order = 0)
+            out_of_bounds = False
             for l in S.landmarks_total:
-                x,y, z = coords[l][0] - (S.in_x-1)/2, coords[l][1] - (S.in_y-1)/2, coords[l][2] - (S.in_z-1)/2 
-                y_new = math.cos(math.radians(-angle)) * y - math.sin(math.radians(-angle)) * z
-                z_new = math.cos(math.radians(-angle)) * z + math.sin(math.radians(-angle)) * y 
-                coords[l][1] = y_new + (S.in_y-1)/2
-                coords[l][2] = z_new + (S.in_z-1)/2
+                x_rotat, y_rotat, z_rotat = functions.rotate(coords[l][0], coords[l][1], coords[l][2], S.in_x, S.in_y, S.in_z, angle, [1,0])
+             
+                if x_rotat < 0 or x_rotat >= S.in_x or y_rotat < 0 or y_rotat >= S.in_y or z_rotat < 0 or z_rotat >= S.in_z:
+                    out_of_bounds = True                   
             # check if still within bounds due to rotation!
-            if x > -(S.in_x-1)/2 and x < (S.in_x-1)/2 and y_new > -(S.in_y-1)/2 and y_new < (S.in_y-1)/2 and z_new > -(S.in_z-1)/2 and z_new < (S.in_z-1)/2:
+            if out_of_bounds == False:
                 image = scipy.ndimage.rotate(image, angle, axes = [1,0],reshape = False, order = 0)
+                coords[l][0], coords[l][1], coords[l][2] = x_rotat, y_rotat, z_rotat
+                
+                # rotate crop locations
+                crop_coords[l][0], crop_coords[l][1], crop_coords[l][2] = functions.rotate(crop_coords[l][0], crop_coords[l][1], crop_coords[l][2], S.in_x, S.in_y, S.in_z, angle, [1,0])                                           
             else:
                 print('ROTATION OUT OF BOUNDS')
-                # if not then need to flip landmarks back
-                for l in S.landmarks_total:
-                    coords[l][0], coords[l][1], coords[l][2] = x + (S.in_x-1)/2, y + (S.in_y-1)/2, z + (S.in_z-1)/2
                 
 
         elif (random_number > 0.33) and (random_number <= 0.66):
-            #structure = scipy.ndimage.rotate(structure, angle, axes = [1,2], reshape = False, order = 0)
+            out_of_bounds = False
             for l in S.landmarks_total:
-                x,y, z = coords[l][0] - (S.in_x-1)/2, coords[l][1] - (S.in_y-1)/2, coords[l][2] - (S.in_z-1)/2 
-                x_new = math.cos(math.radians(-angle)) * x - math.sin(math.radians(-angle)) * y
-                y_new = math.cos(math.radians(-angle)) * y + math.sin(math.radians(-angle)) * x
-                coords[l][0] = x_new + (S.in_x-1)/2
-                coords[l][1] = y_new + (S.in_y-1)/2
-                
-            if x_new > -(S.in_x-1)/2 and x_new < (S.in_x-1)/2 and y_new > -(S.in_y-1)/2 and y_new < (S.in_y-1)/2 and z > -(S.in_z-1)/2 and z < (S.in_z-1)/2:
+                x_rotat, y_rotat, z_rotat = functions.rotate(coords[l][0], coords[l][1], coords[l][2], S.in_x, S.in_y, S.in_z, angle, [1,2])
+             
+                if x_rotat < 0 or x_rotat >= S.in_x or y_rotat < 0 or y_rotat >= S.in_y or z_rotat < 0 or z_rotat >= S.in_z:
+                    out_of_bounds = True                   
+            # check if still within bounds due to rotation!
+            if out_of_bounds == False:
                 image = scipy.ndimage.rotate(image, angle, axes = [1,2],reshape = False, order = 0)
+                coords[l][0], coords[l][1], coords[l][2] = x_rotat, y_rotat, z_rotat
+                
+                # rotate crop locations
+                crop_coords[l][0], crop_coords[l][1], crop_coords[l][2] = functions.rotate(crop_coords[l][0], crop_coords[l][1], crop_coords[l][2], S.in_x, S.in_y, S.in_z, angle, [1,2])               
             else:
                 print('ROTATION OUT OF BOUNDS')
-                # if not then need to flip landmarks back
-                for l in S.landmarks_total:
-                    coords[l][0], coords[l][1], coords[l][2] = x + (S.in_x-1)/2, y + (S.in_y-1)/2, z + (S.in_z-1)/2
 
         else:
-            #structure = scipy.ndimage.rotate(structure, angle, axes = [2,0], reshape = False, order = 0)
+            #structure = scipy.ndimage.rotate(structure, angle, axes = [1,0], reshape = False, order = 0)
+            out_of_bounds = False
             for l in S.landmarks_total:
-                x,y, z = coords[l][0] - (S.in_x-1)/2, coords[l][1] - (S.in_y-1)/2, coords[l][2] - (S.in_z-1)/2 
-                x_new = math.cos(math.radians(angle)) * x + math.sin(math.radians(angle)) * z
-                z_new = math.cos(math.radians(angle)) * z - math.sin(math.radians(angle)) * x
-                coords[l][0] = x_new + (S.in_x-1)/2
-                coords[l][2] = z_new + (S.in_z-1)/2
-                
-            if x_new > -(S.in_x-1)/2 and x_new < (S.in_x-1)/2 and y > -(S.in_y-1)/2 and y < (S.in_y-1)/2 and z_new > -(S.in_z-1)/2 and z_new < (S.in_z-1)/2:
-               image = scipy.ndimage.rotate(image, angle, axes = [2,0],reshape = False, order = 0)
+                x_rotat, y_rotat, z_rotat = functions.rotate(coords[l][0], coords[l][1], coords[l][2], S.in_x, S.in_y, S.in_z, angle, [2,0])            
+                if x_rotat < 0 or x_rotat >= S.in_x or y_rotat < 0 or y_rotat >= S.in_y or z_rotat < 0 or z_rotat >= S.in_z:
+                    out_of_bounds = True                   
+            # check if still within bounds due to rotation!
+            if out_of_bounds == False:
+                image = scipy.ndimage.rotate(image, angle, axes = [2,0],reshape = False, order = 0)
+                coords[l][0], coords[l][1], coords[l][2] = x_rotat, y_rotat, z_rotat            
+                # rotate crop locations
+                crop_coords[l][0], crop_coords[l][1], crop_coords[l][2] = functions.rotate(crop_coords[l][0], crop_coords[l][1], crop_coords[l][2], S.in_x, S.in_y, S.in_z, angle, [2,0])                       
             else:
                 print('ROTATION OUT OF BOUNDS')
-                # if not then need to flip landmarks back
-                for l in S.landmarks_total:
-                    coords[l][0], coords[l][1], coords[l][2] = x + (S.in_x-1)/2, y + (S.in_y-1)/2, z + (S.in_z-1)/2
 
-        return {'image': image, 'structure': structure, 'idx': idx, 'patient':patient, 'coords':coords}
+        return {'image': image, 'structure': structure, 'idx': idx, 'patient':patient, 'coords':coords, 'crop_coords':crop_coords}
     
 def Flip_left_right_structures(structure):
     
@@ -362,7 +474,7 @@ def Flip_left_right_structures(structure):
 
 class Check_left_right(object):
     def __call__(self,sample):
-        image, structure, idx, patient, coords = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords']
+        image, structure, idx, patient, coords, crop_coords = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords'], sample['crop_coords']
         for i in range(len(S.left_structures)):
             left_structure = S.left_structures[i]
             right_structure = S.right_structures[i]
@@ -381,12 +493,12 @@ class Check_left_right(object):
                     print('ERROR LEFT AND RIGHT WRONG WAy RouND')
                     S.error_counter += 1
                     """
-        return {'image': image, 'structure': structure, 'idx': idx, 'patient':patient, 'coords':coords}
+        return {'image': image, 'structure': structure, 'idx': idx, 'patient':patient, 'coords':coords, 'crop_coords':crop_coords}
     
     
 class Horizontal_flip(object):
     def __call__(self,sample):
-        image, structure, idx, patient, coords = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords']
+        image, structure, idx, patient, coords, crop_coords = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords'], sample['crop_coords']
         random_number = random.random()
         if random_number <= 0.5:
             image = np.flip(image, axis = 2).copy()
@@ -397,6 +509,9 @@ class Horizontal_flip(object):
                 x,y,z = coords[l][0], coords[l][1], coords[l][2] 
                 x_new = S.in_x - 1 - x # 0 to 127
                 coords[l][0] = x_new
+                x_crop,y_crop,z_crop = crop_coords[l][0], crop_coords[l][1], crop_coords[l][2] 
+                x_new_crop = S.in_x - 1 - x_crop
+                crop_coords[l][0] = x_new_crop 
             # flip left right structures left becomes right and vice versa
             for k in range(len(S.left_structures)):
                 left_structure = S.left_structures[k]
@@ -406,12 +521,12 @@ class Horizontal_flip(object):
                 coords[left_structure] = right_location
                 coords[right_structure] = left_location
 
-        return {'image': image, 'structure': structure, 'idx': idx, 'patient':patient, 'coords':coords }
+        return {'image': image, 'structure': structure, 'idx': idx, 'patient':patient, 'coords':coords, 'crop_coords':crop_coords}
        
     
 class Upsidedown_scipy(object):
     def __call__(self,sample):
-        image, structure, idx, patient, coords = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords']
+        image, structure, idx, patient, coords, crop_coords = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords'], sample['crop_coords']
         # if upside down need to flip
         # if left cochlea landmark = 5 above 1/2
         # data is y, x, z
@@ -424,7 +539,7 @@ class Upsidedown_scipy(object):
                 landmark_loc_top = np.where(structure == S.top_structures[counter_top])
             except:
                 print('ERROR NONE OF THE TOP STRUCTURES FOUND IN IMAGE- returning unflipped image')
-                return {'image': image, 'structure': structure, 'idx': idx, 'patient':patient, 'coords':coords}
+                return {'image': image, 'structure': structure, 'idx': idx, 'patient':patient, 'coords':coords, 'crop_coords':crop_coords}
 
         counter_bot = 0
         landmark_loc_bot = np.where(structure == S.bot_structures[counter_bot])
@@ -434,7 +549,7 @@ class Upsidedown_scipy(object):
                 landmark_loc_bot = np.where(structure == S.bot_structures[counter_bot])
             except:
                 print('ERROR NONE OF THE BOTTOM STRUCTURES FOUND IN IMAGE- returning unflipped image')
-                return {'image': image, 'structure': structure, 'idx': idx, 'patient':patient, 'coords':coords}
+                return {'image': image, 'structure': structure, 'idx': idx, 'patient':patient, 'coords':coords,'crop_coords':crop_coords}
 
         z_landmark_top = landmark_loc_top[0][0]
         z_landmark_bot = landmark_loc_bot[0][0]
@@ -444,9 +559,9 @@ class Upsidedown_scipy(object):
             image = scipy.ndimage.rotate(image, angle, axes = [2,0], reshape = False, order =0)
             structure = scipy.ndimage.rotate(structure, angle, axes = [2,0], reshape = False, order =0)
             structure = Flip_left_right_structures(structure) # need to flip left/right structures
-            return {'image': image, 'structure': structure, 'idx': idx, 'patient':patient, 'coords':coords}
+            return {'image': image, 'structure': structure, 'idx': idx, 'patient':patient, 'coords':coords, 'crop_coords':crop_coords}
         else:
-            return {'image': image, 'structure': structure, 'idx': idx, 'patient':patient, 'coords':coords}
+            return {'image': image, 'structure': structure, 'idx': idx, 'patient':patient, 'coords':coords, 'crop_coords':crop_coords}
         
     
 class Upsidedown(object):

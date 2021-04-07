@@ -54,7 +54,20 @@ class CTDataset(Dataset):
         sample['coords'] = {}
         for k in settings.landmarks_total:
             sample['coords'][k] = [0,0,0] # x,y,z
-        
+            
+        sample['crop_coords'] = {}
+        for l in settings.landmarks_total:
+            if sample['patient'] in settings.landmark_locations_train_set:
+                x_crop = settings.landmark_locations_train_set[sample['patient']][l]['x'].cpu().numpy()
+                y_crop = settings.landmark_locations_train_set[sample['patient']][l]['y'].cpu().numpy()
+                z_crop = settings.landmark_locations_train_set[sample['patient']][l]['z'].cpu().numpy()
+            elif sample['patient'] in settings.landmark_locations_test_set:
+                x_crop = settings.landmark_locations_test_set[sample['patient']][l]['x'].cpu().numpy()
+                y_crop = settings.landmark_locations_test_set[sample['patient']][l]['y'].cpu().numpy()
+                z_crop = settings.landmark_locations_test_set[sample['patient']][l]['z'].cpu().numpy()
+            else:
+                x_crop, y_crop, z_crop = 0,0,0 # dummy
+            sample['crop_coords'][l] = [x_crop,y_crop,z_crop] # x,y,z
         
         if (self.transform_train_resize) and (self.train_resize == True):
             sample = self.transform_train_resize(sample) # if transforms present, act on sample

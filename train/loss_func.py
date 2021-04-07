@@ -4,7 +4,7 @@ import torch
 from useful_functs import functions
 import settings as S
 
-def calc_loss_gauss(model, img, pred, target, idx, metrics_landmarks, alpha, reg, gamma, epoch_samples, sigma): 
+def calc_loss_gauss(model, img, pred, target, idx, metrics_landmarks, alpha, reg, gamma, epoch_samples, sigma, crop): 
 
     # pred is Batch x Classes x Height x Width x Depth
     # target is Batch x 1 x Height x Width x Depth
@@ -32,7 +32,15 @@ def calc_loss_gauss(model, img, pred, target, idx, metrics_landmarks, alpha, reg
     for l in S.landmarks:
 
       # need location of landmark for all images in target 3D CT scan
-      target_coords = functions.landmark_loc(target, l)[0]
+      if crop == False:
+          target_coords = functions.landmark_loc(target, l)[0]
+          target_landmark = target
+      elif crop == True:
+          # target is B x L x C x H x W x D
+          # needs to be B x C x H x W x D
+          index = S.landmarks.index(l)
+          target_landmark = target[:,index,:,:,:,:]
+          target_coords = functions.landmark_loc(target_landmark, l)[0]
       #target_coords = functions.com_structure(target,l)[0] # the [0] means it extracts the coords rather than the True/False
       # change to top structure
       batch_size = target_coords.size()[0]
@@ -54,9 +62,9 @@ def calc_loss_gauss(model, img, pred, target, idx, metrics_landmarks, alpha, reg
 
         img_number = epoch_samples + i # epoch_samples is 0, 32, 64 e.g. if batch is size 32
       
-        x_size = target.size()[3]
-        y_size = target.size()[2] 
-        z_size = target.size()[4]
+        x_size = target_landmark.size()[3]
+        y_size = target_landmark.size()[2] 
+        z_size = target_landmark.size()[4]
 
         # structure location per image
         structure_com_x, structure_com_y, structure_com_z = target_coords[i][0],target_coords[i][1], target_coords[i][2] 
@@ -78,12 +86,12 @@ def calc_loss_gauss(model, img, pred, target, idx, metrics_landmarks, alpha, reg
 
         # create target gauss map
         #if functions.com_structure(target,l)[1][i] == True:
-        if functions.landmark_loc(target, l)[1][i] == True:
+        if functions.landmark_loc(target_landmark, l)[1][i] == True:
         # change to top structure
           targ_gaus = functions.gaussian_map(structure_com_x,structure_com_y, structure_com_z,S.sigmas[l],gamma,x_size,y_size,z_size, output = True) 
         else:
           # target is full of zeros
-          targ_gaus = torch.zeros(target.size()[2], target.size()[3], target.size()[4]).to(S.device)
+          targ_gaus = torch.zeros(target_landmark.size()[2], target_landmark.size()[3], target_landmark.size()[4]).to(S.device)
 
         # pred heatmap is based on image in batch & landmark
         index = S.landmarks.index(l)

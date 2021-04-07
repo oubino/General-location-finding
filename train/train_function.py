@@ -71,25 +71,31 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
                             # ----- need to be smarter about when do this ---- 
                                 data_loaders.dataset.__test_resize__() 
                                 pred = outputs
-                                for l in S.landmarks:
-                                    for i in range(inputs.size()[0]):
+                                for i in range(inputs.size()[0]):
+                                    S.landmark_locations_train_set[patients[i]] = {}
+                                    for l in S.landmarks:                    
                                         pred_coords_max = functions.pred_max(pred, l, S.landmarks)
                                         pred_max_x, pred_max_y, pred_max_z =  pred_coords_max[i][0], pred_coords_max[i][1], pred_coords_max[i][2] 
-                                        S.landmark_locations_train_set[patients[i]] = {}
+                         
                                         S.landmark_locations_train_set[patients[i]][l] = {}
-                                        S.landmark_locations_train_set[patients[i]][l]['x'] = pred_max_x
-                                        S.landmark_locations_train_set[patients[i]][l]['y'] = pred_max_y
-                                        S.landmark_locations_train_set[patients[i]][l]['z'] = pred_max_z   
-                                        print('locations')
-                                        print(S.landmark_locations_train_set)
+                                        S.landmark_locations_train_set[patients[i]][l]['x'] = pred_max_x * S.downsample_ratio_list[patients[i]]['w']
+                                        S.landmark_locations_train_set[patients[i]][l]['y'] = pred_max_y * S.downsample_ratio_list[patients[i]]['h']
+                                        S.landmark_locations_train_set[patients[i]][l]['z'] = pred_max_z * S.downsample_ratio_list[patients[i]]['d'] 
+                                        #print('locations')
+                                        #print(S.landmark_locations_train_set)
                                 data_loaders.dataset.__train_resize__()
                             # ----- need to be smarter about when do this ---- 
-                                print('here 1')
+                                #print('here 1')
+                                loss = loss_func.calc_loss_gauss(model, inputs, outputs, labels, idx, metrics_landmarks,alpha,reg,gamma,imgs_in_set,sigmas, crop = False)
                             elif epochs_completed >= S.switchover:
-                                print('here 2')
+                                #print('here 2')
+                                # inputs shape is B x L x C x H x W x D
+                                #print(inputs.shape)
                                 outputs = model(inputs, crop = True)
                             # 1. convert masks to heatmaps inside loss function (allows sigma optimisation)
-                            loss = loss_func.calc_loss_gauss(model, inputs, outputs, labels, idx, metrics_landmarks,alpha,reg,gamma,imgs_in_set,sigmas)
+                                #print('input/output/labels')
+                                #print(inputs.shape, outputs.shape, labels.shape)
+                                loss = loss_func.calc_loss_gauss(model, inputs, outputs, labels, idx, metrics_landmarks,alpha,reg,gamma,imgs_in_set,sigmas, crop = True)
                         
                         # print image for comparison
                         if imgs_in_set == 0:

@@ -13,7 +13,7 @@ def init():
     global in_x, in_y, in_z, alpha, reg, gamma, lr_max, lr_min
     global step_size, threshold_img_print, normal_min, normal_max
     global normal_window, use_amp, downsample_ratio_h, downsample_ratio_w
-    global downsample_ratio_d, downsample_idx_list
+    global downsample_ratio_d, downsample_ratio_list
     global root, device
     global batch_accumulation
     global coding_path
@@ -175,10 +175,10 @@ def init():
     use_amp = True
     
     # if downsampling
-    downsample_ratio_h = np.empty((0), float)
-    downsample_ratio_w = np.empty((0), float)
-    downsample_ratio_d = np.empty((0), float)
-    downsample_idx_list = []
+    #downsample_ratio_h = {}
+    #downsample_ratio_w = {{np.empty((0), float)}}
+    #downsample_ratio_d = np.empty((0), float)
+    downsample_ratio_list = {}
     
     # use predicted max - if want gauss fit set to false
     pred_max = True
@@ -246,7 +246,7 @@ def init_new():
     
     epoch_batch = int(input ("Epoch batch: "))
     num_epoch_batches = int(input ("Num epoch batch: "))
-    net_features = 1
+    net_features = 32
     scnet_feat = 64
     
     # -- AMEND -- 
@@ -254,7 +254,7 @@ def init_new():
         run_folder = "run_19_mar_k_fold_aaron"
         #run_folder_load = "run_19_mar_k_fold_aaron"
     elif aaron_or_oli == False:
-        run_folder = "run_4_apr_k_fold_192x192"
+        run_folder = "run_7_apr_crop_test"
         #run_folder_load = "run_22_mar_test_aaron_my_data"
     # make user double check correct
     print('\n')
