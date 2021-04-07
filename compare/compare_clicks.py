@@ -80,8 +80,8 @@ def histogram(data, coord, landmark):
     plt.savefig(hist_name)
 
 # paths
-aaron_folder = r'/home/rankinaaron98/data/Facial_asymmetry_aaron_common/Structures'
-oli_folder = r'/home/olive/data/Facial_asymmetry_oli_common/Structures'
+aaron_folder = r'/home/rankinaaron98/data/Facial_asymmetry_aaron_reclick/Structures'
+oli_folder = r'/home/olive/data/Facial_asymmetry_aaron_common/Structures'
 save_structure_folder = r'/home/olive/data/Facial_asymmetry_combined_line/Structures'
 save_ct_folder = r'/home/olive/data/Facial_asymmetry_combined_line/CTs'
 load_ct_folder = r'/home/olive/data/Facial_asymmetry_oli/CTs'
@@ -242,7 +242,7 @@ if save_images == True:
     """
     
     # create line instead of one average point
-    
+''' 
     # for each image create an array
     for i in list_1:
         py_array_load = np.load(os.path.join(aaron_folder,i))
@@ -281,7 +281,7 @@ if save_images == True:
         np.save(os.path.join(save_structure_folder,i), structure)
         # save ct
         np.save(os.path.join(save_ct_folder,i), ct)
-
+'''
 
 # deviations per landmark per image
 #print('deviations per landmark per image')
