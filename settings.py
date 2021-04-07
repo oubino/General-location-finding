@@ -223,7 +223,7 @@ def init():
     k_fold_ids = []   # k fold test
     
     # switchover to crop
-    switchover = 1
+    switchover = 20
 
     # landmark locations train set
     landmark_locations_train_set = {}
