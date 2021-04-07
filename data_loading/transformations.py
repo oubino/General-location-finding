@@ -256,13 +256,11 @@ class CentreCrop(object):
           
           #print('post coords')
           #print(x,y,z)
-          
-          
               
           image_crop = skimage.util.crop(image, ((z_left,z_right),(x_left, x_right), (y_left, y_right)))
           structure_crop = skimage.util.crop(structure, ((z_left,z_right),(x_left, x_right), (y_left, y_right)))
           
-          if structure_crop.size(0) != 30 or image_crop.size(0) != 30:
+          if structure_crop.shape[0] != 30 or image_crop.shape[0] != 30:
               print('30 error')
               print('image shape, struc shape')
               print(image_crop.shape, structure_crop.shape)
