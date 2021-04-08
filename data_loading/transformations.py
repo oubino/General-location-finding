@@ -203,18 +203,17 @@ class CentreCrop(object):
           #print(x,y,z)
           #print('crop coords')
           #print(x_crop, y_crop, z_crop)
-             
           
           # crop .. (30,100) removes first 30 pixels from LHS and last 100 pixels from RHS   
-          x_left = max(int(round(x_crop)) - self.width/2, 0)
+          x_left = max(int(np.round(x_crop)) - self.width/2, 0)
           x_left = min(x_left, w - self.width) # e.g. x left max is 150, min is 0
           x_right = w - x_left - self.width
           
-          y_left = max(int(round(y_crop)) - self.height/2, 0)
-          y_left = min(y_left, h - self.height) # e.g. x left max is 150, min is 0
+          y_left = max(int(np.round(y_crop)) - self.height/2, 0)
+          y_left = min(y_left, h- self.height) # e.g. x left max is 150, min is 0
           y_right = h - y_left - self.height
           
-          z_left = max(int(round(z_crop)) - self.depth/2, 0)
+          z_left = max(int(np.round(z_crop)) - self.depth/2, 0)
           z_left = min(z_left, d - self.depth) # e.g. x left max is 150, min is 0
           z_right = d - z_left - self.depth
           
