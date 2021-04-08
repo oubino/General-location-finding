@@ -223,7 +223,7 @@ def init():
     k_fold_ids = []   # k fold test
     
     # switchover to crop
-    switchover = 10
+    switchover = 30
 
     # landmark locations train set
     landmark_locations_train_set = {}
@@ -254,7 +254,7 @@ def init_new():
         run_folder = "run_19_mar_k_fold_aaron"
         #run_folder_load = "run_19_mar_k_fold_aaron"
     elif aaron_or_oli == False:
-        run_folder = "run_7_apr_crop_test"
+        run_folder = "run_8_apr_crop_60_epochs"
         #run_folder_load = "run_22_mar_test_aaron_my_data"
     # make user double check correct
     print('\n')

@@ -217,6 +217,8 @@ class CentreCrop(object):
           z_left = min(z_left, d - self.depth) # e.g. x left max is 150, min is 0
           z_right = d - z_left - self.depth
           
+          
+          """
           if x_left + x_right != w - self.width:
               print('issue crop x')
               print(x_left + x_right, w - self.width)
@@ -240,6 +242,8 @@ class CentreCrop(object):
                   z_left = z_left + 1
               elif z_left + z_right == d - self.depth + 1:
                   z_left = z_left - 1
+        
+          """
           
           # print 
          # print('x left right y left right z left right')
@@ -372,17 +376,17 @@ class ToTensor_crop(object):
             # if z is 80 round to 79
             if z >= S.crop_size_z or z < 0:
                 print('Z COORD STRUCTURE OUTSIDE CROP')
-                print('need to think about off central heatmap')
+                print('need to think about off central heatmap (current behaviour sets z_struc = 0)')
                 print(z)
                 z = 0
             if y >= S.crop_size_y or y < 0:
                 print('Y COORD STRUCTURE OUTSIDE CROP')
-                print('need to think about off central heatmap')
+                print('need to think about off central heatmap (current behaviour sets y_struc = 0)')
                 print(y)
                 y = 0
             if x >= S.crop_size_x or x < 0:
                 print('X COORD STRUCTURE OUTSIDE CROP')
-                print('need to think about off central heatmap')
+                print('need to think about off central heatmap (current behaviour sets x_struc = 0)')
                 print(x)
                 x = 0 
             structure[counter][z][y][x] = l
