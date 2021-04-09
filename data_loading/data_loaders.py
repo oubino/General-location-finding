@@ -169,7 +169,6 @@ if S.print_CT_check == True:
         print(error)
     
     # print all images 
-    
     for i in range(len(dataset)):
         for landmark in S.landmarks:
             structure = dataset.__getitem__(i)['structure'].squeeze(0)
