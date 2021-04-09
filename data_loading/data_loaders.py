@@ -169,7 +169,7 @@ if S.print_CT_check == True:
         print(error)
     
     # print all images 
-    """
+    
     for i in range(len(dataset)):
         for landmark in S.landmarks:
             structure = dataset.__getitem__(i)['structure'].squeeze(0)
@@ -185,7 +185,7 @@ if S.print_CT_check == True:
             #structure_extrac = eval_func.extract_landmark_for_structure_np(structure, landmark)
             eval_func.plot_3d_pred_img_no_pred(dataset.__getitem__(i)['image'].squeeze(0).cpu().numpy(), empty_struc, S.threshold_img_print, path_print_ct, dataset.__getitem__(i)['patient'], landmark)
         print(dataset.__getitem__(i)['patient'])
-    """
+    
     # print single image
     for i in range(len(dataset)):
         print(dataset.__getitem__(i)['patient'])
