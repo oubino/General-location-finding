@@ -7,11 +7,12 @@ import math
 import os
 import numpy as np
 from sklearn.model_selection import KFold
-
+from useful_functs import functions
 from evaluate import evaluate_functions as eval_func
 from data_loading import dataset_class as D
 import settings as S
 from data_loading import transformations as T
+import matplotlib.pyplot as plt
 
 #os.chdir(S.root) # change to data path and change back at end
 #print(os.getcwd())
@@ -152,40 +153,110 @@ def init_reserved_test_set():
     }
     
 
-    
-#os.chdir(S.coding_path) # change to data path and change back at end
-print('Coding directory: ')
-print(os.getcwd())
 
 # print all images as CT scans to view them
 if S.print_CT_check == True:
-    #dataset.__test__()
-    # training set
+    
+    def print_2D_slice_check(image, structure, landmark, struc_x, struc_y, struc_z, print_path_ct, patient):
+    
+    # image
+    # - C x H x W x D needs to be cut down to H x W x D
+    # structure
+    # - C x H x W x D needs to be cut down to H x W x D
+    # - currently has all landmarks in but need to plot only 1 landmark - l
+    # pred
+    # - C x H x W x D needs to be cut down to H x W x D
+    # - not sure what values of this heatmap will be so not sure what threshold should be
+    image = image.squeeze(0).cpu().numpy()
+    index = S.landmarks.index(landmark)
+    
+    structure = structure.squeeze(0)
+    structure_l = eval_func.extract_landmark_for_structure(structure, landmark).cpu().numpy() # edit
+    structure = structure.cpu().numpy()
+    
+    fig = plt.figure(figsize=(7, 7))
+    
+    #print('image and predicted heatmap')
+    
+   # print(struc_z)
+    struc_z = int(round(struc_z.item()))
+    image = image[:, :, struc_z]
+    structure_l = structure_l[:, :, struc_z]
+    # ----  if want to plot heatmap ----- 
+    """
+    pred = pred[:, :, pred_z]
+    plt.imshow(image,cmap = 'Greys_r', alpha = 0.5)
+    plt.imshow(structure_l, cmap = 'Reds', alpha = 0.8 )
+    plt.imshow(pred, cmap = cm.jet, alpha = 0.5)
+    """
+    # -----------------------------------
+    
+    # ---- if want to plot as point ------
+    plt.imshow(image,cmap = 'Greys_r', alpha = 0.9)
+    plt.plot(struc_x.cpu().numpy(), struc_y.cpu().numpy(), color = 'red', marker = 'x', label = 'target')
+  
+    # add z annotation
+    plt.annotate("%1.0f" % struc_z,(struc_x.cpu().numpy(), struc_y.cpu().numpy()), color = 'red')
+    plt.legend()
+    # ------------------------------------
+    
+    img_name = os.path.join(print_path_ct, "2d_slice_%s.png" % patient.replace('.npy', '_%1.0f') % landmark)
+    plt.savefig(img_name)
+
+    def init_print_CTs():
+    # split data in train/val/test
+        train_size = int(len(dataset))
+        train_set = torch.utils.data.random_split(dataset, [train_size], generator=torch.Generator().manual_seed(0))
+    # manual seed ensures that same split everytime to ensure testing on correct dataset!
+    # i.e. if random split, train, save, random split, test -> may end up testing on same as training!
+    '''
+    global image_datasets
+    image_datasets = {
+        'train': train_set, 'val': val_set, 'test':test_set
+    }
+    '''
+        global dataloaders
+        # Load data in
+        dataloaders = {
+            'train': DataLoader(train_set, batch_size=S.batch_size, shuffle=True, num_workers=0)
+            }    
+        
+        
+#os.chdir(S.coding_path) # change to data path and change back at end
+    print('Coding directory: ')
+    print(os.getcwd())
+    
+    dataset.__train__()
+    init_reserved_test_set()
     file_name_print = "print_cts"
     path_print_ct = os.path.join(S.run_path, file_name_print)
     try: 
         os.mkdir(path_print_ct)
     except OSError as error:
         print(error)
+    print(len(dataset))
     
-    # print all images 
-    
-    for i in range(len(dataset)):
+    for batch in dataloaders['test']:
+        # print dataloader 
+       # print('here b')
+        inputs = batch['image']
+       # print('here i')
+        labels = batch['structure']
+       # print('here s')
+        idx = batch['idx']  
+        print(idx)
+        patient = batch['patient']
         for landmark in S.landmarks:
-            structure = dataset.__getitem__(i)['structure'].squeeze(0)
-            locations = np.nonzero(np.round(structure) == landmark)
-            try:
-                x, y, z = locations[0][1], locations[0][0], locations[0][2]
-            except IndexError as error:
-                    x = 0
-                    y = 0
-                    z = 0
-            empty_struc = np.zeros((128,128,80))
-            empty_struc[y][x][z] = landmark
+            #patient  = dataset.__getitem__(i)['patient'].squeeze(0)
+            structure_loc = functions.landmark_loc(labels, landmark)[0]
+            structure_max_x, structure_max_y, structure_max_z = structure_loc[0][0],structure_loc[0][1], structure_loc[0][2] 
             #structure_extrac = eval_func.extract_landmark_for_structure_np(structure, landmark)
-            eval_func.plot_3d_pred_img_no_pred(dataset.__getitem__(i)['image'].squeeze(0).cpu().numpy(), empty_struc, S.threshold_img_print, path_print_ct, dataset.__getitem__(i)['patient'], landmark)
-        print(dataset.__getitem__(i)['patient'])
-    '''
+            #eval_func.plot_3d_pred_img_no_pred(inputs[0].squeeze(0).cpu().numpy(), empty_struc, S.threshold_img_print, path_print_ct, patient[0], landmark)
+            #print(dataset.__getitem__(i)['patient'])
+            print_2D_slice_check(inputs[0], labels[0], landmark, structure_max_x, structure_max_y, structure_max_z, path_print_ct, patient[0])
+            
+         
+'''
     # print single image
     for i in range(len(dataset)):
         print(dataset.__getitem__(i)['patient'])
@@ -205,7 +276,7 @@ if S.print_CT_check == True:
                 #structure_extrac = eval_func.extract_landmark_for_structure_np(structure, landmark)
                 eval_func.plot_3d_pred_img_no_pred(dataset.__getitem__(i)['image'].squeeze(0).cpu().numpy(), empty_struc, S.threshold_img_print, path_print_ct, dataset.__getitem__(i)['patient'], landmark)
             print(dataset.__getitem__(i)['patient'])
-    '''
+'''
 
 
 
