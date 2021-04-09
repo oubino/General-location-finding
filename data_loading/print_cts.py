@@ -7,7 +7,7 @@ import sys
 
 
 # change working directory
-coding_path = r'/home/oliver_umney/GitHub/General-location-finding'
+coding_path = r'/home/olive/GitHub/General-location-finding'
 #coding_path = r'/home/rankinaaron98/General-location-finding'
 #coding_path = r'C:\Users\olive\OneDrive\Documents\GitHub\General-location-finding'
 #os.chdir(coding_path)
