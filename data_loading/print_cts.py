@@ -62,7 +62,6 @@ def print_2D_slice_check(image, structure, landmark, struc_x, struc_y, struc_z, 
 
 # print CTs
 
-dir(data_loaders.dataset)
 data_loaders.dataset.__train__()
 data_loaders.init_reserved_test_set()
 file_name_print = "print_cts"
