@@ -58,7 +58,7 @@ def print_2D_slice_check(image, structure, landmark, struc_x, struc_y, struc_z, 
     # ------------------------------------
     
         img_name = os.path.join(print_path_ct, "2d_slice_%s.png" % patient.replace('.npy', '_%1.0f') % landmark)
-        plt.savefig(img_name)
+        plt.savefig(img_name, dpi = 600)
 
 # print CTs
 
