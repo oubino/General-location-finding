@@ -87,7 +87,7 @@ save_ct_folder = r'/home/olive/data/Facial_asymmetry_combined_line/CTs'
 load_ct_folder = r'/home/olive/data/Facial_asymmetry_oli/CTs'
 csv_root = r'/home/rankinaaron98/data/Facial_asymmetry_aaron_reclicks/'
 
-hist_root = r'/home/olive/data/Compare/Histograms/'
+hist_root = r'/home/olive/data/Compare/Histograms_aaron/'
 
 # make folders
 try:  
