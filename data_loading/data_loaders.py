@@ -159,7 +159,7 @@ print(os.getcwd())
 
 # print all images as CT scans to view them
 if S.print_CT_check == True:
-    
+    dataset.__test__()
     # training set
     file_name_print = "print_cts"
     path_print_ct = os.path.join(S.run_path, file_name_print)
@@ -185,7 +185,7 @@ if S.print_CT_check == True:
             #structure_extrac = eval_func.extract_landmark_for_structure_np(structure, landmark)
             eval_func.plot_3d_pred_img_no_pred(dataset.__getitem__(i)['image'].squeeze(0).cpu().numpy(), empty_struc, S.threshold_img_print, path_print_ct, dataset.__getitem__(i)['patient'], landmark)
         print(dataset.__getitem__(i)['patient'])
-    
+    '''
     # print single image
     for i in range(len(dataset)):
         print(dataset.__getitem__(i)['patient'])
@@ -205,7 +205,7 @@ if S.print_CT_check == True:
                 #structure_extrac = eval_func.extract_landmark_for_structure_np(structure, landmark)
                 eval_func.plot_3d_pred_img_no_pred(dataset.__getitem__(i)['image'].squeeze(0).cpu().numpy(), empty_struc, S.threshold_img_print, path_print_ct, dataset.__getitem__(i)['patient'], landmark)
             print(dataset.__getitem__(i)['patient'])
-
+    '''
 
 
 
