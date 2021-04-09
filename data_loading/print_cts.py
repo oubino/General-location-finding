@@ -10,9 +10,9 @@ import sys
 coding_path = r'/home/oliver_umney/GitHub/General-location-finding'
 #coding_path = r'/home/rankinaaron98/General-location-finding'
 #coding_path = r'C:\Users\olive\OneDrive\Documents\GitHub\General-location-finding'
-#os.chdir(coding_path)
-#print(os.getcwd())
-sys.path.append(coding_path)
+os.chdir(coding_path)
+print(os.getcwd())
+#sys.path.append(coding_path)
 
 import settings as S
 S.init()
