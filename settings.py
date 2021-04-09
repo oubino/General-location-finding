@@ -238,7 +238,7 @@ def init_new():
         run_folder = "run_09_april_print_CTs"
         #run_folder_load = "run_19_mar_k_fold_aaron"
     elif aaron_or_oli == False:
-        run_folder = "run_9_apr_print_CTs"
+        run_folder = "run_9_apr_print_CTs_test"
         #run_folder_load = "run_22_mar_test_aaron_my_data"
     # make user double check correct
     print('\n')
