@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 coding_path = r'/home/oliver_umney/GitHub/General-location-finding'
 #coding_path = r'/home/rankinaaron98/General-location-finding'
 os.chdir(coding_path)
+print(os.getcwd())
 
 from data_loading import data_loaders
 import settings as S
