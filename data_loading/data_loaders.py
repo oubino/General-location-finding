@@ -167,41 +167,33 @@ if S.print_CT_check == True:
     # pred
     # - C x H x W x D needs to be cut down to H x W x D
     # - not sure what values of this heatmap will be so not sure what threshold should be
-    image = image.squeeze(0).cpu().numpy()
-    index = S.landmarks.index(landmark)
+        image = image.squeeze(0).cpu().numpy()
+        index = S.landmarks.index(landmark)
     
-    structure = structure.squeeze(0)
-    structure_l = eval_func.extract_landmark_for_structure(structure, landmark).cpu().numpy() # edit
-    structure = structure.cpu().numpy()
+        structure = structure.squeeze(0)
+        structure_l = eval_func.extract_landmark_for_structure(structure, landmark).cpu().numpy() # edit
+        structure = structure.cpu().numpy()
     
-    fig = plt.figure(figsize=(7, 7))
+        fig = plt.figure(figsize=(7, 7))
     
     #print('image and predicted heatmap')
     
    # print(struc_z)
-    struc_z = int(round(struc_z.item()))
-    image = image[:, :, struc_z]
-    structure_l = structure_l[:, :, struc_z]
-    # ----  if want to plot heatmap ----- 
-    """
-    pred = pred[:, :, pred_z]
-    plt.imshow(image,cmap = 'Greys_r', alpha = 0.5)
-    plt.imshow(structure_l, cmap = 'Reds', alpha = 0.8 )
-    plt.imshow(pred, cmap = cm.jet, alpha = 0.5)
-    """
-    # -----------------------------------
-    
+        struc_z = int(round(struc_z.item()))
+        image = image[:, :, struc_z]
+        structure_l = structure_l[:, :, struc_z]
+
     # ---- if want to plot as point ------
-    plt.imshow(image,cmap = 'Greys_r', alpha = 0.9)
-    plt.plot(struc_x.cpu().numpy(), struc_y.cpu().numpy(), color = 'red', marker = 'x', label = 'target')
+        plt.imshow(image,cmap = 'Greys_r', alpha = 0.9)
+        plt.plot(struc_x.cpu().numpy(), struc_y.cpu().numpy(), color = 'red', marker = 'x', label = 'target')
   
     # add z annotation
-    plt.annotate("%1.0f" % struc_z,(struc_x.cpu().numpy(), struc_y.cpu().numpy()), color = 'red')
-    plt.legend()
+        plt.annotate("%1.0f" % struc_z,(struc_x.cpu().numpy(), struc_y.cpu().numpy()), color = 'red')
+        plt.legend()
     # ------------------------------------
     
-    img_name = os.path.join(print_path_ct, "2d_slice_%s.png" % patient.replace('.npy', '_%1.0f') % landmark)
-    plt.savefig(img_name)
+        img_name = os.path.join(print_path_ct, "2d_slice_%s.png" % patient.replace('.npy', '_%1.0f') % landmark)
+        plt.savefig(img_name)
 
     def init_print_CTs():
     # split data in train/val/test
@@ -209,12 +201,7 @@ if S.print_CT_check == True:
         train_set = torch.utils.data.random_split(dataset, [train_size], generator=torch.Generator().manual_seed(0))
     # manual seed ensures that same split everytime to ensure testing on correct dataset!
     # i.e. if random split, train, save, random split, test -> may end up testing on same as training!
-    '''
-    global image_datasets
-    image_datasets = {
-        'train': train_set, 'val': val_set, 'test':test_set
-    }
-    '''
+    
         global dataloaders
         # Load data in
         dataloaders = {
@@ -238,14 +225,12 @@ if S.print_CT_check == True:
     
     for batch in dataloaders['test']:
         # print dataloader 
-       # print('here b')
         inputs = batch['image']
-       # print('here i')
         labels = batch['structure']
-       # print('here s')
         idx = batch['idx']  
         print(idx)
         patient = batch['patient']
+
         for landmark in S.landmarks:
             #patient  = dataset.__getitem__(i)['patient'].squeeze(0)
             structure_loc = functions.landmark_loc(labels, landmark)[0]
