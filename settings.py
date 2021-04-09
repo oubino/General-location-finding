@@ -46,7 +46,7 @@ def init():
         if aaron_or_oli == True:
             # Aaron paths
             coding_path = r'C:\Users\ranki_252uikw\Documents\MPhysS2\General-location-finding'
-            root = r'C:\Users\ranki_252uikw\Documents\MPhysS2\Facial_asymmetry' # note lack of " "
+            root = r'C:\Users\ranki_252uikw\Documents\MPhysS2\Facial_asymmetry_aaron_reclick' # note lack of " "
             save_data_path = r'C:\Users\ranki_252uikw\Documents\MPhysS2\Results'
         elif aaron_or_oli == False:
             # Oli paths
