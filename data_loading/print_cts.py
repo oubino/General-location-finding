@@ -1,12 +1,19 @@
 # print CTs
 
-#from data_loading import data_loaders
+
+import os
+import matplotlib.pyplot as plt
+
+# change working directory
+coding_path = r'/home/oliver_umney/GitHub/General-location-finding'
+#coding_path = r'/home/rankinaaron98/General-location-finding'
+os.chdir(coding_path)
+
+from data_loading import data_loaders
 import settings as S
 from evaluate import evaluate_functions as eval_func
 from useful_functs import functions
 
-import os
-import matplotlib.pyplot as plt
 
 def print_2D_slice_check(image, structure, landmark, struc_x, struc_y, struc_z, print_path_ct, patient):
     
