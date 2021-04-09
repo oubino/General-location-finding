@@ -345,8 +345,8 @@ class Check_left_right(object):
             if right_location[0] > left_location[0]: # if right x is greater than left x
                 print('ERROR LEFT AND RIGHT WRONG WAy RouND')
                 S.error_counter += 1
-                print('Left:' + left_structure)
-                print('right:' + right_structure)
+                print(left_structure)
+                print(right_structure)
             """
             indices_left = np.round(structure) == S.left_structures[i]
             indices_right = np.round(structure) == S.right_structures[i]
