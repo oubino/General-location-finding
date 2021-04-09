@@ -80,7 +80,7 @@ def histogram(data, coord, landmark):
     plt.savefig(hist_name)
 
 # paths
-aaron_folder = r'/home/rankinaaron98/data/Facial_asymmetry_aaron_reclick/Structures'
+aaron_folder = r'/home/rankinaaron98/data/Facial_asymmetry_aaron_reclicks/Structures'
 oli_folder = r'/home/olive/data/Facial_asymmetry_aaron_common/Structures'
 save_structure_folder = r'/home/olive/data/Facial_asymmetry_combined_line/Structures'
 save_ct_folder = r'/home/olive/data/Facial_asymmetry_combined_line/CTs'
