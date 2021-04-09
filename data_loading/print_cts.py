@@ -1,6 +1,6 @@
 # print CTs
 
-from data_loading import data_loaders
+#from data_loading import data_loaders
 import settings as S
 from evaluate import evaluate_functions as eval_func
 from useful_functs import functions
