@@ -159,7 +159,7 @@ print(os.getcwd())
 
 # print all images as CT scans to view them
 if S.print_CT_check == True:
-    dataset.__test__()
+    #dataset.__test__()
     # training set
     file_name_print = "print_cts"
     path_print_ct = os.path.join(S.run_path, file_name_print)
