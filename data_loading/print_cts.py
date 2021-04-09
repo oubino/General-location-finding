@@ -17,6 +17,7 @@ sys.path.append(coding_path)
 import settings as S
 S.init()
 S.init_new()
+from data_loading import dataset_class
 from data_loading import data_loaders
 from evaluate import evaluate_functions as eval_func
 from useful_functs import functions
