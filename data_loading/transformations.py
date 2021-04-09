@@ -337,7 +337,7 @@ def Flip_left_right_structures(structure):
 class Check_left_right(object):
     def __call__(self,sample):
         image, structure, idx, patient, coords = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords']
-        print(patient)
+        #print(patient)
         for i in range(len(S.left_structures)):
             left_structure = S.left_structures[i]
             right_structure = S.right_structures[i]
