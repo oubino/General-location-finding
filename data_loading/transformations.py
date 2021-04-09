@@ -342,11 +342,12 @@ class Check_left_right(object):
             right_structure = S.right_structures[i]
             left_location = coords[left_structure]
             right_location = coords[right_structure]
+            print(left_structure, left_location)
+            print(right_structure, right_location)
             if right_location[0] > left_location[0]: # if right x is greater than left x
                 print('ERROR LEFT AND RIGHT WRONG WAy RouND')
                 S.error_counter += 1
-                print(left_structure, left_location)
-                print(right_structure, right_location)
+                
             """
             indices_left = np.round(structure) == S.left_structures[i]
             indices_right = np.round(structure) == S.right_structures[i]
