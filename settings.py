@@ -29,7 +29,7 @@ def init():
     global wing_loss, wing_omega, wing_epsilon, wing_alpha, wing_theta
     global p2p_reg_term
     global error_counter
-    global print_CT_check
+    #global print_CT_check
     global landmarks_total, landmarks_total_loc
     global k_folds
     global aaron_or_oli
@@ -212,7 +212,7 @@ def init():
     error_counter = 0
     
     # whether to print all CTs as a check
-    print_CT_check = True
+    #print_CT_check = True
     #ct_print = "0072.npy"
     
     # k folds
