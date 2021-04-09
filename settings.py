@@ -81,7 +81,7 @@ def init():
                 elif combined_data == False:   
                     # Oli paths
                     coding_path = r'/home/olive/GitHub/General-location-finding'
-                    root = r'/home/olive/data/Facial_asymmetry_oli_common'
+                    root = r'/home/olive/data/Facial_asymmetry_oli_reclicks'
                     save_data_path = r'/home/olive/data/results/Oli'
             elif google_oli == True:
                 # paths for oli through google
@@ -93,7 +93,7 @@ def init():
                 elif combined_data == False:   
                     # google Oli paths
                     coding_path = r'/home/oliver_umney/GitHub/General-location-finding'
-                    root = r'/home/oliver_umney/data/Facial_asymmetry_oli_common'
+                    root = r'/home/oliver_umney/data/Facial_asymmetry_oli_reclicks'
                     save_data_path =  r'/home/oliver_umney/data/results/oliver_umney_web' 
 
     # results directory
@@ -213,7 +213,7 @@ def init():
     
     # whether to print all CTs as a check
     print_CT_check = True
-    ct_print = "0072.npy"
+    #ct_print = "0072.npy"
     
     # k folds
     k_folds = 5
@@ -238,7 +238,7 @@ def init_new():
         run_folder = "run_09_april_print_CTs"
         #run_folder_load = "run_19_mar_k_fold_aaron"
     elif aaron_or_oli == False:
-        run_folder = "run_4_apr_k_fold_192x192"
+        run_folder = "run_9_apr_print_CTs"
         #run_folder_load = "run_22_mar_test_aaron_my_data"
     # make user double check correct
     print('\n')
