@@ -10,7 +10,7 @@ coding_path = r'/home/oliver_umney/GitHub/General-location-finding'
 os.chdir(coding_path)
 print(os.getcwd())
 
-from data_loading import data_loaders
+from ..data_loading import data_loaders
 import settings as S
 from evaluate import evaluate_functions as eval_func
 from useful_functs import functions
