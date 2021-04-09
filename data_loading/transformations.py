@@ -69,8 +69,12 @@ class Resize(object):
     
       d_pre, h_pre, w_pre = image.shape[:3]
         
-      image = skimage.transform.resize(image, (depth, width, height), order = 1, preserve_range=True, anti_aliasing=True)
-      structure = skimage.transform.resize(structure, (depth, width, height), order = 0, preserve_range = True, anti_aliasing=False )
+      
+      #image = skimage.transform.resize(image, (depth, width, height), order = 1, preserve_range=True, anti_aliasing=True)
+      #structure = skimage.transform.resize(structure, (depth, width, height), order = 0, preserve_range = True, anti_aliasing=False )
+      image = skimage.transform.resize(image, (depth, width, height),  preserve_range=True, anti_aliasing=True)
+      structure = skimage.transform.resize(structure, (depth, width, height), preserve_range = True, anti_aliasing=False )
+      
         
       d_post, h_post, w_post = image.shape[:3] 
     
