@@ -81,16 +81,16 @@ for batch in data_loaders.dataloaders['test']:
     print('Patient')
     print(patient)
 
-    for landmark in S.landmarks:
+    ###for landmark in S.landmarks:
         #patient  = dataset.__getitem__(i)['patient'].squeeze(0)
-        structure_loc = functions.landmark_loc(labels, landmark)[0]
-        structure_max_x, structure_max_y, structure_max_z = structure_loc[0][0],structure_loc[0][1], structure_loc[0][2] 
-        print('landmark, x, y, z')
-        print(landmark, structure_max_x, structure_max_y, structure_max_z)
+        ###structure_loc = functions.landmark_loc(labels, landmark)[0]
+        ###structure_max_x, structure_max_y, structure_max_z = structure_loc[0][0],structure_loc[0][1], structure_loc[0][2] 
+        ###print('landmark, x, y, z')
+        ###print(landmark, structure_max_x, structure_max_y, structure_max_z)
         #structure_extrac = eval_func.extract_landmark_for_structure_np(structure, landmark)
         #eval_func.plot_3d_pred_img_no_pred(inputs[0].squeeze(0).cpu().numpy(), empty_struc, S.threshold_img_print, path_print_ct, patient[0], landmark)
         #print(dataset.__getitem__(i)['patient'])
-        print_2D_slice_check(inputs[0], labels[0], landmark, structure_max_x, structure_max_y, structure_max_z, path_print_ct, patient[0])
+        ###print_2D_slice_check(inputs[0], labels[0], landmark, structure_max_x, structure_max_y, structure_max_z, path_print_ct, patient[0])
         
      
 '''
