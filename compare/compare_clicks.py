@@ -62,7 +62,7 @@ def histogram(data, coord, landmark):
     data = np.array(data)
     data = np.sort(data)
     plt.figure()
-    n, bins, patches = plt.hist(x=data, bins=list(range(-20,21)), color='#0504aa',
+    n, bins, patches = plt.hist(x=data, bins=list(range(-30,31)), color='#0504aa',
                             alpha=0.7)
     plt.grid(axis='y', alpha=0.75)
     plt.xlabel('Deviation/mm')
@@ -74,7 +74,7 @@ def histogram(data, coord, landmark):
     plt.ylim(ymax=np.ceil(maxfreq / 10) * 10 if maxfreq % 10 else maxfreq + 10)
     hist_name = os.path.join(hist_root, "%s_dev_%1.0f" % (coord, landmark))
     # set x lim to centre around 0
-    plt.xticks(np.arange(-20,21,2))
+    plt.xticks(np.arange(-30,31,2))
     plt.savefig(hist_name)
 
 # paths
