@@ -93,7 +93,8 @@ def init():
                 elif combined_data == False:   
                     # google Oli paths
                     coding_path = r'/home/oliver_umney/GitHub/General-location-finding'
-                    root = r'/home/oliver_umney/data/Facial_asymmetry_oli_reclicks'
+                    #root = r'/home/oliver_umney/data/Facial_asymmetry_oli_reclicks'
+                    root = r'/home/oliver_umney/data/oli_test_144'
                     save_data_path =  r'/home/oliver_umney/data/results/oliver_umney_web' 
 
     # results directory
