@@ -102,17 +102,17 @@ def histogram_plain(data, name):
     plt.savefig(hist_name)
 
 # paths
-#clicker_1_folder = r'/home/olive/data/Facial_asymmetry_oli/Structures'
-clicker_1_folder = r'/home/rankinaaron98/data/Facial_asymmetry_aaron_reclicks/Structures'
+clicker_1_folder = r'/home/olive/data/Facial_asymmetry_oli/Structures'
+#clicker_1_folder = r'/home/rankinaaron98/data/Facial_asymmetry_aaron_reclicks/Structures'
 clicker_2_folder = r'/home/olive/data/Facial_asymmetry_oli_reclicks/Structures'
 
-save_structure_folder = r'/home/olive/data/Facial_asymmetry_combined_reclicks/Structures'
-save_ct_folder = r'/home/olive/data/Facial_asymmetry_combined_reclicks/CTs'
+save_structure_folder = r'/home/olive/data/Facial_asymmetry_combined_reclicks_ajf/Structures'
+save_ct_folder = r'/home/olive/data/Facial_asymmetry_combined_reclicks_ajf/CTs'
 
 load_ct_folder = r'/home/olive/data/Facial_asymmetry_oli_reclicks/CTs'
 csv_root = r'/home/rankinaaron98/data/Facial_asymmetry_aaron_reclicks/'
 
-hist_root = r'/home/olive/data/Compare/Histograms_reclick_aaron_oli/'
+hist_root = r'/home/olive/data/Compare/Histograms_reclick_oli_old_new/'
 
 # landmarks
 landmarks = [1,2,3,4,5,6,7,8,9,10]
