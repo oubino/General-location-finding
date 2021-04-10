@@ -74,10 +74,14 @@ class Resize(object):
         
       d_post, h_post, w_post = image.shape[:3] 
     
-      S.downsample_ratio_h = np.append(S.downsample_ratio_h, h_pre/h_post)
-      S.downsample_ratio_w = np.append(S.downsample_ratio_w, w_pre/w_post)
-      S.downsample_ratio_d = np.append(S.downsample_ratio_d, d_pre/d_post)
-      S.downsample_idx_list.append(patient) 
+      #S.downsample_ratio_h = np.append(S.downsample_ratio_h, h_pre/h_post)
+      #S.downsample_ratio_w = np.append(S.downsample_ratio_w, w_pre/w_post)
+      #S.downsample_ratio_d = np.append(S.downsample_ratio_d, d_pre/d_post)
+      #.downsample_idx_list.append(patient) 
+      S.downsample_ratio_list[patient] = {}
+      S.downsample_ratio_list[patient]['h'] = h_pre/h_post
+      S.downsample_ratio_list[patient]['w'] = w_pre/w_post
+      S.downsample_ratio_list[patient]['d'] = d_pre/d_post
       '''
       structure_new = np.zeros(image.shape)
       for l in S.landmarks:
@@ -212,8 +216,6 @@ class CentreCrop(object):
         image = skimage.util.pad(image,((0,pad_value),(0,0),(0,0)))
         structure = skimage.util.pad(structure,((0,pad_value),(0,0),(0,0)))  
 
-      d, h, w = image.shape[:3] # define image height, width, depth as first 3 values
-
       return {'image':image, 'structure': structure, 'idx':idx, 'patient':patient, 'coords':coords} # note note !
 
     
@@ -256,63 +258,53 @@ class ToTensor(object):
         return {'image': image,'structure': structure, 'idx': idx, 'patient':patient, 'coords':coords}
 
 
-
 class Flips_scipy(object):
     def __call__(self,sample):
         image, structure, idx, patient, coords = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords']
         random_number = random.random()
         angle = random.randint(-10, 10)
         if random_number <= 0.33:
-            #structure = scipy.ndimage.rotate(structure, angle, axes = [1,0], reshape = False, order = 0)
+            out_of_bounds = False
             for l in S.landmarks_total:
-                x,y, z = coords[l][0] - (S.in_x-1)/2, coords[l][1] - (S.in_y-1)/2, coords[l][2] - (S.in_z-1)/2 
-                y_new = math.cos(math.radians(-angle)) * y - math.sin(math.radians(-angle)) * z
-                z_new = math.cos(math.radians(-angle)) * z + math.sin(math.radians(-angle)) * y 
-                coords[l][1] = y_new + (S.in_y-1)/2
-                coords[l][2] = z_new + (S.in_z-1)/2
+                x_rotat, y_rotat, z_rotat = functions.rotate(coords[l][0], coords[l][1], coords[l][2], S.in_x, S.in_y, S.in_z, angle, [1,0])
+             
+                if x_rotat < 0 or x_rotat >= S.in_x or y_rotat < 0 or y_rotat >= S.in_y or z_rotat < 0 or z_rotat >= S.in_z:
+                    out_of_bounds = True                   
             # check if still within bounds due to rotation!
-            if x > -(S.in_x-1)/2 and x < (S.in_x-1)/2 and y_new > -(S.in_y-1)/2 and y_new < (S.in_y-1)/2 and z_new > -(S.in_z-1)/2 and z_new < (S.in_z-1)/2:
+            if out_of_bounds == False:
                 image = scipy.ndimage.rotate(image, angle, axes = [1,0],reshape = False, order = 0)
+                coords[l][0], coords[l][1], coords[l][2] = x_rotat, y_rotat, z_rotat          
             else:
                 print('ROTATION OUT OF BOUNDS')
-                # if not then need to flip landmarks back
-                for l in S.landmarks_total:
-                    coords[l][0], coords[l][1], coords[l][2] = x + (S.in_x-1)/2, y + (S.in_y-1)/2, z + (S.in_z-1)/2
                 
 
         elif (random_number > 0.33) and (random_number <= 0.66):
-            #structure = scipy.ndimage.rotate(structure, angle, axes = [1,2], reshape = False, order = 0)
+            out_of_bounds = False
             for l in S.landmarks_total:
-                x,y, z = coords[l][0] - (S.in_x-1)/2, coords[l][1] - (S.in_y-1)/2, coords[l][2] - (S.in_z-1)/2 
-                x_new = math.cos(math.radians(-angle)) * x - math.sin(math.radians(-angle)) * y
-                y_new = math.cos(math.radians(-angle)) * y + math.sin(math.radians(-angle)) * x
-                coords[l][0] = x_new + (S.in_x-1)/2
-                coords[l][1] = y_new + (S.in_y-1)/2
-                
-            if x_new > -(S.in_x-1)/2 and x_new < (S.in_x-1)/2 and y_new > -(S.in_y-1)/2 and y_new < (S.in_y-1)/2 and z > -(S.in_z-1)/2 and z < (S.in_z-1)/2:
+                x_rotat, y_rotat, z_rotat = functions.rotate(coords[l][0], coords[l][1], coords[l][2], S.in_x, S.in_y, S.in_z, angle, [1,2])
+             
+                if x_rotat < 0 or x_rotat >= S.in_x or y_rotat < 0 or y_rotat >= S.in_y or z_rotat < 0 or z_rotat >= S.in_z:
+                    out_of_bounds = True                   
+            # check if still within bounds due to rotation!
+            if out_of_bounds == False:
                 image = scipy.ndimage.rotate(image, angle, axes = [1,2],reshape = False, order = 0)
+                coords[l][0], coords[l][1], coords[l][2] = x_rotat, y_rotat, z_rotat              
             else:
                 print('ROTATION OUT OF BOUNDS')
-                # if not then need to flip landmarks back
-                for l in S.landmarks_total:
-                    coords[l][0], coords[l][1], coords[l][2] = x + (S.in_x-1)/2, y + (S.in_y-1)/2, z + (S.in_z-1)/2
 
         else:
-            #structure = scipy.ndimage.rotate(structure, angle, axes = [2,0], reshape = False, order = 0)
+            #structure = scipy.ndimage.rotate(structure, angle, axes = [1,0], reshape = False, order = 0)
+            out_of_bounds = False
             for l in S.landmarks_total:
-                x,y, z = coords[l][0] - (S.in_x-1)/2, coords[l][1] - (S.in_y-1)/2, coords[l][2] - (S.in_z-1)/2 
-                x_new = math.cos(math.radians(angle)) * x + math.sin(math.radians(angle)) * z
-                z_new = math.cos(math.radians(angle)) * z - math.sin(math.radians(angle)) * x
-                coords[l][0] = x_new + (S.in_x-1)/2
-                coords[l][2] = z_new + (S.in_z-1)/2
-                
-            if x_new > -(S.in_x-1)/2 and x_new < (S.in_x-1)/2 and y > -(S.in_y-1)/2 and y < (S.in_y-1)/2 and z_new > -(S.in_z-1)/2 and z_new < (S.in_z-1)/2:
-               image = scipy.ndimage.rotate(image, angle, axes = [2,0],reshape = False, order = 0)
+                x_rotat, y_rotat, z_rotat = functions.rotate(coords[l][0], coords[l][1], coords[l][2], S.in_x, S.in_y, S.in_z, angle, [2,0])            
+                if x_rotat < 0 or x_rotat >= S.in_x or y_rotat < 0 or y_rotat >= S.in_y or z_rotat < 0 or z_rotat >= S.in_z:
+                    out_of_bounds = True                   
+            # check if still within bounds due to rotation!
+            if out_of_bounds == False:
+                image = scipy.ndimage.rotate(image, angle, axes = [2,0],reshape = False, order = 0)
+                coords[l][0], coords[l][1], coords[l][2] = x_rotat, y_rotat, z_rotat            
             else:
                 print('ROTATION OUT OF BOUNDS')
-                # if not then need to flip landmarks back
-                for l in S.landmarks_total:
-                    coords[l][0], coords[l][1], coords[l][2] = x + (S.in_x-1)/2, y + (S.in_y-1)/2, z + (S.in_z-1)/2
 
         return {'image': image, 'structure': structure, 'idx': idx, 'patient':patient, 'coords':coords}
     

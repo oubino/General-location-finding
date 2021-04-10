@@ -3,6 +3,7 @@ import numpy as np
 from scipy.optimize import curve_fit
 import csv
 import os
+import math
 
 import settings as S
 
@@ -295,7 +296,7 @@ def point_to_point_mm(mask_x, mask_y, mask_z, pred_x, pred_y, pred_z, patient):
   list_img = list(data)#, key=operator.itemgetter(0))
   # sortedlist[img_number][0 = name, 1 = x/y, 2 = z]
   #image_idx = int(image_idx)
-  pat_ind = patient[0].replace('.npy','')
+  pat_ind = patient.replace('.npy','')
   index = 0 
   for i in range(len(list_img)):
       if list_img[i][0] == pat_ind:
@@ -303,33 +304,11 @@ def point_to_point_mm(mask_x, mask_y, mask_z, pred_x, pred_y, pred_z, patient):
   pixel_mm_x = list_img[index][1] # 1 pixel = pixel_mm_x * mm
   pixel_mm_y = list_img[index][1]
   pixel_mm_z = list_img[index][2]
-  if len(S.downsample_idx_list):
-        # array not emtpy
-        index = 0       
-        for i in range(len(S.downsample_idx_list)):
-          if S.downsample_idx_list[i] == patient[0]:
-              index = i
-        #index = S.downsample_idx_list.index(patient)
-        #print('patient')
-        #print(patient)
-        #print('pre amendment pixel sizes', pixel_mm_x, pixel_mm_y, pixel_mm_z)
-        pixel_mm_x = float(pixel_mm_x) 
-        pixel_mm_y = float(pixel_mm_y) 
-        pixel_mm_z = float(pixel_mm_z) 
-        pixel_mm_x = torch.tensor((pixel_mm_x)).to(S.device)
-        pixel_mm_y = torch.tensor((pixel_mm_y)).to(S.device)
-        pixel_mm_z = torch.tensor((pixel_mm_z)).to(S.device)
-        # convert pred_x, pred_y, pred_z to location in original image (512,512,z)
-        pred_x = pred_x * S.downsample_ratio_w[index]
-        pred_y = pred_y * S.downsample_ratio_h[index]
-        pred_z = pred_z * S.downsample_ratio_d[index]
-        #print('downsample ratio x,y,z')
-        #print(S.downsample_ratio_w[index], S.downsample_ratio_h[index], S.downsample_ratio_d[index])
-        #print('post amendment pixel sizes', pixel_mm_x, pixel_mm_y, pixel_mm_z)
-  else:
-      pixel_mm_x = torch.tensor(float(pixel_mm_x)).to(S.device)
-      pixel_mm_y = torch.tensor(float(pixel_mm_y)).to(S.device)
-      pixel_mm_z = torch.tensor(float(pixel_mm_z)).to(S.device)
+  
+  pixel_mm_x = torch.tensor(float(pixel_mm_x)).to(S.device)
+  pixel_mm_y = torch.tensor(float(pixel_mm_y)).to(S.device)
+  pixel_mm_z = torch.tensor(float(pixel_mm_z)).to(S.device)
+  
   point_to_point = (((pred_x - mask_x)*pixel_mm_x)**2 + ((pred_y - mask_y)*pixel_mm_y)**2 + ((pred_z - mask_z)*pixel_mm_z)**2)**0.5 
   return point_to_point
 
@@ -385,6 +364,21 @@ def string(s):
     if s is None:
         return ''
     return '_' + str(s)
+
+def rotate(x_coord, y_coord, z_coord, x_size, y_size, z_size, angle, axis):
+    x,y, z = x_coord - (x_size-1)/2, y_coord - (y_size-1)/2, z_coord - (z_size-1)/2 
+    if axis == [1,0]:
+        y_new = math.cos(math.radians(-angle)) * y - math.sin(math.radians(-angle)) * z
+        z_new = math.cos(math.radians(-angle)) * z + math.sin(math.radians(-angle)) * y 
+        return x, y_new + (y_size-1)/2, z_new + (z_size-1)/2
+    elif axis == [1,2]:
+        x_new = math.cos(math.radians(-angle)) * x - math.sin(math.radians(-angle)) * y
+        y_new = math.cos(math.radians(-angle)) * y + math.sin(math.radians(-angle)) * x
+        return x_new, y_new, z
+    elif axis == [2,0]:
+        x_new = math.cos(math.radians(angle)) * x + math.sin(math.radians(angle)) * z
+        z_new = math.cos(math.radians(angle)) * z - math.sin(math.radians(angle)) * x
+        return x_new, y, z_new        
         
         
 #os.chdir(S.coding_path) # change to data path and change back at end

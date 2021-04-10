@@ -189,7 +189,7 @@ def print_2D_slice(image, structure, pred, landmark, pred_x, pred_y, pred_z, str
     # -----------------------------------
     
     # ---- if want to plot as point ------
-    pred = pred[pred_y, pred_x, pred_z]
+    #pred = pred[pred_y, pred_x, pred_z]
     plt.imshow(image,cmap = 'Greys_r', alpha = 0.9)
     plt.plot(struc_x.cpu().numpy(), struc_y.cpu().numpy(), color = 'red', marker = 'x', label = 'target')
     plt.plot(pred_x.cpu().numpy(), pred_y.cpu().numpy(),color='green', marker='o', label = 'pred')
@@ -349,11 +349,17 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
             # print 2D slice
             print('2D slice for landmark %1.0f' % l)
             print_2D_slice(image[i], structure[i], pred[i], l, pred_max_x, pred_max_y, pred_max_z, structure_max_x, structure_max_y, structure_max_z ,eval_path, patient[i])
+                  
+          # convert pred max to location in full size image
+          if patient[i] in S.downsample_ratio_list:
+            pred_max_x = pred_max_x * S.downsample_ratio_list[patient]['w']
+            pred_max_y = pred_max_y * S.downsample_ratio_list[patient]['h']
+            pred_max_z = pred_max_z * S.downsample_ratio_list[patient]['d']     
+          else:
+            print('pred max not upscaled!')
             
-
-          #img_landmark_point_to_point = point_to_point(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z)
           # point to point takes in original structure location!!
-          img_landmark_point_to_point = functions.point_to_point_mm(structure_orig_max_x, structure_orig_max_y, structure_orig_max_z, pred_max_x, pred_max_y, pred_max_z, patient)
+          img_landmark_point_to_point = functions.point_to_point_mm(structure_orig_max_x, structure_orig_max_y, structure_orig_max_z, pred_max_x, pred_max_y, pred_max_z, patient[i])
           p2p_landmarks[l] = np.append(p2p_landmarks[l],img_landmark_point_to_point.cpu())
           # if img_point_to_point > 20mm is an outlier
           if img_landmark_point_to_point > 20:
@@ -365,6 +371,11 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
   print('\n')
   print('Results summary')    
   print('---------------')
+  
+  latex_line = []
+  csv_line = []
+  name_of_file = os.path.join(eval_path, "results.txt")
+  txt_file = open(name_of_file, "a")
   
   for l in S.landmarks:
     print('\n')
@@ -381,8 +392,6 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
     print('    pred max used = %s' % S.pred_max)
     print('\n')
   
-    name_of_file = os.path.join(eval_path, "results.txt")
-    file = open(name_of_file, "a")
     L = ['\n','Landmark %1.0f' % l, '\n', 
          '  mean point to point error is ' + str(mean) + '+/-' + str(std_mean), '\n',
          '  median point to point error is ' + str(median), '\n', 
@@ -390,8 +399,14 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
          '  sigma is ' + str(sigmas[l]), '\n', 
          '  pred max used = ' + str(S.pred_max), '\n',
          '  trained for ' + str(epochs_completed) + ' epochs\n']
-    file.writelines(L)
-    file.close()
+    txt_file.writelines(L)
+       
+    # write in latex table format
+    latex_line_temp = [' & ' + str(round(mean,1)) + '$\pm$' + str(round(std_mean,1))]  
+    latex_line = latex_line + latex_line_temp     
+    # write in excel format for easy to calc folds 
+    csv_line_temp = [str(round(mean,1)) + ',' + str(round(std_mean,1)) + ',']  
+    csv_line = csv_line + csv_line_temp   
     
     # add to csv file
     csv_name = os.path.join(S.save_data_path, 'results_summary.csv')
@@ -400,6 +415,13 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
         sigma_string = str(sigmas[l])
         writer.writerow(['%s' % S.run_folder, '%s' % epochs_completed_string, 'Landmark %1.0f' % l, 
              str(mean), str(std_mean),str(median),str(outliers_perc) + '%', sigma_string.replace("\n", " "), time.strftime("%Y%m%d-%H%M%S"), 'pred max used = %s' % S.pred_max])
+
+
+  # write in latex/csv form
+  txt_file.writelines(latex_line)
+  txt_file.writelines(['\n'])
+  txt_file.writelines(csv_line)
+  txt_file.close()
        
 def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold, clicker, images, preds): 
   # so can print out test ids for each fold at end
@@ -478,10 +500,17 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold, clicker
             print('2D slice for landmark %1.0f' % l)
             print_2D_slice(image[i], structure[i], pred[i], l, pred_max_z, eval_path, patient[i])
             
+          # convert pred max to location in full size image
+          if patient[i] in S.downsample_ratio_list:
+            pred_max_x = pred_max_x * S.downsample_ratio_list[patient]['w']
+            pred_max_y = pred_max_y * S.downsample_ratio_list[patient]['h']
+            pred_max_z = pred_max_z * S.downsample_ratio_list[patient]['d']     
+          else:
+            print('pred max not upscaled!')
 
           #img_landmark_point_to_point = point_to_point(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z)
           # point to point takes in original structure location!!
-          img_landmark_point_to_point = functions.point_to_point_mm(structure_orig_max_x, structure_orig_max_y, structure_orig_max_z, pred_max_x, pred_max_y, pred_max_z, patient)
+          img_landmark_point_to_point = functions.point_to_point_mm(structure_orig_max_x, structure_orig_max_y, structure_orig_max_z, pred_max_x, pred_max_y, pred_max_z, patient[i])
           p2p_landmarks[l] = np.append(p2p_landmarks[l],img_landmark_point_to_point.cpu())
           # if img_point_to_point > 20mm is an outlier
           if img_landmark_point_to_point > 20:
@@ -494,6 +523,10 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold, clicker
   print('Results summary')    
   print('---------------')
   
+  latex_line = []
+  csv_line = []
+  name_of_file = os.path.join(eval_path, "results.txt")
+  txt_file = open(name_of_file, "a")
   for l in S.landmarks:
     print('\n')
     print('Landmark %1.0f' % l)
@@ -508,9 +541,7 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold, clicker
     print('    trained for ' + str(epochs_completed) + ' epochs')
     print('    pred max used = %s' % S.pred_max)
     print('\n')
-  
-    name_of_file = os.path.join(eval_path, "results.txt")
-    file = open(name_of_file, "a")
+     
     L = ['\n','Landmark %1.0f' % l, '\n', 
          '  mean point to point error is ' + str(mean) + '+/-' + str(std_mean), '\n',
          '  median point to point error is ' + str(median), '\n', 
@@ -518,8 +549,14 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold, clicker
          '  sigma is ' + str(sigmas[l]), '\n', 
          '  pred max used = ' + str(S.pred_max), '\n',
          '  trained for ' + str(epochs_completed) + ' epochs\n']
-    file.writelines(L)
-    file.close()
+    txt_file.writelines(L)
+    
+    # write in latex table format
+    latex_line_temp = [' & ' + str(round(mean,1)) + '$\pm$' + str(round(std_mean,1))]  
+    latex_line = latex_line + latex_line_temp     
+    # write in excel format for easy to calc folds 
+    csv_line_temp = [str(round(mean,1)) + ',' + str(round(std_mean,1)) + ',']  
+    csv_line = csv_line + csv_line_temp     
     
     # add to csv file
     csv_name = os.path.join(S.save_data_path, 'results_summary.csv')
@@ -528,4 +565,11 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold, clicker
         sigma_string = str(sigmas[l])
         writer.writerow(['%s' % S.run_folder, '%s' % epochs_completed_string, 'Landmark %1.0f' % l, 
              str(mean), str(std_mean),str(median),str(outliers_perc) + '%', sigma_string.replace("\n", " "), time.strftime("%Y%m%d-%H%M%S"), 'pred max used = %s' % S.pred_max])
-       
+  
+  # write in latex/csv form
+  txt_file.writelines(latex_line)
+  txt_file.writelines(['\n'])
+  txt_file.writelines(csv_line)  
+  txt_file.close()
+  
+  

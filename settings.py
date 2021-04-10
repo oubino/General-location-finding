@@ -12,8 +12,8 @@ def init():
     global norm_mean, norm_std, batch_size, landmarks, sigmas, num_class
     global in_x, in_y, in_z, alpha, reg, gamma, lr_max, lr_min
     global step_size, threshold_img_print, normal_min, normal_max
-    global normal_window, use_amp, downsample_ratio_h, downsample_ratio_w
-    global downsample_ratio_d, downsample_idx_list
+    global normal_window, use_amp
+    global downsample_ratio_list
     global root, device
     global batch_accumulation
     global coding_path
@@ -172,10 +172,7 @@ def init():
     use_amp = True
     
     # if downsampling
-    downsample_ratio_h = np.empty((0), float)
-    downsample_ratio_w = np.empty((0), float)
-    downsample_ratio_d = np.empty((0), float)
-    downsample_idx_list = []
+    downsample_ratio_list = {}
     
     # use predicted max - if want gauss fit set to false
     pred_max = True
