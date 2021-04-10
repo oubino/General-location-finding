@@ -81,7 +81,8 @@ def init():
                 elif combined_data == False:   
                     # Oli paths
                     coding_path = r'/home/olive/GitHub/General-location-finding'
-                    root = r'/home/olive/data/Facial_asymmetry_oli_reclicks'
+                    #root = r'/home/olive/data/Facial_asymmetry_oli_reclicks'
+                    root = r'/home/oliver_umney/data/oli_test_144'
                     save_data_path = r'/home/olive/data/results/Oli'
             elif google_oli == True:
                 # paths for oli through google
@@ -93,8 +94,7 @@ def init():
                 elif combined_data == False:   
                     # google Oli paths
                     coding_path = r'/home/oliver_umney/GitHub/General-location-finding'
-                    #root = r'/home/oliver_umney/data/Facial_asymmetry_oli_reclicks'
-                    root = r'/home/oliver_umney/data/oli_test_144'
+                    root = r'/home/oliver_umney/data/Facial_asymmetry_oli_reclicks'
                     save_data_path =  r'/home/oliver_umney/data/results/oliver_umney_web' 
 
     # results directory
