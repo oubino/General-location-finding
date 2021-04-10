@@ -104,7 +104,7 @@ except OSError as error:
 landmarks = [1,2,3,4,5,6,7,8,9,10]
 
 # limit
-limit = 12
+limit = 4
 
 # loop over .py
 files_aaron = list(sorted(os.listdir(aaron_folder)))
