@@ -102,17 +102,19 @@ def histogram_plain(data, name):
     plt.savefig(hist_name)
 
 # paths
-clicker_1_folder = r'/home/olive/data/Facial_asymmetry_oli/Structures'
-#clicker_1_folder = r'/home/rankinaaron98/data/Facial_asymmetry_aaron_reclicks/Structures'
+#clicker_1_folder = r'/home/olive/data/Facial_asymmetry_oli/Structures'
+clicker_1_folder = r'/home/rankinaaron98/data/Facial_asymmetry_aaron_reclicks/Structures'
 clicker_2_folder = r'/home/olive/data/Facial_asymmetry_oli_reclicks/Structures'
 
-save_structure_folder = r'/home/olive/data/Facial_asymmetry_combined_reclicks_ajf/Structures'
-save_ct_folder = r'/home/olive/data/Facial_asymmetry_combined_reclicks_ajf/CTs'
+save_structure_folder = r'/home/olive/data/Facial_asymmetry_combined_reclicks/Structures'
+save_ct_folder = r'/home/olive/data/Facial_asymmetry_combined_reclicks/CTs'
 
 load_ct_folder = r'/home/olive/data/Facial_asymmetry_oli_reclicks/CTs'
 csv_root = r'/home/rankinaaron98/data/Facial_asymmetry_aaron_reclicks/'
 
-hist_root = r'/home/olive/data/Compare/Histograms_reclick_oli_old_new/'
+#hist_root = r'/home/olive/data/Compare/Histograms_reclick_oli_old_new/'
+hist_root = r'/home/olive/data/Compare/Histograms_reclick_aaron_oli/'
+
 
 # landmarks
 landmarks = [1,2,3,4,5,6,7,8,9,10]
@@ -165,6 +167,8 @@ calc_deviations = question('calc deviations(y) / or not (n)')
 for i in list_1:
     py_array_clicker_1 = np.load(os.path.join(clicker_1_folder,i))
     py_array_clicker_2 = np.load(os.path.join(clicker_2_folder,i))
+    print(i)
+    print(py_array_clicker_1.shape, py_array_clicker_2.shape)
     for k in landmarks:
         #com_list['%1.0f' % k].append(5)
         #print(com_structure_np(py_array,k)[0])
