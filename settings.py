@@ -236,7 +236,7 @@ def init_new():
     
     # -- AMEND -- 
     if aaron_or_oli == True:
-        run_folder = "run_09_april_print_CTs"
+        run_folder = "run_10_april_k_fold"
         #run_folder_load = "run_19_mar_k_fold_aaron"
     elif aaron_or_oli == False:
         run_folder = "run_10_apr_print_CTs"
