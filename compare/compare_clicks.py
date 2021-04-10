@@ -113,17 +113,6 @@ csv_root = r'/home/rankinaaron98/data/Facial_asymmetry_aaron_reclicks/'
 
 hist_root = r'/home/olive/data/Compare/Histograms_reclick_aaron_oli/'
 
-# make folders
-try:  
-    os.mkdir(save_structure_folder)  
-except OSError as error:  
-    print(error) 
-    
-try:  
-    os.mkdir(save_ct_folder)  
-except OSError as error:  
-    print(error) 
-
 # landmarks
 landmarks = [1,2,3,4,5,6,7,8,9,10]
 
@@ -242,8 +231,14 @@ if calc_deviations == True:
 # ------ return a structure with just one point at the mean  ----- #
 
 if save_images == True:
-
-    """
+    
+    # make folders
+    try:  
+        os.mkdir(save_structure_folder)  
+        os.mkdir(save_ct_folder)  
+    except OSError as error:  
+        print(error) 
+  
     # for each image create an array
     for i in list_1:
         py_array_load = np.load(os.path.join(clicker_1_folder,i))
@@ -265,7 +260,7 @@ if save_images == True:
         # save ct
         np.save(os.path.join(save_ct_folder,i), ct)
         
-    """
+    
     
     # create line instead of one average point
 ''' 
