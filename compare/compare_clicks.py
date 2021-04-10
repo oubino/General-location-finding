@@ -74,12 +74,12 @@ def histogram(data, coord, landmark):
     plt.ylim(ymax=np.ceil(maxfreq / 10) * 10 if maxfreq % 10 else maxfreq + 10)
     hist_name = os.path.join(hist_root, "%s_dev_%1.0f" % (coord, landmark))
     # set x lim to centre around 0
-    plt.xticks(np.arange(-20,21))
+    plt.xticks(np.arange(-20,21,2))
     plt.savefig(hist_name)
 
 # paths
-clicker_1_folder = r'/home/olive/data/Facial_asymmetry_oli/Structures'
-#clicker_1_folder = r'/home/rankinaaron98/data/Facial_asymmetry_aaron_reclicks/Structures'
+#clicker_1_folder = r'/home/olive/data/Facial_asymmetry_oli/Structures'
+clicker_1_folder = r'/home/rankinaaron98/data/Facial_asymmetry_aaron_reclicks/Structures'
 clicker_2_folder = r'/home/olive/data/Facial_asymmetry_oli_reclicks/Structures'
 
 save_structure_folder = r'/home/olive/data/Facial_asymmetry_combined_reclicks_ajd/Structures'
@@ -88,8 +88,8 @@ save_ct_folder = r'/home/olive/data/Facial_asymmetry_combined_reclicks_afd/CTs'
 load_ct_folder = r'/home/olive/data/Facial_asymmetry_oli_reclicks/CTs'
 csv_root = r'/home/rankinaaron98/data/Facial_asymmetry_aaron_reclicks/'
 
-hist_root = r'/home/olive/data/Compare/Histograms_reclick_oli_old_new/'
-#hist_root = r'/home/olive/data/Compare/Histograms_reclick_aaron_oli/'
+#hist_root = r'/home/olive/data/Compare/Histograms_reclick_oli_old_new/'
+hist_root = r'/home/olive/data/Compare/Histograms_reclick_aaron_oli/'
 
 
 # landmarks
