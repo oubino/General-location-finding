@@ -74,7 +74,7 @@ def histogram(data, coord, landmark):
     plt.ylim(ymax=np.ceil(maxfreq / 10) * 10 if maxfreq % 10 else maxfreq + 10)
     hist_name = os.path.join(hist_root, "%s_dev_%1.0f" % (coord, landmark))
     # set x lim to centre around 0
-    plt.xticks(np.arange(-30,31,2))
+    plt.xticks(np.arange(-30,31,4))
     plt.savefig(hist_name)
 
 # paths
