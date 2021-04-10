@@ -55,7 +55,7 @@ def pixel_to_mm(patient):
     pixel_mm_y = float(list_img[index][1])
     pixel_mm_z = float(list_img[index][2])
     
-    return pixel_mm_x, pixel_mm_y, pixel_mm_z
+    return pixel_mm_z, pixel_mm_y, pixel_mm_x
 
 def histogram(data, coord, landmark):
     # plot and save histogram
@@ -167,8 +167,6 @@ calc_deviations = question('calc deviations(y) / or not (n)')
 for i in list_1:
     py_array_clicker_1 = np.load(os.path.join(clicker_1_folder,i))
     py_array_clicker_2 = np.load(os.path.join(clicker_2_folder,i))
-    print(i)
-    print(py_array_clicker_1.shape, py_array_clicker_2.shape)
     for k in landmarks:
         #com_list['%1.0f' % k].append(5)
         #print(com_structure_np(py_array,k)[0])
@@ -181,7 +179,7 @@ for j in range(len(list_1)):
         mean_x = ((com_list_clicker_1['%1.0f' % k][j][2] + com_list_clicker_2['%1.0f' % k][j][2])/2)
         mean_y = ((com_list_clicker_1['%1.0f' % k][j][1] + com_list_clicker_2['%1.0f' % k][j][1])/2)
         mean_z = ((com_list_clicker_1['%1.0f' % k][j][0] + com_list_clicker_2['%1.0f' % k][j][0])/2)
-        coords = [mean_x, mean_y, mean_z]
+        coords = [mean_z, mean_y, mean_x]
         mean_list['%1.0f' % k].append(coords)
     
 click_outlier_counter = 0
@@ -189,7 +187,7 @@ if calc_deviations == True:
     # calculate deviation of arrays etc.
     for j in range(len(list_1)):
         for k in landmarks:
-            x_mm, y_mm, z_mm = pixel_to_mm(list_1[j])
+            z_mm, y_mm, x_mm = pixel_to_mm(list_1[j])
             dev_x = (com_list_clicker_1['%1.0f' % k][j][2] - com_list_clicker_2['%1.0f' % k][j][2])*(x_mm)
             dev_y = (com_list_clicker_1['%1.0f' % k][j][1] - com_list_clicker_2['%1.0f' % k][j][1])*(y_mm)
             dev_z = (com_list_clicker_1['%1.0f' % k][j][0] - com_list_clicker_2['%1.0f' % k][j][0])*(z_mm)
