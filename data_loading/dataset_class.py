@@ -48,12 +48,7 @@ class CTDataset(Dataset):
         sample['coords'] = {}
         for k in settings.landmarks_total:
             sample['coords'][k] = [0,0,0] # x,y,z
-            
-        # amend
-        print('locations')
-        locations = np.nonzero(np.round(structure) == 1)
-        print(locations)
-        
+                   
         
         if (self.transform_train) and (self.test == False):
             sample = self.transform_train(sample) # if transforms present, act on sample

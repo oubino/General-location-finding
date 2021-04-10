@@ -68,15 +68,9 @@ class Resize(object):
       height = self.height
     
       d_pre, h_pre, w_pre = image.shape[:3]
-        
-      # amend
-      print('locations')
-      locations = np.nonzero(np.round(structure) == 1)
-      print(locations)
       
       image = skimage.transform.resize(image, (depth, width, height), order = 1, preserve_range=True, anti_aliasing=True)
       structure = skimage.transform.resize(structure, (depth, width, height), order = 0, preserve_range = True, anti_aliasing=False )
-      
         
       d_post, h_post, w_post = image.shape[:3] 
     
@@ -84,11 +78,6 @@ class Resize(object):
       S.downsample_ratio_w = np.append(S.downsample_ratio_w, w_pre/w_post)
       S.downsample_ratio_d = np.append(S.downsample_ratio_d, d_pre/d_post)
       S.downsample_idx_list.append(patient) 
-      
-      # amend
-      print('locations')
-      locations = np.nonzero(np.round(structure) == 1)
-      print(locations)
       
       '''
       structure_new = np.zeros(image.shape)
