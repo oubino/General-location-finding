@@ -148,9 +148,9 @@ def init():
       #print(sigmas[k])
     
     # input dimensions
-    in_x = 128
-    in_y = 128 
-    in_z = 80
+    in_x = 512
+    in_y = 512 
+    in_z = 100
     
     # learning params
     alpha = 1/25000
