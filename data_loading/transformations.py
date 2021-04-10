@@ -69,6 +69,10 @@ class Resize(object):
     
       d_pre, h_pre, w_pre = image.shape[:3]
         
+      # amend
+      print('locations')
+      locations = np.nonzero(np.round(structure) == 1)
+      print(locations)
       
       image = skimage.transform.resize(image, (depth, width, height), order = 1, preserve_range=True, anti_aliasing=True)
       structure = skimage.transform.resize(structure, (depth, width, height), order = 0, preserve_range = True, anti_aliasing=False )
@@ -82,6 +86,7 @@ class Resize(object):
       S.downsample_idx_list.append(patient) 
       
       # amend
+      print('locations')
       locations = np.nonzero(np.round(structure) == 1)
       print(locations)
       
@@ -424,7 +429,6 @@ class Upsidedown_scipy(object):
         z_landmark_bot = landmark_loc_bot[0][0]
         #z_size = structure.shape[0] 
         if z_landmark_top < z_landmark_bot:
-            print('upside down') # amendment
             angle = 180
             image = scipy.ndimage.rotate(image, angle, axes = [2,0], reshape = False, order =0)
             structure = scipy.ndimage.rotate(structure, angle, axes = [2,0], reshape = False, order =0)
