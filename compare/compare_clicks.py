@@ -78,28 +78,6 @@ def histogram(data, coord, landmark):
     max_val = data_abs.max()
     plt.xlim(-max_val, max_val)  
     plt.savefig(hist_name)
-    
-def histogram_plain(data, name):
-    # plot and save histogram
-    data = np.array(data)
-    data = np.sort(data)
-    plt.figure()
-    n, bins, patches = plt.hist(x=data, bins='auto', color='#0504aa',
-                            alpha=0.7)
-    plt.grid(axis='y', alpha=0.75)
-    plt.xlabel('Deviation/mm')
-    plt.ylabel('Frequency')
-    plt.title("%s" % (name))
-    #plt.text(23, 45, r'$\mu=15, b=3$')
-    maxfreq = n.max()
-    # Set a clean upper y-axis limit.
-    plt.ylim(ymax=np.ceil(maxfreq / 10) * 10 if maxfreq % 10 else maxfreq + 10)
-    hist_name = os.path.join(hist_root, "%s" % (name))
-    # set x lim to centre around 0
-    data_abs = abs(data)
-    max_val = data_abs.max()
-    plt.xlim(-max_val, max_val)  
-    plt.savefig(hist_name)
 
 # paths
 #clicker_1_folder = r'/home/olive/data/Facial_asymmetry_oli/Structures'
@@ -225,6 +203,7 @@ if calc_deviations == True:
         if plot_histograms == True:
       
             # plot and save histogram
+            histogram(a, 'total', k)
             histogram(x, 'x', k)
             histogram(y, 'y', k)
             histogram(z, 'z', k)
@@ -306,9 +285,6 @@ if save_images == True:
         # save ct
         np.save(os.path.join(save_ct_folder,i), ct)
 '''
-
-# deviations per landmark per image
-histogram_plain(dev_list, 'all devs for all clicks')
 
 # for each landmark, list of the images with deviations greater than ceratin distance
 print('for each landmark, list of the images with deviations greater than %1.0f' % limit)
