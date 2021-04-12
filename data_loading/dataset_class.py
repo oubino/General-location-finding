@@ -65,6 +65,8 @@ class CTDataset(Dataset):
           #print('mask_max:%5.2f, mask_min:%5.2f' % (mask.max(),mask.min()))
           #print('x where its equal to 1')
           #print((np.where(mask == mask.max())[0]))
+          print('here')
+          print(sample.keys())
           return sample 
         else:
           print('no structure?')

@@ -256,6 +256,43 @@ class ToTensor(object):
         structure = structure.unsqueeze(0) # force mask to have extra dimension i.e. (1xHxWxD)
         image = image.unsqueeze(0)
         return {'image': image,'structure': structure, 'idx': idx, 'patient':patient, 'coords':coords}
+    
+class ToTensor_no_ds(object):
+    """Convert ndarrays in sample to Tensors."""
+
+    def __call__(self, sample):
+        image, structure, idx, patient, coords = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords']
+        structure = np.zeros(structure.shape)
+        for l in S.landmarks_total:
+            # structure is z, y, x
+            # need it in y, x, z                
+            x, y, z = int(round(coords[l][0])), int(round(coords[l][1])), int(round(coords[l][2]))
+            # if z is 80 round to 79
+            """
+            if z >= S.in_z:
+                print('Z BIGGER THAN Z MAX')
+                print(z)
+                z = S.in_z - 1
+            if y >= S.in_y:
+                print('Y BIGGER THAN Y MAX')
+                print(y)
+                y = S.in_y - 1
+            if x >= S.in_x:
+                print('X BIGGER THAN X MAX')
+                print(x)
+                x = S.in_x - 1
+            """
+            structure[z][y][x] = l
+        # swap color axis because
+        # numpy image: D x H x W 
+        # torch image: C X H X W x D
+        image = image.transpose(1,2,0)
+        structure = structure.transpose(1,2,0)
+        image = torch.from_numpy(image).float() # dont know why images/mask casted to float here but need to do it again later
+        structure = torch.from_numpy(structure).float()
+        structure = structure.unsqueeze(0) # force mask to have extra dimension i.e. (1xHxWxD)
+        image = image.unsqueeze(0)
+        return {'image': image,'structure': structure, 'idx': idx, 'patient':patient, 'coords':coords}
 
 
 class Flips_scipy(object):
