@@ -148,9 +148,9 @@ def init():
       #print(sigmas[k])
     
     # input dimensions
-    in_x = 192
-    in_y = 192 
-    in_z = 100
+    in_x = 128
+    in_y = 128 
+    in_z = 80
     
     # learning params
     alpha = 1/25000
@@ -293,7 +293,7 @@ def init_load():
         run_folder = "run_23_mar_eval_oli"
     elif aaron_or_oli == False:
         #run_folder = "run_22_mar_test_aaron_my_data"
-        run_folder = "run_4_apr_k_fold_192x192"
+        run_folder = "run_12_apr_test_512_eval"
     # make user double check correct
     print('\n')
     print('run folder')
