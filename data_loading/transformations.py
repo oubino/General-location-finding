@@ -377,7 +377,11 @@ class Horizontal_flip(object):
     
 class Upsidedown_scipy(object):
     def __call__(self,sample):
-        image, structure, idx, patient, coords = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords']
+        image = sample['image']
+        structure = sample['structure']
+        idx = sample['idx']
+        patient = sample['patient'],
+        coords = sample['coords']
         # if upside down need to flip
         # if left cochlea landmark = 5 above 1/2
         # data is y, x, z
