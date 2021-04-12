@@ -61,12 +61,17 @@ class CTDataset(Dataset):
         
         #sample['idx'] = idx
         
+        print('here')
+        print(sample.keys())
+        print(self.transform_test)
+        print(self.test)
+        print(self.transform_train)
+        print(self.train)
+        
         if (structure.max() != structure.min()): # exclude images where no mask
           #print('mask_max:%5.2f, mask_min:%5.2f' % (mask.max(),mask.min()))
           #print('x where its equal to 1')
           #print((np.where(mask == mask.max())[0]))
-          print('here')
-          print(sample.keys())
           return sample 
         else:
           print('no structure?')
