@@ -359,8 +359,11 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
           else:
             print('pred max not upscaled!')
             
+          print('patient')
+          print(patient[i])
+            
           # point to point takes in original structure location!!
-          img_landmark_point_to_point = functions.point_to_point_mm(structure_orig_max_x, structure_orig_max_y, structure_orig_max_z, pred_max_x, pred_max_y, pred_max_z, patient[i][0])
+          img_landmark_point_to_point = functions.point_to_point_mm(structure_orig_max_x, structure_orig_max_y, structure_orig_max_z, pred_max_x, pred_max_y, pred_max_z, patient[i])
           p2p_landmarks[l] = np.append(p2p_landmarks[l],img_landmark_point_to_point.cpu())
           # if img_point_to_point > 20mm is an outlier
           if img_landmark_point_to_point > 20:
