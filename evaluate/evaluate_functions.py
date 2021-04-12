@@ -300,8 +300,8 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
 
   for batch in data_loaders.dataloaders['test']:
     image = batch['image'].to(S.device)
-    structure = batch['structure'].to(S.device)
-    structure_original = batch['structure_original'].to(S.device)
+    #structure = batch['structure'].to(S.device)
+    structure_original = batch['structure'].to(S.device)
     patient = batch['patient']
     pred = model(image)
   
@@ -309,15 +309,15 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
     
     for l in S.landmarks: # cycle over all landmarks
       
-      for i in range(structure.size()[0]):
+      for i in range(structure_original.size()[0]):
         
-        structure_loc = functions.landmark_loc(structure, l)[0]
+        #structure_loc = functions.landmark_loc(structure, l)[0]
         structure_orig_loc = functions.landmark_loc(structure_original, l)[0]
         #structure_com = functions.com_structure(structure, l)[0]# [0] ensures extracts coords rather than True/False
         # change to top structure
         #if functions.com_structure(structure,1)[1][i] == True:
 
-        if functions.landmark_loc(structure,l)[1][i] == True:
+        if functions.landmark_loc(structure_original,l)[1][i] == True:
         # change to top structure
           dimension = 3
           height_guess = ((gamma) * (2*np.pi)**(-dimension/2) * sigmas[l].item() ** (-dimension)) 
@@ -329,12 +329,13 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
 
           #print(pred.shape)
           
-          structure_max_x, structure_max_y, structure_max_z = structure_loc[i][0],structure_loc[i][1], structure_loc[i][2] 
+          #structure_max_x, structure_max_y, structure_max_z = structure_loc[i][0],structure_loc[i][1], structure_loc[i][2] 
           pred_max_x, pred_max_y, pred_max_z =  pred_coords_max[i][0], pred_coords_max[i][1], pred_coords_max[i][2] 
           
           structure_orig_max_x, structure_orig_max_y, structure_orig_max_z = structure_orig_loc[i][0],structure_orig_loc[i][1], structure_orig_loc[i][2] 
 
           # print out 3D images for first one in batch
+          """
           if batch_number == 0 and i == 0: # for first batch 
             # now need to choose first in batch i.e. # image[0]
             #print('3D plots for landmark %1.0f' % l)
@@ -349,7 +350,7 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
             # print 2D slice
             print('2D slice for landmark %1.0f' % l)
             print_2D_slice(image[i], structure[i], pred[i], l, pred_max_x, pred_max_y, pred_max_z, structure_max_x, structure_max_y, structure_max_z ,eval_path, patient[i])
-                  
+          """
           # convert pred max to location in full size image
           if patient[i] in S.downsample_ratio_list:
             pred_max_x = pred_max_x * S.downsample_ratio_list[patient]['w']
