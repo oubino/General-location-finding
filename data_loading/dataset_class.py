@@ -55,8 +55,8 @@ class CTDataset(Dataset):
             sample['image'] = self.transform_train(sample['image']) # if transforms present, act on sample
             sample['structure'] = self.transform_train(sample['structure'])
         if (self.transform_test) and (self.test == True):
-            print('sample', sample)
-            sample['structure_original'] = self.transform_test_no_ds(sample['structure'])
+            sample['structure_original'] = self.transform_test_no_ds(sample)['structure']
+            print('here')
             sample['image'] = self.transform_test(sample['image'])
             sample['structure'] = self.transform_test(sample['structure'])
         
