@@ -19,13 +19,13 @@ from data_loading import transformations as T
 if S.downsample_user == True:
     trans_plain = transforms.Compose([T.Resize(S.in_z,S.in_x,S.in_y),T.Upsidedown_scipy(), T.Extract_landmark_location(test= True), T.Fix_base_value(), T.Normalise(S.normal_min, S.normal_max, S.normal_window), T.Check_left_right(), T.ToTensor()])
     trans_augment = transforms.Compose([T.Resize(S.in_z,S.in_x,S.in_y),T.Upsidedown_scipy(), T.Extract_landmark_location(test = False), T.Fix_base_value(), T.Normalise(S.normal_min, S.normal_max, S.normal_window),  T.Flips_scipy(), T.Horizontal_flip(),  T.Check_left_right(), T.ToTensor()])
-
+    trans_plain_no_ds = transforms.Compose([T.Upsidedown_scipy(), T.Extract_landmark_location(test= True), T.Fix_base_value(), T.Normalise(S.normal_min, S.normal_max, S.normal_window), T.Check_left_right(), T.ToTensor()])
 elif S.downsample_user == False:
     trans_plain = transforms.Compose([T.Upsidedown_scipy(),T.Extract_landmark_location(test = True), T.Fix_base_value(), T.Normalise(S.normal_min, S.normal_max, S.normal_window), T.CentreCrop(S.in_z,S.in_x,S.in_y), T.ToTensor()])
     trans_augment = transforms.Compose([T.Upsidedown_scipy(), T.Extract_landmark_location(test = False), T.Fix_base_value(), T.Normalise(S.normal_min, S.normal_max, S.normal_window),T.CentreCrop(S.in_z,S.in_x,S.in_y), T.Flips_scipy(), T.Horizontal_flip(), T.ToTensor()])
 
 
-dataset = D.CTDataset(S.root, transform_train = trans_augment, transform_test = trans_plain, test = False )
+dataset = D.CTDataset(S.root, transform_train = trans_augment, transform_test = trans_plain, transform_test_no_ds = trans_plain_no_ds ,test = False )
 
 def init(fold, train_ids, test_ids):
     # initialise dataloader 
