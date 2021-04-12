@@ -52,12 +52,12 @@ class CTDataset(Dataset):
         
         
         if (self.transform_train) and (self.test == False):
-            sample['image'] = self.transform_train(sample['image']) # if transforms present, act on sample
-            sample['structure'] = self.transform_train(sample['structure'])
+            sample = self.transform_train(sample)
         if (self.transform_test) and (self.test == True):
-            sample['structure_original'] = self.transform_test_no_ds(sample)['structure']
-            sample['image'] = self.transform_test(sample)['image']
-            sample['structure'] = self.transform_test(sample)['structure']
+            sample['structure_original'] = self.transform_test_no_ds(sample)['structure'] # need to pull through twice to get orig and normal struc
+            sample = self.transform_test(sample)
+            #sample['image'] = self.transform_test(sample)['image']
+            #sample['structure'] = self.transform_test(sample)['structure']
         
         #sample['idx'] = idx
         
