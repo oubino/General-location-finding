@@ -54,18 +54,14 @@ class CTDataset(Dataset):
         if (self.transform_train) and (self.test == False):
             sample = self.transform_train(sample)
         if (self.transform_test) and (self.test == True):
-            print('here')
-            sample['structure_original'] = self.transform_test_no_ds(sample)['structure'] # need to pull through twice to get orig and normal struc
+            # need to pull through twice to get orig and normal struc
+            sample_temp = sample
+            sample_temp = self.transform_test_no_ds(sample_temp)
             sample = self.transform_test(sample)
+            sample['structure_original'] = sample_temp['structure']
             #sample['image'] = self.transform_test(sample)['image']
             #sample['structure'] = self.transform_test(sample)['structure']
-            print(sample.keys())
         
-        if (self.transform_test):
-            print('here 1')
-        
-        if (self.test == True):
-            print('here 2')
         #sample['idx'] = idx
                 
         if (structure.max() != structure.min()): # exclude images where no mask
