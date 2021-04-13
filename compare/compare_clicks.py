@@ -88,7 +88,7 @@ save_ct_folder = r'/home/olive/data/Facial_asymmetry_combined_reclicks_afd/CTs'
 load_ct_folder = r'/home/olive/data/Facial_asymmetry_oli_reclicks/CTs'
 csv_root = r'/home/rankinaaron98/data/Facial_asymmetry_aaron_reclicks/'
 
-hist_root = r'/home/rankinaaron98/data/Compare_aaron/Histograms_reclick_aaron_oli/'
+hist_root = r'/home/rankinaaron98/data/Compare_aaron/Histograms_reclick__oli_old_new/'
 #hist_root = r'/home/olive/data/Compare/Histograms_reclick_aaron_oli/'
 
 
