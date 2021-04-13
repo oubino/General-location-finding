@@ -294,7 +294,7 @@ def init_load():
     # -- AMEND -- 
     if aaron_or_oli == True:
         #run_folder = "run_22_mar_oli_kfold_eval"
-        run_folder = "run_23_mar_eval_oli"
+        run_folder = "run_10_apr_k_fold"
     elif aaron_or_oli == False:
         #run_folder = "run_22_mar_test_aaron_my_data"
         run_folder = "run_10_apr_k_fold"
