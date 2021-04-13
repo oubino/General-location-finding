@@ -351,14 +351,15 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
             print_2D_slice(image[i], structure[i], pred[i], l, pred_max_x, pred_max_y, pred_max_z, structure_max_x, structure_max_y, structure_max_z ,eval_path, patient[i][0])
             
           print('orig method p2p')
-          functions.point_to_point_mm_old(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z, patient[i][0])
+          print(functions.point_to_point_mm_old(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z, patient[i][0]))
+          
           
           # convert pred max to location in full size image
           print('list, patient')
           print(S.downsample_ratio_list)
           print(patient[i][0])
           print('here 2 ratio')
-          print(structure_original.shape[3]/structure.shape[3])
+          print(structure_original.shape[2]/structure.shape[2], structure_original.shape[3]/structure.shape[3],structure_original.shape[4]/structure.shape[4],)
           if patient[i][0] in S.downsample_ratio_list:
             pred_max_x = pred_max_x * S.downsample_ratio_list[patient[i][0]]['w']
             pred_max_y = pred_max_y * S.downsample_ratio_list[patient[i][0]]['h']
