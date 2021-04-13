@@ -359,9 +359,14 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
           if patient[i] in S.downsample_ratio_list:
             pred_max_x = pred_max_x * S.downsample_ratio_list[patient]['w']
             pred_max_y = pred_max_y * S.downsample_ratio_list[patient]['h']
-            pred_max_z = pred_max_z * S.downsample_ratio_list[patient]['d']     
+            pred_max_z = pred_max_z * S.downsample_ratio_list[patient]['d']   
           else:
-            print('pred max not upscaled!')
+              pred_max_x = pred_max_x * (structure_original.shape[3]/structure.shape[3])
+              pred_max_y = pred_max_y * (structure_original.shape[2]/structure.shape[2])
+              pred_max_z = pred_max_z * (structure_original.shape[4]/structure.shape[4])
+              
+          #else:
+          #  print('pred max not upscaled!')
             
           # point to point takes in original structure location!!
           img_landmark_point_to_point = functions.point_to_point_mm(structure_orig_max_x, structure_orig_max_y, structure_orig_max_z, pred_max_x, pred_max_y, pred_max_z, patient[i][0])

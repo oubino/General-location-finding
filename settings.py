@@ -111,7 +111,7 @@ def init():
         batch_size = int(input ("Batch size: "))
     else:
         batch_size = 5       
-    batch_size_test = 1
+    batch_size_test = 1 # HAS TO BE 1 ! STRUC ORIGINAL OTHERWISE WILL BE DIFFERENT SHAPES AND BATCH LOADER WILL FAIL
     
     # specify landmarks + region want to train for - AMEND
     #landmarks = [1,2,3,5,7,9] # brainstem # not general
