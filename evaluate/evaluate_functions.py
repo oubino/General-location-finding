@@ -349,11 +349,6 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
             # print 2D slice
             print('2D slice for landmark %1.0f' % l)
             print_2D_slice(image[i], structure[i], pred[i], l, pred_max_x, pred_max_y, pred_max_z, structure_max_x, structure_max_y, structure_max_z ,eval_path, patient[i][0])
-                  
-          print('structure orig shape')
-          print(structure_original.shape)
-          print('structure shape')
-          print(structure.shape)
           
           # convert pred max to location in full size image
           if patient[i] in S.downsample_ratio_list:
