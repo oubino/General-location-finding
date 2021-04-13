@@ -68,11 +68,40 @@ class Resize(object):
       height = self.height
     
       d_pre, h_pre, w_pre = image.shape[:3]
+      
+      print('-----------------------')
+      coordinates = {}
+      for k in S.landmarks_total:
+          coordinates[k] = [0,0,0] 
+      print('resized')
+      for l in S.landmarks_total:
+            # structure is z, y, x
+            # need it in y, x, z
+            coords = numpy_loc.landmark_loc_np(S.landmarks_total_loc[l],structure,l, patient, True)[0]
+            if sum(coords) != 0 :
+                x, y, z = coords[0], coords[1], coords[2]
+                coordinates[l] = [x,y,z]
+      print('coords pre resize')
+      print(coordinates)
         
       image = skimage.transform.resize(image, (depth, width, height), order = 1, preserve_range=True, anti_aliasing=True)
       structure = skimage.transform.resize(structure, (depth, width, height), order = 0, preserve_range = True, anti_aliasing=False )
+      
+      for l in S.landmarks_total:
+            # structure is z, y, x
+            # need it in y, x, z
+            coords = numpy_loc.landmark_loc_np(S.landmarks_total_loc[l],structure,l, patient, True)[0]
+            if sum(coords) != 0 :
+                x, y, z = coords[0], coords[1], coords[2]
+                coordinates[l] = [x,y,z]
+      print('coords post resize')
+      print(coordinates)
         
       d_post, h_post, w_post = image.shape[:3] 
+      
+      print('resized')
+      print(h_post/h_pre, w_post/w_pre, d_post/d_pre)
+      print('--------------------------------------')
     
       #S.downsample_ratio_h = np.append(S.downsample_ratio_h, h_pre/h_post)
       #S.downsample_ratio_w = np.append(S.downsample_ratio_w, w_pre/w_post)
@@ -101,6 +130,7 @@ class Fix_base_value(object):
   def __call__(self, sample):
       image, structure, idx, patient, coords = sample['image'], sample['structure'], sample['idx'], sample['patient'], sample['coords']
       if np.round(np.amin(image)) < -1000:
+          print('fix base value should not be used if see this then stop and consult')
           image = image + np.abs(np.round(np.amin(image)))
       return {'image':image, 'structure': structure, 'idx': idx, 'patient':patient, 'coords': coords} # note note !
   
@@ -124,6 +154,9 @@ class Extract_landmark_location(object):
                 x, y, z = coords[0], coords[1], coords[2]
                 structure_mod[z][y][x] = l
                 coordinates[l] = [x,y,z]
+        print('coords in extract')
+        print(coordinates)
+        
         return {'image':image, 'structure': structure_mod, 'idx': idx, 'patient':patient, 'coords': coordinates} # note note !
     
 class Check_landmark_still_there(object):
