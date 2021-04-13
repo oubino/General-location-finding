@@ -312,6 +312,47 @@ def point_to_point_mm(mask_x, mask_y, mask_z, pred_x, pred_y, pred_z, patient):
   point_to_point = (((pred_x - mask_x)*pixel_mm_x)**2 + ((pred_y - mask_y)*pixel_mm_y)**2 + ((pred_z - mask_z)*pixel_mm_z)**2)**0.5 
   return point_to_point
 
+def point_to_point_mm_old(mask_x, mask_y, mask_z, pred_x, pred_y, pred_z, patient):
+  # calculates point to point in mm
+  data = csv.reader(open(os.path.join(S.root, 'image_dimensions.csv')),delimiter=',')
+  next(data) # skip first line
+  list_img = list(data)#, key=operator.itemgetter(0))
+  # sortedlist[img_number][0 = name, 1 = x/y, 2 = z]
+  #image_idx = int(image_idx)
+  pat_ind = patient.replace('.npy','')
+  index = 0 
+  for i in range(len(list_img)):
+      if list_img[i][0] == pat_ind:
+          index = i
+  pixel_mm_x = list_img[index][1] # 1 pixel = pixel_mm_x * mm
+  pixel_mm_y = list_img[index][1]
+  pixel_mm_z = list_img[index][2]
+  if len(S.downsample_idx_list):
+        # array not emtpy
+        index = 0       
+        for i in range(len(S.downsample_idx_list)):
+          if S.downsample_idx_list[i] == patient:
+              index = i
+        #index = S.downsample_idx_list.index(patient)
+        #print('patient')
+        #print(patient)
+        #print('pre amendment pixel sizes', pixel_mm_x, pixel_mm_y, pixel_mm_z)
+        pixel_mm_x = float(pixel_mm_x) * S.downsample_ratio_w[index]
+        pixel_mm_y = float(pixel_mm_y) * S.downsample_ratio_h[index]
+        pixel_mm_z = float(pixel_mm_z) * S.downsample_ratio_d[index]
+        pixel_mm_x = torch.tensor((pixel_mm_x)).to(S.device)
+        pixel_mm_y = torch.tensor((pixel_mm_y)).to(S.device)
+        pixel_mm_z = torch.tensor((pixel_mm_z)).to(S.device)
+        #print('downsample ratio x,y,z')
+        #print(S.downsample_ratio_w[index], S.downsample_ratio_h[index], S.downsample_ratio_d[index])
+        #print('post amendment pixel sizes', pixel_mm_x, pixel_mm_y, pixel_mm_z)
+  else:
+      pixel_mm_x = torch.tensor(float(pixel_mm_x)).to(S.device)
+      pixel_mm_y = torch.tensor(float(pixel_mm_y)).to(S.device)
+      pixel_mm_z = torch.tensor(float(pixel_mm_z)).to(S.device)
+  point_to_point = (((pred_x - mask_x)*pixel_mm_x)**2 + ((pred_y - mask_y)*pixel_mm_y)**2 + ((pred_z - mask_z)*pixel_mm_z)**2)**0.5 
+  return point_to_point
+
 
 def gaussian(x,y,z, targ_coords, sigma, gamma, dimension = 3): # assumes in 2d space
   # x, y are general coords and targ_coords define mean of gaussian

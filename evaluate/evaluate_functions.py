@@ -349,6 +349,9 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
             # print 2D slice
             print('2D slice for landmark %1.0f' % l)
             print_2D_slice(image[i], structure[i], pred[i], l, pred_max_x, pred_max_y, pred_max_z, structure_max_x, structure_max_y, structure_max_z ,eval_path, patient[i][0])
+            
+          print('orig method p2p')
+          functions.point_to_point_mm_old(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z, patient[i][0])
           
           # convert pred max to location in full size image
           if patient[i] in S.downsample_ratio_list:
@@ -365,6 +368,8 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
             
           # point to point takes in original structure location!!
           img_landmark_point_to_point = functions.point_to_point_mm(structure_orig_max_x, structure_orig_max_y, structure_orig_max_z, pred_max_x, pred_max_y, pred_max_z, patient[i][0])
+          print('new method p2p')
+          print(img_landmark_point_to_point)
           p2p_landmarks[l] = np.append(p2p_landmarks[l],img_landmark_point_to_point.cpu())
           # if img_point_to_point > 20mm is an outlier
           if img_landmark_point_to_point > 20:
