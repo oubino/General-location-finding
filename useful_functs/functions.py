@@ -305,6 +305,9 @@ def point_to_point_mm(mask_x, mask_y, mask_z, pred_x, pred_y, pred_z, patient):
   pixel_mm_y = list_img[index][1]
   pixel_mm_z = list_img[index][2]
   
+  print('pixel x, y, z')
+  print(pixel_mm_x, pixel_mm_y, pixel_mm_z)
+  
   pixel_mm_x = torch.tensor(float(pixel_mm_x)).to(S.device)
   pixel_mm_y = torch.tensor(float(pixel_mm_y)).to(S.device)
   pixel_mm_z = torch.tensor(float(pixel_mm_z)).to(S.device)
@@ -327,6 +330,8 @@ def point_to_point_mm_old(mask_x, mask_y, mask_z, pred_x, pred_y, pred_z, patien
   pixel_mm_x = list_img[index][1] # 1 pixel = pixel_mm_x * mm
   pixel_mm_y = list_img[index][1]
   pixel_mm_z = list_img[index][2]
+  print('orig pixel x, y, z')
+  print(pixel_mm_x, pixel_mm_y, pixel_mm_z)
   if len(S.downsample_ratio_list):
         # array not emtpy
         index = 0       
@@ -341,7 +346,6 @@ def point_to_point_mm_old(mask_x, mask_y, mask_z, pred_x, pred_y, pred_z, patien
             pixel_mm_x = torch.tensor((pixel_mm_x)).to(S.device)
             pixel_mm_y = torch.tensor((pixel_mm_y)).to(S.device)
             pixel_mm_z = torch.tensor((pixel_mm_z)).to(S.device)
-            print('made it here')
         #print('downsample ratio x,y,z')
         #print(S.downsample_ratio_w[index], S.downsample_ratio_h[index], S.downsample_ratio_d[index])
         #print('post amendment pixel sizes', pixel_mm_x, pixel_mm_y, pixel_mm_z)

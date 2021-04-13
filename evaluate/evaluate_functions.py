@@ -353,26 +353,26 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
           print('orig method p2p')
           print(functions.point_to_point_mm_old(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z, patient[i][0]))
           
-          
+          print('structure x, y, z')
+          print(structure_max_x, structure_max_y, structure_max_z)
+          print('512 structure x, y, z')
+          print(structure_orig_max_x, structure_orig_max_y, structure_orig_max_z)
+          print('pred x, y, z')
+          print(pred_max_x, pred_max_y, pred_max_z)
+  
           # convert pred max to location in full size image
-          print('list, patient')
-          print(S.downsample_ratio_list)
-          print(patient[i][0])
-          print('here 2 ratio')
-          print(structure_original.shape[2]/structure.shape[2], structure_original.shape[3]/structure.shape[3],structure_original.shape[4]/structure.shape[4],)
           if patient[i][0] in S.downsample_ratio_list:
             pred_max_x = pred_max_x * S.downsample_ratio_list[patient[i][0]]['w']
             pred_max_y = pred_max_y * S.downsample_ratio_list[patient[i][0]]['h']
             pred_max_z = pred_max_z * S.downsample_ratio_list[patient[i][0]]['d']   
-            print('here 1')
           else:
-              print('here 2')
+              print('shouldnt get here')
               pred_max_x = pred_max_x * (structure_original.shape[3]/structure.shape[3])
               pred_max_y = pred_max_y * (structure_original.shape[2]/structure.shape[2])
               pred_max_z = pred_max_z * (structure_original.shape[4]/structure.shape[4])
               
-          #else:
-          #  print('pred max not upscaled!')
+          print('pred x, y, z 512')
+          print(pred_max_x, pred_max_y, pred_max_z)
             
           # point to point takes in original structure location!!
           img_landmark_point_to_point = functions.point_to_point_mm(structure_orig_max_x, structure_orig_max_y, structure_orig_max_z, pred_max_x, pred_max_y, pred_max_z, patient[i][0])
