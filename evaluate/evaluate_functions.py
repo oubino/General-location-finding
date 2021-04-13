@@ -360,9 +360,9 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
           print('here 2 ratio')
           print(structure_original.shape[3]/structure.shape[3])
           if patient[i][0] in S.downsample_ratio_list:
-            pred_max_x = pred_max_x * S.downsample_ratio_list[patient]['w']
-            pred_max_y = pred_max_y * S.downsample_ratio_list[patient]['h']
-            pred_max_z = pred_max_z * S.downsample_ratio_list[patient]['d']   
+            pred_max_x = pred_max_x * S.downsample_ratio_list[patient[i][0]]['w']
+            pred_max_y = pred_max_y * S.downsample_ratio_list[patient[i][0]]['h']
+            pred_max_z = pred_max_z * S.downsample_ratio_list[patient[i][0]]['d']   
             print('here 1')
           else:
               print('here 2')
