@@ -80,7 +80,7 @@ def histogram(data, coord, landmark):
 # paths
 clicker_1_folder = r'/home/olive/data/Facial_asymmetry_oli_reclicks/Structures'
 #clicker_1_folder = r'/home/rankinaaron98/data/Facial_asymmetry_aaron_reclicks/Structures'
-clicker_2_folder = r'/home/olive/data/Facial_asymmetry_aaron_reclicks/Structures'
+clicker_2_folder = r'/home/olive/data/Facial_asymmetry_oli_common/Structures'
 
 save_structure_folder = r'/home/olive/data/Facial_asymmetry_combined_reclicks_ajd/Structures'
 save_ct_folder = r'/home/olive/data/Facial_asymmetry_combined_reclicks_afd/CTs'
