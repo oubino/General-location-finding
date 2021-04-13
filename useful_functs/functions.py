@@ -327,7 +327,7 @@ def point_to_point_mm_old(mask_x, mask_y, mask_z, pred_x, pred_y, pred_z, patien
   pixel_mm_x = list_img[index][1] # 1 pixel = pixel_mm_x * mm
   pixel_mm_y = list_img[index][1]
   pixel_mm_z = list_img[index][2]
-  if len(S.downsample_idx_list):
+  if len(S.downsample_ratio_list):
         # array not emtpy
         index = 0       
         if patient in S.downsample_ratio_list:
