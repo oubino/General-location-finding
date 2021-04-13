@@ -77,9 +77,9 @@ class Resize(object):
       for l in S.landmarks_total:
             # structure is z, y, x
             # need it in y, x, z
-            coords = numpy_loc.landmark_loc_np(S.landmarks_total_loc[l],structure,l, patient, True)[0]
-            if sum(coords) != 0 :
-                x, y, z = coords[0], coords[1], coords[2]
+            coords_check = numpy_loc.landmark_loc_np(S.landmarks_total_loc[l],structure,l, patient, True)[0]
+            if sum(coords_check) != 0 :
+                x, y, z = coords_check[0], coords_check[1], coords_check[2]
                 coordinates[l] = [x,y,z]
       print('coords pre resize')
       print(coordinates)
@@ -90,9 +90,9 @@ class Resize(object):
       for l in S.landmarks_total:
             # structure is z, y, x
             # need it in y, x, z
-            coords = numpy_loc.landmark_loc_np(S.landmarks_total_loc[l],structure,l, patient, True)[0]
-            if sum(coords) != 0 :
-                x, y, z = coords[0], coords[1], coords[2]
+            coords_check = numpy_loc.landmark_loc_np(S.landmarks_total_loc[l],structure,l, patient, True)[0]
+            if sum(coords_check) != 0 :
+                x, y, z = coords_check[0], coords_check[1], coords_check[2]
                 coordinates[l] = [x,y,z]
       print('coords post resize')
       print(coordinates)
