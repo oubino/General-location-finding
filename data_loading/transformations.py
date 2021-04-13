@@ -70,9 +70,11 @@ class Resize(object):
       d_pre, h_pre, w_pre = image.shape[:3]
       
       print('-----------------------')
+      
       coordinates = {}
       for k in S.landmarks_total:
           coordinates[k] = [0,0,0] 
+          
       print('resized')
       for l in S.landmarks_total:
             # structure is z, y, x
@@ -83,14 +85,74 @@ class Resize(object):
                 coordinates[l] = [x,y,z]
       print('coords pre resize')
       print(coordinates)
-        
+      structure_orig = structure
+      
       image = skimage.transform.resize(image, (depth, width, height), order = 1, preserve_range=True, anti_aliasing=True)
       structure = skimage.transform.resize(structure, (depth, width, height), order = 0, preserve_range = True, anti_aliasing=False )
+      structure_1 = skimage.transform.resize(structure_orig, (depth, width, height), order = 1, preserve_range = True, anti_aliasing=False )
+      structure_2 = skimage.transform.resize(structure_orig, (depth, width, height), order = 0, preserve_range = True, anti_aliasing=True )
+      structure_3 = skimage.transform.resize(structure_orig, (depth, width, height), order = 1, preserve_range = True, anti_aliasing=True )
+      structure_4 = skimage.transform.resize(structure_orig, (depth, width, height), order = 0, preserve_range = True, anti_aliasing=False )
       
+      coordinates = {}
+      for k in S.landmarks_total:
+          coordinates[k] = [0,0,0] 
       for l in S.landmarks_total:
             # structure is z, y, x
             # need it in y, x, z
             coords_check = numpy_loc.landmark_loc_np(S.landmarks_total_loc[l],structure,l, patient, True)[0]
+            if sum(coords_check) != 0 :
+                x, y, z = coords_check[0], coords_check[1], coords_check[2]
+                coordinates[l] = [x,y,z]
+      print('coords post resize')
+      print(coordinates)
+      
+      coordinates = {}
+      for k in S.landmarks_total:
+          coordinates[k] = [0,0,0] 
+      for l in S.landmarks_total:
+            # structure is z, y, x
+            # need it in y, x, z
+            coords_check = numpy_loc.landmark_loc_np(S.landmarks_total_loc[l],structure_1,l, patient, True)[0]
+            if sum(coords_check) != 0 :
+                x, y, z = coords_check[0], coords_check[1], coords_check[2]
+                coordinates[l] = [x,y,z]
+      print('coords post resize')
+      print(coordinates)
+      
+      coordinates = {}
+      for k in S.landmarks_total:
+          coordinates[k] = [0,0,0] 
+      for l in S.landmarks_total:
+            # structure is z, y, x
+            # need it in y, x, z
+            coords_check = numpy_loc.landmark_loc_np(S.landmarks_total_loc[l],structure_2,l, patient, True)[0]
+            if sum(coords_check) != 0 :
+                x, y, z = coords_check[0], coords_check[1], coords_check[2]
+                coordinates[l] = [x,y,z]
+      print('coords post resize')
+      print(coordinates)
+      
+      coordinates = {}
+      for k in S.landmarks_total:
+          coordinates[k] = [0,0,0] 
+      for l in S.landmarks_total:
+            # structure is z, y, x
+            # need it in y, x, z
+            coords_check = numpy_loc.landmark_loc_np(S.landmarks_total_loc[l],structure_3,l, patient, True)[0]
+            if sum(coords_check) != 0 :
+                x, y, z = coords_check[0], coords_check[1], coords_check[2]
+                coordinates[l] = [x,y,z]
+      print('coords post resize')
+      print(coordinates)
+      
+      coordinates = {}
+      for k in S.landmarks_total:
+          coordinates[k] = [0,0,0] 
+      for l in S.landmarks_total:
+            # structure is z, y, x
+            # need it in y, x, z
+            coords_check = numpy_loc.landmark_loc_np(S.landmarks_total_loc[l],structure_4,l, patient, True)[0]
             if sum(coords_check) != 0 :
                 x, y, z = coords_check[0], coords_check[1], coords_check[2]
                 coordinates[l] = [x,y,z]
