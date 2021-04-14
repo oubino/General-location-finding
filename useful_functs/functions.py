@@ -464,10 +464,10 @@ def line_learn_loc(coords_1, coords_2):
         #    print('ERROR DIFFERENT TYPES OF POINTS')
         #else:
         #    coords[k]['locat'] = coords_1[k]['locat']
-        if coords_1[k]['present'] == False or coords_2[k]['present'] == False:
-            coords[k]['present'] = False
+        if coords_1[k]['present'] == 0 or coords_2[k]['present'] == 0:
+            coords[k]['present'] = 0
         else:
-            coords[k]['present'] = True
+            coords[k]['present'] = 1
     return coords
 
 def mean_from_clickers(coords_1, coords_2): 
