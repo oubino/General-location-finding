@@ -56,12 +56,12 @@ class CentreCrop(object):
       
       # location around which to crop
       
-      if settings.train_line == True:
-          crop_coords_1 = functions.load_obj_pickle(settings.root, 'crop_coords_Oli')
-          crop_coords_2 = functions.load_obj_pickle(settings.root, 'crop_coords_Aaron')
+      if S.train_line == True:
+          crop_coords_1 = functions.load_obj_pickle(S.root, 'crop_coords_Oli')
+          crop_coords_2 = functions.load_obj_pickle(S.root, 'crop_coords_Aaron')
           crop_coords = functions.line_learn_crop(crop_coords_1[patient], crop_coords_2[patient])
-      elif settings.train_line == False:
-          crop_coords = functions.load_obj_pickle(settings.root, 'crop_coords_' + settings.clicker)
+      elif S.train_line == False:
+          crop_coords = functions.load_obj_pickle(S.root, 'crop_coords_' + S.clicker)
           crop_coords = crop_coords[patient]
       
       x_crop = crop_coords['x']

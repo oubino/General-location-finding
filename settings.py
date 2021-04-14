@@ -170,6 +170,9 @@ def init():
     
     # decision on whether to crop or downsample
     downsample_user = False
+    
+    print('Downsample')
+    print(downsample_user)
  
     # image saved counter
     img_counter_1 = 0
