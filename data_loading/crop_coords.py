@@ -19,7 +19,7 @@ def load_obj(root, name):
         return pickle.load(f)
     
 # load in pickle file
-file = load_obj(pickle_struc_path, 'coords_%s' + S.clicker)
+file = load_obj(pickle_struc_path, 'coords_' + S.clicker)
 
 # average of HMl and HMr location
 patients = list(file.keys())
