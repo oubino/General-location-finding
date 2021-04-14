@@ -105,9 +105,7 @@ class CentreCrop(object):
               exit()
                         
       if z_left < 0:
-          print('z left, z right')
-          print(z_left, z_right)
-          image = skimage.util.pad(image, ((-z_left,0),(0, 0), (0, 0)))
+          image = np.pad(image, ((-z_left,0),(0, 0), (0, 0)))
           image_crop = skimage.util.crop(image, ((0,0),(y_left, y_right), (x_left, x_right)))
       elif z_left >= 0:
           image_crop = skimage.util.crop(image, ((z_left,z_right),(y_left, y_right), (x_left, x_right)))
