@@ -149,7 +149,7 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
   txt_file.close()
        
 
-def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold, clicker, images, preds): 
+def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold): 
   
   # so can print out test ids for each fold at end
   S.k_fold_ids.append(data_loaders.print_ids)

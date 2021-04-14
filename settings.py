@@ -13,7 +13,7 @@ def init():
     global in_x, in_y, in_z, alpha, reg, gamma, lr_max, lr_min
     global step_size, threshold_img_print, normal_min, normal_max
     global normal_window, use_amp
-    global downsample_ratio_list
+    global downsample_ratio_list, crop_list
     global root, device
     global batch_accumulation
     global coding_path
@@ -145,6 +145,7 @@ def init():
     
     # normalise parameters
     normal_min = 15 + 1024
+    
     normal_max = 400 + 1024
     normal_window = 1800
     
@@ -153,6 +154,9 @@ def init():
     
     # if downsampling
     downsample_ratio_list = {}
+    
+    # if cropping
+    crop_list = {}
     
     # use predicted max - if want gauss fit set to false
     pred_max = True

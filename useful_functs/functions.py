@@ -470,6 +470,16 @@ def line_learn_loc(coords_1, coords_2):
             coords[k]['present'] = 1
     return coords
 
+def line_learn_crop(coords_1, coords_2):
+    coords = {}
+    x_1, y_1, z_1 = coords_1['x'], coords_1['y'], coords_1['z']
+    x_2, y_2, z_2 = coords_2['x'], coords_2['y'], coords_2['z']
+    x = (x_1 + x_2)/2
+    y = (y_1 + y_2)/2
+    z = (z_1 + z_2)/2
+
+    return coords
+
 def mean_from_clickers(coords_1, coords_2): 
     coords = {}
     for k in S.landmarks_total:
@@ -495,14 +505,18 @@ def aug_to_orig(pred_max_x, pred_max_y, pred_max_z, downsample, patient):
             pred_max_y = pred_max_y * S.downsample_ratio_list[patient]['h']
             pred_max_z = pred_max_z * S.downsample_ratio_list[patient]['d']   
           else:
-              print('shouldnt get here')    
-              pred_max_x = pred_max_x * (structure_original.shape[3]/structure.shape[3])
-              pred_max_y = pred_max_y * (structure_original.shape[2]/structure.shape[2])
-              pred_max_z = pred_max_z * (structure_original.shape[4]/structure.shape[4])
-    
+              print('aug to orig error')    
+              exit() # deliberately crash if gets here
+              
     elif downsample == False: # convert a crop
-        print('shouldnt get here')
-        print(bob)
+        # convert pred max to location in full size image
+        if patient in S.crop_list:
+            pred_max_x = pred_max_x + S.crop_list[patient]['x_left']
+            pred_max_y = pred_max_y + S.crop_list[patient]['y_left']
+            pred_max_z = pred_max_z + S.crop_list[patient]['z_left']
+        else:
+            print('aug to orig error')
+            exit()
     
     return pred_max_x, pred_max_y, pred_max_z
     
