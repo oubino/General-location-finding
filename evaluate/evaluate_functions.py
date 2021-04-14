@@ -74,14 +74,14 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
             #print('3D plots for landmark %1.0f' % l)
             #print_3D_heatmap(image[i], structure[i], pred[i], l, eval_path, patient[i])
             #print_3D_gauss_heatmap(image[i], structure_max_x, structure_max_y, structure_max_z, pred[i], l, sigmas[l], eval_path, patient[i])
-            print('\n')
-            print('Structure LOC for landmark %1.0f:' % l)
-            print(structure_max_x, structure_max_y, structure_max_z)
-            print('Predicted LOC for landmark %1.0f:' % l)
-            print(pred_max_x, pred_max_y, pred_max_z)
-            print('\n')
+            #print('\n')
+            #print('Structure LOC for landmark %1.0f:' % l)
+            #print(structure_max_x, structure_max_y, structure_max_z)
+            #print('Predicted LOC for landmark %1.0f:' % l)
+            #print(pred_max_x, pred_max_y, pred_max_z)
+            #print('\n')
             # print 2D slice
-            print('2D slice for landmark %1.0f' % l)
+            #print('2D slice for landmark %1.0f' % l)
             print_2D_slice(l, pred_max_x, pred_max_y, pred_max_z, structure_max_x, structure_max_y, structure_max_z ,eval_path, patient[i])
                       
           # point to point takes in original structure location!!
