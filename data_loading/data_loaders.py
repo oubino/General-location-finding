@@ -7,11 +7,12 @@ import math
 import os
 import numpy as np
 from sklearn.model_selection import KFold
-
+from useful_functs import functions
 from evaluate import evaluate_functions as eval_func
 from data_loading import dataset_class as D
 import settings as S
 from data_loading import transformations as T
+import matplotlib.pyplot as plt
 
 #os.chdir(S.root) # change to data path and change back at end
 #print(os.getcwd())
@@ -24,7 +25,7 @@ elif S.downsample_user == False:
     trans_augment = transforms.Compose([T.CentreCrop(S.in_z,S.in_x,S.in_y),T.Upsidedown_scipy(), T.Normalise(S.normal_min, S.normal_max, S.normal_window), T.Shift(), T.Flips_scipy(), T.Horizontal_flip(), T.Check_left_right(), T.ToTensor()])
 
 
-dataset = D.CTDataset(S.root, transform_train = trans_augment, transform_test = trans_plain, test = False )
+dataset = D.CTDataset(S.root, S.root_struc, transform_train = trans_augment, transform_test = trans_plain, test = False)
 
 def init(fold, train_ids, test_ids):
     # initialise dataloader 
@@ -150,62 +151,5 @@ def init_reserved_test_set():
         'test': DataLoader(test_set,batch_size = S.batch_size_test, shuffle = False, num_workers=0)
     }
     
-
-    
-#os.chdir(S.coding_path) # change to data path and change back at end
 print('Coding directory: ')
 print(os.getcwd())
-
-# print all images as CT scans to view them
-if S.print_CT_check == True:
-    
-    # training set
-    file_name_print = "print_cts"
-    path_print_ct = os.path.join(S.run_path, file_name_print)
-    try: 
-        os.mkdir(path_print_ct)
-    except OSError as error:
-        print(error)
-    
-    # print all images 
-    """
-    for i in range(len(dataset)):
-        for landmark in S.landmarks:
-            structure = dataset.__getitem__(i)['structure'].squeeze(0)
-            locations = np.nonzero(np.round(structure) == landmark)
-            try:
-                x, y, z = locations[0][1], locations[0][0], locations[0][2]
-            except IndexError as error:
-                    x = 0
-                    y = 0
-                    z = 0
-            empty_struc = np.zeros((128,128,80))
-            empty_struc[y][x][z] = landmark
-            #structure_extrac = eval_func.extract_landmark_for_structure_np(structure, landmark)
-            eval_func.plot_3d_pred_img_no_pred(dataset.__getitem__(i)['image'].squeeze(0).cpu().numpy(), empty_struc, S.threshold_img_print, path_print_ct, dataset.__getitem__(i)['patient'], landmark)
-        print(dataset.__getitem__(i)['patient'])
-    """
-    # print single image
-    for i in range(len(dataset)):
-        print(dataset.__getitem__(i)['patient'])
-        if dataset.__getitem__(i)['patient'] == S.ct_print:
-            print('--- printing ---')
-            for landmark in S.landmarks:
-                structure = dataset.__getitem__(i)['structure'].squeeze(0)
-                locations = np.nonzero(np.round(structure) == landmark)
-                try:
-                    x, y, z = locations[0][1], locations[0][0], locations[0][2]
-                except IndexError as error:
-                        x = 0
-                        y = 0
-                        z = 0
-                empty_struc = np.zeros((128,128,80))
-                empty_struc[y][x][z] = landmark
-                #structure_extrac = eval_func.extract_landmark_for_structure_np(structure, landmark)
-                eval_func.plot_3d_pred_img_no_pred(dataset.__getitem__(i)['image'].squeeze(0).cpu().numpy(), empty_struc, S.threshold_img_print, path_print_ct, dataset.__getitem__(i)['patient'], landmark)
-            print(dataset.__getitem__(i)['patient'])
-
-
-
-
-    

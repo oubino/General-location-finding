@@ -44,7 +44,6 @@ class Resize(object):
       
       return {'image':image, 'idx': idx, 'patient':patient, 'coords':coords} # note note !'structure': structure_new
 
-
 class CentreCrop(object):    
   def __init__(self, depth, width, height):
       self.depth = depth
@@ -253,10 +252,8 @@ class Flips_scipy(object):
                 coords[l]['x'], coords[l]['y'], coords[l]['z'] = coords_rotat[l]['x'], coords_rotat[l]['y'], coords_rotat[l]['z']
             else:
                 print('ROTATION OUT OF BOUNDS')
-
-
         return {'image': image, 'idx': idx, 'patient':patient, 'coords':coords}
-
+      
 class Horizontal_flip(object):
     def __call__(self,sample):
         image, idx, patient, coords = sample['image'], sample['idx'], sample['patient'], sample['coords']

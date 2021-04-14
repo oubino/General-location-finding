@@ -22,12 +22,10 @@ class CTDataset(Dataset):
                 on a sample.
         """
         self.root = root
+        self.root_struc = root_struc
         self.imgs = list(sorted(os.listdir(os.path.join(root, "CTs")))) # ensure they're aligned & index them
-        #self.structures = list(sorted(os.listdir(os.path.join(root, "Structures"))))
-        # self.structure_centres = list(sorted(os.listdir(os.path.join(root, "Structure Centres"))))
         self.transform_train = transform_train
         self.transform_test = transform_test
-        #self.transform_test_no_ds = transform_test_no_ds
         self.test = False
         self.train = False
         
@@ -41,7 +39,7 @@ class CTDataset(Dataset):
         sample = {'image': img} # both are nd.arrays, stored in sample dataset
         sample['idx'] = idx # should print out which image is problematic
         sample['patient'] = self.imgs[idx]
-        
+
         # load in structure coords
         if settings.train_line == True:
             struc_coord_1 = functions.load_obj_pickle(settings.root, 'coords_Oli')

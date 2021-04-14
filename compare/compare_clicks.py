@@ -55,14 +55,14 @@ def pixel_to_mm(patient):
     pixel_mm_y = float(list_img[index][1])
     pixel_mm_z = float(list_img[index][2])
     
-    return pixel_mm_x, pixel_mm_y, pixel_mm_z
+    return pixel_mm_z, pixel_mm_y, pixel_mm_x
 
 def histogram(data, coord, landmark):
     # plot and save histogram
     data = np.array(data)
     data = np.sort(data)
     plt.figure()
-    n, bins, patches = plt.hist(x=data, bins='auto', color='#0504aa',
+    n, bins, patches = plt.hist(x=data, bins=list(range(-30,31)), color='#0504aa',
                             alpha=0.7)
     plt.grid(axis='y', alpha=0.75)
     plt.xlabel('Deviation/mm')
@@ -74,47 +74,39 @@ def histogram(data, coord, landmark):
     plt.ylim(ymax=np.ceil(maxfreq / 10) * 10 if maxfreq % 10 else maxfreq + 10)
     hist_name = os.path.join(hist_root, "%s_dev_%1.0f" % (coord, landmark))
     # set x lim to centre around 0
-    data_abs = abs(data)
-    max_val = data_abs.max()
-    plt.xlim(-max_val, max_val)  
+    plt.xticks(np.arange(-30,31,4))
     plt.savefig(hist_name)
 
 # paths
-aaron_folder = r'/home/rankinaaron98/data/Facial_asymmetry_aaron_common/Structures'
-oli_folder = r'/home/olive/data/Facial_asymmetry_oli_common/Structures'
-save_structure_folder = r'/home/olive/data/Facial_asymmetry_combined_line/Structures'
-save_ct_folder = r'/home/olive/data/Facial_asymmetry_combined_line/CTs'
-load_ct_folder = r'/home/olive/data/Facial_asymmetry_oli/CTs'
-csv_root = r'/home/rankinaaron98/data/Facial_asymmetry_oli/'
+clicker_1_folder = r'/home/olive/data/Facial_asymmetry_oli_reclicks/Structures'
+#clicker_1_folder = r'/home/rankinaaron98/data/Facial_asymmetry_aaron_reclicks/Structures'
+clicker_2_folder = r'/home/olive/data/Facial_asymmetry_oli_common/Structures'
 
-hist_root = r'/home/olive/data/Compare/Histograms/'
+save_structure_folder = r'/home/olive/data/Facial_asymmetry_combined_reclicks_ajd/Structures'
+save_ct_folder = r'/home/olive/data/Facial_asymmetry_combined_reclicks_afd/CTs'
 
-# make folders
-try:  
-    os.mkdir(save_structure_folder)  
-except OSError as error:  
-    print(error) 
-    
-try:  
-    os.mkdir(save_ct_folder)  
-except OSError as error:  
-    print(error) 
+load_ct_folder = r'/home/olive/data/Facial_asymmetry_oli_reclicks/CTs'
+csv_root = r'/home/rankinaaron98/data/Facial_asymmetry_aaron_reclicks/'
+
+hist_root = r'/home/rankinaaron98/data/Compare_aaron/Histograms_reclick__oli_old_new/'
+#hist_root = r'/home/olive/data/Compare/Histograms_reclick_aaron_oli/'
+
 
 # landmarks
 landmarks = [1,2,3,4,5,6,7,8,9,10]
 
 # limit
-limit = 12
+limit = 20
 
 # loop over .py
-files_aaron = list(sorted(os.listdir(aaron_folder)))
-files_oli = list(sorted(os.listdir(oli_folder)))
+files_clicker_1 = list(sorted(os.listdir(clicker_1_folder)))
+files_clicker_2 = list(sorted(os.listdir(clicker_2_folder)))
 
-list_1 = [x for x in files_aaron if x in files_oli]
+list_1 = [x for x in files_clicker_1 if x in files_clicker_2]
 
 
-com_list_aaron = {}
-com_list_oli = {}
+com_list_clicker_1 = {}
+com_list_clicker_2 = {}
 dev_list = {}
 dev_list_x = {}
 dev_list_y = {}
@@ -128,8 +120,8 @@ mean_dev_std = {}
 mean_list = {}
 
 for k in landmarks:
-    com_list_aaron['%1.0f' % k] = []
-    com_list_oli['%1.0f' % k] = []
+    com_list_clicker_1['%1.0f' % k] = []
+    com_list_clicker_2['%1.0f' % k] = []
     dev_list['%1.0f' % k] = []
     dev_list_x['%1.0f' % k] = []
     dev_list_y['%1.0f' % k] = []
@@ -147,33 +139,34 @@ save_images = question('save images(y) / or not (n)')
 plot_histograms = question('histograms(y) / or not (n)')
 calc_deviations = question('calc deviations(y) / or not (n)')
 
-# for common structures add mean to array for both aaron and oli
+# for common structures add mean to array for both clicker_1 and clicker_2
 for i in list_1:
-    py_array_aaron = np.load(os.path.join(aaron_folder,i))
-    py_array_oli = np.load(os.path.join(oli_folder,i))
+    py_array_clicker_1 = np.load(os.path.join(clicker_1_folder,i))
+    py_array_clicker_2 = np.load(os.path.join(clicker_2_folder,i))
     for k in landmarks:
         #com_list['%1.0f' % k].append(5)
         #print(com_structure_np(py_array,k)[0])
-        com_list_aaron['%1.0f' % k].append(com_structure_np(py_array_aaron,k)[0])
-        com_list_oli['%1.0f' % k].append(com_structure_np(py_array_oli,k)[0])
+        com_list_clicker_1['%1.0f' % k].append(com_structure_np(py_array_clicker_1,k)[0])
+        com_list_clicker_2['%1.0f' % k].append(com_structure_np(py_array_clicker_2,k)[0])
         
-# calculate mean of aaron and oli from arrays
+# calculate mean of clicker_1 and clicker_2 from arrays
 for j in range(len(list_1)):
     for k in landmarks:
-        mean_x = ((com_list_aaron['%1.0f' % k][j][2] + com_list_oli['%1.0f' % k][j][2])/2)
-        mean_y = ((com_list_aaron['%1.0f' % k][j][1] + com_list_oli['%1.0f' % k][j][1])/2)
-        mean_z = ((com_list_aaron['%1.0f' % k][j][0] + com_list_oli['%1.0f' % k][j][0])/2)
-        coords = [mean_x, mean_y, mean_z]
+        mean_x = ((com_list_clicker_1['%1.0f' % k][j][2] + com_list_clicker_2['%1.0f' % k][j][2])/2)
+        mean_y = ((com_list_clicker_1['%1.0f' % k][j][1] + com_list_clicker_2['%1.0f' % k][j][1])/2)
+        mean_z = ((com_list_clicker_1['%1.0f' % k][j][0] + com_list_clicker_2['%1.0f' % k][j][0])/2)
+        coords = [mean_z, mean_y, mean_x]
         mean_list['%1.0f' % k].append(coords)
     
+click_outlier_counter = 0
 if calc_deviations == True:
     # calculate deviation of arrays etc.
     for j in range(len(list_1)):
         for k in landmarks:
-            x_mm, y_mm, z_mm = pixel_to_mm(list_1[j])
-            dev_x = (com_list_aaron['%1.0f' % k][j][2] - com_list_oli['%1.0f' % k][j][2])*(x_mm)
-            dev_y = (com_list_aaron['%1.0f' % k][j][1] - com_list_oli['%1.0f' % k][j][1])*(y_mm)
-            dev_z = (com_list_aaron['%1.0f' % k][j][0] - com_list_oli['%1.0f' % k][j][0])*(z_mm)
+            z_mm, y_mm, x_mm = pixel_to_mm(list_1[j])
+            dev_x = (com_list_clicker_1['%1.0f' % k][j][2] - com_list_clicker_2['%1.0f' % k][j][2])*(x_mm)
+            dev_y = (com_list_clicker_1['%1.0f' % k][j][1] - com_list_clicker_2['%1.0f' % k][j][1])*(y_mm)
+            dev_z = (com_list_clicker_1['%1.0f' % k][j][0] - com_list_clicker_2['%1.0f' % k][j][0])*(z_mm)
             dev = math.sqrt(abs(dev_x)**2 + abs(dev_y)**2 + abs(dev_z)**2)
             dev_list['%1.0f' % k].append(dev)
             dev_list_x['%1.0f' % k].append(dev_x)
@@ -184,6 +177,7 @@ if calc_deviations == True:
                 print('image: %s' % list_1[j])
                 print('landmark: %1.0f' % k)
                 print(dev)
+                click_outlier_counter += 1
                 print('------------')
                 
     
@@ -207,6 +201,7 @@ if calc_deviations == True:
         if plot_histograms == True:
       
             # plot and save histogram
+            histogram(a, 'total', k)
             histogram(x, 'x', k)
             histogram(y, 'y', k)
             histogram(z, 'z', k)
@@ -216,11 +211,17 @@ if calc_deviations == True:
 # ------ return a structure with just one point at the mean  ----- #
 
 if save_images == True:
-
-    """
+    
+    # make folders
+    try:  
+        os.mkdir(save_structure_folder)  
+        os.mkdir(save_ct_folder)  
+    except OSError as error:  
+        print(error) 
+  
     # for each image create an array
     for i in list_1:
-        py_array_load = np.load(os.path.join(aaron_folder,i))
+        py_array_load = np.load(os.path.join(clicker_1_folder,i))
         ct = np.load(os.path.join(load_ct_folder,i))
         structure = np.empty(py_array_load.shape)
         # add number at location of x y z for each landmark
@@ -239,25 +240,25 @@ if save_images == True:
         # save ct
         np.save(os.path.join(save_ct_folder,i), ct)
         
-    """
+    
     
     # create line instead of one average point
-    
+''' 
     # for each image create an array
     for i in list_1:
-        py_array_load = np.load(os.path.join(aaron_folder,i))
+        py_array_load = np.load(os.path.join(clicker_1_folder,i))
         ct = np.load(os.path.join(load_ct_folder,i))
         structure = np.empty(py_array_load.shape)
         # add number at location of x y z for each landmark
         index = list_1.index(i)
         for k in landmarks:
-            z_aaron = int(com_list_aaron['%1.0f' % k][index][0])
-            y_aaron = int(com_list_aaron['%1.0f' % k][index][1])
-            x_aaron = int(com_list_aaron['%1.0f' % k][index][2])
-            z_oli = int(com_list_oli['%1.0f' % k][index][0])
-            y_oli = int(com_list_oli['%1.0f' % k][index][1])
-            x_oli = int(com_list_oli['%1.0f' % k][index][2]) 
-            line = line_nd((z_aaron, y_aaron, x_aaron), (z_oli, y_oli, x_oli), endpoint=True)
+            z_clicker_1 = int(com_list_clicker_1['%1.0f' % k][index][0])
+            y_clicker_1 = int(com_list_clicker_1['%1.0f' % k][index][1])
+            x_clicker_1 = int(com_list_clicker_1['%1.0f' % k][index][2])
+            z_clicker_2 = int(com_list_clicker_2['%1.0f' % k][index][0])
+            y_clicker_2 = int(com_list_clicker_2['%1.0f' % k][index][1])
+            x_clicker_2 = int(com_list_clicker_2['%1.0f' % k][index][2]) 
+            line = line_nd((z_clicker_1, y_clicker_1, x_clicker_1), (z_clicker_2, y_clicker_2, x_clicker_2), endpoint=True)
             # make line thicker
             line_mod = line
             for a in range(5):
@@ -268,9 +269,9 @@ if save_images == True:
                        z = np.concatenate((line_mod[0],line[0] + c - 2))
                        line_mod = (z,y,x)                     
             # clip line between x,y,z
-            line_mod[0] = np.clip(line_mod[0],min(z_aaron,z_oli), max(z_aaron,z_oli)) # clip z values between min and max of aaron/oli
-            line_mod[1] = np.clip(line_mod[1],min(y_aaron,y_oli), max(y_aaron,y_oli))
-            line_mod[2] = np.clip(line_mod[2],min(x_aaron,x_oli), max(x_aaron,x_oli))
+            line_mod[0] = np.clip(line_mod[0],min(z_clicker_1,z_clicker_2), max(z_clicker_1,z_clicker_2)) # clip z values between min and max of clicker_1/clicker_2
+            line_mod[1] = np.clip(line_mod[1],min(y_clicker_1,y_clicker_2), max(y_clicker_1,y_clicker_2))
+            line_mod[2] = np.clip(line_mod[2],min(x_clicker_1,x_clicker_2), max(x_clicker_1,x_clicker_2))
             #x = [ (line_mod[2] < py_array_load.shape[2]) & (line_mod[2] > 0 ]
             #y = [(line_mod[1] < py_array_load.shape[1]) & (line_mod[1] > 0 ] 
             #z = [(line_mod[0] < py_array_load.shape[0]) & (line_mod[0] > 0 ]
@@ -281,16 +282,15 @@ if save_images == True:
         np.save(os.path.join(save_structure_folder,i), structure)
         # save ct
         np.save(os.path.join(save_ct_folder,i), ct)
-
-
-# deviations per landmark per image
-#print('deviations per landmark per image')
-#print(dev_list)
+'''
 
 # for each landmark, list of the images with deviations greater than ceratin distance
-print('for each landmark, list of the images with deviations greater than certain distance')
+print('for each landmark, list of the images with deviations greater than %1.0f' % limit)
 print(dev_upper_limit_list)
 print('\n')
+
+print('percentage of clicks which are outliers')
+print(100*click_outlier_counter/(len(list_1)*len(landmarks)))
             
 # mean deviation per landmark
 print('mean deviation per landmark')
@@ -314,4 +314,4 @@ print('z mean dev')
 print(mean_dev_z)
 print('\n')
             
-print(' deviations are AARON - OLI')
+print(' deviations are clicker_1 - clicker_2')

@@ -29,7 +29,7 @@ def init():
     global wing_loss, wing_omega, wing_epsilon, wing_alpha, wing_theta
     global p2p_reg_term
     global error_counter
-    global print_CT_check
+    #global print_CT_check
     global landmarks_total, landmarks_total_loc
     global k_folds
     global aaron_or_oli
@@ -75,6 +75,7 @@ def init():
                 coding_path = r'/home/oliver_umney/GitHub/General-location-finding'
                 root = r'/home/oliver_umney/data/Facial_asymmetry_reclicks'
                 save_data_path =  r'/home/oliver_umney/data/results/oliver_umney_web' 
+
 
     # results directory
     print('Results directory:')
@@ -193,8 +194,8 @@ def init():
     error_counter = 0
     
     # whether to print all CTs as a check
-    print_CT_check = False
-    ct_print = "0072.npy"
+    #print_CT_check = True
+    #ct_print = "0072.npy"
     
     # k folds
     k_folds = 5
@@ -230,6 +231,7 @@ def init_new():
         #run_folder_load = "run_19_mar_k_fold_aaron"
     elif aaron_or_oli == False:
         run_folder = "run_14_apr_test_line"
+
         #run_folder_load = "run_22_mar_test_aaron_my_data"
     # make user double check correct
     print('\n')
@@ -284,10 +286,11 @@ def init_load():
     # -- AMEND -- 
     if aaron_or_oli == True:
         #run_folder = "run_22_mar_oli_kfold_eval"
-        run_folder = "run_23_mar_eval_oli"
+        run_folder = "run_10_apr_k_fold"
     elif aaron_or_oli == False:
         #run_folder = "run_22_mar_test_aaron_my_data"
         run_folder = "run_13_apr_debug"
+
     # make user double check correct
     print('\n')
     print('run folder')
