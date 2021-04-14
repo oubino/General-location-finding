@@ -31,7 +31,7 @@ class CTDataset(Dataset):
     def __getitem__(self, idx):
         if torch.is_tensor(idx): # convert tensor to list to index items
             idx = idx.tolist() 
-        img_path = os.path.join(self.root, "CTs", self.imgs[idx]) # image path is combination of root and index 
+        img_path = os.path.join(r'/home/rankinaaron98/data/Facial_asymmetry_reclicks', "CTs", self.imgs[idx]) # image path is combination of root and index 
         structure_path = os.path.join(self.root, "Structures", self.structures[idx])
         # structure_centre_path = os.path.join(self.root, "Structure Centres", self.structure_centres[idx])
 
