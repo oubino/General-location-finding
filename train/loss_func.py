@@ -138,6 +138,7 @@ def calc_loss_gauss(model, img, pred, target_coords, idx, metrics_landmarks, alp
         metrics_landmarks[l]['mean z targ'] += structure_com_z.cpu().numpy() # z targ per image per landmark
         metrics_landmarks[l]['mean point to point'] += img_landmark_point_to_point.data.cpu().numpy() # p2p per image per landmark
 
+      """
       # print for every epoch_samples = 0 -> i.e first image in epoch
       if epoch_samples == 0:
         if l == S.landmarks[0]:
@@ -152,7 +153,7 @@ def calc_loss_gauss(model, img, pred, target_coords, idx, metrics_landmarks, alp
         print('img loss')
         print(img_loss)
         # plot predicted and target heatmap
-
+       """
           
     # return mean batch loss
     mean_batch_loss = (total_batch_loss/img.size()[0]) # batch_size
