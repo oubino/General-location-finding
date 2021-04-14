@@ -47,7 +47,7 @@ def init():
         if aaron_or_oli == True:
             # Aaron paths
             coding_path = r'C:\Users\ranki_252uikw\Documents\MPhysS2\General-location-finding'
-            root = r'C:\Users\ranki_252uikw\Documents\MPhysS2\Facial_asymmetry' # note lack of " "
+            root = r'C:\Users\ranki_252uikw\Documents\MPhysS2\Facial_asymmetry_reclicks' # note lack of " "
             save_data_path = r'C:\Users\ranki_252uikw\Documents\MPhysS2\Results'
         elif aaron_or_oli == False:
             # Oli paths
@@ -58,44 +58,23 @@ def init():
         # use server paths for data and code for Aaron/Oli
         aaron_or_oli = yes_or_no.question('aaron(y) / oli (n)')
         if aaron_or_oli == True:
-            combined_data = yes_or_no.question('combined_data (y) / solo_data (n)')
-            if combined_data == True:
-                # Aaron paths
-                coding_path = r'/home/rankinaaron98/General-location-finding'
-                root = r'/home/rankinaaron98/data/Facial_asymmetry_combined'
-                save_data_path = r'/home/rankinaaron98/data/results/Aaron'
-            elif combined_data == False:
-                # Aaron paths
-                coding_path = r'/home/rankinaaron98/General-location-finding'
-                root = r'/home/rankinaaron98/data/Facial_asymmetry_aaron_reclicks'
-                save_data_path = r'/home/rankinaaron98/data/results/Aaron'
+            # Aaron paths
+            coding_path = r'/home/rankinaaron98/General-location-finding'
+            root = r'/home/rankinaaron98/data/Facial_asymmetry_reclicks'
+            save_data_path = r'/home/rankinaaron98/data/results/Aaron'
         # load model path
         elif aaron_or_oli == False:           
-            combined_data = yes_or_no.question('combined_data (y) / solo_data (n)')
             google_oli = yes_or_no.question('are you accessing through: sdk (n)/google (y)')
-            if google_oli == False:
-                if combined_data == True:         
-                    # Oli paths
-                    coding_path =  r'/home/olive/GitHub/General-location-finding' 
-                    root = r'/home/olive/data/Facial_asymmetry_combined' 
-                    save_data_path =  r'/home/olive/data/results/Oli'
-                elif combined_data == False:   
-                    # Oli paths
-                    coding_path = r'/home/olive/GitHub/General-location-finding'
-                    root = r'/home/olive/data/Facial_asymmetry_oli_common'
-                    save_data_path = r'/home/olive/data/results/Oli'
+            if google_oli == False:  
+                # Oli paths
+                coding_path = r'/home/olive/GitHub/General-location-finding'
+                root = r'/home/olive/data/Facial_asymmetry_reclicks'
+                save_data_path = r'/home/olive/data/results/Oli'
             elif google_oli == True:
-                # paths for oli through google
-                if combined_data == True:         
-                    # google Oli paths
-                    coding_path = r'/home/oliver_umney/GitHub/General-location-finding'
-                    root = r'/home/oliver_umney/data/Facial_asymmetry_combined'
-                    save_data_path =  r'/home/oliver_umney/data/results/oliver_umney_web' 
-                elif combined_data == False:   
-                    # google Oli paths
-                    coding_path = r'/home/oliver_umney/GitHub/General-location-finding'
-                    root = r'/home/oliver_umney/data/Facial_asymmetry_oli_common'
-                    save_data_path =  r'/home/oliver_umney/data/results/oliver_umney_web' 
+                # google Oli paths
+                coding_path = r'/home/oliver_umney/GitHub/General-location-finding'
+                root = r'/home/oliver_umney/data/Facial_asymmetry_reclicks'
+                save_data_path =  r'/home/oliver_umney/data/results/oliver_umney_web' 
 
     # results directory
     print('Results directory:')

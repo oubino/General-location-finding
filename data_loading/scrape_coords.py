@@ -1,13 +1,14 @@
+# scrape coords and save
+
 import os
-print(os.getcwd())
-#coding_path = r'C:\Users\olive\OneDrive\Documents\GitHub\General-location-finding'
+
 coding_path_aaron = r'/home/rankinaaron98/General-location-finding'
 coding_path_oli =  r'/home/olive/GitHub/General-location-finding'
-#coding_path_aaron = r'C:\Users\ranki_252uikw\Documents\MPhysS2\General-location-finding'
-#os.chdir(coding_path_oli)
-# scrape coords and save
+struc_path = r'/home/olive/data/Facial_asymmetry_oli_reclicks'
+
+
 import pickle
-print(os.getcwd())
+
 
 
 import numpy as np
@@ -26,16 +27,16 @@ test = False
 
 
 def save_obj(obj, name):
-    with open(os.path.join(S.root, name) + '.pkl', 'wb') as f:
+    with open(os.path.join(struc_path, name) + '.pkl', 'wb') as f:
         pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)
 
 def load_obj(name):
-    with open(os.path.join(S.root, name) + '.pkl', 'rb') as f:
+    with open(os.path.join(struc_path, name) + '.pkl', 'rb') as f:
         return pickle.load(f)
 
 
-struc_list = list(sorted(os.listdir(os.path.join(S.root, "Structures"))))
-structure_path = os.path.join(S.root, "Structures")
+struc_list = list(sorted(os.listdir(os.path.join(struc_path, "Structures"))))
+structure_path = os.path.join(struc_path, "Structures")
 print(struc_list)
 
 
