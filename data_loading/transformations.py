@@ -101,6 +101,7 @@ class CentreCrop(object):
     
           # failsafe
           if x < 0 or x >= S.in_x or y < 0 or y >= S.in_y or z < 0 or z >= S.in_z:
+              print('exiting due to crop failsafe')
               exit()
                         
       image_crop = skimage.util.crop(image, ((z_left,z_right),(y_left, y_right), (x_left, x_right)))
