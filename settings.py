@@ -217,15 +217,15 @@ def init_new():
     
     epoch_batch = int(input ("Epoch batch: "))
     num_epoch_batches = int(input ("Num epoch batch: "))
-    net_features= 1
+    net_features= 32
     scnet_feat = 64
     
     # -- AMEND -- 
     if aaron_or_oli == True:
-        run_folder = "run_19_mar_k_fold_aaron"
+        run_folder = "run_14_apr_test_line"
         #run_folder_load = "run_19_mar_k_fold_aaron"
     elif aaron_or_oli == False:
-        run_folder = "run_14_apr_debug"
+        run_folder = "run_14_apr_test_line"
         #run_folder_load = "run_22_mar_test_aaron_my_data"
     # make user double check correct
     print('\n')
