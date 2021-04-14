@@ -8,9 +8,6 @@ struc_path = r'/home/olive/data/Facial_asymmetry_oli_reclicks'
 
 
 import pickle
-
-
-
 import numpy as np
 
 import settings as S
@@ -69,6 +66,6 @@ for i in struc_list:
 
 save_obj(coordinates, 'coords_%s' % S.clicker)
 
-a = load_obj('coords_Aaron')
+a = load_obj('coords_Oli')
 print(a)
 
