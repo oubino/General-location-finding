@@ -55,18 +55,20 @@ class CentreCrop(object):
       image, idx, patient, coords = sample['image'], sample['idx'], sample['patient'], sample['coords']
       d, h, w = image.shape[:3] # define image height, width, depth as first 3 values
       
-      x_crop = 0 # location around which to crop
-      y_crop = 0 # its gonna be based on structure locations
-      z_crop = 0
+      # location around which to crop
       
-      counter = 0
+      if settings.train_line == True:
+          crop_coords_1 = functions.load_obj_pickle(settings.root, 'crop_coords_Oli')
+          crop_coords_2 = functions.load_obj_pickle(settings.root, 'crop_coords_Aaron')
+          crop_coords = functions.line_learn_crop(crop_coords_1[patient], crop_coords_2[patient])
+      elif settings.train_line == False:
+          crop_coords = functions.load_obj_pickle(settings.root, 'crop_coords_' + settings.clicker)
+          crop_coords = crop_coords[patient]
       
-      for l in S.landmarks:              
-          # need to amend coords of structure
-          x,y, z = coords[l]['x'], coords[l]['y'], coords[l]['z']
-          
-          # x crop y crop z crop = ...
-                
+      x_crop = crop_coords['x']
+      y_crop = crop_coords['y']
+      z_crop = crop_coords['z']
+                      
       # crop .. (30,100) removes first 30 pixels from LHS and last 100 pixels from RHS   
       x_left = max(int(np.round(x_crop)) - self.width/2, 0)
       x_left = min(x_left, w - self.width) # e.g. x left max is 150, min is 0
@@ -79,6 +81,12 @@ class CentreCrop(object):
       z_left = max(int(np.round(z_crop)) - self.depth/2, 0)
       z_left = min(z_left, d - self.depth) # e.g. x left max is 150, min is 0
       z_right = d - z_left - self.depth
+      
+      # append crops to list
+      S.crop_list[patient] = {}
+      S.crop_list[patient]['x_left'] = x_left
+      S.crop_list[patient]['y_left'] = y_left
+      S.crop_list[patient]['z_left'] = z_left
           
       for l in S.landmarks:              
           # need to amend coords of structure

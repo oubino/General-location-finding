@@ -1,24 +1,16 @@
 # scrape coords and save
 
 import os
-
-coding_path_aaron = r'/home/rankinaaron98/General-location-finding'
-coding_path_oli =  r'/home/olive/GitHub/General-location-finding'
-struc_path = r'/home/olive/data/Facial_asymmetry_oli_reclicks'
-
-
 import pickle
 import numpy as np
 
 import settings as S
 from data_loading import numpy_loc
-
 S.init()
+
+struc_path = r'/home/olive/data/Facial_asymmetry_oli_reclicks'
+
     
-test = False
-#clicker = 'Oli'
-
-
 def save_obj(obj, name):
     with open(os.path.join(struc_path, name) + '.pkl', 'wb') as f:
         pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)
@@ -46,7 +38,7 @@ for i in struc_list:
     for l in S.landmarks_total:
         # structure is z, y, x
         # need it in y, x, z
-        coord_calc =  numpy_loc.landmark_loc_np(S.landmarks_total_loc[l],structure,l, i, test)
+        coord_calc =  numpy_loc.landmark_loc_np(S.landmarks_total_loc[l],structure,l, i)
         coords, coords_present = coord_calc[0], coord_calc[1]
         if sum(coords) != 0 :
             x, y, z = coords[0], coords[1], coords[2]
@@ -62,6 +54,6 @@ for i in struc_list:
 
 save_obj(coordinates, 'coords_%s' % S.clicker)
 
-a = load_obj('coords_Oli')
+a = load_obj('coords_%s' & S.clicker)
 print(a)
 

@@ -1,18 +1,14 @@
 import numpy as np
 import random
 
-def landmark_loc_np(locat, structure, landmark, patient, test):
+def landmark_loc_np(locat, structure, landmark, patient):
     if locat == 'com':
         return com_structure_np(structure,landmark, patient)
     elif locat == 'top':
         return top_structure_np(structure,landmark, patient)
     elif locat == 'bot':
         return bot_structure_np(structure,landmark, patient)
-    elif locat == 'line':
-        if test == False:
-            return line_structure_np(structure, landmark, patient)
-        elif test == True:
-            return com_structure_np(structure,landmark, patient)
+    
         
 def com_structure_np(structure, landmark, patient): # assumes 1 channel
   # structure is (D x H x W)
@@ -92,6 +88,8 @@ def bot_structure_np(structure, landmark, patient): # assumes 1 channel
   coords = [x_bot, y_bot, z_bot]
   return coords, landmark_present 
 
+"""
+
 def line_structure_np(structure, landmark, patient): # assumes 1 channel
   # structure is (D x H x W)
   # output is x,y,z
@@ -123,5 +121,5 @@ def line_structure_np(structure, landmark, patient): # assumes 1 channel
   print('coords')
   print(coords)
   return coords, landmark_present, coords
-
+"""
 

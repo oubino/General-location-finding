@@ -477,7 +477,9 @@ def line_learn_crop(coords_1, coords_2):
     x = (x_1 + x_2)/2
     y = (y_1 + y_2)/2
     z = (z_1 + z_2)/2
-
+    coords['x'] = x
+    coords['y'] = y
+    coords['z'] = z
     return coords
 
 def mean_from_clickers(coords_1, coords_2): 
