@@ -117,7 +117,7 @@ class load_model:
         if S.train_line == False:
             evaluate_functions.performance_metrics(self.model_load,S.sigmas,S.gamma, self.epochs_completed, fold)
         elif S.train_line == True:
-            evaluate_functions.performance_metrics(self.model_load,S.sigmas,S.gamma, self.epochs_completed, fold)
+            evaluate_functions.performance_metrics_line(self.model_load,S.sigmas,S.gamma, self.epochs_completed, fold)
     
     
     def save(self, fold):
