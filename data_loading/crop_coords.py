@@ -37,3 +37,4 @@ for i in patients:
 save_obj(pickle_struc_path, crop_coords,'crop_coords_%s' % S.clicker)
 
 a = load_obj(pickle_struc_path, 'crop_coords_%s' % S.clicker)
+print(a)
