@@ -12,9 +12,9 @@ def init():
     global norm_mean, norm_std, batch_size, landmarks, sigmas, num_class
     global in_x, in_y, in_z, alpha, reg, gamma, lr_max, lr_min
     global step_size, threshold_img_print, normal_min, normal_max
-    global normal_window, use_amp, downsample_ratio_h, downsample_ratio_w
-    global downsample_ratio_d, downsample_idx_list
-    global root, device, root_struc
+    global normal_window, use_amp
+    global downsample_ratio_list, crop_list
+    global root, device
     global batch_accumulation
     global coding_path
     global pred_max
@@ -36,6 +36,7 @@ def init():
     global ct_print
     global k_fold_ids
     global batch_size_test
+    global train_line, clicker
 
          
     # paths
@@ -46,7 +47,7 @@ def init():
         if aaron_or_oli == True:
             # Aaron paths
             coding_path = r'C:\Users\ranki_252uikw\Documents\MPhysS2\General-location-finding'
-            root = r'C:\Users\ranki_252uikw\Documents\MPhysS2\Facial_asymmetry_aaron_reclick' # note lack of " "
+            root = r'C:\Users\ranki_252uikw\Documents\MPhysS2\Facial_asymmetry_reclicks' # note lack of " "
             save_data_path = r'C:\Users\ranki_252uikw\Documents\MPhysS2\Results'
         elif aaron_or_oli == False:
             # Oli paths
@@ -57,47 +58,24 @@ def init():
         # use server paths for data and code for Aaron/Oli
         aaron_or_oli = yes_or_no.question('aaron(y) / oli (n)')
         if aaron_or_oli == True:
-            combined_data = yes_or_no.question('combined_data (y) / solo_data (n)')
-            if combined_data == True:
-                # Aaron paths
-                coding_path = r'/home/rankinaaron98/General-location-finding'
-                root = r'/home/rankinaaron98/data/Facial_asymmetry_reclicks'
-                
-                save_data_path = r'/home/rankinaaron98/data/results/Aaron'
-            elif combined_data == False:
-                # Aaron paths
-                coding_path = r'/home/rankinaaron98/General-location-finding'
-                root = r'/home/rankinaaron98/data/Facial_asymmetry_reclicks'
-                root_struc = r'/home/rankinaaron98/data/Facial_asymmetry_aaron_reclicks'
-                save_data_path = r'/home/rankinaaron98/data/results/Aaron'
+            # Aaron paths
+            coding_path = r'/home/rankinaaron98/General-location-finding'
+            root = r'/home/rankinaaron98/data/Facial_asymmetry_reclicks'
+            save_data_path = r'/home/rankinaaron98/data/results/Aaron'
         # load model path
         elif aaron_or_oli == False:           
-            combined_data = yes_or_no.question('combined_data (y) / solo_data (n)')
             google_oli = yes_or_no.question('are you accessing through: sdk (n)/google (y)')
-            if google_oli == False:
-                if combined_data == True:         
-                    # Oli paths
-                    coding_path =  r'/home/olive/GitHub/General-location-finding' 
-                    root = r'/home/olive/data/Facial_asymmetry_combined' 
-                    save_data_path =  r'/home/olive/data/results/Oli'
-                elif combined_data == False:   
-                    # Oli paths
-                    coding_path = r'/home/olive/GitHub/General-location-finding'
-                    #root = r'/home/olive/data/Facial_asymmetry_oli_reclicks'
-                    root = r'/home/oliver_umney/data/oli_test_144'
-                    save_data_path = r'/home/olive/data/results/Oli'
+            if google_oli == False:  
+                # Oli paths
+                coding_path = r'/home/olive/GitHub/General-location-finding'
+                root = r'/home/olive/data/Facial_asymmetry_reclicks'
+                save_data_path = r'/home/olive/data/results/Oli'
             elif google_oli == True:
-                # paths for oli through google
-                if combined_data == True:         
-                    # google Oli paths
-                    coding_path = r'/home/oliver_umney/GitHub/General-location-finding'
-                    root = r'/home/oliver_umney/data/Facial_asymmetry_combined'
-                    save_data_path =  r'/home/oliver_umney/data/results/oliver_umney_web' 
-                elif combined_data == False:   
-                    # google Oli paths
-                    coding_path = r'/home/oliver_umney/GitHub/General-location-finding'
-                    root = r'/home/oliver_umney/data/Facial_asymmetry_oli_reclicks'
-                    save_data_path =  r'/home/oliver_umney/data/results/oliver_umney_web' 
+                # google Oli paths
+                coding_path = r'/home/oliver_umney/GitHub/General-location-finding'
+                root = r'/home/oliver_umney/data/Facial_asymmetry_reclicks'
+                save_data_path =  r'/home/oliver_umney/data/results/oliver_umney_web' 
+
 
     # results directory
     print('Results directory:')
@@ -114,7 +92,7 @@ def init():
         batch_size = int(input ("Batch size: "))
     else:
         batch_size = 5       
-    batch_size_test = 1
+    batch_size_test = 1 # HAS TO BE 1 ! STRUC ORIGINAL OTHERWISE WILL BE DIFFERENT SHAPES AND BATCH LOADER WILL FAIL
     
     # specify landmarks + region want to train for - AMEND
     #landmarks = [1,2,3,5,7,9] # brainstem # not general
@@ -168,6 +146,7 @@ def init():
     
     # normalise parameters
     normal_min = 15 + 1024
+    
     normal_max = 400 + 1024
     normal_window = 1800
     
@@ -175,10 +154,10 @@ def init():
     use_amp = True
     
     # if downsampling
-    downsample_ratio_h = np.empty((0), float)
-    downsample_ratio_w = np.empty((0), float)
-    downsample_ratio_d = np.empty((0), float)
-    downsample_idx_list = []
+    downsample_ratio_list = {}
+    
+    # if cropping
+    crop_list = {}
     
     # use predicted max - if want gauss fit set to false
     pred_max = True
@@ -221,8 +200,18 @@ def init():
     # k folds
     k_folds = 5
     k_fold_ids = []   # k fold test
-
     
+    # train line true
+    train_line_q = input ("Train/eval on a line (y/n)? ")
+    if train_line_q == 'y':
+        train_line = True
+    elif train_line_q == 'n':
+        train_line = False
+        clicker = input ("Name of clicker ")
+    else:
+        print('ERROR')
+
+     
 def init_new():
     # oli vs aaron settings 
     global epoch_batch, num_epoch_batches
@@ -233,15 +222,16 @@ def init_new():
     
     epoch_batch = int(input ("Epoch batch: "))
     num_epoch_batches = int(input ("Num epoch batch: "))
-    net_features = 32
+    net_features= 32
     scnet_feat = 64
     
     # -- AMEND -- 
     if aaron_or_oli == True:
-        run_folder = "run_10_april_k_fold"
+        run_folder = "run_14_apr_test_line"
         #run_folder_load = "run_19_mar_k_fold_aaron"
     elif aaron_or_oli == False:
-        run_folder = "run_10_apr_k_fold"
+        run_folder = "run_14_apr_test_line"
+
         #run_folder_load = "run_22_mar_test_aaron_my_data"
     # make user double check correct
     print('\n')
@@ -270,7 +260,7 @@ def init_load():
     global landmarks_load, landmarks_load_loc
     global num_class_load, net_features_load, scnet_feat_load, sigmas_load
 
-    net_features_load = 32
+    net_features_load = 1
     scnet_feat_load = 64
     
     # -- AMEND -- 
@@ -299,7 +289,8 @@ def init_load():
         run_folder = "run_10_apr_k_fold"
     elif aaron_or_oli == False:
         #run_folder = "run_22_mar_test_aaron_my_data"
-        run_folder = "run_10_apr_k_fold"
+        run_folder = "run_13_apr_debug"
+
     # make user double check correct
     print('\n')
     print('run folder')
@@ -322,7 +313,9 @@ def init_load():
     writer = SummaryWriter(tensorboard_loc) 
     
 # this is only used for final eval on Aaron, Oli, combined
-# implemented to ensure uses same prediction to compare to Aaron, Oli, Combined 
+# implemented to ensure uses same prediction to compare to Aaron, Oli, Combined
+
+""" 
     
 def init_load_eval_line():
     # oli vs aaron settings 
@@ -385,5 +378,5 @@ def init_load_eval_line():
     
     
     
-    
+    """
     

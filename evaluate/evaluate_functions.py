@@ -16,6 +16,349 @@ import settings as S
 from useful_functs import functions
 
 
+def performance_metrics(model,sigmas,gamma, epochs_completed, fold): 
+    
+  # so can print out test ids for each fold at end
+  S.k_fold_ids.append(data_loaders.print_ids)
+  
+  # create directory for this eval
+  epochs_completed_string = str(epochs_completed)
+  file_name = "eval_" + epochs_completed_string + functions.string(fold)
+  eval_path = os.path.join(S.run_path, file_name) # directory labelled with epochs_completed
+  try: 
+      os.mkdir(eval_path)
+  except OSError as error:
+      print(error)
+      
+  p2p_landmarks = defaultdict(float)
+  outliers_landmarks = defaultdict(float)
+  for l in S.landmarks:
+    p2p_landmarks[l] = np.empty((0), float)
+    outliers_landmarks[l] = np.empty((0), float)
+    
+  # load in struc_coord  
+  struc_coord = functions.load_obj_pickle(S.root, 'coords_' + S.clicker) 
+
+  for batch in data_loaders.dataloaders['test']:
+    image = batch['image'].to(S.device)
+    patient = batch['patient']
+    pred = model(image)
+  
+    batch_number = 0
+    
+    for l in S.landmarks: # cycle over all landmarks
+      
+      for i in range(image.size()[0]): # batch size
+        
+        struc_loc = struc_coord[patient[i]]
+
+        if struc_loc[l]['present'] == True:
+        # change to top structure
+          dimension = 3
+          height_guess = ((gamma) * (2*np.pi)**(-dimension/2) * sigmas[l].item() ** (-dimension)) 
+          
+          if S.pred_max == True:
+              pred_coords_max = functions.pred_max(pred, l, S.landmarks) # change to gauss fit
+          else:
+              pred_coords_max = functions.gauss_max(pred,l,height_guess,sigmas[l].item(), S.in_x, S.in_y, S.in_z, S.landmarks)  
+          
+          structure_max_x, structure_max_y, structure_max_z = struc_loc[l]['x'],struc_loc[l]['y'], struc_loc[l]['z'] 
+          pred_max_x, pred_max_y, pred_max_z =  pred_coords_max[i][0], pred_coords_max[i][1], pred_coords_max[i][2] 
+          
+          # convert pred to location in orig img
+          pred_max_x, pred_max_y, pred_max_z = functions.aug_to_orig(pred_max_x, pred_max_y, pred_max_z, S.downsample_user, patient[i])
+          
+          # print out 3D images for first one in batch
+          if batch_number == 0 and i == 0: # for first batch 
+            # now need to choose first in batch i.e. # image[0]
+            #print('3D plots for landmark %1.0f' % l)
+            #print_3D_heatmap(image[i], structure[i], pred[i], l, eval_path, patient[i])
+            #print_3D_gauss_heatmap(image[i], structure_max_x, structure_max_y, structure_max_z, pred[i], l, sigmas[l], eval_path, patient[i])
+            print('\n')
+            print('Structure LOC for landmark %1.0f:' % l)
+            print(structure_max_x, structure_max_y, structure_max_z)
+            print('Predicted LOC for landmark %1.0f:' % l)
+            print(pred_max_x, pred_max_y, pred_max_z)
+            print('\n')
+            # print 2D slice
+            print('2D slice for landmark %1.0f' % l)
+            print_2D_slice(l, pred_max_x, pred_max_y, pred_max_z, structure_max_x, structure_max_y, structure_max_z ,eval_path, patient[i])
+                      
+          # point to point takes in original structure location!!
+          img_landmark_point_to_point = functions.point_to_point_mm(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z, patient[i])
+          p2p_landmarks[l] = np.append(p2p_landmarks[l],img_landmark_point_to_point.cpu())
+          # if img_point_to_point > 20mm is an outlier
+          if img_landmark_point_to_point > 20:
+            outliers_landmarks[l] = np.append(outliers_landmarks[l],1)
+            
+    batch_number += 1 # not sure where to put
+    
+  print('\n')
+  print('Results summary')    
+  print('---------------')
+  
+  latex_line = []
+  csv_line = []
+  name_of_file = os.path.join(eval_path, "results.txt")
+  txt_file = open(name_of_file, "a")
+  
+  for l in S.landmarks:
+    print('\n')
+    print('Landmark %1.0f' % l)
+    mean = np.mean(p2p_landmarks[l])
+    std_mean = np.std(p2p_landmarks[l],ddof =1)*(len(p2p_landmarks[l]))**-0.5
+    median = np.median(p2p_landmarks[l])
+    outliers_perc = outliers_landmarks[l].sum()/len(p2p_landmarks[l]) * 100
+    print('    mean point to point error is ' + str(mean) + '+/-' + str(std_mean))
+    print('    median point to point error is ' + str(median))
+    print('    percentage of images which were outliers is ' + str(outliers_perc) + '%')
+    print('    sigma is ' + str(sigmas[l]))
+    print('    trained for ' + str(epochs_completed) + ' epochs')
+    print('    pred max used = %s' % S.pred_max)
+    print('\n')
+  
+    L = ['\n','Landmark %1.0f' % l, '\n', 
+         '  mean point to point error is ' + str(mean) + '+/-' + str(std_mean), '\n',
+         '  median point to point error is ' + str(median), '\n', 
+         '  percentage of images which were outliers is ' + str(outliers_perc) + '%', '\n',
+         '  sigma is ' + str(sigmas[l]), '\n', 
+         '  pred max used = ' + str(S.pred_max), '\n',
+         '  trained for ' + str(epochs_completed) + ' epochs\n']
+    txt_file.writelines(L)
+       
+    # write in latex table format
+    latex_line_temp = [' & ' + str(round(mean,1)) + '$\pm$' + str(round(std_mean,1))]  
+    latex_line = latex_line + latex_line_temp     
+    # write in excel format for easy to calc folds 
+    csv_line_temp = [str(round(mean,1)) + ',' + str(round(std_mean,1)) + ',']  
+    csv_line = csv_line + csv_line_temp   
+    
+    # add to csv file
+    csv_name = os.path.join(S.save_data_path, 'results_summary.csv')
+    with open(csv_name, 'a', newline = '') as file:
+        writer = csv.writer(file)
+        sigma_string = str(sigmas[l])
+        writer.writerow(['%s' % S.run_folder, '%s' % epochs_completed_string, 'Landmark %1.0f' % l, 
+             str(mean), str(std_mean),str(median),str(outliers_perc) + '%', sigma_string.replace("\n", " "), time.strftime("%Y%m%d-%H%M%S"), 'pred max used = %s' % S.pred_max])
+
+
+  # write in latex/csv form
+  txt_file.writelines(latex_line)
+  txt_file.writelines(['\n'])
+  txt_file.writelines(csv_line)
+  txt_file.close()
+       
+
+def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold): 
+  
+  # so can print out test ids for each fold at end
+  S.k_fold_ids.append(data_loaders.print_ids)
+  
+  # create directory for this eval
+  epochs_completed_string = str(epochs_completed)
+  file_name = "eval_" + epochs_completed_string + functions.string(fold)
+  eval_path = os.path.join(S.run_path, file_name) # directory labelled with epochs_completed
+  try: 
+      os.mkdir(eval_path)
+  except OSError as error:
+      print(error)
+      
+  keys = ['clicker_1', 'clicker_2', 'mean']
+  p2p_landmarks = {}
+  outliers_landmarks = {}
+  
+  for i in keys:
+      p2p_landmarks[i] = {} 
+      outliers_landmarks[i] = {} 
+  for i in keys:
+      for l in S.landmarks:
+        p2p_landmarks[i][l] = np.empty((0), float)
+        outliers_landmarks[i][l] = np.empty((0), float)
+    
+  # load in struc_coord  
+  struc_coord_clicker_1 = functions.load_obj_pickle(S.root, 'coords_' + 'Oli') 
+  struc_coord_clicker_2 = functions.load_obj_pickle(S.root, 'coords_' + 'Aaron') 
+  struc_coord_mean = functions.mean_from_clickers(struc_coord_clicker_1, struc_coord_clicker_2)
+  
+  struc_coord = {}
+  struc_coord['clicker_1'] = struc_coord_clicker_1 
+  struc_coord['clicker_2'] = struc_coord_clicker_2
+  struc_coord['mean'] = struc_coord_mean
+  
+  for batch in data_loaders.dataloaders['test']:
+    image = batch['image'].to(S.device)
+    patient = batch['patient']
+    pred = model(image)
+  
+    batch_number = 0
+    
+    for l in S.landmarks: # cycle over all landmarks
+      
+      for i in range(image.size()[0]): # batch size
+          
+          dimension = 3
+          height_guess = ((gamma) * (2*np.pi)**(-dimension/2) * sigmas[l].item() ** (-dimension)) 
+          
+          if S.pred_max == True:
+              pred_coords_max = functions.pred_max(pred, l, S.landmarks) # change to gauss fit
+          else:
+              pred_coords_max = functions.gauss_max(pred,l,height_guess,sigmas[l].item(), S.in_x, S.in_y, S.in_z, S.landmarks)  
+              
+          pred_max_x, pred_max_y, pred_max_z =  pred_coords_max[i][0], pred_coords_max[i][1], pred_coords_max[i][2] 
+                  
+          # convert pred to location in orig img
+          pred_max_x, pred_max_y, pred_max_z = functions.aug_to_orig(pred_max_x, pred_max_y, pred_max_z, S.downsample_user, patient[i])
+          
+          for k in keys: # clicker_1, clicker_2, and mean
+                        
+                struc_loc = struc_coord[k][[patient[i]]]
+        
+                if struc_loc[l]['present'] == True:
+    
+                  structure_max_x, structure_max_y, structure_max_z = struc_loc[l]['x'],struc_loc[l]['y'], struc_loc[l]['z']      
+                  
+                  # print out images for first one in batch
+                  if batch_number == 0 and i == 0: # for first batch 
+                    print('\n')
+                    print('Structure LOC for landmark %1.0f and clicker %s:' % (l,k))
+                    print(structure_max_x, structure_max_y, structure_max_z)
+                    print('Predicted LOC for landmark %1.0f and clicker %s:' % (l,k))
+                    print(pred_max_x, pred_max_y, pred_max_z)
+                    print('\n')
+                              
+                  # point to point takes in original structure location!!
+                  img_landmark_point_to_point = functions.point_to_point_mm(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z, patient[i])
+                  p2p_landmarks[k][l] = np.append(p2p_landmarks[l],img_landmark_point_to_point.cpu())
+                  # if img_point_to_point > 20mm is an outlier
+                  if img_landmark_point_to_point > 20:
+                    outliers_landmarks[k][l] = np.append(outliers_landmarks[l],1)
+                    
+          # print 2D slice
+          print('2D slice for landmark %1.0f' % l)
+          print_2D_slice_line(l, pred_max_x, pred_max_y, pred_max_z, struc_coord, eval_path, patient[i])
+            
+    batch_number += 1 # not sure where to put
+   
+  for k in keys:
+      
+      print('\n')
+      print('Results summary for clicker %s' % k)    
+      print('---------------')
+      
+      latex_line = []
+      csv_line = []
+      name_of_file = os.path.join(eval_path, "results_%s.txt" % k)
+      txt_file = open(name_of_file, "a")
+      
+      for l in S.landmarks:
+        print('\n')
+        print('Landmark %1.0f' % l)
+        mean = np.mean(p2p_landmarks[k][l])
+        std_mean = np.std(p2p_landmarks[k][l],ddof =1)*(len(p2p_landmarks[k][l]))**-0.5
+        median = np.median(p2p_landmarks[k][l])
+        outliers_perc = outliers_landmarks[k][l].sum()/len(p2p_landmarks[k][l]) * 100
+        print('    mean point to point error is ' + str(mean) + '+/-' + str(std_mean))
+        print('    median point to point error is ' + str(median))
+        print('    percentage of images which were outliers is ' + str(outliers_perc) + '%')
+        print('    sigma is ' + str(sigmas[l]))
+        print('    trained for ' + str(epochs_completed) + ' epochs')
+        print('    pred max used = %s' % S.pred_max)
+        print('\n')
+      
+        L = ['\n','Landmark %1.0f' % l, '\n', 
+             '  mean point to point error is ' + str(mean) + '+/-' + str(std_mean), '\n',
+             '  median point to point error is ' + str(median), '\n', 
+             '  percentage of images which were outliers is ' + str(outliers_perc) + '%', '\n',
+             '  sigma is ' + str(sigmas[l]), '\n', 
+             '  pred max used = ' + str(S.pred_max), '\n',
+             '  trained for ' + str(epochs_completed) + ' epochs\n']
+        txt_file.writelines(L)
+           
+        # write in latex table format
+        latex_line_temp = [' & ' + str(round(mean,1)) + '$\pm$' + str(round(std_mean,1))]  
+        latex_line = latex_line + latex_line_temp     
+        # write in excel format for easy to calc folds 
+        csv_line_temp = [str(round(mean,1)) + ',' + str(round(std_mean,1)) + ',']  
+        csv_line = csv_line + csv_line_temp   
+        
+        # add to csv file
+        csv_name = os.path.join(S.save_data_path, 'results_summary.csv')
+        with open(csv_name, 'a', newline = '') as file:
+            writer = csv.writer(file)
+            sigma_string = str(sigmas[l])
+            writer.writerow(['%s' % S.run_folder, '%s' % epochs_completed_string, 'Landmark %1.0f' % l, 
+                 str(mean), str(std_mean),str(median),str(outliers_perc) + '%', sigma_string.replace("\n", " "), time.strftime("%Y%m%d-%H%M%S"), 'pred max used = %s' % S.pred_max])
+    
+    
+      # write in latex/csv form
+      txt_file.writelines(latex_line)
+      txt_file.writelines(['\n'])
+      txt_file.writelines(csv_line)
+      txt_file.close()
+
+
+def print_2D_slice_line(landmark, pred_x, pred_y, pred_z, structure_coord, eval_path, patient):
+    
+    # image
+    #  D x H x W
+    img_path = os.path.join(S.root, "CTs", patient) 
+    img = np.load(img_path)
+        
+    plt.figure(figsize=(7, 7))
+        
+    pred_z = int(pred_z) # convert to nearest int
+    img = img[pred_z, :, :]
+    
+    struc_x_1, struc_y_1, struc_z_1 = structure_coord['clicker_1'][patient]['x'], structure_coord['clicker_1'][patient]['y'], structure_coord['clicker_1'][patient]['z']
+    struc_x_2, struc_y_2, struc_z_2 = structure_coord['clicker_2'][patient]['x'], structure_coord['clicker_2'][patient]['y'], structure_coord['clicker_2'][patient]['z']
+
+    # ---- plot as point ------
+    plt.imshow(image,cmap = 'Greys_r', alpha = 0.9)
+    plt.plot(struc_y_1.cpu().numpy(), struc_x_1.cpu().numpy(), color = 'red', marker = 'x', label = 'target_oli')
+    plt.plot(struc_y_2.cpu().numpy(), struc_x_2.cpu().numpy(), color = 'blue', marker = 'x', label = 'target_aaron')
+    plt.plot(pred_y.cpu().numpy(), pred_x.cpu().numpy(),color='green', marker='o', label = 'pred')
+    # add z annotation
+    plt.annotate("%1.0f" % pred_z,(pred_y.cpu().numpy(), pred_x.cpu().numpy()), color = 'green')
+    plt.annotate("%1.0f" % int(struc_z_1),(struc_y_1, struc_x_1), color = 'red')
+    plt.annotate("%1.0f" % int(struc_z_2),(struc_y_2, struc_x_2), color = 'blue')
+    plt.legend()
+    # ------------------------------------
+    
+    img_name = os.path.join(eval_path, "2d_slice_%s.png" % patient[0].replace('.npy', '_%1.0f') % landmark)
+    S.img_counter_3 += 1
+    plt.savefig(img_name)
+    
+def print_2D_slice(landmark, pred_x, pred_y, pred_z, struc_x, struc_y, struc_z, eval_path, patient):
+    
+    # image
+    #  D x H x W
+    img_path = os.path.join(S.root, "CTs", patient) 
+    img = np.load(img_path)
+        
+    plt.figure(figsize=(7, 7))
+        
+    pred_z = int(pred_z) # convert to nearest int
+    img = img[pred_z, :, :]
+    
+    # ---- plot as point ------
+    plt.imshow(img,cmap = 'Greys_r', alpha = 0.9)
+    plt.plot(struc_y, struc_x, color = 'red', marker = 'x', label = 'target')
+    plt.plot(pred_y.cpu().numpy(), pred_x.cpu().numpy(),color='green', marker='o', label = 'pred')
+    # add z annotation
+    plt.annotate("%1.0f" % pred_z,(pred_y.cpu().numpy(), pred_x.cpu().numpy()), color = 'green')
+    plt.annotate("%1.0f" % int(struc_z),(struc_y, struc_x), color = 'red')
+    plt.legend()
+    # ------------------------------------
+    
+    img_name = os.path.join(eval_path, "2d_slice_%s.png" % patient.replace('.npy', '_%1.0f') % landmark)
+    S.img_counter_3 += 1
+    plt.savefig(img_name)
+    
+
+
+"""
+  
+
 def extract_landmark_for_structure(structure, landmark):
   landmark = float(landmark)
   zero_tensor = torch.zeros(structure.size(), dtype = torch.float).to(S.device)
@@ -154,56 +497,6 @@ def plot_3d_pred_img_struc_no_img(structure, pred, eval_path):
     S.img_counter_2 += 1
     plt.savefig(img_name)
     
-def print_2D_slice(image, structure, pred, landmark, pred_x, pred_y, pred_z, struc_x, struc_y, struc_z, eval_path, patient):
-    
-    # image
-    # - C x H x W x D needs to be cut down to H x W x D
-    # structure
-    # - C x H x W x D needs to be cut down to H x W x D
-    # - currently has all landmarks in but need to plot only 1 landmark - l
-    # pred
-    # - C x H x W x D needs to be cut down to H x W x D
-    # - not sure what values of this heatmap will be so not sure what threshold should be
-    image = image.squeeze(0).cpu().numpy()
-    index = S.landmarks.index(landmark)
-    pred = pred[index].detach().cpu().numpy() # chooses relevant channel for landmark - might need to be squeezed
-    structure = structure.squeeze(0)
-    structure_l = extract_landmark_for_structure(structure, landmark).cpu().numpy() # edit
-    structure = structure.cpu().numpy()
-    
-    fig = plt.figure(figsize=(7, 7))
-    
-    #print('image and predicted heatmap')
-    
-    pred_z = int(pred_z) # convert to nearest int
-
-    image = image[:, :, pred_z]
-    structure_l = structure_l[:, :, pred_z]
-    # ----  if want to plot heatmap ----- 
-    """
-    pred = pred[:, :, pred_z]
-    plt.imshow(image,cmap = 'Greys_r', alpha = 0.5)
-    plt.imshow(structure_l, cmap = 'Reds', alpha = 0.8 )
-    plt.imshow(pred, cmap = cm.jet, alpha = 0.5)
-    """
-    # -----------------------------------
-    
-    # ---- if want to plot as point ------
-    pred = pred[pred_y, pred_x, pred_z]
-    plt.imshow(image,cmap = 'Greys_r', alpha = 0.9)
-    plt.plot(struc_x.cpu().numpy(), struc_y.cpu().numpy(), color = 'red', marker = 'x', label = 'target')
-    plt.plot(pred_x.cpu().numpy(), pred_y.cpu().numpy(),color='green', marker='o', label = 'pred')
-    # add z annotation
-    plt.annotate("%1.0f" % pred_z,(pred_x.cpu().numpy(), pred_y.cpu().numpy()), color = 'green')
-    plt.annotate("%1.0f" % int(struc_z.cpu().numpy()),(struc_x.cpu().numpy(), struc_y.cpu().numpy()), color = 'red')
-    plt.legend()
-    # ------------------------------------
-    
-    img_name = os.path.join(eval_path, "2d_slice_%s.png" % patient.replace('.npy', '_%1.0f') % landmark)
-    S.img_counter_3 += 1
-    plt.savefig(img_name)
-
-    
     
 def print_3D_heatmap(image, structure, pred, landmark, eval_path, patient):
   # image
@@ -277,246 +570,5 @@ def print_3D_gauss_heatmap(image, structure_com_x, structure_com_y, structure_co
 
   plot_3d_pred_img_struc(image, structure_gauss, pred, threshold_img, eval_path, patient, landmark)
 
-
-
-def performance_metrics(model,sigmas,gamma, epochs_completed, fold): 
-  # so can print out test ids for each fold at end
-  S.k_fold_ids.append(data_loaders.print_ids)
-  # create directory for this eval
-  epochs_completed_string = str(epochs_completed)
-  file_name = "eval_" + epochs_completed_string + functions.string(fold)
-  eval_path = os.path.join(S.run_path, file_name) # directory labelled with epochs_completed
-  try: 
-      os.mkdir(eval_path)
-  except OSError as error:
-      print(error)
-      
-  p2p_landmarks = defaultdict(float)
-  outliers_landmarks = defaultdict(float)
-  for l in S.landmarks:
-    p2p_landmarks[l] = np.empty((0), float)
-    outliers_landmarks[l] = np.empty((0), float)
-
-
-  for batch in data_loaders.dataloaders['test']:
-    image = batch['image'].to(S.device)
-    structure = batch['structure'].to(S.device)
-    patient = batch['patient']
-    pred = model(image)
+"""
   
-    batch_number = 0
-    
-    for l in S.landmarks: # cycle over all landmarks
-      
-      for i in range(structure.size()[0]):
-        
-        structure_loc = functions.landmark_loc(structure, l)[0]
-        #structure_com = functions.com_structure(structure, l)[0]# [0] ensures extracts coords rather than True/False
-        # change to top structure
-        #if functions.com_structure(structure,1)[1][i] == True:
-
-        if functions.landmark_loc(structure,l)[1][i] == True:
-        # change to top structure
-          dimension = 3
-          height_guess = ((gamma) * (2*np.pi)**(-dimension/2) * sigmas[l].item() ** (-dimension)) 
-          
-          if S.pred_max == True:
-              pred_coords_max = functions.pred_max(pred, l, S.landmarks) # change to gauss fit
-          else:
-              pred_coords_max = functions.gauss_max(pred,l,height_guess,sigmas[l].item(), S.in_x, S.in_y, S.in_z, S.landmarks)  
-
-          #print(pred.shape)
-          
-          structure_max_x, structure_max_y, structure_max_z = structure_loc[i][0],structure_loc[i][1], structure_loc[i][2] 
-          pred_max_x, pred_max_y, pred_max_z =  pred_coords_max[i][0], pred_coords_max[i][1], pred_coords_max[i][2] 
-
-
-          # print out 3D images for first one in batch
-          if batch_number == 0 and i == 0: # for first batch 
-            # now need to choose first in batch i.e. # image[0]
-            #print('3D plots for landmark %1.0f' % l)
-            #print_3D_heatmap(image[i], structure[i], pred[i], l, eval_path, patient[i])
-            #print_3D_gauss_heatmap(image[i], structure_max_x, structure_max_y, structure_max_z, pred[i], l, sigmas[l], eval_path, patient[i])
-            print('\n')
-            print('Structure LOC for landmark %1.0f:' % l)
-            print(structure_max_x, structure_max_y, structure_max_z)
-            print('Predicted LOC for landmark %1.0f:' % l)
-            print(pred_max_x, pred_max_y, pred_max_z)
-            print('\n')
-            # print 2D slice
-            print('2D slice for landmark %1.0f' % l)
-            print_2D_slice(image[i], structure[i], pred[i], l, pred_max_x, pred_max_y, pred_max_z, structure_max_x, structure_max_y, structure_max_z ,eval_path, patient[i])
-            
-
-          #img_landmark_point_to_point = point_to_point(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z)
-          img_landmark_point_to_point = functions.point_to_point_mm(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z, patient[i])
-          p2p_landmarks[l] = np.append(p2p_landmarks[l],img_landmark_point_to_point.cpu())
-          # if img_point_to_point > 20mm is an outlier
-          if img_landmark_point_to_point > 20:
-            outliers_landmarks[l] = np.append(outliers_landmarks[l],1)
-            
-
-    batch_number += 1 # not sure where to put
-    
-  print('\n')
-  print('Results summary')    
-  print('---------------')
-  
-  for l in S.landmarks:
-    print('\n')
-    print('Landmark %1.0f' % l)
-    mean = np.mean(p2p_landmarks[l])
-    std_mean = np.std(p2p_landmarks[l],ddof =1)*(len(p2p_landmarks[l]))**-0.5
-    median = np.median(p2p_landmarks[l])
-    outliers_perc = outliers_landmarks[l].sum()/len(p2p_landmarks[l]) * 100
-    print('    mean point to point error is ' + str(mean) + '+/-' + str(std_mean))
-    print('    median point to point error is ' + str(median))
-    print('    percentage of images which were outliers is ' + str(outliers_perc) + '%')
-    print('    sigma is ' + str(sigmas[l]))
-    print('    trained for ' + str(epochs_completed) + ' epochs')
-    print('    pred max used = %s' % S.pred_max)
-    print('\n')
-  
-    name_of_file = os.path.join(eval_path, "results.txt")
-    file = open(name_of_file, "a")
-    L = ['\n','Landmark %1.0f' % l, '\n', 
-         '  mean point to point error is ' + str(mean) + '+/-' + str(std_mean), '\n',
-         '  median point to point error is ' + str(median), '\n', 
-         '  percentage of images which were outliers is ' + str(outliers_perc) + '%', '\n',
-         '  sigma is ' + str(sigmas[l]), '\n', 
-         '  pred max used = ' + str(S.pred_max), '\n',
-         '  trained for ' + str(epochs_completed) + ' epochs\n']
-    file.writelines(L)
-    file.close()
-    
-    # add to csv file
-    csv_name = os.path.join(S.save_data_path, 'results_summary.csv')
-    with open(csv_name, 'a', newline = '') as file:
-        writer = csv.writer(file)
-        sigma_string = str(sigmas[l])
-        writer.writerow(['%s' % S.run_folder, '%s' % epochs_completed_string, 'Landmark %1.0f' % l, 
-             str(mean), str(std_mean),str(median),str(outliers_perc) + '%', sigma_string.replace("\n", " "), time.strftime("%Y%m%d-%H%M%S"), 'pred max used = %s' % S.pred_max])
-       
-def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold, clicker, images, preds): 
-  # so can print out test ids for each fold at end
-  S.k_fold_ids.append(data_loaders.print_ids)
-  # create directory for this eval
-  epochs_completed_string = str(epochs_completed)
-  file_name = "eval_" + epochs_completed_string + functions.string(fold) + clicker
-  eval_path = os.path.join(S.run_path, file_name) # directory labelled with epochs_completed
-  try: 
-      os.mkdir(eval_path)
-  except OSError as error:
-      print(error)
-      
-  p2p_landmarks = defaultdict(float)
-  outliers_landmarks = defaultdict(float)
-  for l in S.landmarks:
-    p2p_landmarks[l] = np.empty((0), float)
-    outliers_landmarks[l] = np.empty((0), float)
-    
-  counter = 0
-  for batch in data_loaders.dataloaders['test']:
-    structure = batch['structure'].to(S.device)
-    patient = batch['patient']
-    image = images[counter]
-    pred = preds[counter]
-    counter += 1
-    
-  
-    batch_number = 0
-    
-    for l in S.landmarks: # cycle over all landmarks
-      
-      for i in range(structure.size()[0]):
-        
-        structure_loc = functions.landmark_loc(structure, l)[0]
-        #structure_com = functions.com_structure(structure, l)[0]# [0] ensures extracts coords rather than True/False
-        # change to top structure
-        #if functions.com_structure(structure,1)[1][i] == True:
-
-        if functions.landmark_loc(structure,l)[1][i] == True:
-        # change to top structure
-          dimension = 3
-          height_guess = ((gamma) * (2*np.pi)**(-dimension/2) * sigmas[l].item() ** (-dimension)) 
-          
-          if S.pred_max == True:
-              pred_coords_max = functions.pred_max(pred, l, S.landmarks) # change to gauss fit
-          else:
-              pred_coords_max = functions.gauss_max(pred,l,height_guess,sigmas[l].item(), S.in_x, S.in_y, S.in_z, S.landmarks)  
-
-          #print(pred.shape)
-          
-          structure_max_x, structure_max_y, structure_max_z = structure_loc[i][0],structure_loc[i][1], structure_loc[i][2] 
-          pred_max_x, pred_max_y, pred_max_z =  pred_coords_max[i][0], pred_coords_max[i][1], pred_coords_max[i][2] 
-          
-          print('predicted x,y,z (check consistnetn)')
-          print(pred_max_x, pred_max_y, pred_max_z)
-
-
-          # print out 3D images for first one in batch
-          if batch_number == 0 and i == 0: # for first batch 
-            # now need to choose first in batch i.e. # image[0]
-            #print('3D plots for landmark %1.0f' % l)
-            #print_3D_heatmap(image[i], structure[i], pred[i], l, eval_path, patient[i])
-            #print_3D_gauss_heatmap(image[i], structure_max_x, structure_max_y, structure_max_z, pred[i], l, sigmas[l], eval_path, patient[i])
-            print('\n')
-            print('Structure LOC for landmark %1.0f:' % l)
-            print(structure_max_x, structure_max_y, structure_max_z)
-            print('Predicted LOC for landmark %1.0f:' % l)
-            print(pred_max_x, pred_max_y, pred_max_z)
-            print('\n')
-            # print 2D slice
-            print('2D slice for landmark %1.0f' % l)
-            print_2D_slice(image[i], structure[i], pred[i], l, pred_max_z, eval_path, patient[i])
-            
-
-          #img_landmark_point_to_point = point_to_point(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z)
-          img_landmark_point_to_point = functions.point_to_point_mm(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z, patient[i])
-          p2p_landmarks[l] = np.append(p2p_landmarks[l],img_landmark_point_to_point.cpu())
-          # if img_point_to_point > 20mm is an outlier
-          if img_landmark_point_to_point > 20:
-            outliers_landmarks[l] = np.append(outliers_landmarks[l],1)
-            
-
-    batch_number += 1 # not sure where to put
-    
-  print('\n')
-  print('Results summary')    
-  print('---------------')
-  
-  for l in S.landmarks:
-    print('\n')
-    print('Landmark %1.0f' % l)
-    mean = np.mean(p2p_landmarks[l])
-    std_mean = np.std(p2p_landmarks[l],ddof =1)*(len(p2p_landmarks[l]))**-0.5
-    median = np.median(p2p_landmarks[l])
-    outliers_perc = outliers_landmarks[l].sum()/len(p2p_landmarks[l]) * 100
-    print('    mean point to point error is ' + str(mean) + '+/-' + str(std_mean))
-    print('    median point to point error is ' + str(median))
-    print('    percentage of images which were outliers is ' + str(outliers_perc) + '%')
-    print('    sigma is ' + str(sigmas[l]))
-    print('    trained for ' + str(epochs_completed) + ' epochs')
-    print('    pred max used = %s' % S.pred_max)
-    print('\n')
-  
-    name_of_file = os.path.join(eval_path, "results.txt")
-    file = open(name_of_file, "a")
-    L = ['\n','Landmark %1.0f' % l, '\n', 
-         '  mean point to point error is ' + str(mean) + '+/-' + str(std_mean), '\n',
-         '  median point to point error is ' + str(median), '\n', 
-         '  percentage of images which were outliers is ' + str(outliers_perc) + '%', '\n',
-         '  sigma is ' + str(sigmas[l]), '\n', 
-         '  pred max used = ' + str(S.pred_max), '\n',
-         '  trained for ' + str(epochs_completed) + ' epochs\n']
-    file.writelines(L)
-    file.close()
-    
-    # add to csv file
-    csv_name = os.path.join(S.save_data_path, 'results_summary.csv')
-    with open(csv_name, 'a', newline = '') as file:
-        writer = csv.writer(file)
-        sigma_string = str(sigmas[l])
-        writer.writerow(['%s' % S.run_folder, '%s' % epochs_completed_string, 'Landmark %1.0f' % l, 
-             str(mean), str(std_mean),str(median),str(outliers_perc) + '%', sigma_string.replace("\n", " "), time.strftime("%Y%m%d-%H%M%S"), 'pred max used = %s' % S.pred_max])
-       

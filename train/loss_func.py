@@ -4,10 +4,10 @@ import torch
 from useful_functs import functions
 import settings as S
 
-def calc_loss_gauss(model, img, pred, target, idx, metrics_landmarks, alpha, reg, gamma, epoch_samples, sigma): 
+def calc_loss_gauss(model, img, pred, target_coords, idx, metrics_landmarks, alpha, reg, gamma, epoch_samples, sigma): 
 
     # pred is Batch x Classes x Height x Width x Depth
-    # target is Batch x 1 x Height x Width x Depth
+    # target_coords is Batch x Dictionary (Dict[landmark][key]; Keys: x,y,z,locat,present)
 
     # loss function for difference between gaussian heat maps
     # pred is gaussian heatmap & need to convert target to gaussian heatmap
@@ -30,12 +30,6 @@ def calc_loss_gauss(model, img, pred, target, idx, metrics_landmarks, alpha, reg
     total_p2p_loss = 0
     
     for l in S.landmarks:
-
-      # need location of landmark for all images in target 3D CT scan
-      target_coords = functions.landmark_loc(target, l)[0]
-      #target_coords = functions.com_structure(target,l)[0] # the [0] means it extracts the coords rather than the True/False
-      # change to top structure
-      batch_size = target_coords.size()[0]
       
       # location of prediction for all images 
       pred_coords_max = functions.pred_max(pred, l, S.landmarks) # don't change to gauss fit as gauss fit takes too long
@@ -50,18 +44,17 @@ def calc_loss_gauss(model, img, pred, target, idx, metrics_landmarks, alpha, reg
       total_point_to_point_landmark = 0
     
       # for every image in batch
-      for i in range(batch_size): 
+      for i in range(img.size()[0]): # batch size
 
         img_number = epoch_samples + i # epoch_samples is 0, 32, 64 e.g. if batch is size 32
       
-        x_size = target.size()[3]
-        y_size = target.size()[2] 
-        z_size = target.size()[4]
-
-        # structure location per image
-        structure_com_x, structure_com_y, structure_com_z = target_coords[i][0],target_coords[i][1], target_coords[i][2] 
-
-        # pred location per image
+        x_size = S.in_x #target.size()[3]
+        y_size = S.in_y #target.size()[2] 
+        z_size = S.in_z #target.size()[4]
+            
+        # struc/pred location per image
+        structure_com_x, structure_com_y, structure_com_z = target_coords[l]['x'][i],target_coords[l]['y'][i], target_coords[l]['z'][i]
+        structure_com_x, structure_com_y, structure_com_z = structure_com_x.to(S.device), structure_com_y.to(S.device), structure_com_z.to(S.device)
         pred_max_x, pred_max_y, pred_max_z =  pred_coords_max[i][0], pred_coords_max[i][1], pred_coords_max[i][2] 
 
         # average x/y posn
@@ -77,13 +70,12 @@ def calc_loss_gauss(model, img, pred, target, idx, metrics_landmarks, alpha, reg
         #img_landmark_point_to_point = point_to_point_mm(structure_com_x, structure_com_y, structure_com_z, pred_max_x, pred_max_y, pred_max_z, idx[i].item())
 
         # create target gauss map
-        #if functions.com_structure(target,l)[1][i] == True:
-        if functions.landmark_loc(target, l)[1][i] == True:
-        # change to top structure
+        if target_coords[l]['present'][i] == 1:
           targ_gaus = functions.gaussian_map(structure_com_x,structure_com_y, structure_com_z,S.sigmas[l],gamma,x_size,y_size,z_size, output = True) 
         else:
           # target is full of zeros
-          targ_gaus = torch.zeros(target.size()[2], target.size()[3], target.size()[4]).to(S.device)
+          print('zero target')
+          targ_gaus = torch.zeros(S.in_y, S.in_x, S.in_z).to(S.device)
 
         # pred heatmap is based on image in batch & landmark
         index = S.landmarks.index(l)
@@ -145,22 +137,6 @@ def calc_loss_gauss(model, img, pred, target, idx, metrics_landmarks, alpha, reg
         metrics_landmarks[l]['mean y targ'] += structure_com_y.data.cpu().numpy() # y targ per image per landmark
         metrics_landmarks[l]['mean z targ'] += structure_com_z.cpu().numpy() # z targ per image per landmark
         metrics_landmarks[l]['mean point to point'] += img_landmark_point_to_point.data.cpu().numpy() # p2p per image per landmark
-      
-      # metrics_landmarks is total for batch - print metrics divides everything by total number of images
-      """
-      metrics_landmarks[l]['loss'] /= batch_size #* target.size()[0] # loss per batch per landmark
-      metrics_landmarks[l]['sum loss'] /= batch_size #* target.size()[0]# sum loss per batch per landmark
-      metrics_landmarks[l]['reg loss'] /= batch_size #* target.size()[0]# reg loss per batch per landmark
-      metrics_landmarks[l]['alpha loss'] /= batch_size #* target.size()[0]# alpha loss per batch per landmark
-      metrics_landmarks[l]['p2p loss'] /= batch_size #* target.size()[0]# p2p loss per batch per landmark
-      metrics_landmarks[l]['mean x pred'] /= batch_size #* target.size()[0] # x posn per batch per landmark
-      metrics_landmarks[l]['mean y pred'] /= batch_size #* target.size()[0] # y posn per batch per landmark
-      metrics_landmarks[l]['mean z pred'] /= batch_size #* target.size()[0] # z posn per batch per landmark
-      metrics_landmarks[l]['mean x targ'] /= batch_size #* target.size()[0] # x targ per batch per landmark
-      metrics_landmarks[l]['mean y targ'] /= batch_size #* target.size()[0] # y targ per batch per landmark
-      metrics_landmarks[l]['mean z targ'] /= batch_size #* target.size()[0] # z targ per batch per landmark
-      metrics_landmarks[l]['mean point to point'] /= batch_size #* target.size()[0] # p2p per batch per landmark
-      """
 
       # print for every epoch_samples = 0 -> i.e first image in epoch
       if epoch_samples == 0:
@@ -179,7 +155,7 @@ def calc_loss_gauss(model, img, pred, target, idx, metrics_landmarks, alpha, reg
 
           
     # return mean batch loss
-    mean_batch_loss = (total_batch_loss/batch_size)
+    mean_batch_loss = (total_batch_loss/img.size()[0]) # batch_size
     
     # mean loss per image
     

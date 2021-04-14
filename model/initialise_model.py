@@ -54,7 +54,10 @@ class initialise_model:
         
         self.model.eval()   # Set model to the evaluation mode
         data_loaders.dataset.__test__() # sets whole dataset to test mode means it doesn't augment images
-        evaluate_functions.performance_metrics(self.model,S.sigmas,S.gamma, self.epochs_completed, fold)
+        if S.train_line == True:
+            evaluate_functions.performance_metrics_line(self.model,S.sigmas,S.gamma, self.epochs_completed, fold)
+        elif S.train_line == False:
+            evaluate_functions.performance_metrics(self.model,S.sigmas,S.gamma, self.epochs_completed, fold)
         
     def save(self, fold):
         

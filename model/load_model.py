@@ -101,8 +101,10 @@ class load_model:
         # evaluate model
         self.model_load.eval() # trained
         data_loaders.dataset.__test__() # sets whole dataset to test mode means it doesn't augment images
-        evaluate_functions.performance_metrics(self.model_load,S.sigmas,S.gamma, self.epochs_completed, fold) # trained x 2
-        
+        if S.train_line == False:
+            evaluate_functions.performance_metrics(self.model_load,S.sigmas,S.gamma, self.epochs_completed, fold) # trained x 2
+        elif S.train_line == True:
+            evaluate_functions.performance_metrics_line(self.model_load,S.sigmas,S.gamma, self.epochs_completed, fold) # trained x 2
     
     def evaluate_pre_train(self, fold):
         
@@ -112,18 +114,11 @@ class load_model:
         print(self.best_loss)
         self.model_load.eval()
         data_loaders.dataset.__test__() # sets whole dataset to test mode means it doesn't augment images
-        evaluate_functions.performance_metrics(self.model_load,S.sigmas,S.gamma, self.epochs_completed, fold)
-        
-    def evaluate_line(self, fold, clicker, images, preds):
-        
-        # if not trained load in best loss and epochs completed 
-        self.best_loss = torch.load(paths.PATH_val_loss_load)['best_val_loss']
-        self.epochs_completed = torch.load(paths.PATH_epochs_completed_load)['epochs_completed']
-        print(self.best_loss)
-        self.model_load.eval()
-        data_loaders.dataset.__test__() # sets whole dataset to test mode means it doesn't augment images
-        evaluate_functions.performance_metrics_line(self.model_load,S.sigmas,S.gamma, self.epochs_completed, fold, clicker, images, preds)
-
+        if S.train_line == False:
+            evaluate_functions.performance_metrics(self.model_load,S.sigmas,S.gamma, self.epochs_completed, fold)
+        elif S.train_line == True:
+            evaluate_functions.performance_metrics(self.model_load,S.sigmas,S.gamma, self.epochs_completed, fold)
+    
     
     def save(self, fold):
         
