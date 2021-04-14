@@ -34,6 +34,6 @@ for i in patients:
     crop_coords[i]['x'], crop_coords[i]['y'], crop_coords[i]['z'] = x,y,z
     
 # save pickel file as crop_coords_clicker
-save_obj(pickle_struc_path, 'crop_coords_%s' % S.clicker)
+save_obj(pickle_struc_path, crop_coords,'crop_coords_%s' % S.clicker)
 
 a = load_obj('crop_coords_&s' % S.clicker)
