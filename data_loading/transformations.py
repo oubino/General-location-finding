@@ -27,7 +27,7 @@ class Resize(object):
     
       d_pre, h_pre, w_pre = image.shape[:3]
           
-      image = skimage.transform.resize(image, (depth, width, height), order = 1, preserve_range=True, anti_aliasing=True)
+      image = skimage.transform.resize(image, (depth, height, width), order = 1, preserve_range=True, anti_aliasing=True)
           
       d_post, h_post, w_post = image.shape[:3] 
       
@@ -100,7 +100,7 @@ class CentreCrop(object):
           coords[l]['y']= y
           coords[l]['z'] = z
                         
-      image_crop = skimage.util.crop(image, ((z_left,z_right),(x_left, x_right), (y_left, y_right)))
+      image_crop = skimage.util.crop(image, ((z_left,z_right),(y_left, y_right), (x_left, x_right)))
           
       if image_crop.shape[0] != S.crop_size_z:
         print('30 error')
@@ -178,6 +178,28 @@ class Normalise(object):
       img_norm -= minval
       img_norm /= self.window
       return {'image':img_norm, 'idx': idx, 'patient':patient, 'coords': coords} # note note !
+  
+class Shift(object):
+    def __call__(self, sample):
+        image, idx, patient, coords = sample['image'], sample['idx'], sample['patient'], sample['coords']
+        
+        x_shift, y_shift, z_shift = random.randint(-10,10), random.randint(-10,10), random.randint(-10,10)          
+        out_of_bounds = False      
+        for l in S.landmarks_total:
+            if (coords[l]['x'] + x_shift < 0) or (coords[l]['x'] + x_shift >= S.in_x) or (coords[l]['y'] + y_shift < 0) or (coords[l]['y'] + y_shift >= S.in_y) or  (coords[l]['z'] + z_shift < 0) or (coords[l]['z'] + z_shift >= S.in_z):
+                out_of_bounds = True
+                    
+        if out_of_bounds == False:
+            for l in S.landmarks_total:
+                coords[l]['x'] = coords[l]['x'] + x_shift
+                coords[l]['y'] = coords[l]['y'] + y_shift
+                coords[l]['z'] = coords[l]['z'] + z_shift
+            image = scipy.ndimage.shift(image, (z_shift, y_shift, x_shift))
+        else:
+            print('shift out of bounds')
+                
+        return {'image': image, 'idx': idx, 'patient':patient, 'coords':coords}
+        
 
 class Flips_scipy(object):
     def __call__(self,sample):
