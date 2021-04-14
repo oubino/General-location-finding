@@ -36,6 +36,7 @@ def init():
     global ct_print
     global k_fold_ids
     global batch_size_test
+    global train_line, clicker
 
          
     # paths
@@ -148,9 +149,9 @@ def init():
       #print(sigmas[k])
     
     # input dimensions
-    in_x = 128
-    in_y = 128 
-    in_z = 80
+    in_x = 192
+    in_y = 192 
+    in_z = 100
     
     # learning params
     alpha = 1/25000
@@ -215,6 +216,16 @@ def init():
     # k folds
     k_folds = 5
     k_fold_ids = []   # k fold test
+    
+    # train line true
+    train_line_q = input ("Train/eval on a line (y/n)? ")
+    if train_line_q == 'y':
+        train_line = True
+    elif train_line_q == 'n':
+        train_line = False
+        clicker = input ("Name of clicker ")
+    else:
+        print('ERROR')
 
     
 def init_new():
@@ -227,7 +238,7 @@ def init_new():
     
     epoch_batch = int(input ("Epoch batch: "))
     num_epoch_batches = int(input ("Num epoch batch: "))
-    net_features = 32
+    net_features= 1
     scnet_feat = 64
     
     # -- AMEND -- 
@@ -235,7 +246,7 @@ def init_new():
         run_folder = "run_19_mar_k_fold_aaron"
         #run_folder_load = "run_19_mar_k_fold_aaron"
     elif aaron_or_oli == False:
-        run_folder = "run_4_apr_k_fold_192x192"
+        run_folder = "run_14_apr_debug"
         #run_folder_load = "run_22_mar_test_aaron_my_data"
     # make user double check correct
     print('\n')
@@ -264,7 +275,7 @@ def init_load():
     global landmarks_load, landmarks_load_loc
     global num_class_load, net_features_load, scnet_feat_load, sigmas_load
 
-    net_features_load = 32
+    net_features_load = 1
     scnet_feat_load = 64
     
     # -- AMEND -- 
@@ -293,7 +304,7 @@ def init_load():
         run_folder = "run_23_mar_eval_oli"
     elif aaron_or_oli == False:
         #run_folder = "run_22_mar_test_aaron_my_data"
-        run_folder = "run_12_apr_test_512_eval"
+        run_folder = "run_13_apr_debug"
     # make user double check correct
     print('\n')
     print('run folder')
@@ -316,7 +327,9 @@ def init_load():
     writer = SummaryWriter(tensorboard_loc) 
     
 # this is only used for final eval on Aaron, Oli, combined
-# implemented to ensure uses same prediction to compare to Aaron, Oli, Combined 
+# implemented to ensure uses same prediction to compare to Aaron, Oli, Combined
+
+""" 
     
 def init_load_eval_line():
     # oli vs aaron settings 
@@ -379,5 +392,5 @@ def init_load_eval_line():
     
     
     
-    
+    """
     

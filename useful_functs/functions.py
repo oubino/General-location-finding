@@ -4,6 +4,8 @@ from scipy.optimize import curve_fit
 import csv
 import os
 import math
+import pickle
+import random
 
 import settings as S
 
@@ -11,6 +13,8 @@ import settings as S
 print('Data directory: ')
 print(os.getcwd())
 
+
+"""
 def landmark_loc(heatmap, landmark):
     batch_size = (heatmap.size()[0])
     landmark_present = []
@@ -40,7 +44,7 @@ def landmark_loc(heatmap, landmark):
     # if True then for that coord it is COM, if false then need to produce heatmap of zeros
     return coords, landmark_present   
     
-"""
+
 def landmark_loc(locat, heatmap, landmark):
     if locat == 'com':
         return com_structure(heatmap,landmark)
@@ -48,7 +52,7 @@ def landmark_loc(locat, heatmap, landmark):
         return top_structure(heatmap,landmark)
     elif locat == 'bot':
         return bot_structure(heatmap,landmark)
-"""
+
 
 def com_structure(heatmap, landmark): # assumes 1 channel
   # heatmap is batch of either masks or image of 
@@ -207,7 +211,7 @@ def landmarks_coords(heatmap, landmark):
   # if True then has x,y,z of all posn of that landmark, if False then need to produce heatmap of zeros
   return coords, landmark_present   
 
-
+"""
 # takes in heatmap of B x C x H x W x D
 # i.e. batch x 6 channels x H x W x D
 # needs to workout max (x,y,z) for specified landmark
@@ -315,6 +319,7 @@ def point_to_point_mm(mask_x, mask_y, mask_z, pred_x, pred_y, pred_z, patient):
   point_to_point = (((pred_x - mask_x)*pixel_mm_x)**2 + ((pred_y - mask_y)*pixel_mm_y)**2 + ((pred_z - mask_z)*pixel_mm_z)**2)**0.5 
   return point_to_point
 
+"""
 def point_to_point_mm_old(mask_x, mask_y, mask_z, pred_x, pred_y, pred_z, patient):
   # calculates point to point in mm
   data = csv.reader(open(os.path.join(S.root, 'image_dimensions.csv')),delimiter=',')
@@ -355,7 +360,7 @@ def point_to_point_mm_old(mask_x, mask_y, mask_z, pred_x, pred_y, pred_z, patien
       pixel_mm_z = torch.tensor(float(pixel_mm_z)).to(S.device)
   point_to_point = (((pred_x - mask_x)*pixel_mm_x)**2 + ((pred_y - mask_y)*pixel_mm_y)**2 + ((pred_z - mask_z)*pixel_mm_z)**2)**0.5 
   return point_to_point
-
+"""
 
 def gaussian(x,y,z, targ_coords, sigma, gamma, dimension = 3): # assumes in 2d space
   # x, y are general coords and targ_coords define mean of gaussian
@@ -379,6 +384,7 @@ def gaussian_map(peak_x,peak_y,peak_z, sigma,gamma,x_size,y_size, z_size, output
     # note multiply to ensure spherical
   return h
 
+"""
 # new gaussian map function produces gaussian target based on every location of landmark in target
 def gaussian_map_expansive(landmarks, landmarks_size, sigma, gamma, x_size, y_size, z_size, dimension =3):
   # x/y/z_landmarks gives multiple locations of landmark
@@ -389,7 +395,7 @@ def gaussian_map_expansive(landmarks, landmarks_size, sigma, gamma, x_size, y_si
     peak_x, peak_y, peak_z = landmarks[i][0], landmarks[i][1], landmarks[i][2]
     h += pre_factor * torch.exp( -((torch.tensor(x).to(S.device)-peak_x)**2 + (torch.tensor(y).to(S.device)-peak_y)**2 + (torch.tensor(z).to(S.device)-peak_z)**2) / (2.*sigma*sigma) )
   return h
-
+"""
 
 def print_metrics(metrics,  epoch_samples, phase): # not sure??
     print('Phase: Landmark, Value')
@@ -410,19 +416,93 @@ def string(s):
     return '_' + str(s)
 
 def rotate(x_coord, y_coord, z_coord, x_size, y_size, z_size, angle, axis):
-    x,y, z = x_coord - (x_size-1)/2, y_coord - (y_size-1)/2, z_coord - (z_size-1)/2 
+    
+    c = math.cos(math.radians(angle))
+    s = math.sin(math.radians(angle))
+    
+    x_offset = (x_size - 1)/2 #- math.cos(math.radians(angle)) * ((x_size - 1)/2) - math.sin(math.radians(angle)) * ((z_size- 1)/2)
+    y_offset = (y_size - 1)/2
+    z_offset = (z_size - 1)/2
+    
+    x,y, z = x_coord - x_offset, y_coord - y_offset, z_coord - z_offset
+  
     if axis == [1,0]:
-        y_new = math.cos(math.radians(-angle)) * y - math.sin(math.radians(-angle)) * z
-        z_new = math.cos(math.radians(-angle)) * z + math.sin(math.radians(-angle)) * y 
-        return x, y_new + (y_size-1)/2, z_new + (z_size-1)/2
+        y_new = s * z + c * y
+        z_new = c * z - s * y 
+        x_new = x
     elif axis == [1,2]:
-        x_new = math.cos(math.radians(-angle)) * x - math.sin(math.radians(-angle)) * y
-        y_new = math.cos(math.radians(-angle)) * y + math.sin(math.radians(-angle)) * x
-        return x_new, y_new, z
-    elif axis == [2,0]:
-        x_new = math.cos(math.radians(angle)) * x + math.sin(math.radians(angle)) * z
-        z_new = math.cos(math.radians(angle)) * z - math.sin(math.radians(angle)) * x
-        return x_new, y, z_new        
+        x_new = s * y + c * x
+        y_new = c * y - s * x
+        z_new = z
+    elif axis == [2,0]:                  
+        x_new = s * z + c * x
+        z_new = c * z - s * x
+        y_new = y      
+
+    return x_new + x_offset, y_new + y_offset, z_new + z_offset
+
+def save_obj_pickle(obj, root, name):
+    with open(os.path.join(root, name) + '.pkl', 'wb') as f:
+        pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)
+
+def load_obj_pickle(root, name):
+    with open(os.path.join(root, name) + '.pkl', 'rb') as f:
+        return pickle.load(f)
+    
+def line_learn_loc(coords_1, coords_2):
+    coords = {}
+    for k in S.landmarks_total:
+        coords[k] = {}
+    for k in S.landmarks_total:
+        x_1, y_1, z_1 = coords_1[k]['x'], coords_1[k]['y'], coords_1[k]['z']
+        x_2, y_2, z_2 = coords_2[k]['x'], coords_2[k]['y'], coords_2[k]['z']
+        t = random.random()
+        coords[k]['x'] = x_2 + t(x_2 - x_1)
+        coords[k]['y'] = y_2 + t(y_2 - y_1)
+        coords[k]['z'] = z_2 + t(z_2 - z_1)
+        if coords_1[k]['locat'] != coords_2[k]['locat']:
+            print('ERROR DIFFERENT TYPES OF POINTS')
+        else:
+            coords[k]['locat'] = coords_1[k]['locat']
+    return coords
+
+def mean_from_clickers(coords_1, coords_2): 
+    coords = {}
+    for k in S.landmarks_total:
+        coords[k] = {}
+    for k in S.landmarks_total:
+        x_1, y_1, z_1 = coords_1[k]['x'], coords_1[k]['y'], coords_1[k]['z']
+        x_2, y_2, z_2 = coords_2[k]['x'], coords_2[k]['y'], coords_2[k]['z']
+        coords[k]['x'] = (x_1 + x_2)/2
+        coords[k]['y'] = (y_1 + y_2)/2
+        coords[k]['z'] = (z_1 + z_2)/2
+        if coords_1[k]['locat'] != coords_2[k]['locat']:
+            print('ERROR DIFFERENT TYPES OF POINTS')
+        else:
+            coords[k]['locat'] = coords_1[k]['locat']
+    return coords
+    
+
+def aug_to_orig(pred_max_x, pred_max_y, pred_max_z, downsample, patient):
+    if downsample == True: # convert a downsample
+        # convert pred max to location in full size image
+          if patient in S.downsample_ratio_list:
+            pred_max_x = pred_max_x * S.downsample_ratio_list[patient]['w']
+            pred_max_y = pred_max_y * S.downsample_ratio_list[patient]['h']
+            pred_max_z = pred_max_z * S.downsample_ratio_list[patient]['d']   
+          else:
+              print('shouldnt get here')    
+              pred_max_x = pred_max_x * (structure_original.shape[3]/structure.shape[3])
+              pred_max_y = pred_max_y * (structure_original.shape[2]/structure.shape[2])
+              pred_max_z = pred_max_z * (structure_original.shape[4]/structure.shape[4])
+    
+    elif downsample == False: # convert a crop
+        print('shouldnt get here')
+        print(bob)
+    
+    return pred_max_x, pred_max_y, pred_max_z
+    
+        
         
         
 #os.chdir(S.coding_path) # change to data path and change back at end

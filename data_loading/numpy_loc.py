@@ -39,7 +39,8 @@ def com_structure_np(structure, landmark, patient): # assumes 1 channel
     x_com /= len(locations[0])
     y_com /= len(locations[0])
     z_com /= len(locations[0])
-  coords = [int(x_com),int(y_com),int(z_com)]
+  # get rid of int in coords
+  coords = [x_com,y_com,z_com]
   return coords, landmark_present 
 
 
@@ -118,7 +119,7 @@ def line_structure_np(structure, landmark, patient): # assumes 1 channel
     x = locations[2][index]
     y = locations[1][index]
     z = locations[0][index]
-  coords = [int(x),int(y),int(z)]
+  coords = [x,y,z]
   print('coords')
   print(coords)
   return coords, landmark_present, coords

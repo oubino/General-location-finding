@@ -45,11 +45,14 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
             for batch in data_loaders.dataloaders[phase]:
                     # print dataloader 
                     inputs = batch['image']
-                    labels = batch['structure']
                     idx = batch['idx']
+                    target_coords = batch['coords']
                    # print(labels.size())
                     inputs = inputs.float().to(S.device)
-                    labels = labels.float().to(S.device)
+                    #target_coords = target_coords.to(S.device)
+                    patients = batch['patient']
+                    
+                    # target_coords is a dictioanry so is [landmarks]['x'][batch_id]
 
                     # zero the parameter gradients
                     #print('zero the grad')
@@ -65,7 +68,7 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
                         with torch.cuda.amp.autocast(enabled = S.use_amp):
                             outputs = model((inputs))
                             # 1. convert masks to heatmaps inside loss function (allows sigma optimisation)
-                            loss = loss_func.calc_loss_gauss(model, inputs, outputs, labels, idx, metrics_landmarks,alpha,reg,gamma,imgs_in_set,sigmas)
+                            loss = loss_func.calc_loss_gauss(model, inputs, outputs, target_coords, idx, metrics_landmarks,alpha,reg,gamma,imgs_in_set,sigmas)
                         
                         # print image for comparison
                         if imgs_in_set == 0:

@@ -6,6 +6,7 @@ import os
 import numpy as np
 
 import settings
+from useful_functs import functions
 
 #os.chdir(settings.root) # change to data path and change back at end
 
@@ -13,7 +14,7 @@ import settings
 class CTDataset(Dataset):
     """3D CT Scan dataset."""
 
-    def __init__(self, root, transform_train =None, transform_test = None, transform_test_no_ds = None, test = False):
+    def __init__(self, root, transform_train =None, transform_test = None, test = False, train = False):
         """
         Args:
             root (string): Directory with all the images.
@@ -26,51 +27,39 @@ class CTDataset(Dataset):
         # self.structure_centres = list(sorted(os.listdir(os.path.join(root, "Structure Centres"))))
         self.transform_train = transform_train
         self.transform_test = transform_test
-        self.transform_test_no_ds = transform_test_no_ds
+        #self.transform_test_no_ds = transform_test_no_ds
         self.test = False
+        self.train = False
         
     def __getitem__(self, idx):
         if torch.is_tensor(idx): # convert tensor to list to index items
             idx = idx.tolist() 
+            
         img_path = os.path.join(self.root, "CTs", self.imgs[idx]) # image path is combination of root and index 
-        structure_path = os.path.join(self.root, "Structures", self.structures[idx])
-        # structure_centre_path = os.path.join(self.root, "Structure Centres", self.structure_centres[idx])
-
         img = np.load(img_path) # image read in as numpy array
-        structure = np.load(structure_path) # mask - think 0 = background
-        # structure_centre = np.load(structure_centre_path)
         
-        #print(img.shape)
-
-        sample = {'image': img, 'structure': structure} # both are nd.arrays, stored in sample dataset
+        sample = {'image': img} # both are nd.arrays, stored in sample dataset
         sample['idx'] = idx # should print out which image is problematic
         sample['patient'] = self.imgs[idx]
-
-        sample['coords'] = {}
-        for k in settings.landmarks_total:
-            sample['coords'][k] = [0,0,0] # x,y,z
         
+        # load in structure coords
+        if settings.train_line == True:
+            struc_coord_1 = functions.load_obj_pickle(settings.root, 'coords_Oli')
+            struc_coord_2 = functions.load_obj_pickle(settings.root, 'coords_Aaron')  
+            struc_coord_1 = struc_coord_1[sample['patient']]
+            struc_coord_2 = struc_coord_2[sample['patient']]  
+            struc_coord = functions.line_learn_loc(struc_coord_1, struc_coord_2)
+        elif settings.train_line == False:
+            struc_coord = functions.load_obj_pickle(settings.root, 'coords_' + settings.clicker)  
+            struc_coord = struc_coord[sample['patient']]
+        sample['coords'] = struc_coord    
         
         if (self.transform_train) and (self.test == False):
             sample = self.transform_train(sample)
         if (self.transform_test) and (self.test == True):
-            # need to pull through twice to get orig and normal struc
-            sample_temp = sample
-            sample_temp = self.transform_test_no_ds(sample_temp)
             sample = self.transform_test(sample)
-            sample['structure_original'] = sample_temp['structure']
-            #sample['image'] = self.transform_test(sample)['image']
-            #sample['structure'] = self.transform_test(sample)['structure']
         
-        #sample['idx'] = idx
-                
-        if (structure.max() != structure.min()): # exclude images where no mask
-          #print('mask_max:%5.2f, mask_min:%5.2f' % (mask.max(),mask.min()))
-          #print('x where its equal to 1')
-          #print((np.where(mask == mask.max())[0]))
-          return sample 
-        else:
-          print('no structure?')
+        return sample
     
     def __len__(self):
         return len(self.imgs) # get size of dataset
