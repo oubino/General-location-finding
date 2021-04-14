@@ -96,7 +96,7 @@ class CentreCrop(object):
           y = y - y_left
           z = z - z_left
           coords[l]['x'] = x
-          coords[l]['y']=  y
+          coords[l]['y'] = y
           coords[l]['z'] = z
     
           # failsafe

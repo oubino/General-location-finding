@@ -52,7 +52,7 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
         
         struc_loc = struc_coord[patient[i]]
 
-        if struc_loc[l]['present'] == True:
+        if struc_loc[l]['present'] == 1:
         # change to top structure
           dimension = 3
           height_guess = ((gamma) * (2*np.pi)**(-dimension/2) * sigmas[l].item() ** (-dimension)) 
