@@ -22,7 +22,7 @@ class CTDataset(Dataset):
                 on a sample.
         """
         self.root = root
-        self.root_struc = root_struc
+       # self.root_struc = root_struc
         self.imgs = list(sorted(os.listdir(os.path.join(root, "CTs")))) # ensure they're aligned & index them
         self.transform_train = transform_train
         self.transform_test = transform_test
