@@ -26,7 +26,7 @@ elif S.downsample_user == False:
     trans_augment = transforms.Compose([T.Upsidedown_scipy(), T.Extract_landmark_location(test = False), T.Fix_base_value(), T.Normalise(S.normal_min, S.normal_max, S.normal_window),T.CentreCrop(S.in_z,S.in_x,S.in_y), T.Flips_scipy(), T.Horizontal_flip(), T.ToTensor()])
 
 
-dataset = D.CTDataset(S.root, transform_train = trans_augment, transform_test = trans_plain, test = False)
+dataset = D.CTDataset(S.root, S.root_struc, transform_train = trans_augment, transform_test = trans_plain, test = False)
 
 def init(fold, train_ids, test_ids):
     # initialise dataloader 
