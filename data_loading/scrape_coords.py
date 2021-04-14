@@ -1,6 +1,8 @@
 import os
+print(os.getcwd)
 coding_path = r'C:\Users\olive\OneDrive\Documents\GitHub\General-location-finding'
 coding_path_aaron = r'/home/rankinaaron98/General-location-finding'
+coding_path_aaron = r'C:\Users\ranki_252uikw\Documents\MPhysS2\General-location-finding'
 os.chdir(coding_path_aaron)
 # scrape coords and save
 import pickle
