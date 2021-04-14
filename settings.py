@@ -169,7 +169,11 @@ def init():
     UNET_model_user = True
     
     # decision on whether to crop or downsample
-    downsample_user = False
+    downsample_q = input ("Downsample(y)/crop(n) ")
+    if downsample_q == 'y':
+        downsample_user = True
+    elif downsample_q == 'n':
+        downsample_user = False
     
     print('Downsample')
     print(downsample_user)
