@@ -13,7 +13,7 @@ import settings
 class CTDataset(Dataset):
     """3D CT Scan dataset."""
 
-    def __init__(self, root, transform_train =None, transform_test = None, test = False):
+    def __init__(self, root, root_struc, transform_train =None, transform_test = None, test = False):
         """
         Args:
             root (string): Directory with all the images.
@@ -22,7 +22,7 @@ class CTDataset(Dataset):
         """
         self.root = root
         self.imgs = list(sorted(os.listdir(os.path.join(root, "CTs")))) # ensure they're aligned & index them
-        self.structures = list(sorted(os.listdir(os.path.join(root, "Structures"))))
+        self.structures = list(sorted(os.listdir(os.path.join(root_struc, "Structures"))))
         # self.structure_centres = list(sorted(os.listdir(os.path.join(root, "Structure Centres"))))
         self.transform_train = transform_train
         self.transform_test = transform_test
@@ -31,8 +31,8 @@ class CTDataset(Dataset):
     def __getitem__(self, idx):
         if torch.is_tensor(idx): # convert tensor to list to index items
             idx = idx.tolist() 
-        img_path = os.path.join(r'/home/rankinaaron98/data/Facial_asymmetry_reclicks', "CTs", self.imgs[idx]) # image path is combination of root and index 
-        structure_path = os.path.join(self.root, "Structures", self.structures[idx])
+        img_path = os.path.join(self.root, "CTs", self.imgs[idx]) # image path is combination of root and index 
+        structure_path = os.path.join(self.root_struc, "Structures", self.structures[idx])
         # structure_centre_path = os.path.join(self.root, "Structure Centres", self.structure_centres[idx])
 
         img = np.load(img_path) # image read in as numpy array

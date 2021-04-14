@@ -14,7 +14,7 @@ def init():
     global step_size, threshold_img_print, normal_min, normal_max
     global normal_window, use_amp, downsample_ratio_h, downsample_ratio_w
     global downsample_ratio_d, downsample_idx_list
-    global root, device
+    global root, device, root_struc
     global batch_accumulation
     global coding_path
     global pred_max
@@ -61,12 +61,14 @@ def init():
             if combined_data == True:
                 # Aaron paths
                 coding_path = r'/home/rankinaaron98/General-location-finding'
-                root = r'/home/rankinaaron98/data/Facial_asymmetry_combined'
+                root = r'/home/rankinaaron98/data/Facial_asymmetry_reclicks'
+                
                 save_data_path = r'/home/rankinaaron98/data/results/Aaron'
             elif combined_data == False:
                 # Aaron paths
                 coding_path = r'/home/rankinaaron98/General-location-finding'
                 root = r'/home/rankinaaron98/data/Facial_asymmetry_aaron_reclicks'
+                root_struc = r'/home/rankinaaron98/data/Facial_asymmetry_aaron_reclicks'
                 save_data_path = r'/home/rankinaaron98/data/results/Aaron'
         # load model path
         elif aaron_or_oli == False:           
