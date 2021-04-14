@@ -1,5 +1,5 @@
 import os
-print(os.getcwd)
+print(os.getcwd())
 #coding_path = r'C:\Users\olive\OneDrive\Documents\GitHub\General-location-finding'
 coding_path_aaron = r'/home/rankinaaron98/General-location-finding'
 coding_path_oli =  r'/home/olive/GitHub/General-location-finding'
@@ -7,14 +7,12 @@ coding_path_oli =  r'/home/olive/GitHub/General-location-finding'
 os.chdir(coding_path_oli)
 # scrape coords and save
 import pickle
-print(os.getcwd)
+print(os.getcwd())
 
 
 import numpy as np
 import settings as S
 from data_loading import numpy_loc
-
-
 
 #print()
 
