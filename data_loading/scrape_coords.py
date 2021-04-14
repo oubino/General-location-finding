@@ -1,16 +1,20 @@
+import os
+coding_path = r'C:\Users\olive\OneDrive\Documents\GitHub\General-location-finding'
+coding_path_aaron = r'/home/rankinaaron98/General-location-finding'
+os.chdir(coding_path_aaron)
 # scrape coords and save
 import pickle
-import os
+
 import numpy as np
 import settings as S
 from data_loading import numpy_loc
 
-coding_path = r'C:\Users\olive\OneDrive\Documents\GitHub\General-location-finding'
-coding_path_aaron = r'/home/rankinaaron98/General-location-finding'
-os.chdir(coding_path_aaron)
 
 
+#print()
 
+
+print('here')
 S.init()
     
 test = False
