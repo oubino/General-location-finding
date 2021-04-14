@@ -292,7 +292,7 @@ def init_load():
         run_folder = "run_10_apr_k_fold"
     elif aaron_or_oli == False:
         #run_folder = "run_22_mar_test_aaron_my_data"
-        run_folder = "run_13_apr_debug"
+        run_folder = "run_14_apr_test_line"
 
     # make user double check correct
     print('\n')
