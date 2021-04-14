@@ -21,6 +21,7 @@ class CTDataset(Dataset):
                 on a sample.
         """
         self.root = root
+        self.root_struc = root_struc
         self.imgs = list(sorted(os.listdir(os.path.join(root, "CTs")))) # ensure they're aligned & index them
         self.structures = list(sorted(os.listdir(os.path.join(root_struc, "Structures"))))
         # self.structure_centres = list(sorted(os.listdir(os.path.join(root, "Structure Centres"))))
