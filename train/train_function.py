@@ -53,8 +53,6 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
                     patients = batch['patient']
                     
                     # target_coords is a dictioanry so is [landmarks]['x'][batch_id]
-                    print('target coords')
-                    print(target_coords)
 
                     # zero the parameter gradients
                     #print('zero the grad')

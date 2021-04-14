@@ -58,9 +58,6 @@ class CTDataset(Dataset):
             sample = self.transform_train(sample)
         if (self.transform_test) and (self.test == True):
             sample = self.transform_test(sample)
-            
-        print('sample in dataset')
-        print(sample['coords'])
         
         return sample
     

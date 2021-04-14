@@ -66,7 +66,7 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
           pred_max_x, pred_max_y, pred_max_z =  pred_coords_max[i][0], pred_coords_max[i][1], pred_coords_max[i][2] 
           
           # convert pred to location in orig img
-          pred_max_x, pred_max_y, pred_max_z = functions.aug_to_orig(pred_max_x, pred_max_y, pred_max_z, S.downsample_user, patient[i][0])
+          pred_max_x, pred_max_y, pred_max_z = functions.aug_to_orig(pred_max_x, pred_max_y, pred_max_z, S.downsample_user, patient[i])
           
           # print out 3D images for first one in batch
           if batch_number == 0 and i == 0: # for first batch 
@@ -82,10 +82,10 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
             print('\n')
             # print 2D slice
             print('2D slice for landmark %1.0f' % l)
-            print_2D_slice(l, pred_max_x, pred_max_y, pred_max_z, structure_max_x, structure_max_y, structure_max_z ,eval_path, patient[i][0])
+            print_2D_slice(l, pred_max_x, pred_max_y, pred_max_z, structure_max_x, structure_max_y, structure_max_z ,eval_path, patient[i])
                       
           # point to point takes in original structure location!!
-          img_landmark_point_to_point = functions.point_to_point_mm(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z, patient[i][0])
+          img_landmark_point_to_point = functions.point_to_point_mm(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z, patient[i])
           p2p_landmarks[l] = np.append(p2p_landmarks[l],img_landmark_point_to_point.cpu())
           # if img_point_to_point > 20mm is an outlier
           if img_landmark_point_to_point > 20:
@@ -207,7 +207,7 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold, clicker
           pred_max_x, pred_max_y, pred_max_z =  pred_coords_max[i][0], pred_coords_max[i][1], pred_coords_max[i][2] 
                   
           # convert pred to location in orig img
-          pred_max_x, pred_max_y, pred_max_z = functions.aug_to_orig(pred_max_x, pred_max_y, pred_max_z, S.downsample_user, patient[i][0])
+          pred_max_x, pred_max_y, pred_max_z = functions.aug_to_orig(pred_max_x, pred_max_y, pred_max_z, S.downsample_user, patient[i])
           
           for k in keys: # clicker_1, clicker_2, and mean
                         
@@ -227,7 +227,7 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold, clicker
                     print('\n')
                               
                   # point to point takes in original structure location!!
-                  img_landmark_point_to_point = functions.point_to_point_mm(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z, patient[i][0])
+                  img_landmark_point_to_point = functions.point_to_point_mm(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z, patient[i])
                   p2p_landmarks[k][l] = np.append(p2p_landmarks[l],img_landmark_point_to_point.cpu())
                   # if img_point_to_point > 20mm is an outlier
                   if img_landmark_point_to_point > 20:
@@ -297,14 +297,14 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold, clicker
       txt_file.close()
 
 
-def print_2D_slice(image, structure, pred, landmark, pred_x, pred_y, pred_z, structure_coord, eval_path, patient):
+def print_2D_slice_line(landmark, pred_x, pred_y, pred_z, structure_coord, eval_path, patient):
     
     # image
     #  D x H x W
     img_path = os.path.join(S.root, "CTs", patient) 
     img = np.load(img_path)
         
-    #fig = plt.figure(figsize=(7, 7))
+    plt.figure(figsize=(7, 7))
         
     pred_z = int(pred_z) # convert to nearest int
     img = img[pred_z, :, :]
@@ -319,8 +319,8 @@ def print_2D_slice(image, structure, pred, landmark, pred_x, pred_y, pred_z, str
     plt.plot(pred_y.cpu().numpy(), pred_x.cpu().numpy(),color='green', marker='o', label = 'pred')
     # add z annotation
     plt.annotate("%1.0f" % pred_z,(pred_y.cpu().numpy(), pred_x.cpu().numpy()), color = 'green')
-    plt.annotate("%1.0f" % int(struc_z_1.cpu().numpy()),(struc_y_1.cpu().numpy(), struc_x_1.cpu().numpy()), color = 'red')
-    plt.annotate("%1.0f" % int(struc_z_2.cpu().numpy()),(struc_y_2.cpu().numpy(), struc_x_2.cpu().numpy()), color = 'blue')
+    plt.annotate("%1.0f" % int(struc_z_1),(struc_y_1, struc_x_1), color = 'red')
+    plt.annotate("%1.0f" % int(struc_z_2),(struc_y_2, struc_x_2), color = 'blue')
     plt.legend()
     # ------------------------------------
     
@@ -328,25 +328,25 @@ def print_2D_slice(image, structure, pred, landmark, pred_x, pred_y, pred_z, str
     S.img_counter_3 += 1
     plt.savefig(img_name)
     
-def print_2D_slice_line(image, structure, pred, landmark, pred_x, pred_y, pred_z, struc_x, struc_y, struc_z, eval_path, patient):
+def print_2D_slice(landmark, pred_x, pred_y, pred_z, struc_x, struc_y, struc_z, eval_path, patient):
     
     # image
     #  D x H x W
     img_path = os.path.join(S.root, "CTs", patient) 
     img = np.load(img_path)
         
-    #fig = plt.figure(figsize=(7, 7))
+    plt.figure(figsize=(7, 7))
         
     pred_z = int(pred_z) # convert to nearest int
     img = img[pred_z, :, :]
     
     # ---- plot as point ------
-    plt.imshow(image,cmap = 'Greys_r', alpha = 0.9)
-    plt.plot(struc_y.cpu().numpy(), struc_x.cpu().numpy(), color = 'red', marker = 'x', label = 'target')
+    plt.imshow(img,cmap = 'Greys_r', alpha = 0.9)
+    plt.plot(struc_y, struc_x, color = 'red', marker = 'x', label = 'target')
     plt.plot(pred_y.cpu().numpy(), pred_x.cpu().numpy(),color='green', marker='o', label = 'pred')
     # add z annotation
     plt.annotate("%1.0f" % pred_z,(pred_y.cpu().numpy(), pred_x.cpu().numpy()), color = 'green')
-    plt.annotate("%1.0f" % int(struc_z.cpu().numpy()),(struc_y.cpu().numpy(), struc_x.cpu().numpy()), color = 'red')
+    plt.annotate("%1.0f" % int(struc_z),(struc_y, struc_x), color = 'red')
     plt.legend()
     # ------------------------------------
     
