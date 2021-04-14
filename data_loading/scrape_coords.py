@@ -4,8 +4,8 @@ import os
 import numpy as np
 
 coding_path = r'C:\Users\olive\OneDrive\Documents\GitHub\General-location-finding'
-
-os.chdir(coding_path)
+coding_path_aaron = r'/home/rankinaaron98/General-location-finding'
+os.chdir(coding_path_aaron)
 
 import settings as S
 from data_loading import numpy_loc
@@ -59,6 +59,6 @@ for i in struc_list:
 
 save_obj(coordinates, 'coords_%s' % S.clicker)
 
-a = load_obj('coords_Oli')
-#print(a)
+a = load_obj('coords_Aaron')
+print(a)
 
