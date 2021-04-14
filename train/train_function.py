@@ -71,9 +71,9 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
                             loss = loss_func.calc_loss_gauss(model, inputs, outputs, target_coords, idx, metrics_landmarks,alpha,reg,gamma,imgs_in_set,sigmas)
                         
                         # print image for comparison
-                        if imgs_in_set == 0:
+                        #if imgs_in_set == 0:
                           # plot image
-                          print(' ---- first image of set ---- (end)')
+                        #  print(' ---- first image of set ---- (end)')
                         # 2. vs convert to heatmap here means no sigma optimisation
 
 
