@@ -229,18 +229,21 @@ def line_learn_crop(coords_1, coords_2):
 
 def mean_from_clickers(coords_1, coords_2): 
     coords = {}
-    for k in S.landmarks_total:
-        coords[k] = {}
-    for k in S.landmarks_total:
-        x_1, y_1, z_1 = coords_1[k]['x'], coords_1[k]['y'], coords_1[k]['z']
-        x_2, y_2, z_2 = coords_2[k]['x'], coords_2[k]['y'], coords_2[k]['z']
-        coords[k]['x'] = (x_1 + x_2)/2
-        coords[k]['y'] = (y_1 + y_2)/2
-        coords[k]['z'] = (z_1 + z_2)/2
-        if coords_1[k]['locat'] != coords_2[k]['locat']:
-            print('ERROR DIFFERENT TYPES OF POINTS')
-        else:
-            coords[k]['locat'] = coords_1[k]['locat']
+    for key in coords_1.keys():
+        coords[key] = {}
+        for k in S.landmarks_total:
+            coords[key][k] = {}
+    for key in coords_1.keys():
+        for k in S.landmarks_total:
+            x_1, y_1, z_1 = coords_1[key][k]['x'], coords_1[key][k]['y'], coords_1[key][k]['z']
+            x_2, y_2, z_2 = coords_2[key][k]['x'], coords_2[key][k]['y'], coords_2[key][k]['z']
+            coords[key][k]['x'] = (x_1 + x_2)/2
+            coords[key][k]['y'] = (y_1 + y_2)/2
+            coords[key][k]['z'] = (z_1 + z_2)/2
+            if coords_1[key][k]['locat'] != coords_2[key][k]['locat']:
+                print('ERROR DIFFERENT TYPES OF POINTS')
+            else:
+                coords[key][k]['locat'] = coords_1[key][k]['locat']
     return coords
     
 
