@@ -54,6 +54,6 @@ for i in struc_list:
 
 save_obj(coordinates, 'coords_%s' % S.clicker)
 
-a = load_obj('coords_%s' & S.clicker)
+a = load_obj('coords_%s' % S.clicker)
 print(a)
 
