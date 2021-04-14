@@ -240,10 +240,10 @@ def mean_from_clickers(coords_1, coords_2):
             coords[key][k]['x'] = (x_1 + x_2)/2
             coords[key][k]['y'] = (y_1 + y_2)/2
             coords[key][k]['z'] = (z_1 + z_2)/2
-            if coords_1[key][k]['locat'] != coords_2[key][k]['locat']:
-                print('ERROR DIFFERENT TYPES OF POINTS')
-            else:
-                coords[key][k]['locat'] = coords_1[key][k]['locat']
+            #if coords_1[key][k]['locat'] != coords_2[key][k]['locat']:
+            #    print('ERROR DIFFERENT TYPES OF POINTS')
+            #else:
+            #    coords[key][k]['locat'] = coords_1[key][k]['locat']
     return coords
     
 
