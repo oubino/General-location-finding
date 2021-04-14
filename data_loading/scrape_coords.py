@@ -12,7 +12,7 @@ print(os.getcwd())
 
 import numpy as np
 
-import settings as S
+from ..data_loading import settings as S
 from data_loading import numpy_loc
 
 #print()
