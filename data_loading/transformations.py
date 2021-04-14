@@ -106,8 +106,8 @@ class CentreCrop(object):
                         
       image_crop = skimage.util.crop(image, ((z_left,z_right),(y_left, y_right), (x_left, x_right)))
           
-      if image_crop.shape[0] != S.in_size_z:
-        print('30 error')
+      if image_crop.shape[0] != S.in_z:
+        print('crop error')
         print('image shape orig')
         print(image.shape)
         print('image shape')
