@@ -53,6 +53,8 @@ def calc_loss_gauss(model, img, pred, target_coords, idx, metrics_landmarks, alp
         z_size = S.in_z #target.size()[4]
     
 
+        print(target_coords)
+        
         # struc/pred location per image
         structure_com_x, structure_com_y, structure_com_z = target_coords[l]['x'][i],target_coords[l]['y'][i], target_coords[l]['z'][i]
         structure_com_x, structure_com_y, structure_com_z = structure_com_x.to(S.device), structure_com_y.to(S.device), structure_com_z.to(S.device)
