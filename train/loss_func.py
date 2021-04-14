@@ -51,6 +51,7 @@ def calc_loss_gauss(model, img, pred, target_coords, idx, metrics_landmarks, alp
         x_size = S.in_x #target.size()[3]
         y_size = S.in_y #target.size()[2] 
         z_size = S.in_z #target.size()[4]
+    
 
         # struc/pred location per image
         structure_com_x, structure_com_y, structure_com_z = target_coords[l]['x'][i],target_coords[l]['y'][i], target_coords[l]['z'][i]
@@ -70,7 +71,7 @@ def calc_loss_gauss(model, img, pred, target_coords, idx, metrics_landmarks, alp
         #img_landmark_point_to_point = point_to_point_mm(structure_com_x, structure_com_y, structure_com_z, pred_max_x, pred_max_y, pred_max_z, idx[i].item())
 
         # create target gauss map
-        if target_coords[l]['present'][i] == True:
+        if target_coords[l]['present'][i] == 1:
           targ_gaus = functions.gaussian_map(structure_com_x,structure_com_y, structure_com_z,S.sigmas[l],gamma,x_size,y_size,z_size, output = True) 
         else:
           # target is full of zeros

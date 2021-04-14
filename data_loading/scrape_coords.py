@@ -28,7 +28,8 @@ def load_obj(name):
 struc_list = list(sorted(os.listdir(os.path.join(S.root, "Structures"))))
 structure_path = os.path.join(S.root, "Structures")
 print(struc_list)
-"""
+
+
 coordinates = {}
 
 for i in struc_list:
@@ -48,19 +49,16 @@ for i in struc_list:
             x, y, z = coords[0], coords[1], coords[2]
             #structure_mod[z][y][x] = l
             coordinates[i][l]['x'], coordinates[i][l]['y'], coordinates[i][l]['z'] = x,y,z
-            coordinates[i][l]['locat'] = S.landmarks_total_loc[l]
-            coordinates[i][l]['present'] = True
+            #coordinates[i][l]['locat'] = S.landmarks_total_loc[l]
+            coordinates[i][l]['present'] = 1 # 1 
         else:
-            coordinates[i][l]['present'] = False
-            coordinates[i][l]['locat'] = 'absent'
-            
+            #coordinates[i][l]['locat'] = False
+            coordinates[i][l]['present'] = 0
+
             
 
 save_obj(coordinates, 'coords_%s' % S.clicker)
-"""
-a = load_obj('coords_Oli')
-print(a)
 
-for i in struc_list:
-    for l in S.landmarks_total:
-        print(a[i][l]['present'])
+a = load_obj('coords_Oli')
+#print(a)
+

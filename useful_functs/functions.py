@@ -486,6 +486,10 @@ def mean_from_clickers(coords_1, coords_2):
 def aug_to_orig(pred_max_x, pred_max_y, pred_max_z, downsample, patient):
     if downsample == True: # convert a downsample
         # convert pred max to location in full size image
+          print('patient')
+          print(patient)
+          print('downsample list')
+          print(S.downsample_ratio_list)
           if patient in S.downsample_ratio_list:
             pred_max_x = pred_max_x * S.downsample_ratio_list[patient]['w']
             pred_max_y = pred_max_y * S.downsample_ratio_list[patient]['h']

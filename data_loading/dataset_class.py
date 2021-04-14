@@ -52,7 +52,7 @@ class CTDataset(Dataset):
         elif settings.train_line == False:
             struc_coord = functions.load_obj_pickle(settings.root, 'coords_' + settings.clicker)  
             struc_coord = struc_coord[sample['patient']]
-        sample['coords'] = struc_coord    
+        sample['coords'] = struc_coord           
         
         if (self.transform_train) and (self.test == False):
             sample = self.transform_train(sample)
