@@ -206,7 +206,7 @@ def init():
     else:
         print('ERROR')
 
-    
+     
 def init_new():
     # oli vs aaron settings 
     global epoch_batch, num_epoch_batches

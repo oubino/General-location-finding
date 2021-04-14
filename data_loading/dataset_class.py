@@ -23,7 +23,7 @@ class CTDataset(Dataset):
         """
         self.root = root
         self.imgs = list(sorted(os.listdir(os.path.join(root, "CTs")))) # ensure they're aligned & index them
-        self.structures = list(sorted(os.listdir(os.path.join(root, "Structures"))))
+        #self.structures = list(sorted(os.listdir(os.path.join(root, "Structures"))))
         # self.structure_centres = list(sorted(os.listdir(os.path.join(root, "Structure Centres"))))
         self.transform_train = transform_train
         self.transform_test = transform_test
