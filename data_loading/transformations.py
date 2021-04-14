@@ -191,7 +191,7 @@ class Flips_scipy(object):
             # check if still within bounds due to rotation!
             if out_of_bounds == False:
                 image = scipy.ndimage.rotate(image, angle, axes = [1,0],reshape = False, order = 3)
-                coords = coords_rotat   
+                coords[l]['x'], coords[l]['y'], coords[l]['z'] = coords_rotat[l]['x'], coords_rotat[l]['y'], coords_rotat[l]['z']
             else:
                 print('ROTATION OUT OF BOUNDS')
                 
@@ -206,7 +206,7 @@ class Flips_scipy(object):
             # check if still within bounds due to rotation!
             if out_of_bounds == False:
                 image = scipy.ndimage.rotate(image, angle, axes = [1,2],reshape = False, order = 3)
-                coords = coords_rotat 
+                coords[l]['x'], coords[l]['y'], coords[l]['z'] = coords_rotat[l]['x'], coords_rotat[l]['y'], coords_rotat[l]['z']
             else:
                 print('ROTATION OUT OF BOUNDS')
 
@@ -220,7 +220,7 @@ class Flips_scipy(object):
             # check if still within bounds due to rotation!
             if out_of_bounds == False:
                 image = scipy.ndimage.rotate(image, angle, axes = [2,0],reshape = False, order = 3)
-                coords = coords_rotat       
+                coords[l]['x'], coords[l]['y'], coords[l]['z'] = coords_rotat[l]['x'], coords_rotat[l]['y'], coords_rotat[l]['z']
             else:
                 print('ROTATION OUT OF BOUNDS')
 

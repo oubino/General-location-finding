@@ -52,7 +52,7 @@ for i in struc_list:
             #coordinates[i][l]['locat'] = S.landmarks_total_loc[l]
             coordinates[i][l]['present'] = 1 # 1 
         else:
-            #coordinates[i][l]['locat'] = False
+            #coordinates[i][l]['locat'] = 'absent'
             coordinates[i][l]['present'] = 0
 
             
