@@ -48,7 +48,7 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
     
     for l in S.landmarks: # cycle over all landmarks
       
-      for i in range(S.batch_size_test):
+      for i in range(image.size()[0]): # batch size
         
         struc_loc = struc_coord[patient[i]]
 
@@ -194,7 +194,7 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold, clicker
     
     for l in S.landmarks: # cycle over all landmarks
       
-      for i in range(S.batch_size_test):
+      for i in range(image.size()[0]): # batch size
           
           dimension = 3
           height_guess = ((gamma) * (2*np.pi)**(-dimension/2) * sigmas[l].item() ** (-dimension)) 

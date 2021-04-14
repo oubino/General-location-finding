@@ -44,17 +44,14 @@ def calc_loss_gauss(model, img, pred, target_coords, idx, metrics_landmarks, alp
       total_point_to_point_landmark = 0
     
       # for every image in batch
-      for i in range(S.batch_size): 
+      for i in range(img.size()[0]): # batch size
 
         img_number = epoch_samples + i # epoch_samples is 0, 32, 64 e.g. if batch is size 32
       
         x_size = S.in_x #target.size()[3]
         y_size = S.in_y #target.size()[2] 
         z_size = S.in_z #target.size()[4]
-    
-
-        print(target_coords)
-        
+            
         # struc/pred location per image
         structure_com_x, structure_com_y, structure_com_z = target_coords[l]['x'][i],target_coords[l]['y'][i], target_coords[l]['z'][i]
         structure_com_x, structure_com_y, structure_com_z = structure_com_x.to(S.device), structure_com_y.to(S.device), structure_com_z.to(S.device)
