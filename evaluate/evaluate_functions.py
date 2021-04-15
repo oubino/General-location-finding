@@ -234,7 +234,7 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
                     outliers_landmarks[k][l] = np.append(outliers_landmarks[k][l],1)
                     
           # print 2D slice
-          print('2D slice for landmark %1.0f' % l)
+          #print('2D slice for landmark %1.0f' % l)
           print_2D_slice_line(l, pred_max_x, pred_max_y, pred_max_z, struc_coord, eval_path, patient[i])
             
     batch_number += 1 # not sure where to put
@@ -303,11 +303,15 @@ def print_2D_slice_line(landmark, pred_x, pred_y, pred_z, structure_coord, eval_
     #  D x H x W
     img_path = os.path.join(S.root, "CTs", patient) 
     img = np.load(img_path)
+    
+    print('shape')
+    print(img.shape)
         
     plt.figure(figsize=(7, 7))
         
     pred_z = int(pred_z) # convert to nearest int
     img = img[pred_z, :, :]
+
     
     struc_x_1, struc_y_1, struc_z_1 = structure_coord['clicker_1'][patient][landmark]['x'], structure_coord['clicker_1'][patient][landmark]['y'], structure_coord['clicker_1'][patient][landmark]['z']
     struc_x_2, struc_y_2, struc_z_2 = structure_coord['clicker_2'][patient][landmark]['x'], structure_coord['clicker_2'][patient][landmark]['y'], structure_coord['clicker_2'][patient][landmark]['z']
