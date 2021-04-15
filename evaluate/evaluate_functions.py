@@ -309,11 +309,11 @@ def print_2D_slice_line(landmark, pred_x, pred_y, pred_z, structure_coord, eval_
     pred_z = int(pred_z) # convert to nearest int
     img = img[pred_z, :, :]
     
-    struc_x_1, struc_y_1, struc_z_1 = structure_coord['clicker_1'][patient]['x'], structure_coord['clicker_1'][patient]['y'], structure_coord['clicker_1'][patient]['z']
-    struc_x_2, struc_y_2, struc_z_2 = structure_coord['clicker_2'][patient]['x'], structure_coord['clicker_2'][patient]['y'], structure_coord['clicker_2'][patient]['z']
+    struc_x_1, struc_y_1, struc_z_1 = structure_coord['clicker_1'][patient][landmark]['x'], structure_coord['clicker_1'][patient][landmark]['y'], structure_coord['clicker_1'][patient][landmark]['z']
+    struc_x_2, struc_y_2, struc_z_2 = structure_coord['clicker_2'][patient][landmark]['x'], structure_coord['clicker_2'][patient][landmark]['y'], structure_coord['clicker_2'][patient][landmark]['z']
 
     # ---- plot as point ------
-    plt.imshow(image,cmap = 'Greys_r', alpha = 0.9)
+    plt.imshow(img,cmap = 'Greys_r', alpha = 0.9)
     plt.plot(struc_y_1.cpu().numpy(), struc_x_1.cpu().numpy(), color = 'red', marker = 'x', label = 'target_oli')
     plt.plot(struc_y_2.cpu().numpy(), struc_x_2.cpu().numpy(), color = 'blue', marker = 'x', label = 'target_aaron')
     plt.plot(pred_y.cpu().numpy(), pred_x.cpu().numpy(),color='green', marker='o', label = 'pred')
