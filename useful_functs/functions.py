@@ -244,6 +244,10 @@ def mean_from_clickers(coords_1, coords_2):
             #    print('ERROR DIFFERENT TYPES OF POINTS')
             #else:
             #    coords[key][k]['locat'] = coords_1[key][k]['locat']
+            if coords_1[key][k]['present'] == 0 or coords_2[key][k]['present'] == 0:
+                coords[key][k]['present'] = 0
+            else:
+                coords[key][k]['present'] = 1
     return coords
     
 
