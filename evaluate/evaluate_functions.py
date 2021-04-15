@@ -163,7 +163,7 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
   except OSError as error:
       print(error)
       
-  keys = ['clicker_1', 'clicker_2', 'mean']
+  keys = ('clicker_1', 'clicker_2', 'mean')
   p2p_landmarks = {}
   outliers_landmarks = {}
   
@@ -211,7 +211,8 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
           
           for k in keys: # clicker_1, clicker_2, and mean
                         
-                struc_loc = struc_coord[k][[patient[i]]]
+                print('patient', patient[i])
+                struc_loc = struc_coord[k][patient[i]]
         
                 if struc_loc[l]['present'] == True:
     
