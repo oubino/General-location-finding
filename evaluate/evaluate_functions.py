@@ -324,7 +324,7 @@ def print_2D_slice_line(landmark, pred_x, pred_y, pred_z, structure_coord, eval_
     plt.legend()
     # ------------------------------------
     
-    img_name = os.path.join(eval_path, "2d_slice_%s.png" % patient[0].replace('.npy', '_%1.0f') % landmark)
+    img_name = os.path.join(eval_path, "2d_slice_%s.png" % patient.replace('.npy', '_%1.0f') % landmark)
     S.img_counter_3 += 1
     plt.savefig(img_name)
     
