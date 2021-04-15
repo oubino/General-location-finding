@@ -211,7 +211,6 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
           
           for k in keys: # clicker_1, clicker_2, and mean
                         
-                print('patient', patient[i])
                 struc_loc = struc_coord[k][patient[i]]
         
                 if struc_loc[l]['present'] == True:
@@ -219,17 +218,17 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
                   structure_max_x, structure_max_y, structure_max_z = struc_loc[l]['x'],struc_loc[l]['y'], struc_loc[l]['z']      
                   
                   # print out images for first one in batch
-                  if batch_number == 0 and i == 0: # for first batch 
-                    print('\n')
-                    print('Structure LOC for landmark %1.0f and clicker %s:' % (l,k))
-                    print(structure_max_x, structure_max_y, structure_max_z)
-                    print('Predicted LOC for landmark %1.0f and clicker %s:' % (l,k))
-                    print(pred_max_x, pred_max_y, pred_max_z)
-                    print('\n')
+                  #if batch_number == 0 and i == 0: # for first batch 
+                   # print('\n')
+                   # print('Structure LOC for landmark %1.0f and clicker %s:' % (l,k))
+                   # print(structure_max_x, structure_max_y, structure_max_z)
+                   # print('Predicted LOC for landmark %1.0f and clicker %s:' % (l,k))
+                   # print(pred_max_x, pred_max_y, pred_max_z)
+                   # print('\n')
                               
                   # point to point takes in original structure location!!
                   img_landmark_point_to_point = functions.point_to_point_mm(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z, patient[i])
-                  p2p_landmarks[k][l] = np.append(p2p_landmarks[l],img_landmark_point_to_point.cpu())
+                  p2p_landmarks[k][l] = np.append(p2p_landmarks[k][l],img_landmark_point_to_point.cpu())
                   # if img_point_to_point > 20mm is an outlier
                   if img_landmark_point_to_point > 20:
                     outliers_landmarks[k][l] = np.append(outliers_landmarks[l],1)
