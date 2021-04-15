@@ -66,10 +66,14 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
                     with torch.set_grad_enabled(phase == 'train'):
                         
                         with torch.cuda.amp.autocast(enabled = S.use_amp):
+                            start_time = time.time()
                             outputs = model((inputs))
                             # 1. convert masks to heatmaps inside loss function (allows sigma optimisation)
+                            print('post outputs')
+                            print(time.time() - start_time)
                             loss = loss_func.calc_loss_gauss(model, inputs, outputs, target_coords, idx, metrics_landmarks,alpha,reg,gamma,imgs_in_set,sigmas)
-                        
+                            print('post loss func')
+                            print(time.time() - start_time)
                         # print image for comparison
                         #if imgs_in_set == 0:
                           # plot image
