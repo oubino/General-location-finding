@@ -8,10 +8,11 @@ import settings
 def init(fold):
     
     # initialise data loader
-    if fold == None:
-        data_loaders.init_load_no_k_fold()
-    else:
-        data_loaders.init_load_k_fold(int(fold))  
+    #if fold == None:
+    #    data_loaders.init_load_no_k_fold()
+    #else:
+    data_loaders.init_load_k_fold(int(fold))  
+    settings.tensorboard_init(fold) # initialise tensorboard writer
 
     load_transfered_model = yes_or_no.question('are you loading in a model which was saved as a transfered model')
     model = load_model.load_model(load_transfered_model)

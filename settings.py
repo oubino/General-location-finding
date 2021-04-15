@@ -37,7 +37,6 @@ def init():
     global k_fold_ids
     global batch_size_test
     global train_line, clicker
-
          
     # paths
     locally_or_server = yes_or_no.question('locally(y) / server(n)')
@@ -225,7 +224,6 @@ def init_new():
     global net_features, scnet_feat
     global run_path, run_folder
     global epoch_load, folds_trained_with, fold_load
-    global writer
     
     epoch_batch = int(input ("Epoch batch: "))
     num_epoch_batches = int(input ("Num epoch batch: "))
@@ -233,11 +231,7 @@ def init_new():
     scnet_feat = 64
     
     # -- AMEND -- 
-    if aaron_or_oli == True:
-        run_folder = "run_14_apr_test_line"
-        #run_folder_load = "run_19_mar_k_fold_aaron"
-    elif aaron_or_oli == False:
-        run_folder = "run_15_apr_ds_192x192x100"
+    run_folder = input ( "run folder (NOTE IT WILL OVERWRITE TENSORBOARD SO MAKE SURE): ")
 
         #run_folder_load = "run_22_mar_test_aaron_my_data"
     # make user double check correct
@@ -251,19 +245,13 @@ def init_new():
         os.mkdir(run_path)  
     except OSError as error:  
             print(error) 
-        
-    # create tensorboard writer
-    tensor_folder = os.path.join(save_data_path, 'tensorboard')
-    tensorboard_loc = os.path.join(tensor_folder, '%s-%s' % (time_stamp,run_folder))
-    writer = SummaryWriter(tensorboard_loc) 
-
+    
 def init_load():
     # oli vs aaron settings 
     global epoch_batch, num_epoch_batches
     global net_features, scnet_feat
     global run_path, run_folder
     global epoch_load, folds_trained_with, fold_load
-    global writer
     global landmarks_load, landmarks_load_loc
     global num_class_load, net_features_load, scnet_feat_load, sigmas_load
 
@@ -291,12 +279,8 @@ def init_load():
       #print(sigmas[k])
         
     # -- AMEND -- 
-    if aaron_or_oli == True:
-        #run_folder = "run_22_mar_oli_kfold_eval"
-        run_folder = "run_10_apr_k_fold"
-    elif aaron_or_oli == False:
-        #run_folder = "run_22_mar_test_aaron_my_data"
-        run_folder = "run_15_apr_ds_192x192x100"
+    run_folder = input ( "run folder (NOTE IT WILL OVERWRITE TENSORBOARD SO MAKE SURE): ")
+
 
     # make user double check correct
     print('\n')
@@ -312,12 +296,17 @@ def init_load():
 
     epoch_load = input ("epoch to load in: ")
     folds_trained_with = 5
-    fold_load = input ("Fold to load in: None for no folds, 0 for fold 0, 1 for fold 1 etc.: ")
+    fold_load = input ("Fold to load in: 0 for fold 0, 1 for fold 1 etc.: ")
+        
+def tensorboard_init(fold):
+    global writer
     
     # create tensorboard writer
     tensor_folder = os.path.join(save_data_path, 'tensorboard')
-    tensorboard_loc = os.path.join(tensor_folder, '%s-%s' % (time_stamp,run_folder))
+    tensorboard_loc = os.path.join(tensor_folder, '%s' % run_folder)
     writer = SummaryWriter(tensorboard_loc) 
+    
+    
     
 # this is only used for final eval on Aaron, Oli, combined
 # implemented to ensure uses same prediction to compare to Aaron, Oli, Combined
