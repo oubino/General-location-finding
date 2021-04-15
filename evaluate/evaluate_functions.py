@@ -343,11 +343,11 @@ def print_2D_slice(landmark, pred_x, pred_y, pred_z, struc_x, struc_y, struc_z, 
     
     # ---- plot as point ------
     plt.imshow(img,cmap = 'Greys_r', alpha = 0.9)
-    plt.plot(struc_y, struc_x, color = 'red', marker = 'x', label = 'target')
-    plt.plot(pred_y.cpu().numpy(), pred_x.cpu().numpy(),color='green', marker='o', label = 'pred')
+    plt.plot(struc_x, struc_y, color = 'red', marker = 'x', label = 'target')
+    plt.plot(pred_x.cpu().numpy(), pred_y.cpu().numpy(),color='green', marker='o', label = 'pred')
     # add z annotation
-    plt.annotate("%1.0f" % pred_z,(pred_y.cpu().numpy(), pred_x.cpu().numpy()), color = 'green')
-    plt.annotate("%1.0f" % int(struc_z),(struc_y, struc_x), color = 'red')
+    plt.annotate("%1.0f" % pred_z,(pred_x.cpu().numpy(), pred_y.cpu().numpy()), color = 'green')
+    plt.annotate("%1.0f" % int(struc_z),(struc_x, struc_y), color = 'red')
     plt.legend()
     # ------------------------------------
     
