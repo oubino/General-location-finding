@@ -303,7 +303,7 @@ def tensorboard_init(fold):
     
     # create tensorboard writer
     tensor_folder = os.path.join(save_data_path, 'tensorboard')
-    tensorboard_loc = os.path.join(tensor_folder, '%s' % run_folder)
+    tensorboard_loc = os.path.join(tensor_folder, '%s_fold_%1.0f' % (run_folder,fold))
     writer = SummaryWriter(tensorboard_loc) 
     
     
