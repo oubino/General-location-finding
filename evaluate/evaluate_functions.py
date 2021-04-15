@@ -304,9 +304,6 @@ def print_2D_slice_line(landmark, pred_x, pred_y, pred_z, structure_coord, eval_
     img_path = os.path.join(S.root, "CTs", patient) 
     img = np.load(img_path)
     
-    print('shape')
-    print(img.shape)
-        
     plt.figure(figsize=(7, 7))
         
     pred_z = int(pred_z) # convert to nearest int
@@ -318,13 +315,13 @@ def print_2D_slice_line(landmark, pred_x, pred_y, pred_z, structure_coord, eval_
 
     # ---- plot as point ------
     plt.imshow(img,cmap = 'Greys_r', alpha = 0.9)
-    plt.plot(struc_y_1, struc_x_1, color = 'red', marker = 'x', label = 'target_oli')
-    plt.plot(struc_y_2, struc_x_2, color = 'blue', marker = 'x', label = 'target_aaron')
-    plt.plot(pred_y.cpu().numpy(), pred_x.cpu().numpy(),color='green', marker='o', label = 'pred')
+    plt.plot(struc_x_1, struc_y_1, color = 'red', marker = 'x', label = 'target_oli')
+    plt.plot(struc_x_2, struc_y_2, color = 'blue', marker = 'x', label = 'target_aaron')
+    plt.plot(pred_x.cpu().numpy(), pred_y.cpu().numpy(),color='green', marker='o', label = 'pred')
     # add z annotation
-    plt.annotate("%1.0f" % pred_z,(pred_y.cpu().numpy(), pred_x.cpu().numpy()), color = 'green')
-    plt.annotate("%1.0f" % int(struc_z_1),(struc_y_1, struc_x_1), color = 'red')
-    plt.annotate("%1.0f" % int(struc_z_2),(struc_y_2, struc_x_2), color = 'blue')
+    plt.annotate("%1.0f" % pred_z,(pred_x.cpu().numpy(), pred_y.cpu().numpy()), color = 'green')
+    plt.annotate("%1.0f" % int(struc_z_1),(struc_x_1, struc_y_1), color = 'red')
+    plt.annotate("%1.0f" % int(struc_z_2),(struc_x_2, struc_y_2), color = 'blue')
     plt.legend()
     # ------------------------------------
     
