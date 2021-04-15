@@ -43,6 +43,7 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
       
             batch_number = 1
             for batch in data_loaders.dataloaders[phase]:
+                    start_time = time.time()
                     # print dataloader 
                     inputs = batch['image']
                     idx = batch['idx']
@@ -51,6 +52,9 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
                     inputs = inputs.float().to(S.device)
                     #target_coords = target_coords.to(S.device)
                     patients = batch['patient']
+                    
+                    print('post batches')
+                    print(time.time() - start_time)
                     
                     # target_coords is a dictioanry so is [landmarks]['x'][batch_id]
 
@@ -92,7 +96,8 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
                             scheduler.step()
                             optimizer.zero_grad()
                                 
-
+                        print('post update params')
+                        print(time.time() - start_time)
 
                     # statistics
                     imgs_in_set += inputs.size(0)
