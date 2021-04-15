@@ -314,8 +314,8 @@ def print_2D_slice_line(landmark, pred_x, pred_y, pred_z, structure_coord, eval_
 
     # ---- plot as point ------
     plt.imshow(img,cmap = 'Greys_r', alpha = 0.9)
-    plt.plot(struc_y_1.cpu().numpy(), struc_x_1.cpu().numpy(), color = 'red', marker = 'x', label = 'target_oli')
-    plt.plot(struc_y_2.cpu().numpy(), struc_x_2.cpu().numpy(), color = 'blue', marker = 'x', label = 'target_aaron')
+    plt.plot(struc_y_1, struc_x_1, color = 'red', marker = 'x', label = 'target_oli')
+    plt.plot(struc_y_2, struc_x_2, color = 'blue', marker = 'x', label = 'target_aaron')
     plt.plot(pred_y.cpu().numpy(), pred_x.cpu().numpy(),color='green', marker='o', label = 'pred')
     # add z annotation
     plt.annotate("%1.0f" % pred_z,(pred_y.cpu().numpy(), pred_x.cpu().numpy()), color = 'green')
