@@ -237,7 +237,7 @@ def init_new():
         run_folder = "run_14_apr_test_line"
         #run_folder_load = "run_19_mar_k_fold_aaron"
     elif aaron_or_oli == False:
-        run_folder = "run_14_apr_test_line"
+        run_folder = "run_15_apr_ds_192x192x100"
 
         #run_folder_load = "run_22_mar_test_aaron_my_data"
     # make user double check correct
