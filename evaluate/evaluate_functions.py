@@ -231,7 +231,7 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
                   p2p_landmarks[k][l] = np.append(p2p_landmarks[k][l],img_landmark_point_to_point.cpu())
                   # if img_point_to_point > 20mm is an outlier
                   if img_landmark_point_to_point > 20:
-                    outliers_landmarks[k][l] = np.append(outliers_landmarks[l],1)
+                    outliers_landmarks[k][l] = np.append(outliers_landmarks[k][l],1)
                     
           # print 2D slice
           print('2D slice for landmark %1.0f' % l)
