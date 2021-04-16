@@ -6,6 +6,7 @@ import os
 import math
 import pickle
 import random
+from skimage import transform
 
 import settings as S
 
@@ -180,11 +181,50 @@ def rotate(x_coord, y_coord, z_coord, x_size, y_size, z_size, angle, axis):
         y_new = c * y - s * x
         z_new = z
     elif axis == [2,0]:                  
-        x_new = s * z + c * x
-        z_new = c * z - s * x
+        x_new = -s * z + c * x # s * z + c * x
+        z_new = c * z + s * x # c * z - s * x
         y_new = y      
 
     return x_new + x_offset, y_new + y_offset, z_new + z_offset
+
+def rotate_img(image, angle, x_size, y_size, z_size, axis):
+    
+    c = math.cos(math.radians(angle))
+    s = math.sin(math.radians(angle))
+    
+    x_offset = (x_size - 1)/2 #- math.cos(math.radians(angle)) * ((x_size - 1)/2) - math.sin(math.radians(angle)) * ((z_size- 1)/2)
+    y_offset = (y_size - 1)/2
+    z_offset = (z_size - 1)/2
+    
+    if axis == [1,0]:       
+        R = np.array([[c, -s, 0, 0],
+                      [s, c, 0, 0]
+                      [0, 0, 1, 0]
+                      [0, 0, 0, 1]])
+        
+    elif axis == [1,2]:
+        R = np.array([[1, 0, 0, 0],
+                      [0, c, -s, 0]
+                      [0, s, c, 0]
+                      [0, 0, 0, 1]])
+    elif axis == [2,0]:         
+        R = np.array([[c, 0, s, 0],
+                      [0, 1, 0, 0]
+                      [-s, 0, c, 0]
+                      [0, 0, 0, 1]])         
+    
+    # translation matrix to shift image center to origin
+    T = np.array([[1, 0, 0, -z_offset],
+                  [0, 1, 0, -y_offset]
+                  [0, 0, 1, -x_offset]
+                  [0, 0, 0, 1]])
+    
+    H = np.linalg.inv(T).dot(R).dot(T)
+    img_rot = transform.AffineTransform(image,H)
+    
+    print(img_rot.shape)
+    return img_rot
+   
 
 def save_obj_pickle(obj, root, name):
     with open(os.path.join(root, name) + '.pkl', 'wb') as f:
