@@ -188,7 +188,7 @@ class Normalise(object):
       
       for l in S.landmarks_total:
           z, y, x = coords[l]['z'], coords[l]['y'], coords[l]['x']
-          image[int(z)][int(y)][int(x)] = 100
+          image[int(z)][int(y)][int(x)] = 10*l
       
       return {'image':img_norm, 'idx': idx, 'patient':patient, 'coords': coords} # note note !
   
@@ -333,7 +333,12 @@ class ToTensor(object):
             #structure[z][y][x] = l
             coords[l]['x'], coords[l]['y'], coords[l]['z'] = x,y,z
             
-            print_2D_slice(image, l, x, y, z, patient)
+            #print_2D_slice(image, l, x, y, z, patient)
+            print('landmark, x, y, z')
+            print(l, x, y , z)
+            locations = np.nonzero(np.round(image) == l * 10)
+            z, y, x = locations[2], locations[1], locations[0]
+            print(x, y, z)
             
         # swap color axis because
         # numpy image: D x H x W 
