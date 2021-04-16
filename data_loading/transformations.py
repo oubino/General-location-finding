@@ -188,7 +188,7 @@ class Normalise(object):
       
       for l in S.landmarks_total:
           z, y, x = coords[l]['z'], coords[l]['y'], coords[l]['x']
-          image[int(z)][int(y)][int(x)] = 100*l
+          img_norm[int(z)][int(y)][int(x)] = 100*l
       
       return {'image':img_norm, 'idx': idx, 'patient':patient, 'coords': coords} # note note !
   
