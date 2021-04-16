@@ -222,7 +222,7 @@ def rotate_img(image, angle, x_size, y_size, z_size, axis):
     H = np.linalg.inv(T).dot(R).dot(T)
     print(H)
     #tform = transform.AffineTransform(H)
-    img_rot = transform.warp(image, H.inverse)
+    img_rot = transform.warp(image, np.linalg.inv(H))
     
     
     print(img_rot.shape)
