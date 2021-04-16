@@ -75,12 +75,12 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
                             # if 75 images will step twice then is left over with 3 images - need to scale by this
                             # so need to scale 
                             if (i+1) > (S.batch_acc_steps * iters_to_acc): 
-                                print('Leftover batch')
-                                print(i+1)
-                                print((data_loaders.batch_acc_batches - S.batch_acc_steps*iters_to_acc))
+                                #print('Leftover batch')
+                                #print(i+1)
+                                #print((data_loaders.batch_acc_batches - S.batch_acc_steps*iters_to_acc))
                                 loss = loss/((data_loaders.batch_acc_batches - S.batch_acc_steps*iters_to_acc))
                             else:
-                                print(iters_to_acc, i)
+                               # print(iters_to_acc, i)
                                 loss = loss/iters_to_acc
 
 
@@ -88,16 +88,16 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
                         if phase == 'train':
                             start_time = time.time()
                             scaler.scale(loss).backward()
-                            print(time.time()-start_time)
-                            print(i+1 % data_loaders.batch_acc_batches, i+1 % iters_to_acc )
+                            #print(time.time()-start_time)
+                            #print(i+1 % data_loaders.batch_acc_batches, i+1 % iters_to_acc )
                             if ((i+1) % data_loaders.batch_acc_batches == 0) or ((i+1) % iters_to_acc == 0):
-                                print('reached', data_loaders.batch_acc_batches, i+1)
+                             #   print('reached', data_loaders.batch_acc_batches, i+1)
                                 start_time_op = time.time()
                                 scaler.step(optimizer)
                                 scaler.update() 
                                 scheduler.step()
                                 optimizer.zero_grad()
-                                print(time.time()-start_time_op)
+                              #  print(time.time()-start_time_op)
 
                     # statistics
                     imgs_in_set += inputs.size(0)
