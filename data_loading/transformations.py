@@ -305,6 +305,10 @@ class Check_left_right(object):
                 print('ERROR LEFT AND RIGHT WRONG WAy RouND')
                 S.error_counter += 1
         
+        print('check lR')
+        for l in S.landmarks_total:
+            print(coords[l]['x'], coords[l]['y'], coords[l]['z'])
+            
         return {'image': image, 'idx': idx, 'patient':patient, 'coords':coords}   
 
 
