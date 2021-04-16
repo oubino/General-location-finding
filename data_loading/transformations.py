@@ -188,7 +188,7 @@ class Normalise(object):
       
       for l in S.landmarks_total:
           z, y, x = coords[l]['z'], coords[l]['y'], coords[l]['x']
-          image[int(z)][int(y)][int(x)] = 10*l
+          image[int(z)][int(y)][int(x)] = 100*l
       
       return {'image':img_norm, 'idx': idx, 'patient':patient, 'coords': coords} # note note !
   
@@ -336,7 +336,7 @@ class ToTensor(object):
             #print_2D_slice(image, l, x, y, z, patient)
             print('landmark, x, y, z')
             print(l, x, y , z)
-            locations = np.nonzero(image > 1)
+            locations = np.nonzero(image > 100)
             print(locations)
             z, y, x = locations[2], locations[1], locations[0]
             print(x, y, z)
