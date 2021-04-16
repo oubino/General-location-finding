@@ -360,6 +360,10 @@ def print_2D_slice(landmark, struc_x, struc_y, struc_z, patient):
     # ------------------------------------
     save_file = "print_img"
     save_path = os.path.join(S.run_path, save_file)
+    try: 
+      os.mkdir(save_path)
+    except OSError as error:
+      print(error)
     img_name = os.path.join(save_path, "2d_slice_%s.png" % patient.replace('.npy', '_%1.0f') % landmark)
     S.img_counter_3 += 1
     plt.savefig(img_name)
