@@ -219,13 +219,12 @@ def init():
     elif train_line_q == 'n':
         train_line = False
         aaron_or_oli = yes_or_no.question('aaron(y) / oli (n)')
-        if aaron_or_oli == 'y':
-            clicker = str('Aaron')
-        elif aaron_or_oli == 'n':
-            clicker = str('Oli')
+        if aaron_or_oli == True:
+            clicker = 'Aaron'
+        elif aaron_or_oli == False:
+            clicker = 'Oli'
     else:
         print('ERROR')
-
      
 def init_new():
     # oli vs aaron settings 
