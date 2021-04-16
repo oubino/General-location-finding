@@ -198,25 +198,25 @@ def rotate_img(image, angle, x_size, y_size, z_size, axis):
     
     if axis == [1,0]:       
         R = np.array([[c, -s, 0, 0],
-                      [s, c, 0, 0]
-                      [0, 0, 1, 0]
+                      [s, c, 0, 0],
+                      [0, 0, 1, 0],
                       [0, 0, 0, 1]])
         
     elif axis == [1,2]:
         R = np.array([[1, 0, 0, 0],
-                      [0, c, -s, 0]
-                      [0, s, c, 0]
+                      [0, c, -s, 0],
+                      [0, s, c, 0],
                       [0, 0, 0, 1]])
     elif axis == [2,0]:         
         R = np.array([[c, 0, s, 0],
-                      [0, 1, 0, 0]
-                      [-s, 0, c, 0]
+                      [0, 1, 0, 0],
+                      [-s, 0, c, 0],
                       [0, 0, 0, 1]])         
     
     # translation matrix to shift image center to origin
     T = np.array([[1, 0, 0, -z_offset],
-                  [0, 1, 0, -y_offset]
-                  [0, 0, 1, -x_offset]
+                  [0, 1, 0, -y_offset],
+                  [0, 0, 1, -x_offset],
                   [0, 0, 0, 1]])
     
     H = np.linalg.inv(T).dot(R).dot(T)
