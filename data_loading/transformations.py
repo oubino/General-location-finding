@@ -143,7 +143,7 @@ class Upsidedown_scipy(object):
         
         if upside_down == True:
             angle = 180
-            image = scipy.ndimage.rotate(image, angle, axes = [2,0], reshape = False, order = 0)
+            image = scipy.ndimage.rotate(image, angle, axes = [2,0], reshape = False, order = 3)
             # rotate coords up/down 
             for l in S.landmarks_total:
                 coords[l]['z'] = image.shape[0] - 1 - coords[l]['z'] # e.g. loc 25 in z image size 80 becomes 54 (as start from 0)
@@ -195,7 +195,6 @@ class Normalise(object):
 class Shift(object):
     def __call__(self, sample):
         image, idx, patient, coords = sample['image'], sample['idx'], sample['patient'], sample['coords']
-        
         max_val = 10
         x_shift, y_shift, z_shift = random.randint(-max_val,max_val), random.randint(-max_val,max_val), random.randint(-max_val,max_val)          
         out_of_bounds = False      
@@ -219,8 +218,7 @@ class Flips_scipy(object):
     def __call__(self,sample):
         image, idx, patient, coords = sample['image'], sample['idx'], sample['patient'], sample['coords']
         random_number = random.random()
-        #angle = random.randint(-10, 10)
-        angle = 10
+        angle = random.randint(-10, 10)
         
         coords_rotat = {}
         for k in S.landmarks_total:
@@ -341,13 +339,7 @@ class ToTensor(object):
             #structure[z][y][x] = l
             coords[l]['x'], coords[l]['y'], coords[l]['z'] = x,y,z
             
-            print_2D_slice(image, l, x, y, z, patient)
-            print('landmark, x, y, z')
-            print(l, x, y , z)
-            locations = np.nonzero(np.round(image) == 100*l)
-            z, y, x = locations[0], locations[1], locations[2]
-            print(x, y, z)
-            
+            #print_2D_slice(image, l, x, y, z, patient)
             
         # swap color axis because
         # numpy image: D x H x W 
@@ -358,7 +350,7 @@ class ToTensor(object):
         return {'image': image,'idx': idx, 'patient':patient, 'coords':coords}
     
 
-    
+"""   
 import os
 import matplotlib.pyplot as plt
 def print_2D_slice(img, landmark, struc_x, struc_y, struc_z, patient):
@@ -388,7 +380,7 @@ def print_2D_slice(img, landmark, struc_x, struc_y, struc_z, patient):
     plt.savefig(img_name)
 
 
-"""
+
 class ToTensor_no_ds(object):
     Convert ndarrays in sample to Tensors.
 
