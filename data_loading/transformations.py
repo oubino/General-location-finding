@@ -273,7 +273,6 @@ class Horizontal_flip(object):
     def __call__(self,sample):
         image, idx, patient, coords = sample['image'], sample['idx'], sample['patient'], sample['coords']
         random_number = random.random()
-        random_number = 0.2
         if random_number <= 0.5:
             image = np.flip(image, axis = 2).copy()
             # flip coordinate in x axis only
