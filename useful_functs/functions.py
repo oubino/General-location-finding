@@ -7,6 +7,7 @@ import math
 import pickle
 import random
 from skimage import transform
+from skimage.transform import ProjectiveTransform
 
 import settings as S
 
@@ -221,10 +222,12 @@ def rotate_img(image, angle, x_size, y_size, z_size, axis):
     
     H = np.linalg.inv(T).dot(R).dot(T)
     print(H)
-    print
+    
+    tform = transform.AffineTransform()
     tform = transform.AffineTransform(H, dimensionality = 3)
     img_rot = transform.warp(image, tform.inverse)
     
+    img_rot = transform.warp(image,ProjectiveTransform(H))
     
     print(img_rot.shape)
     return img_rot
