@@ -350,7 +350,7 @@ class ToTensor(object):
         return {'image': image,'idx': idx, 'patient':patient, 'coords':coords}
     
 
-"""   
+
 import os
 import matplotlib.pyplot as plt
 def print_2D_slice(img, landmark, struc_x, struc_y, struc_z, patient):
@@ -379,7 +379,7 @@ def print_2D_slice(img, landmark, struc_x, struc_y, struc_z, patient):
     S.img_counter_3 += 1
     plt.savefig(img_name)
 
-
+"""
 
 class ToTensor_no_ds(object):
     Convert ndarrays in sample to Tensors.
