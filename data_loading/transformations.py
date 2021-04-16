@@ -218,8 +218,9 @@ class Flips_scipy(object):
     def __call__(self,sample):
         image, idx, patient, coords = sample['image'], sample['idx'], sample['patient'], sample['coords']
         #random_number = random.random()
-        random_number = 0.5
-        angle = random.randint(-10, 10)
+        random_number = 0.2
+        #angle = random.randint(-10, 10)
+        angle = 30
         
         coords_rotat = {}
         for k in S.landmarks_total:
@@ -234,6 +235,7 @@ class Flips_scipy(object):
                     out_of_bounds = True                   
             # check if still within bounds due to rotation!
             if out_of_bounds == False:
+                # HAS TO BE ORDER 0 !!!!
                 image = scipy.ndimage.rotate(image, angle, axes = [1,0],reshape = False, order = 0)
                 #image = functions.rotate_img(image,angle, S.in_x, S.in_y, S.in_z, axis = [1,0])
                 for l in S.landmarks_total:
