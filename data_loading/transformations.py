@@ -196,7 +196,7 @@ class Shift(object):
     def __call__(self, sample):
         image, idx, patient, coords = sample['image'], sample['idx'], sample['patient'], sample['coords']
         
-        max_val = 20
+        max_val = 10
         x_shift, y_shift, z_shift = random.randint(-max_val,max_val), random.randint(-max_val,max_val), random.randint(-max_val,max_val)          
         out_of_bounds = False      
         for l in S.landmarks_total:
@@ -220,7 +220,7 @@ class Flips_scipy(object):
         image, idx, patient, coords = sample['image'], sample['idx'], sample['patient'], sample['coords']
         random_number = random.random()
         #angle = random.randint(-10, 10)
-        angle = 20
+        angle = 10
         
         coords_rotat = {}
         for k in S.landmarks_total:
