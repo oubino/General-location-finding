@@ -220,9 +220,9 @@ def init():
         train_line = False
         aaron_or_oli = yes_or_no.question('aaron(y) / oli (n)')
         if aaron_or_oli == 'y':
-            clicker = 'Aaron'
+            clicker = str('Aaron')
         elif aaron_or_oli == 'n':
-            clicker = 'Oli'
+            clicker = str('Oli')
     else:
         print('ERROR')
 
