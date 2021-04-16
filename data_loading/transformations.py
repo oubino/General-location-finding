@@ -327,6 +327,9 @@ class ToTensor(object):
             #structure[z][y][x] = l
             coords[l]['x'], coords[l]['y'], coords[l]['z'] = x,y,z
             
+        for l in S.landmarks_total:
+            print_2D_slice(l, x, y, z, patient)
+            
         # swap color axis because
         # numpy image: D x H x W 
         # torch image: C X H X W x D
@@ -334,6 +337,32 @@ class ToTensor(object):
         image = torch.from_numpy(image).float() # dont know why images/mask casted to float here but need to do it again later
         image = image.unsqueeze(0)
         return {'image': image,'idx': idx, 'patient':patient, 'coords':coords}
+    
+import os
+import matplotlib.pyplot as plt
+def print_2D_slice(landmark, struc_x, struc_y, struc_z, patient):
+    
+    # image
+    #  D x H x W
+    img_path = os.path.join(S.root, "CTs", patient) 
+    img = np.load(img_path)
+        
+    plt.figure(figsize=(7, 7))
+        
+    img = img[struc_z, :, :]
+    
+    # ---- plot as point ------
+    plt.imshow(img,cmap = 'Greys_r', alpha = 0.9)
+    plt.plot(struc_x, struc_y, color = 'red', marker = 'x', label = 'target')
+    # add z annotation
+    plt.annotate("%1.0f" % int(struc_z),(struc_x, struc_y), color = 'red')
+    plt.legend()
+    # ------------------------------------
+    save_file = "print_img"
+    save_path = os.path.join(S.run_path, save_file)
+    img_name = os.path.join(save_path, "2d_slice_%s.png" % patient.replace('.npy', '_%1.0f') % landmark)
+    S.img_counter_3 += 1
+    plt.savefig(img_name)
 
 
 """    
