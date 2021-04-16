@@ -327,7 +327,7 @@ class ToTensor(object):
             #structure[z][y][x] = l
             coords[l]['x'], coords[l]['y'], coords[l]['z'] = x,y,z
             
-            print_2D_slice(l, x, y, z, patient)
+            print_2D_slice(image, l, x, y, z, patient)
             
         # swap color axis because
         # numpy image: D x H x W 
@@ -339,12 +339,10 @@ class ToTensor(object):
     
 import os
 import matplotlib.pyplot as plt
-def print_2D_slice(landmark, struc_x, struc_y, struc_z, patient):
+def print_2D_slice(img, landmark, struc_x, struc_y, struc_z, patient):
     
     # image
     #  D x H x W
-    img_path = os.path.join(S.root, "CTs", patient) 
-    img = np.load(img_path)
         
     plt.figure(figsize=(7, 7))
         
