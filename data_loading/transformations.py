@@ -268,6 +268,8 @@ class Flips_scipy(object):
                 coords[l]['x'], coords[l]['y'], coords[l]['z'] = coords_rotat[l]['x'], coords_rotat[l]['y'], coords_rotat[l]['z']
             else:
                 print('ROTATION OUT OF BOUNDS')
+                
+        
         return {'image': image, 'idx': idx, 'patient':patient, 'coords':coords}
       
 class Horizontal_flip(object):
@@ -289,6 +291,10 @@ class Horizontal_flip(object):
                 right_location = coords[right_structure]
                 coords[left_structure] = right_location
                 coords[right_structure] = left_location
+        
+        print('check lR')
+        for l in S.landmarks_total:
+            print(coords[l]['x'], coords[l]['y'], coords[l]['z'])
 
         return {'image': image, 'idx': idx, 'patient':patient, 'coords':coords }
 
@@ -304,10 +310,7 @@ class Check_left_right(object):
             if right_location['x'] > left_location['x']: # if right x is greater than left x
                 print('ERROR LEFT AND RIGHT WRONG WAy RouND')
                 S.error_counter += 1
-        
-        print('check lR')
-        for l in S.landmarks_total:
-            print(coords[l]['x'], coords[l]['y'], coords[l]['z'])
+    
             
         return {'image': image, 'idx': idx, 'patient':patient, 'coords':coords}   
 
