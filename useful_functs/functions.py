@@ -172,6 +172,10 @@ def rotate(x_coord, y_coord, z_coord, x_size, y_size, z_size, angle, axis):
     z_offset = (z_size - 1)/2
     
     x,y, z = x_coord - x_offset, y_coord - y_offset, z_coord - z_offset
+    
+    print('coords')
+    print(x,y,z)
+    print(angle)
   
     if axis == [1,0]:
         y_new = s * z + c * y
