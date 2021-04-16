@@ -327,7 +327,6 @@ class ToTensor(object):
             #structure[z][y][x] = l
             coords[l]['x'], coords[l]['y'], coords[l]['z'] = x,y,z
             
-        for l in S.landmarks_total:
             print_2D_slice(l, x, y, z, patient)
             
         # swap color axis because
