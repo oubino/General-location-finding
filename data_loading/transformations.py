@@ -336,10 +336,19 @@ class ToTensor(object):
             #print_2D_slice(image, l, x, y, z, patient)
             print('landmark, x, y, z')
             print(l, x, y , z)
-            locations = np.nonzero(np.round(image) < 105*l)
+            locations = np.nonzero(np.round(image) == 100*l)
             z, y, x = locations[0], locations[1], locations[2]
             print(x, y, z)
-            locations = np.nonzero(np.round(image) > 95*l)
+            locations = np.nonzero(np.round(image) == (100*l)-1)
+            z, y, x = locations[0], locations[1], locations[2]
+            print(x, y, z)
+            locations = np.nonzero(np.round(image) == (100*l)+1)
+            z, y, x = locations[0], locations[1], locations[2]
+            print(x, y, z)
+            locations = np.nonzero(np.round(image) == (100*l)-2)
+            z, y, x = locations[0], locations[1], locations[2]
+            print(x, y, z)
+            locations = np.nonzero(np.round(image) == (100*l)+2)
             z, y, x = locations[0], locations[1], locations[2]
             print(x, y, z)
             
@@ -351,6 +360,8 @@ class ToTensor(object):
         image = torch.from_numpy(image).float() # dont know why images/mask casted to float here but need to do it again later
         image = image.unsqueeze(0)
         return {'image': image,'idx': idx, 'patient':patient, 'coords':coords}
+    
+"""
     
 import os
 import matplotlib.pyplot as plt
@@ -381,7 +392,7 @@ def print_2D_slice(img, landmark, struc_x, struc_y, struc_z, patient):
     plt.savefig(img_name)
 
 
-"""    
+
 class ToTensor_no_ds(object):
     Convert ndarrays in sample to Tensors.
 
