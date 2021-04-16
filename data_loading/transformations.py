@@ -186,9 +186,9 @@ class Normalise(object):
       img_norm -= minval
       img_norm /= self.window
       
-      for l in S.landmarks_total:
-          z, y, x = coords[l]['z'], coords[l]['y'], coords[l]['x']
-          img_norm[int(z)][int(y)][int(x)] = 100*l
+      #for l in S.landmarks_total:
+      #    z, y, x = coords[l]['z'], coords[l]['y'], coords[l]['x']
+      #    img_norm[int(z)][int(y)][int(x)] = 100*l
       
       return {'image':img_norm, 'idx': idx, 'patient':patient, 'coords': coords} # note note !
   
