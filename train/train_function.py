@@ -86,14 +86,17 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
 
                         # backward + optimize only if in training phase
                         if phase == 'train':
+                            start_time = time.time()
                             scaler.scale(loss).backward()
+                            print(time.time()-start_time)
                             if (i+1 % data_loaders.batch_acc_batches == 0) or (i+1 % iters_to_acc == 0):
                                 print('reached', data_loaders.batch_acc_batches, i+1)
+                                start_time_op = time.time()
                                 scaler.step(optimizer)
                                 scaler.update() 
                                 scheduler.step()
                                 optimizer.zero_grad()
-                                
+                                print(time.time()-start_time_op)
 
                     # statistics
                     imgs_in_set += inputs.size(0)
