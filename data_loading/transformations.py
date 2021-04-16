@@ -218,7 +218,7 @@ class Flips_scipy(object):
     def __call__(self,sample):
         image, idx, patient, coords = sample['image'], sample['idx'], sample['patient'], sample['coords']
         #random_number = random.random()
-        random_number = 0.2
+        random_number = 0.5
         angle = random.randint(-10, 10)
         
         coords_rotat = {}
