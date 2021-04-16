@@ -364,6 +364,7 @@ class ToTensor(object):
             locations = np.nonzero(np.round(image) == (100*l)+4)
             z, y, x = locations[0], locations[1], locations[2]
             print(x, y, z)
+            print(image.max())
             
             
         # swap color axis because
