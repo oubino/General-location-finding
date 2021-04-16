@@ -15,7 +15,7 @@ def init():
     global normal_window, use_amp
     global downsample_ratio_list, crop_list
     global root, device
-    global batch_accumulation
+    global batch_acc_steps
     global coding_path
     global pred_max
     global time_stamp
@@ -35,7 +35,7 @@ def init():
     global aaron_or_oli
     global ct_print
     global k_fold_ids
-    global batch_size_test
+    global batch_size_test, batch_acc_steps_test
     global train_line, clicker
          
     # paths
@@ -90,8 +90,13 @@ def init():
     if change_batch_size == True:
         batch_size = int(input ("Batch size: "))
     else:
-        batch_size = 5       
+        batch_size = 5  
     batch_size_test = 1 # HAS TO BE 1 ! STRUC ORIGINAL OTHERWISE WILL BE DIFFERENT SHAPES AND BATCH LOADER WILL FAIL
+    
+    
+    
+    batch_acc_steps = 2  
+  
     
     # specify landmarks + region want to train for - AMEND
     #landmarks = [1,2,3,5,7,9] # brainstem # not general

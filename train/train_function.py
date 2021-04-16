@@ -41,7 +41,7 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
             # i.e. metrics_landmarks[3]['loss'] is loss for landmark denoted by 3
 
             imgs_in_set = 0 # i.e. counts total number of images in train or val or test set
-            iters_to_acc = math.floor((data_loaders.batch_accumulation)/S.batch_acc_steps)
+            iters_to_acc = math.floor((data_loaders.batch_acc_batches)/S.batch_acc_steps)
             #batch_number = 1
             for i, batch in enumerate(data_loaders.dataloaders[phase]):
                     # print dataloader 
@@ -75,16 +75,20 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
                             # if 75 images will step twice then is left over with 3 images - need to scale by this
                             # so need to scale 
                             if (i+1) > (S.batch_acc_steps * iters_to_acc): 
-                                loss = loss/((data_loaders.batch_accumulation - S.batch_acc_steps*iters_to_acc))
+                                print('Leftover batch')
+                                print(i+1)
+                                print((data_loaders.batch_acc_batches - S.batch_acc_steps*iters_to_acc))
+                                loss = loss/((data_loaders.batch_acc_batches - S.batch_acc_steps*iters_to_acc))
                             else:
+                                print(iters_to_acc)
                                 loss = loss/iters_to_acc
 
 
                         # backward + optimize only if in training phase
                         if phase == 'train':
                             scaler.scale(loss).backward()
-                            if (i+1 % data_loaders.batch_accumulation == 0) or (i+1 % iters_to_acc == 0):
-                            #print('reached', batch_number, batch_accumulation)
+                            if (i+1 % data_loaders.batch_acc_batches == 0) or (i+1 % iters_to_acc == 0):
+                                print('reached', data_loaders.batch_acc_batches, i+1)
                                 scaler.step(optimizer)
                                 scaler.update() 
                                 scheduler.step()

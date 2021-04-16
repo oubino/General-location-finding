@@ -43,15 +43,15 @@ def init(fold, train_ids, test_ids):
     train_subsampler = torch.utils.data.SubsetRandomSampler(train_ids)
     test_subsampler = torch.utils.data.SubsetRandomSampler(test_ids)
     
-    global batch_accumulation   
-    batch_accumulation = math.ceil(len(train_ids)/S.batch_size) # rounds it up
+    global batch_acc_batches  
+    batch_acc_batches = math.ceil(len(train_ids)/S.batch_size) # rounds it up
 
     global dataloaders
 
     dataloaders = {
-    'train': DataLoader(dataset, batch_size=S.batch_size, sampler= train_subsampler),
-    'test': DataLoader(dataset, batch_size=S.batch_size_test, sampler= test_subsampler),
-    'val': DataLoader(dataset, batch_size=S.batch_size, sampler= val_subsampler)  
+    'train': DataLoader(dataset, batch_size=S.batch_size, shuffle=True, sampler= train_subsampler),
+    'test': DataLoader(dataset, batch_size=S.batch_size_test, shuffle=False, sampler= test_subsampler),
+    'val': DataLoader(dataset, batch_size=S.batch_size, shuffle=True, sampler= val_subsampler)  
     }
     
 def init_no_k_fold():
@@ -63,8 +63,8 @@ def init_no_k_fold():
     # manual seed ensures that same split everytime to ensure testing on correct dataset!
     # i.e. if random split, train, save, random split, test -> may end up testing on same as training!
     
-    global batch_accumulation   
-    batch_accumulation = math.ceil(train_size/S.batch_size) # rounds it up
+    global batch_acc_batches   
+    batch_acc_batches = math.ceil(train_size/S.batch_size) # rounds it up
     
     global image_datasets
     image_datasets = {
@@ -88,8 +88,8 @@ def init_load_no_k_fold():
     # manual seed ensures that same split everytime to ensure testing on correct dataset!
     # i.e. if random split, train, save, random split, test -> may end up testing on same as training!
     
-    global batch_accumulation   
-    batch_accumulation = math.ceil(train_size/S.batch_size) # rounds it up
+    global batch_acc_batches  
+    batch_acc_batches = math.ceil(train_size/S.batch_size) # rounds it up
     
     global image_datasets
     image_datasets = {
@@ -124,15 +124,15 @@ def init_load_k_fold(fold):
     train_subsampler = torch.utils.data.SubsetRandomSampler(train_ids)
     test_subsampler = torch.utils.data.SubsetRandomSampler(test_ids)
     
-    global batch_accumulation
-    batch_accumulation = math.ceil(len(train_ids)/S.batch_size) # rounds it up
+    global batch_acc_batches
+    batch_acc_batches = math.ceil(len(train_ids)/S.batch_size) # rounds it up
 
     global dataloaders
 
     dataloaders = {
-    'train': DataLoader(dataset, batch_size=S.batch_size, sampler= train_subsampler),
-    'test': DataLoader(dataset, batch_size=S.batch_size_test, sampler= test_subsampler),
-    'val': DataLoader(dataset, batch_size=S.batch_size, sampler= val_subsampler)  
+    'train': DataLoader(dataset, batch_size=S.batch_size, shuffle=True, sampler= train_subsampler),
+    'test': DataLoader(dataset, batch_size=S.batch_size_test, shuffle=False, sampler= test_subsampler),
+    'val': DataLoader(dataset, batch_size=S.batch_size, shuffle=True, sampler= val_subsampler)  
     }
     
 def init_reserved_test_set():
