@@ -186,8 +186,8 @@ def rotate(x_coord, y_coord, z_coord, x_size, y_size, z_size, angle, axis):
         y_new = c * y - s * x
         z_new = z
     elif axis == [2,0]:                  
-        x_new = -s * z + c * x # s * z + c * x
-        z_new = c * z + s * x # c * z - s * x
+        x_new = s * z + c * x
+        z_new = c * z - s * x
         y_new = y      
 
     print(x_new + x_offset, y_new + y_offset, z_new + z_offset)
