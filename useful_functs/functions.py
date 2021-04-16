@@ -190,6 +190,7 @@ def rotate(x_coord, y_coord, z_coord, x_size, y_size, z_size, angle, axis):
         z_new = c * z + s * x # c * z - s * x
         y_new = y      
 
+    print(x_new + x_offset, y_new + y_offset, z_new + z_offset)
     return x_new + x_offset, y_new + y_offset, z_new + z_offset
 
 def rotate_img(image, angle, x_size, y_size, z_size, axis):
