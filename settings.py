@@ -218,12 +218,7 @@ def init():
         train_line = True
     elif train_line_q == 'n':
         train_line = False
-        if aaron_or_oli == 'y':
-            clicker = 'Aaron'
-        elif aaron_or_oli == 'n':
-            clicker = 'Oli'
-    else:
-        print('ERROR')
+        clicker = input ("Name of clicker ")
 
      
 def init_new():
