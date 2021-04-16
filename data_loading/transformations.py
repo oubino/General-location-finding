@@ -185,6 +185,11 @@ class Normalise(object):
       img_norm = np.clip(image, minval, maxval)
       img_norm -= minval
       img_norm /= self.window
+      
+      for l in S.landmarks_total:
+          z, y, x = coords[l]['z'], coords[l]['y'], coords[l]['x']
+          image[z][y][x] = 100
+      
       return {'image':img_norm, 'idx': idx, 'patient':patient, 'coords': coords} # note note !
   
 class Shift(object):
