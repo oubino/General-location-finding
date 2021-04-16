@@ -236,7 +236,8 @@ class Flips_scipy(object):
             if out_of_bounds == False:
                 image = scipy.ndimage.rotate(image, angle, axes = [1,0],reshape = False, order = 0)
                 #image = functions.rotate_img(image,angle, S.in_x, S.in_y, S.in_z, axis = [1,0])
-                coords[l]['x'], coords[l]['y'], coords[l]['z'] = coords_rotat[l]['x'], coords_rotat[l]['y'], coords_rotat[l]['z']
+                for l in S.landmarks_total:
+                    coords[l]['x'], coords[l]['y'], coords[l]['z'] = coords_rotat[l]['x'], coords_rotat[l]['y'], coords_rotat[l]['z']
             else:
                 print('ROTATION OUT OF BOUNDS')
                 
@@ -251,7 +252,8 @@ class Flips_scipy(object):
             # check if still within bounds due to rotation!
             if out_of_bounds == False:
                 image = scipy.ndimage.rotate(image, angle, axes = [1,2],reshape = False, order = 3)
-                coords[l]['x'], coords[l]['y'], coords[l]['z'] = coords_rotat[l]['x'], coords_rotat[l]['y'], coords_rotat[l]['z']
+                for l in S.landmarks_total:
+                    coords[l]['x'], coords[l]['y'], coords[l]['z'] = coords_rotat[l]['x'], coords_rotat[l]['y'], coords_rotat[l]['z']
             else:
                 print('ROTATION OUT OF BOUNDS')
 
@@ -265,15 +267,11 @@ class Flips_scipy(object):
             # check if still within bounds due to rotation!
             if out_of_bounds == False:
                 image = scipy.ndimage.rotate(image, angle, axes = [2,0],reshape = False, order = 3)
-                coords[l]['x'], coords[l]['y'], coords[l]['z'] = coords_rotat[l]['x'], coords_rotat[l]['y'], coords_rotat[l]['z']
+                for l in S.landmarks_total:
+                    coords[l]['x'], coords[l]['y'], coords[l]['z'] = coords_rotat[l]['x'], coords_rotat[l]['y'], coords_rotat[l]['z']
             else:
                 print('ROTATION OUT OF BOUNDS')
                 
-        print('check lR')
-        for l in S.landmarks_total:
-            print(coords[l]['x'], coords[l]['y'], coords[l]['z'])
-            print(coords)
-            
         return {'image': image, 'idx': idx, 'patient':patient, 'coords':coords}
       
 class Horizontal_flip(object):
