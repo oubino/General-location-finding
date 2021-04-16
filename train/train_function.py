@@ -3,6 +3,7 @@ import time
 import copy
 from collections import defaultdict
 import torch
+import math
 
 import settings as S
 from data_loading import data_loaders
@@ -40,9 +41,9 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
             # i.e. metrics_landmarks[3]['loss'] is loss for landmark denoted by 3
 
             imgs_in_set = 0 # i.e. counts total number of images in train or val or test set
-      
-            batch_number = 1
-            for batch in data_loaders.dataloaders[phase]:
+            iters_to_acc = math.floor((data_loaders.batch_accumulation)/S.batch_acc_steps)
+            #batch_number = 1
+            for i, batch in enumerate(data_loaders.dataloaders[phase]):
                     # print dataloader 
                     inputs = batch['image']
                     idx = batch['idx']
@@ -69,28 +70,30 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
                             outputs = model((inputs))
                             # 1. convert masks to heatmaps inside loss function (allows sigma optimisation)
                             loss = loss_func.calc_loss_gauss(model, inputs, outputs, target_coords, idx, metrics_landmarks,alpha,reg,gamma,imgs_in_set,sigmas)
-                        # print image for comparison
-                        #if imgs_in_set == 0:
-                          # plot image
-                        #  print(' ---- first image of set ---- (end)')
-                        # 2. vs convert to heatmap here means no sigma optimisation
+                            
+                            # iters to accumulate set to 12 this would mean 12 x 3 = 36 images before optim.step()
+                            # if 75 images will step twice then is left over with 3 images - need to scale by this
+                            # so need to scale 
+                            if (i+1) > (S.batch_acc_steps * iters_to_acc): 
+                                loss = loss/((data_loaders.batch_accumulation - S.batch_acc_steps*iters_to_acc))
+                            else:
+                                loss = loss/iters_to_acc
 
 
                         # backward + optimize only if in training phase
                         if phase == 'train':
                             scaler.scale(loss).backward()
-                            # only step once per epoch
-                            #if (batch_number % batch_accumulation == 0) or (batch_number % 10 == 0):
+                            if (i+1 % data_loaders.batch_accumulation == 0) or (i+1 % iters_to_acc == 0):
                             #print('reached', batch_number, batch_accumulation)
-                            scaler.step(optimizer)
-                            scaler.update() 
-                            scheduler.step()
-                            optimizer.zero_grad()
+                                scaler.step(optimizer)
+                                scaler.update() 
+                                scheduler.step()
+                                optimizer.zero_grad()
                                 
 
                     # statistics
                     imgs_in_set += inputs.size(0)
-                    batch_number += 1
+                    #batch_number += 1
                 
             print('Images in set')    
             print(imgs_in_set)
