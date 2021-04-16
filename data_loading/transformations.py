@@ -339,37 +339,12 @@ class ToTensor(object):
             #structure[z][y][x] = l
             coords[l]['x'], coords[l]['y'], coords[l]['z'] = x,y,z
             
-            #print_2D_slice(image, l, x, y, z, patient)
+            print_2D_slice(image, l, x, y, z, patient)
             print('landmark, x, y, z')
             print(l, x, y , z)
             locations = np.nonzero(np.round(image) == 100*l)
             z, y, x = locations[0], locations[1], locations[2]
             print(x, y, z)
-            locations = np.nonzero(np.round(image) == (100*l)-1)
-            z, y, x = locations[0], locations[1], locations[2]
-            print(x, y, z)
-            locations = np.nonzero(np.round(image) == (100*l)+1)
-            z, y, x = locations[0], locations[1], locations[2]
-            print(x, y, z)
-            locations = np.nonzero(np.round(image) == (100*l)-2)
-            z, y, x = locations[0], locations[1], locations[2]
-            print(x, y, z)
-            locations = np.nonzero(np.round(image) == (100*l)+2)
-            z, y, x = locations[0], locations[1], locations[2]
-            print(x, y, z)
-            locations = np.nonzero(np.round(image) == (100*l)-3)
-            z, y, x = locations[0], locations[1], locations[2]
-            print(x, y, z)
-            locations = np.nonzero(np.round(image) == (100*l)+3)
-            z, y, x = locations[0], locations[1], locations[2]
-            print(x, y, z)
-            locations = np.nonzero(np.round(image) == (100*l)-4)
-            z, y, x = locations[0], locations[1], locations[2]
-            print(x, y, z)
-            locations = np.nonzero(np.round(image) == (100*l)+4)
-            z, y, x = locations[0], locations[1], locations[2]
-            print(x, y, z)
-            print(image.max())
             
             
         # swap color axis because
@@ -380,7 +355,7 @@ class ToTensor(object):
         image = image.unsqueeze(0)
         return {'image': image,'idx': idx, 'patient':patient, 'coords':coords}
     
-"""
+
     
 import os
 import matplotlib.pyplot as plt
@@ -411,7 +386,7 @@ def print_2D_slice(img, landmark, struc_x, struc_y, struc_z, patient):
     plt.savefig(img_name)
 
 
-
+"""
 class ToTensor_no_ds(object):
     Convert ndarrays in sample to Tensors.
 

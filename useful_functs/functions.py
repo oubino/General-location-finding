@@ -172,10 +172,6 @@ def rotate(x_coord, y_coord, z_coord, x_size, y_size, z_size, angle, axis):
     z_offset = (z_size - 1)/2
     
     x,y, z = x_coord - x_offset, y_coord - y_offset, z_coord - z_offset
-    
-    print('coords')
-    print(x,y,z)
-    print(angle)
   
     if axis == [1,0]:
         y_new = s * z + c * y
@@ -190,52 +186,7 @@ def rotate(x_coord, y_coord, z_coord, x_size, y_size, z_size, angle, axis):
         z_new = c * z - s * x
         y_new = y      
 
-    print(x_new + x_offset, y_new + y_offset, z_new + z_offset)
     return x_new + x_offset, y_new + y_offset, z_new + z_offset
-
-def rotate_img(image, angle, x_size, y_size, z_size, axis):
-    
-    c = math.cos(math.radians(angle))
-    s = math.sin(math.radians(angle))
-    
-    x_offset = (x_size - 1)/2 #- math.cos(math.radians(angle)) * ((x_size - 1)/2) - math.sin(math.radians(angle)) * ((z_size- 1)/2)
-    y_offset = (y_size - 1)/2
-    z_offset = (z_size - 1)/2
-    
-    if axis == [1,0]:       
-        R = np.array([[c, -s, 0, 0],
-                      [s, c, 0, 0],
-                      [0, 0, 1, 0],
-                      [0, 0, 0, 1]])
-        
-    elif axis == [1,2]:
-        R = np.array([[1, 0, 0, 0],
-                      [0, c, -s, 0],
-                      [0, s, c, 0],
-                      [0, 0, 0, 1]])
-    elif axis == [2,0]:         
-        R = np.array([[c, 0, s, 0],
-                      [0, 1, 0, 0],
-                      [-s, 0, c, 0],
-                      [0, 0, 0, 1]])         
-    
-    # translation matrix to shift image center to origin
-    T = np.array([[1, 0, 0, -z_offset],
-                  [0, 1, 0, -y_offset],
-                  [0, 0, 1, -x_offset],
-                  [0, 0, 0, 1]])
-    
-    H = np.linalg.inv(T).dot(R).dot(T)
-    print(H)
-    
-    tform = transform.AffineTransform()
-    tform = transform.AffineTransform(H, dimensionality = 3)
-    img_rot = transform.warp(image, tform.inverse)
-    
-    img_rot = transform.warp(image,ProjectiveTransform(H))
-    
-    print(img_rot.shape)
-    return img_rot
    
 
 def save_obj_pickle(obj, root, name):
@@ -581,5 +532,49 @@ def gaussian_map_expansive(landmarks, landmarks_size, sigma, gamma, x_size, y_si
     peak_x, peak_y, peak_z = landmarks[i][0], landmarks[i][1], landmarks[i][2]
     h += pre_factor * torch.exp( -((torch.tensor(x).to(S.device)-peak_x)**2 + (torch.tensor(y).to(S.device)-peak_y)**2 + (torch.tensor(z).to(S.device)-peak_z)**2) / (2.*sigma*sigma) )
   return h
+
+def rotate_img(image, angle, x_size, y_size, z_size, axis):
+    
+    c = math.cos(math.radians(angle))
+    s = math.sin(math.radians(angle))
+    
+    x_offset = (x_size - 1)/2 #- math.cos(math.radians(angle)) * ((x_size - 1)/2) - math.sin(math.radians(angle)) * ((z_size- 1)/2)
+    y_offset = (y_size - 1)/2
+    z_offset = (z_size - 1)/2
+    
+    if axis == [1,0]:       
+        R = np.array([[c, -s, 0, 0],
+                      [s, c, 0, 0],
+                      [0, 0, 1, 0],
+                      [0, 0, 0, 1]])
+        
+    elif axis == [1,2]:
+        R = np.array([[1, 0, 0, 0],
+                      [0, c, -s, 0],
+                      [0, s, c, 0],
+                      [0, 0, 0, 1]])
+    elif axis == [2,0]:         
+        R = np.array([[c, 0, s, 0],
+                      [0, 1, 0, 0],
+                      [-s, 0, c, 0],
+                      [0, 0, 0, 1]])         
+    
+    # translation matrix to shift image center to origin
+    T = np.array([[1, 0, 0, -z_offset],
+                  [0, 1, 0, -y_offset],
+                  [0, 0, 1, -x_offset],
+                  [0, 0, 0, 1]])
+    
+    H = np.linalg.inv(T).dot(R).dot(T)
+    print(H)
+    
+    tform = transform.AffineTransform()
+    tform = transform.AffineTransform(H, dimensionality = 3)
+    img_rot = transform.warp(image, tform.inverse)
+    
+    img_rot = transform.warp(image,ProjectiveTransform(H))
+    
+    print(img_rot.shape)
+    return img_rot
 
 """
