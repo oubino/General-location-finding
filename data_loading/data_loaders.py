@@ -49,9 +49,9 @@ def init(fold, train_ids, test_ids):
     global dataloaders
 
     dataloaders = {
-    'train': DataLoader(dataset, batch_size=S.batch_size, shuffle=True, sampler= train_subsampler),
-    'test': DataLoader(dataset, batch_size=S.batch_size_test, shuffle=False, sampler= test_subsampler),
-    'val': DataLoader(dataset, batch_size=S.batch_size, shuffle=True, sampler= val_subsampler)  
+    'train': DataLoader(dataset, batch_size=S.batch_size, sampler= train_subsampler),
+    'test': DataLoader(dataset, batch_size=S.batch_size_test, sampler= test_subsampler),
+    'val': DataLoader(dataset, batch_size=S.batch_size, sampler= val_subsampler)  
     }
     
 def init_no_k_fold():
@@ -74,9 +74,9 @@ def init_no_k_fold():
     global dataloaders
     # Load data in
     dataloaders = {
-        'train': DataLoader(train_set, batch_size=S.batch_size, shuffle=True, num_workers=0),
-        'val': DataLoader(val_set, batch_size=S.batch_size, shuffle=True, num_workers=0),
-        'test': DataLoader(test_set,batch_size = S.batch_size_test, shuffle = False, num_workers=0)
+        'train': DataLoader(train_set, batch_size=S.batch_size, num_workers=0),
+        'val': DataLoader(val_set, batch_size=S.batch_size,  num_workers=0),
+        'test': DataLoader(test_set,batch_size = S.batch_size_test, num_workers=0)
     }
 
 def init_load_no_k_fold():
@@ -99,9 +99,9 @@ def init_load_no_k_fold():
     global dataloaders
     # Load data in
     dataloaders = {
-        'train': DataLoader(train_set, batch_size=S.batch_size, shuffle=True, num_workers=0),
-        'val': DataLoader(val_set, batch_size=S.batch_size, shuffle=True, num_workers=0),
-        'test': DataLoader(test_set,batch_size = S.batch_size_test, shuffle = False, num_workers=0)
+        'train': DataLoader(train_set, batch_size=S.batch_size, num_workers=0),
+        'val': DataLoader(val_set, batch_size=S.batch_size, num_workers=0),
+        'test': DataLoader(test_set,batch_size = S.batch_size_test, num_workers=0)
     }
     
 def init_load_k_fold(fold):
@@ -130,9 +130,9 @@ def init_load_k_fold(fold):
     global dataloaders
 
     dataloaders = {
-    'train': DataLoader(dataset, batch_size=S.batch_size, shuffle=True, sampler= train_subsampler),
-    'test': DataLoader(dataset, batch_size=S.batch_size_test, shuffle=False, sampler= test_subsampler),
-    'val': DataLoader(dataset, batch_size=S.batch_size, shuffle=True, sampler= val_subsampler)  
+    'train': DataLoader(dataset, batch_size=S.batch_size, sampler= train_subsampler),
+    'test': DataLoader(dataset, batch_size=S.batch_size_test, sampler= test_subsampler),
+    'val': DataLoader(dataset, batch_size=S.batch_size, sampler= val_subsampler)  
     }
     
 def init_reserved_test_set():
