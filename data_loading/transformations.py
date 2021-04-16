@@ -339,7 +339,7 @@ class ToTensor(object):
             #structure[z][y][x] = l
             coords[l]['x'], coords[l]['y'], coords[l]['z'] = x,y,z
             
-            print_2D_slice(image, l, x, y, z, patient)
+            #print_2D_slice(image, l, x, y, z, patient)
             
         # swap color axis because
         # numpy image: D x H x W 
@@ -350,6 +350,7 @@ class ToTensor(object):
         return {'image': image,'idx': idx, 'patient':patient, 'coords':coords}
     
 
+"""
 
 import os
 import matplotlib.pyplot as plt
@@ -379,7 +380,7 @@ def print_2D_slice(img, landmark, struc_x, struc_y, struc_z, patient):
     S.img_counter_3 += 1
     plt.savefig(img_name)
 
-"""
+
 
 class ToTensor_no_ds(object):
     Convert ndarrays in sample to Tensors.
