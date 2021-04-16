@@ -339,7 +339,7 @@ class ToTensor(object):
             #structure[z][y][x] = l
             coords[l]['x'], coords[l]['y'], coords[l]['z'] = x,y,z
             
-            #print_2D_slice(image, l, x, y, z, patient)
+            print_2D_slice(image, l, x, y, z, patient)
             
         # swap color axis because
         # numpy image: D x H x W 
