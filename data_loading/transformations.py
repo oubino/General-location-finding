@@ -336,7 +336,7 @@ class ToTensor(object):
             #print_2D_slice(image, l, x, y, z, patient)
             print('landmark, x, y, z')
             print(l, x, y , z)
-            locations = np.nonzero(np.round(image) == l * 10)
+            locations = np.nonzero(image > 1)
             print(locations)
             z, y, x = locations[2], locations[1], locations[0]
             print(x, y, z)
