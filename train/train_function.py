@@ -14,7 +14,7 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
     best_model_wts = copy.deepcopy(model.state_dict())
 
     for epoch in range(num_epochs):
-        print('Epoch {}/{}'.format(epoch, num_epochs - 1))
+        print('Epoch {}/{}'.format((epoch + 1), num_epochs))
         print('-' * 10)
 
         since = time.time()
