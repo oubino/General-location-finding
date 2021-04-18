@@ -197,9 +197,9 @@ class Normalise(object):
       level = random.randint(self.level_min, self.level_max)
       minval = max(level - self.window/2, 0) # ensures don't go to negative values
       maxval = level + self.window/2
-      img_norm = np.clip(image, minval, maxval)
-      img_norm -= minval
-      img_norm /= self.window
+      image = np.clip(image, minval, maxval)
+      image -= minval
+      image /= self.window
       
       #for l in S.landmarks_total:
       #    z, y, x = coords[l]['z'], coords[l]['y'], coords[l]['x']
@@ -208,7 +208,7 @@ class Normalise(object):
       print('min/max value post normalise')
       print(np.amin(image), np.amax(image)) 
       
-      return {'image':img_norm, 'idx': idx, 'patient':patient, 'coords': coords} # note note !
+      return {'image':image, 'idx': idx, 'patient':patient, 'coords': coords} # note note !
   
 class Shift(object):
     def __call__(self, sample):
