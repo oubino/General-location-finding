@@ -74,14 +74,14 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
                             # iters to accumulate set to 12 this would mean 12 x 3 = 36 images before optim.step()
                             # if 75 images will step twice then is left over with 3 images - need to scale by this
                             # so need to scale 
-                            if (i+1) > (S.batch_acc_steps * iters_to_acc): 
+                           # if (i+1) > (S.batch_acc_steps * iters_to_acc): 
                                 #print('Leftover batch')
                                 #print(i+1)
                                 #print((data_loaders.batch_acc_batches - S.batch_acc_steps*iters_to_acc))
-                                loss = loss/((data_loaders.batch_acc_batches - S.batch_acc_steps*iters_to_acc))
-                            else:
+                            #    loss = loss/((data_loaders.batch_acc_batches - S.batch_acc_steps*iters_to_acc))
+                            #else:
                                # print(iters_to_acc, i)
-                                loss = loss/iters_to_acc
+                             #   loss = loss/iters_to_acc
 
 
                         # backward + optimize only if in training phase
@@ -89,12 +89,12 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
                             scaler.scale(loss).backward()
                             #print(time.time()-start_time)
                             #print(i+1 % data_loaders.batch_acc_batches, i+1 % iters_to_acc )
-                            if ((i+1) % data_loaders.batch_acc_batches == 0) or ((i+1) % iters_to_acc == 0):
+                            #if ((i+1) % data_loaders.batch_acc_batches == 0) or ((i+1) % iters_to_acc == 0):
                              #   print('reached', data_loaders.batch_acc_batches, i+1)
-                                scaler.step(optimizer)
-                                scaler.update() 
-                                scheduler.step()
-                                optimizer.zero_grad()
+                            scaler.step(optimizer)
+                            scaler.update() 
+                            scheduler.step()
+                            optimizer.zero_grad()
                               #  print(time.time()-start_time_op)
 
                     # statistics
