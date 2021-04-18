@@ -130,6 +130,9 @@ class Upsidedown_scipy(object):
         # if left cochlea landmark = 5 above 1/2
         # data is y, x, z
         # if top structure is below bottom structure then flips by 180
+        print('min/max value pre upside down')
+        print(np.amin(image), np.amax(image)) 
+        
         upside_down = False
         for i in range(len(S.top_structures)):
             top_structure = S.top_structures[i]
@@ -157,8 +160,16 @@ class Upsidedown_scipy(object):
                 coords[right_structure] = left_location
                 coords[left_structure] = right_location
             print('flipped')
+            
+            print('min/max value post upside down')
+            print(np.amin(image), np.amax(image)) 
+            
             return {'image': image, 'idx': idx, 'patient':patient, 'coords':coords}
         else:
+            
+            print('min/max value post upside down')
+            print(np.amin(image), np.amax(image)) 
+            
             return {'image': image, 'idx': idx, 'patient':patient, 'coords':coords}
               
         
@@ -173,6 +184,10 @@ class Normalise(object):
                           
   def __call__(self, sample):
       image, idx, patient, coords = sample['image'], sample['idx'], sample['patient'], sample['coords']
+      
+      print('min/max value pre normalise')
+      print(np.amin(image), np.amax(image)) 
+      
       # need to normalise around different values
       if np.round(np.amin(image)) < 0:
           print("MIN VALUE LESS THAN 0")
@@ -190,11 +205,18 @@ class Normalise(object):
       #    z, y, x = coords[l]['z'], coords[l]['y'], coords[l]['x']
       #    img_norm[int(z)][int(y)][int(x)] = 100*l
       
+      print('min/max value post normalise')
+      print(np.amin(image), np.amax(image)) 
+      
       return {'image':img_norm, 'idx': idx, 'patient':patient, 'coords': coords} # note note !
   
 class Shift(object):
     def __call__(self, sample):
         image, idx, patient, coords = sample['image'], sample['idx'], sample['patient'], sample['coords']
+        
+        print('min/max value pre shift')
+        print(np.amin(image), np.amax(image)) 
+        
         max_val = 10
         x_shift, y_shift, z_shift = random.randint(-max_val,max_val), random.randint(-max_val,max_val), random.randint(-max_val,max_val)          
         out_of_bounds = False      
@@ -210,6 +232,10 @@ class Shift(object):
             image = scipy.ndimage.shift(image, (z_shift, y_shift, x_shift), order = 3)
         else:
             print('shift out of bounds')
+            
+            
+        print('min/max value post shift')
+        print(np.amin(image), np.amax(image)) 
                 
         return {'image': image, 'idx': idx, 'patient':patient, 'coords':coords}
         
@@ -217,6 +243,10 @@ class Shift(object):
 class Flips_scipy(object):
     def __call__(self,sample):
         image, idx, patient, coords = sample['image'], sample['idx'], sample['patient'], sample['coords']
+        
+        print('min/max value pre flips')
+        print(np.amin(image), np.amax(image)) 
+        
         random_number = random.random()
         angle = random.randint(-10, 10)
         
@@ -272,11 +302,18 @@ class Flips_scipy(object):
             else:
                 print('ROTATION OUT OF BOUNDS')
                 
+        print('min/max value post shift')
+        print(np.amin(image), np.amax(image)) 
+                
         return {'image': image, 'idx': idx, 'patient':patient, 'coords':coords}
       
 class Horizontal_flip(object):
     def __call__(self,sample):
         image, idx, patient, coords = sample['image'], sample['idx'], sample['patient'], sample['coords']
+        
+        print('min/max value pre h flip')
+        print(np.amin(image), np.amax(image)) 
+        
         random_number = random.random()
         if random_number <= 0.5:
             image = np.flip(image, axis = 2).copy()
@@ -293,6 +330,9 @@ class Horizontal_flip(object):
                 right_location = coords[right_structure]
                 coords[left_structure] = right_location
                 coords[right_structure] = left_location
+                
+        print('min/max value post h flip')
+        print(np.amin(image), np.amax(image)) 
 
         return {'image': image, 'idx': idx, 'patient':patient, 'coords':coords }
 
@@ -318,6 +358,9 @@ class ToTensor(object):
 
     def __call__(self, sample):
         image, idx, patient, coords = sample['image'], sample['idx'], sample['patient'], sample['coords']
+        
+        print('min/max value pre to tensor')
+        print(np.amin(image), np.amax(image)) 
 
         for l in S.landmarks_total:
             # structure is z, y, x
