@@ -12,7 +12,7 @@ from useful_functs import functions
 import settings as S
 from data_loading import numpy_loc
 
-order_mod = 3
+order_mod = 1
 
 class Resize(object):
 
@@ -333,8 +333,8 @@ class ToTensor(object):
     def __call__(self, sample):
         image, idx, patient, coords = sample['image'], sample['idx'], sample['patient'], sample['coords']
         
-        #print('min/max value pre to tensor')
-        #print(np.amin(image), np.amax(image)) 
+        print('min/max value pre to tensor')
+        print(np.amin(image), np.amax(image)) 
 
         for l in S.landmarks_total:
             # structure is z, y, x
