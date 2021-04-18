@@ -12,6 +12,8 @@ from useful_functs import functions
 import settings as S
 from data_loading import numpy_loc
 
+order_mod = 0
+
 class Resize(object):
 
   def __init__(self, depth, width, height):
@@ -146,7 +148,7 @@ class Upsidedown_scipy(object):
         
         if upside_down == True:
             angle = 180
-            image = scipy.ndimage.rotate(image, angle, axes = [2,0], reshape = False, order = 3)
+            image = scipy.ndimage.rotate(image, angle, axes = [2,0], reshape = False, order = order_mod) # was 3
             # rotate coords up/down 
             for l in S.landmarks_total:
                 coords[l]['z'] = image.shape[0] - 1 - coords[l]['z'] # e.g. loc 25 in z image size 80 becomes 54 (as start from 0)
@@ -229,7 +231,7 @@ class Shift(object):
                 coords[l]['x'] = coords[l]['x'] + x_shift
                 coords[l]['y'] = coords[l]['y'] + y_shift
                 coords[l]['z'] = coords[l]['z'] + z_shift
-            image = scipy.ndimage.shift(image, (z_shift, y_shift, x_shift), order = 3)
+            image = scipy.ndimage.shift(image, (z_shift, y_shift, x_shift), order = order_mod)
         else:
             print('shift out of bounds')
             
@@ -264,7 +266,7 @@ class Flips_scipy(object):
             # check if still within bounds due to rotation!
             if out_of_bounds == False:
                 # HAS TO BE ORDER 0 !!!!
-                image = scipy.ndimage.rotate(image, angle, axes = [1,0],reshape = False, order = 3)# has to be order 0
+                image = scipy.ndimage.rotate(image, angle, axes = [1,0],reshape = False, order = order_mod)# has to be order 0
                 #image = functions.rotate_img(image,angle, S.in_x, S.in_y, S.in_z, axis = [1,0])
                 for l in S.landmarks_total:
                     coords[l]['x'], coords[l]['y'], coords[l]['z'] = coords_rotat[l]['x'], coords_rotat[l]['y'], coords_rotat[l]['z']
@@ -281,7 +283,7 @@ class Flips_scipy(object):
                     out_of_bounds = True                   
             # check if still within bounds due to rotation!
             if out_of_bounds == False:
-                image = scipy.ndimage.rotate(image, angle, axes = [1,2],reshape = False, order = 3)
+                image = scipy.ndimage.rotate(image, angle, axes = [1,2],reshape = False, order = order_mod)
                 for l in S.landmarks_total:
                     coords[l]['x'], coords[l]['y'], coords[l]['z'] = coords_rotat[l]['x'], coords_rotat[l]['y'], coords_rotat[l]['z']
             else:
@@ -296,7 +298,7 @@ class Flips_scipy(object):
                     out_of_bounds = True    
             # check if still within bounds due to rotation!
             if out_of_bounds == False:
-                image = scipy.ndimage.rotate(image, angle, axes = [2,0],reshape = False, order = 3)
+                image = scipy.ndimage.rotate(image, angle, axes = [2,0],reshape = False, order = order_mod)
                 for l in S.landmarks_total:
                     coords[l]['x'], coords[l]['y'], coords[l]['z'] = coords_rotat[l]['x'], coords_rotat[l]['y'], coords_rotat[l]['z']
             else:
