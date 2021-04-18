@@ -340,9 +340,6 @@ class ToTensor(object):
 
     def __call__(self, sample):
         image, idx, patient, coords = sample['image'], sample['idx'], sample['patient'], sample['coords']
-        
-        print('min/max value pre to tensor')
-        print(np.amin(image), np.amax(image)) 
 
         for l in S.landmarks_total:
             # structure is z, y, x
