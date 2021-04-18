@@ -326,6 +326,14 @@ class Check_left_right(object):
             
         return {'image': image, 'idx': idx, 'patient':patient, 'coords':coords}   
 
+class Normalise_final(object):
+    def __call__(self,sample):
+        image, idx, patient, coords = sample['image'], sample['idx'], sample['patient'], sample['coords']
+        max_val = np.amax(image)
+        image /= max_val
+            
+        return {'image': image, 'idx': idx, 'patient':patient, 'coords':coords}   
+
 
 class ToTensor(object):
     """Convert ndarrays in sample to Tensors."""
