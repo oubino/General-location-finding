@@ -12,7 +12,7 @@ from useful_functs import functions
 import settings as S
 from data_loading import numpy_loc
 
-order_mod = 2
+order_mod = 3
 
 class Resize(object):
 
