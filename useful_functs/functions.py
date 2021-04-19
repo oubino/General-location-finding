@@ -205,9 +205,9 @@ def line_learn_loc(coords_1, coords_2):
         x_1, y_1, z_1 = coords_1[k]['x'], coords_1[k]['y'], coords_1[k]['z']
         x_2, y_2, z_2 = coords_2[k]['x'], coords_2[k]['y'], coords_2[k]['z']
         t = random.random()
-        coords[k]['x'] = x_2 + t*(x_2 - x_1)
-        coords[k]['y'] = y_2 + t*(y_2 - y_1)
-        coords[k]['z'] = z_2 + t*(z_2 - z_1)
+        coords[k]['x'] = x_1 + t*(x_2 - x_1)
+        coords[k]['y'] = y_1 + t*(y_2 - y_1)
+        coords[k]['z'] = z_1 + t*(z_2 - z_1)
         #if coords_1[k]['locat'] != coords_2[k]['locat']:
         #    print('ERROR DIFFERENT TYPES OF POINTS')
         #else:
