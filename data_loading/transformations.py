@@ -12,6 +12,8 @@ from useful_functs import functions
 import settings as S
 from data_loading import numpy_loc
 
+order_mod = 1
+
 class Resize(object):
 
   def __init__(self, depth, width, height):
@@ -130,6 +132,7 @@ class Upsidedown_scipy(object):
         # if left cochlea landmark = 5 above 1/2
         # data is y, x, z
         # if top structure is below bottom structure then flips by 180
+        
         upside_down = False
         for i in range(len(S.top_structures)):
             top_structure = S.top_structures[i]
@@ -143,7 +146,7 @@ class Upsidedown_scipy(object):
         
         if upside_down == True:
             angle = 180
-            image = scipy.ndimage.rotate(image, angle, axes = [2,0], reshape = False, order = 3)
+            image = scipy.ndimage.rotate(image, angle, axes = [2,0], reshape = False, order = order_mod) # was 3
             # rotate coords up/down 
             for l in S.landmarks_total:
                 coords[l]['z'] = image.shape[0] - 1 - coords[l]['z'] # e.g. loc 25 in z image size 80 becomes 54 (as start from 0)
@@ -157,8 +160,9 @@ class Upsidedown_scipy(object):
                 coords[right_structure] = left_location
                 coords[left_structure] = right_location
             print('flipped')
+            
             return {'image': image, 'idx': idx, 'patient':patient, 'coords':coords}
-        else:
+        else:          
             return {'image': image, 'idx': idx, 'patient':patient, 'coords':coords}
               
         
@@ -172,7 +176,8 @@ class Normalise(object):
       self.window = window
                           
   def __call__(self, sample):
-      image, idx, patient, coords = sample['image'], sample['idx'], sample['patient'], sample['coords']
+      image, idx, patient, coords = sample['image'], sample['idx'], sample['patient'], sample['coords']     
+      
       # need to normalise around different values
       if np.round(np.amin(image)) < 0:
           print("MIN VALUE LESS THAN 0")
@@ -182,19 +187,23 @@ class Normalise(object):
       level = random.randint(self.level_min, self.level_max)
       minval = max(level - self.window/2, 0) # ensures don't go to negative values
       maxval = level + self.window/2
-      img_norm = np.clip(image, minval, maxval)
-      img_norm -= minval
-      img_norm /= self.window
+      image = np.clip(image, minval, maxval)
+      image -= minval
+      image /= self.window
       
       #for l in S.landmarks_total:
       #    z, y, x = coords[l]['z'], coords[l]['y'], coords[l]['x']
       #    img_norm[int(z)][int(y)][int(x)] = 100*l
       
-      return {'image':img_norm, 'idx': idx, 'patient':patient, 'coords': coords} # note note !
+      #print('min/max value post normalise')
+      #print(np.amin(image), np.amax(image)) 
+      
+      return {'image':image, 'idx': idx, 'patient':patient, 'coords': coords} # note note !
   
 class Shift(object):
     def __call__(self, sample):
         image, idx, patient, coords = sample['image'], sample['idx'], sample['patient'], sample['coords']
+        
         max_val = 10
         x_shift, y_shift, z_shift = random.randint(-max_val,max_val), random.randint(-max_val,max_val), random.randint(-max_val,max_val)          
         out_of_bounds = False      
@@ -207,16 +216,17 @@ class Shift(object):
                 coords[l]['x'] = coords[l]['x'] + x_shift
                 coords[l]['y'] = coords[l]['y'] + y_shift
                 coords[l]['z'] = coords[l]['z'] + z_shift
-            image = scipy.ndimage.shift(image, (z_shift, y_shift, x_shift), order = 3)
+            image = scipy.ndimage.shift(image, (z_shift, y_shift, x_shift), order = order_mod)
         else:
             print('shift out of bounds')
-                
+
         return {'image': image, 'idx': idx, 'patient':patient, 'coords':coords}
         
 
 class Flips_scipy(object):
     def __call__(self,sample):
         image, idx, patient, coords = sample['image'], sample['idx'], sample['patient'], sample['coords']
+        
         random_number = random.random()
         angle = random.randint(-10, 10)
         
@@ -234,7 +244,7 @@ class Flips_scipy(object):
             # check if still within bounds due to rotation!
             if out_of_bounds == False:
                 # HAS TO BE ORDER 0 !!!!
-                image = scipy.ndimage.rotate(image, angle, axes = [1,0],reshape = False, order = 3)# has to be order 0
+                image = scipy.ndimage.rotate(image, angle, axes = [1,0],reshape = False, order = order_mod)# has to be order 0
                 #image = functions.rotate_img(image,angle, S.in_x, S.in_y, S.in_z, axis = [1,0])
                 for l in S.landmarks_total:
                     coords[l]['x'], coords[l]['y'], coords[l]['z'] = coords_rotat[l]['x'], coords_rotat[l]['y'], coords_rotat[l]['z']
@@ -251,7 +261,7 @@ class Flips_scipy(object):
                     out_of_bounds = True                   
             # check if still within bounds due to rotation!
             if out_of_bounds == False:
-                image = scipy.ndimage.rotate(image, angle, axes = [1,2],reshape = False, order = 3)
+                image = scipy.ndimage.rotate(image, angle, axes = [1,2],reshape = False, order = order_mod)
                 for l in S.landmarks_total:
                     coords[l]['x'], coords[l]['y'], coords[l]['z'] = coords_rotat[l]['x'], coords_rotat[l]['y'], coords_rotat[l]['z']
             else:
@@ -266,7 +276,7 @@ class Flips_scipy(object):
                     out_of_bounds = True    
             # check if still within bounds due to rotation!
             if out_of_bounds == False:
-                image = scipy.ndimage.rotate(image, angle, axes = [2,0],reshape = False, order = 3)
+                image = scipy.ndimage.rotate(image, angle, axes = [2,0],reshape = False, order = order_mod)
                 for l in S.landmarks_total:
                     coords[l]['x'], coords[l]['y'], coords[l]['z'] = coords_rotat[l]['x'], coords_rotat[l]['y'], coords_rotat[l]['z']
             else:
@@ -277,6 +287,7 @@ class Flips_scipy(object):
 class Horizontal_flip(object):
     def __call__(self,sample):
         image, idx, patient, coords = sample['image'], sample['idx'], sample['patient'], sample['coords']
+        
         random_number = random.random()
         if random_number <= 0.5:
             image = np.flip(image, axis = 2).copy()
@@ -312,13 +323,21 @@ class Check_left_right(object):
             
         return {'image': image, 'idx': idx, 'patient':patient, 'coords':coords}   
 
+class Normalise_final(object):
+    def __call__(self,sample):
+        image, idx, patient, coords = sample['image'], sample['idx'], sample['patient'], sample['coords']
+        max_val = np.amax(image)
+        image /= max_val
+            
+        return {'image': image, 'idx': idx, 'patient':patient, 'coords':coords}   
+
 
 class ToTensor(object):
     """Convert ndarrays in sample to Tensors."""
 
     def __call__(self, sample):
         image, idx, patient, coords = sample['image'], sample['idx'], sample['patient'], sample['coords']
-
+        
         for l in S.landmarks_total:
             # structure is z, y, x
             # need it in y, x, z                
@@ -350,8 +369,8 @@ class ToTensor(object):
         return {'image': image,'idx': idx, 'patient':patient, 'coords':coords}
     
 
-"""
 
+"""
 import os
 import matplotlib.pyplot as plt
 def print_2D_slice(img, landmark, struc_x, struc_y, struc_z, patient):

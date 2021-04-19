@@ -73,14 +73,15 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
                             
                             # iters to accumulate set to 12 this would mean 12 x 3 = 36 images before optim.step()
                             # if 75 images will step twice then is left over with 3 images - need to scale by this
-                            # so need to scale 
-                           # if (i+1) > (S.batch_acc_steps * iters_to_acc): 
+                            # so need to scale
+                            #if (i+1) > (S.batch_acc_steps * iters_to_acc): 
                                 #print('Leftover batch')
                                 #print(i+1)
                                 #print((data_loaders.batch_acc_batches - S.batch_acc_steps*iters_to_acc))
                             #    loss = loss/((data_loaders.batch_acc_batches - S.batch_acc_steps*iters_to_acc))
                             #else:
                                # print(iters_to_acc, i)
+
                              #   loss = loss/iters_to_acc
 
 
