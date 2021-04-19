@@ -12,7 +12,7 @@ from useful_functs import functions
 import settings as S
 from data_loading import numpy_loc
 
-order_mod = 3
+order_mod = 1
 
 class Resize(object):
 
@@ -326,7 +326,6 @@ class Check_left_right(object):
 class Normalise_final(object):
     def __call__(self,sample):
         image, idx, patient, coords = sample['image'], sample['idx'], sample['patient'], sample['coords']
-        image = np.clip(image, 0, 1)
         max_val = np.amax(image)
         image /= max_val
             
@@ -339,9 +338,6 @@ class ToTensor(object):
     def __call__(self, sample):
         image, idx, patient, coords = sample['image'], sample['idx'], sample['patient'], sample['coords']
         
-        print('min/max value pre to tensor')
-        print(np.amin(image), np.amax(image)) 
-
         for l in S.landmarks_total:
             # structure is z, y, x
             # need it in y, x, z                
@@ -374,7 +370,7 @@ class ToTensor(object):
     
 
 
-
+"""
 import os
 import matplotlib.pyplot as plt
 def print_2D_slice(img, landmark, struc_x, struc_y, struc_z, patient):
@@ -403,7 +399,7 @@ def print_2D_slice(img, landmark, struc_x, struc_y, struc_z, patient):
     S.img_counter_3 += 1
     plt.savefig(img_name)
 
-"""
+
 
 class ToTensor_no_ds(object):
     Convert ndarrays in sample to Tensors.
