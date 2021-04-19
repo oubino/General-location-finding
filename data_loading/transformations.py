@@ -176,10 +176,7 @@ class Normalise(object):
       self.window = window
                           
   def __call__(self, sample):
-      image, idx, patient, coords = sample['image'], sample['idx'], sample['patient'], sample['coords']
-      
-      #print('min/max value pre normalise')
-      #print(np.amin(image), np.amax(image)) 
+      image, idx, patient, coords = sample['image'], sample['idx'], sample['patient'], sample['coords']     
       
       # need to normalise around different values
       if np.round(np.amin(image)) < 0:
@@ -341,6 +338,9 @@ class ToTensor(object):
 
     def __call__(self, sample):
         image, idx, patient, coords = sample['image'], sample['idx'], sample['patient'], sample['coords']
+        
+        print('min/max value pre to tensor')
+        print(np.amin(image), np.amax(image)) 
 
         for l in S.landmarks_total:
             # structure is z, y, x
