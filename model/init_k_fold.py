@@ -90,7 +90,7 @@ def init(init_fold):
         print('\n')
         print('Evaluating model')
         print('----------------')
-        model.evaluate(fold)   
+       # model.evaluate(fold)   
         print('error counter')
         print(settings.error_counter)
         time_elapsed_fold = time.time() - start_time_fold
