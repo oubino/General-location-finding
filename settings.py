@@ -86,11 +86,11 @@ def init():
     print(device)
         
     # batch size
-    change_batch_size = yes_or_no.question('Would you like to change batch size from default(5): ')
+    change_batch_size = yes_or_no.question('Would you like to change batch size from default(3): ')
     if change_batch_size == True:
         batch_size = int(input ("Batch size: "))
     else:
-        batch_size = 5  
+        batch_size = 3  
     batch_size_test = 1 # HAS TO BE 1 ! STRUC ORIGINAL OTHERWISE WILL BE DIFFERENT SHAPES AND BATCH LOADER WILL FAIL
     
     
