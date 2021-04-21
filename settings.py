@@ -51,8 +51,8 @@ def init():
         elif aaron_or_oli == False:
             # Oli paths
             coding_path = r'C:\Users\olive\OneDrive\Documents\GitHub\General-location-finding'
-            root = r'C:\Users\olive\OneDrive\Documents\CNN\3D_data\Facial_asymmetry_reclicks' # note lack of " "
-            save_data_path = r'C:\Users\olive\OneDrive\Documents\CNN\Sem 2\Results'
+            root = r'C:\Users\olive\OneDrive\Documents\MPhys\3D_data\Facial_asymmetry_reclicks' # note lack of " "
+            save_data_path = r'C:\Users\olive\OneDrive\Documents\MPhys\Sem 2\Results'
     elif locally_or_server == False:
         # use server paths for data and code for Aaron/Oli
         aaron_or_oli = yes_or_no.question('aaron(y) / oli (n)')
