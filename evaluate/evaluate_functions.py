@@ -234,8 +234,8 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
                     outliers_landmarks[k][l] = np.append(outliers_landmarks[k][l],1)
                     
           # print 2D slice
-          #print('2D slice for landmark %1.0f' % l)
-          #print_2D_slice_line(l, pred_max_x, pred_max_y, pred_max_z, struc_coord, eval_path, patient[i])
+          print('2D slice for landmark %1.0f' % l)
+          print_2D_slice_line(l, pred_max_x, pred_max_y, pred_max_z, struc_coord, eval_path, patient[i])
             
     batch_number += 1 # not sure where to put
    
