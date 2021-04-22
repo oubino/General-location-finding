@@ -12,7 +12,7 @@ from useful_functs import functions
 import settings as S
 from data_loading import numpy_loc
 
-order_mod = 1
+order_mod = 3
 
 class Resize(object):
 
@@ -326,6 +326,7 @@ class Check_left_right(object):
 class Normalise_final(object):
     def __call__(self,sample):
         image, idx, patient, coords = sample['image'], sample['idx'], sample['patient'], sample['coords']
+        image = np.clip(image,0,1)
         max_val = np.amax(image)
         image /= max_val
             
