@@ -32,10 +32,15 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
       
   p2p_landmarks = defaultdict(float)
   outliers_landmarks = defaultdict(float)
+  x_axis_devs, x_axis_devs_mm = defaultdict(float), defaultdict(float)
+  y_axis_devs, y_axis_devs_mm = defaultdict(float), defaultdict(float)
+  z_axis_devs, z_axis_devs_mm = defaultdict(float), defaultdict(float)
   for l in S.landmarks:
     p2p_landmarks[l] = np.empty((0), float)
     outliers_landmarks[l] = np.empty((0), float)
-    
+    x_axis_devs[l], x_axis_devs_mm[l] = np.empty((0), float),  np.empty((0), float)
+    y_axis_devs[l], y_axis_devs_mm[l] = np.empty((0), float),  np.empty((0), float)
+    z_axis_devs[l], z_axis_devs_mm[l] = np.empty((0), float),  np.empty((0), float)
   # load in struc_coord  
   struc_coord = functions.load_obj_pickle(S.root, 'coords_' + S.clicker) 
 
@@ -69,7 +74,7 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
           pred_max_x, pred_max_y, pred_max_z = functions.aug_to_orig(pred_max_x, pred_max_y, pred_max_z, S.downsample_user, patient[i])
           
           # print out 3D images for first one in batch
-          if batch_number == 0 and i == 0: # for first batch 
+          #if batch_number == 0 and i == 0: # for first batch 
             # now need to choose first in batch i.e. # image[0]
             #print('3D plots for landmark %1.0f' % l)
             #print_3D_heatmap(image[i], structure[i], pred[i], l, eval_path, patient[i])
@@ -81,12 +86,14 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
             #print(pred_max_x, pred_max_y, pred_max_z)
             #print('\n')
             # print 2D slice
-            print('2D slice for landmark %1.0f' % l)
-            print_2D_slice(l, pred_max_x, pred_max_y, pred_max_z, structure_max_x, structure_max_y, structure_max_z ,eval_path, patient[i])
+            #print('2D slice for landmark %1.0f' % l)
+            #print_2D_slice(l, pred_max_x, pred_max_y, pred_max_z, structure_max_x, structure_max_y, structure_max_z ,eval_path, patient[i])
                       
           # point to point takes in original structure location!!
           img_landmark_point_to_point = functions.point_to_point_mm(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z, patient[i])
           p2p_landmarks[l] = np.append(p2p_landmarks[l],img_landmark_point_to_point.cpu())
+          
+          x_axis_devs[l] = np.append(x_axis_devs[l], )
           # if img_point_to_point > 20mm is an outlier
           if img_landmark_point_to_point > 20:
             outliers_landmarks[l] = np.append(outliers_landmarks[l],1)
@@ -230,6 +237,8 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
                   img_landmark_point_to_point = functions.point_to_point_mm(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z, patient[i])
                   p2p_landmarks[k][l] = np.append(p2p_landmarks[k][l],img_landmark_point_to_point.cpu())
                   # if img_point_to_point > 20mm is an outlier
+                  x_p2p, x_p2p_mm, y_p2p, y_p2p_mm, z_p2p, z_p2p_mm = functions.axis_p2p_devs(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z, patient[i])
+                  x_
                   if img_landmark_point_to_point > 20:
                     outliers_landmarks[k][l] = np.append(outliers_landmarks[k][l],1)
                     
