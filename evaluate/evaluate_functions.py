@@ -32,15 +32,15 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
       
   p2p_landmarks = defaultdict(float)
   outliers_landmarks = defaultdict(float)
-  x_axis_devs, x_axis_devs_mm = defaultdict(float), defaultdict(float)
-  y_axis_devs, y_axis_devs_mm = defaultdict(float), defaultdict(float)
-  z_axis_devs, z_axis_devs_mm = defaultdict(float), defaultdict(float)
+  #x_axis_err, x_axis_err_mm = defaultdict(float), defaultdict(float)
+  #y_axis_err, y_axis_err_mm = defaultdict(float), defaultdict(float)
+  #z_axis_err, z_axis_err_mm = defaultdict(float), defaultdict(float)
   for l in S.landmarks:
     p2p_landmarks[l] = np.empty((0), float)
     outliers_landmarks[l] = np.empty((0), float)
-    x_axis_devs[l], x_axis_devs_mm[l] = np.empty((0), float),  np.empty((0), float)
-    y_axis_devs[l], y_axis_devs_mm[l] = np.empty((0), float),  np.empty((0), float)
-    z_axis_devs[l], z_axis_devs_mm[l] = np.empty((0), float),  np.empty((0), float)
+   # x_axis_err[l], x_axis_err_mm[l] = np.empty((0), float),  np.empty((0), float)
+   # y_axis_err[l], y_axis_err_mm[l] = np.empty((0), float),  np.empty((0), float)
+   # z_axis_err[l], z_axis_err_mm[l] = np.empty((0), float),  np.empty((0), float)
   # load in struc_coord  
   struc_coord = functions.load_obj_pickle(S.root, 'coords_' + S.clicker) 
 
@@ -93,7 +93,7 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
           img_landmark_point_to_point = functions.point_to_point_mm(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z, patient[i])
           p2p_landmarks[l] = np.append(p2p_landmarks[l],img_landmark_point_to_point.cpu())
           
-          x_axis_devs[l] = np.append(x_axis_devs[l], )
+         # x_axis_err[l] = np.append(x_axis_err[l], )
           # if img_point_to_point > 20mm is an outlier
           if img_landmark_point_to_point > 20:
             outliers_landmarks[l] = np.append(outliers_landmarks[l],1)
@@ -173,29 +173,29 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
   keys = ('clicker_1', 'clicker_2', 'mean')
   p2p_landmarks = {}
   outliers_landmarks = {}
-  x_axis_devs, x_axis_devs_mm = {}, {}
-  y_axis_devs, y_axis_devs_mm = {}, {}
-  z_axis_devs, z_axis_devs_mm = {}, {}
+  x_axis_err, x_axis_err_mm = {}, {}
+  y_axis_err, y_axis_err_mm = {}, {}
+  z_axis_err, z_axis_err_mm = {}, {}
   for i in keys:
       p2p_landmarks[i] = {} 
       outliers_landmarks[i] = {} 
-      x_axis_devs[i] = {}
-      x_axis_devs_mm[i] = {}
-      y_axis_devs[i] = {}
-      y_axis_devs_mm[i] = {}
-      z_axis_devs[i] = {}
-      z_axis_devs_mm[i] = {}
+      x_axis_err[i] = {}
+      x_axis_err_mm[i] = {}
+      y_axis_err[i] = {}
+      y_axis_err_mm[i] = {}
+      z_axis_err[i] = {}
+      z_axis_err_mm[i] = {}
       
   for i in keys:
       for l in S.landmarks:
         p2p_landmarks[i][l] = np.empty((0), float)
         outliers_landmarks[i][l] = np.empty((0), float)
-        x_axis_devs[i][l] = np.empty((0), float)
-        x_axis_devs_mm[i][l] = np.empty((0), float)
-        y_axis_devs[i][l] = np.empty((0), float)
-        y_axis_devs_mm[i][l] = np.empty((0), float)
-        z_axis_devs[i][l] = np.empty((0), float)
-        z_axis_devs_mm[i][l] = np.empty((0), float)
+        x_axis_err[i][l] = np.empty((0), float)
+        x_axis_err_mm[i][l] = np.empty((0), float)
+        y_axis_err[i][l] = np.empty((0), float)
+        y_axis_err_mm[i][l] = np.empty((0), float)
+        z_axis_err[i][l] = np.empty((0), float)
+        z_axis_err_mm[i][l] = np.empty((0), float)
     
   # load in struc_coord  
   struc_coord_clicker_1 = functions.load_obj_pickle(S.root, 'coords_' + 'Oli') 
@@ -252,13 +252,13 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
                   img_landmark_point_to_point = functions.point_to_point_mm(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z, patient[i])
                   p2p_landmarks[k][l] = np.append(p2p_landmarks[k][l],img_landmark_point_to_point.cpu())
                   # if img_point_to_point > 20mm is an outlier
-                  x_p2p, x_p2p_mm, y_p2p, y_p2p_mm, z_p2p, z_p2p_mm = functions.axis_p2p_devs(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z, patient[i])
-                  x_axis_devs[k][l] = np.append(x_axis_devs[k][l], x_p2p.cpu())
-                  x_axis_devs_mm[k][l] = np.append(x_axis_devs_mm[k][l], x_p2p_mm.cpu())
-                  y_axis_devs[k][l] = np.append(y_axis_devs[k][l], y_p2p.cpu())
-                  y_axis_devs_mm[k][l] = np.append(y_axis_devs_mm[k][l], y_p2p_mm.cpu())
-                  z_axis_devs[k][l] = np.append(z_axis_devs[k][l], z_p2p.cpu())
-                  z_axis_devs_mm[k][l] = np.append(z_axis_devs_mm[k][l], z_p2p_mm.cpu())
+                  x_p2p, x_p2p_mm, y_p2p, y_p2p_mm, z_p2p, z_p2p_mm = functions.axis_p2p_err(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z, patient[i])
+                  x_axis_err[k][l] = np.append(x_axis_err[k][l], x_p2p.cpu())
+                  x_axis_err_mm[k][l] = np.append(x_axis_err_mm[k][l], x_p2p_mm.cpu())
+                  y_axis_err[k][l] = np.append(y_axis_err[k][l], y_p2p.cpu())
+                  y_axis_err_mm[k][l] = np.append(y_axis_err_mm[k][l], y_p2p_mm.cpu())
+                  z_axis_err[k][l] = np.append(z_axis_err[k][l], z_p2p.cpu())
+                  z_axis_err_mm[k][l] = np.append(z_axis_err_mm[k][l], z_p2p_mm.cpu())
                   if img_landmark_point_to_point > 20:
                     outliers_landmarks[k][l] = np.append(outliers_landmarks[k][l],1)
                     
@@ -294,25 +294,25 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
         print('    pred max used = %s' % S.pred_max)
         print('\n')
         
-        mean_x_dev = np.mean(x_axis_devs[k][l])
-        mean_x_dev_mm = np.mean(x_axis_devs_mm[k][l])
-        mean_y_dev = np.mean(y_axis_devs[k][l])
-        mean_y_dev_mm = np.mean(y_axis_devs_mm[k][l])
-        mean_z_dev = np.mean(z_axis_devs[k][l])
-        mean_z_dev_mm = np.mean(z_axis_devs_mm[k][l])
+        mean_x_err = np.mean(x_axis_err[k][l])
+        mean_x_err_mm = np.mean(x_axis_err_mm[k][l])
+        mean_y_err = np.mean(y_axis_err[k][l])
+        mean_y_err_mm = np.mean(y_axis_err_mm[k][l])
+        mean_z_err = np.mean(z_axis_err[k][l])
+        mean_z_err_mm = np.mean(z_axis_err_mm[k][l])
         
-        print('     mean error in x axis is: ' + str(mean_x_dev) + '(' + str(mean_x_dev_mm) + 'mm)')
-        print('     mean error in y axis is: ' + str(mean_y_dev) + '(' + str(mean_y_dev_mm) + 'mm)')
-        print('     mean error in z axis is: ' + str(mean_z_dev) + '(' + str(mean_z_dev_mm) + 'mm)')
+        print('     mean error in x axis is: ' + str(mean_x_err) + '(' + str(mean_x_err_mm) + 'mm)')
+        print('     mean error in y axis is: ' + str(mean_y_err) + '(' + str(mean_y_err_mm) + 'mm)')
+        print('     mean error in z axis is: ' + str(mean_z_err) + '(' + str(mean_z_err_mm) + 'mm)')
         
         
         L = ['\n','Landmark %1.0f' % l, '\n', 
              '  mean point to point error is ' + str(mean) + '+/-' + str(std_mean), '\n',
              '  median point to point error is ' + str(median), '\n', 
              '  percentage of images which were outliers is ' + str(outliers_perc) + '%', '\n',
-             '  mean error in x axis is: ' + str(mean_x_dev) + '(' + str(mean_x_dev_mm) + 'mm)', '\n',
-             '  mean error in y axis is: ' + str(mean_y_dev) + '(' + str(mean_y_dev_mm) + 'mm)', '\n',
-             '  mean error in z axis is: ' + str(mean_z_dev) + '(' + str(mean_z_dev_mm) + 'mm)', '\n',
+             '  mean error in x axis is: ' + str(mean_x_err) + '(' + str(mean_x_err_mm) + 'mm)', '\n',
+             '  mean error in y axis is: ' + str(mean_y_err) + '(' + str(mean_y_err_mm) + 'mm)', '\n',
+             '  mean error in z axis is: ' + str(mean_z_err) + '(' + str(mean_z_err_mm) + 'mm)', '\n',
              '  sigma is ' + str(sigmas[l]), '\n', 
              '  pred max used = ' + str(S.pred_max), '\n',
              '  trained for ' + str(epochs_completed) + ' epochs\n']
