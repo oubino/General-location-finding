@@ -123,7 +123,7 @@ def point_to_point_mm(mask_x, mask_y, mask_z, pred_x, pred_y, pred_z, patient):
   
   return point_to_point
 
-def axis_p2p_devs(mask_x, mask_y, mask_z, pred_x, pred_y, pred_z, patient):
+def axis_p2p_err(mask_x, mask_y, mask_z, pred_x, pred_y, pred_z, patient):
   # calculates point to point in mm
   data = csv.reader(open(os.path.join(S.root, 'image_dimensions.csv')),delimiter=',')
   next(data) # skip first line
