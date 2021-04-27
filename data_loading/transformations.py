@@ -62,6 +62,9 @@ class CentreCrop(object):
           
           # if in test then slide window across
           print('sliding window')
+          # x_crop = S.crop_coords_slide[patient][S.slide_index]['x']
+          # x_left right etc. need to be properly saved based on patient and sliding index
+          # S.crop_list[patient][sliding_index]['x_left'] = x_left
       else:
           if S.train_line == True:
               crop_coords_1 = functions.load_obj_pickle(S.root, 'crop_coords_Oli')
