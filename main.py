@@ -13,9 +13,12 @@ if initialise == True:
     from model import init_k_fold
     fold_init = input ("Fold to initialise from, if want to do full folds then put 0, if want to train folds 3,4,5 put 2 (folds are 0,1,2,3,4) ")
     # assumption here is that folds are done in same way everytime!!
-    init_k_fold.init(fold_init)
-    print('test ids for each fold')
-    print(settings.k_fold_ids)
+    for i in range(3):
+        fold_init = i
+        init_k_fold.init(fold_init)
+        print('test ids for each fold')
+        print(settings.k_fold_ids)
+    
 
 elif initialise == False:
     settings.init_load()
