@@ -39,10 +39,11 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
   # load in struc_coord  
   struc_coord = functions.load_obj_pickle(S.root, 'coords_' + S.clicker) 
 
-  for batch in data_loaders.dataloaders['test']:
-    image = batch['image'].to(S.device)
-    patient = batch['patient']
+  for batch in data_loaders.dataloaders['test']:        
+    patient = batch['patient']    
+    image = batch['image'].to(S.device)        
     pred = model(image)
+        
   
     batch_number = 0
     
