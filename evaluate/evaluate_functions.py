@@ -310,6 +310,9 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
              '  mean point to point error is ' + str(mean) + '+/-' + str(std_mean), '\n',
              '  median point to point error is ' + str(median), '\n', 
              '  percentage of images which were outliers is ' + str(outliers_perc) + '%', '\n',
+             '  mean error in x axis is: ' + str(mean_x_dev) + '(' + str(mean_x_dev_mm) + 'mm)', '\n',
+             '  mean error in y axis is: ' + str(mean_y_dev) + '(' + str(mean_y_dev_mm) + 'mm)', '\n',
+             '  mean error in z axis is: ' + str(mean_z_dev) + '(' + str(mean_z_dev_mm) + 'mm)', '\n',
              '  sigma is ' + str(sigmas[l]), '\n', 
              '  pred max used = ' + str(S.pred_max), '\n',
              '  trained for ' + str(epochs_completed) + ' epochs\n']
