@@ -14,6 +14,7 @@ import settings as S
 from data_loading import transformations as T
 import matplotlib.pyplot as plt
 
+
 #os.chdir(S.root) # change to data path and change back at end
 #print(os.getcwd())
 
@@ -99,7 +100,7 @@ def init_reserved_test_set():
     global dataloaders
     # Load data in
     dataloaders = {
-        'test': DataLoader(test_set,batch_size = S.batch_size_test, shuffle = False, num_workers=0)
+        'test': DataLoader(test_set,batch_size = 1, shuffle = False, num_workers=0)
     }
     
 """

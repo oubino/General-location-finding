@@ -213,20 +213,20 @@ def init():
     k_fold_ids = []   # k fold test
     
     # train line true
-    train_line_q = input ("Train/eval on a line (y/n)? If want to eval on reserved test put (r)")
-    sliding_window = yes_or_no.question('Sliding window (y)/(n)')
+    train_line_q = input ("Train/eval on a line (y/n)? If want to eval on reserved test put (r): ")
+    sliding_window = yes_or_no.question('Sliding window (y)/(n): ')
     if train_line_q == 'y':
         train_line = True
     elif train_line_q == 'n':
         train_line = False
-        aaron_or_oli = yes_or_no.question('Aaron clicks(y) / Oli clicks (n)')
+        aaron_or_oli = yes_or_no.question('Aaron clicks(y) / Oli clicks (n): ')
         if aaron_or_oli == True:
             clicker = 'Aaron'
         elif aaron_or_oli == False:
             clicker = 'Oli'
     elif train_line_q == 'r':
         train_line = False # necessary for crop in transformations
-        clicker_input = input ('Aaron(a), Oli (o), Abby (ab)')
+        clicker_input = input ('Aaron(a), Oli (o), Abby (ab): ')
         if clicker_input == 'a':
             clicker = 'Aaron_test_set'
         elif clicker_input == 'o':
