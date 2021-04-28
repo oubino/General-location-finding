@@ -9,7 +9,7 @@ settings.init()
 settings.init_load()
 
 # cts and structures & csv path
-settings.root = r'/home/olive/data/Test_set'
+settings.root = r'/home/rankinaaron98/Facial_asymmetry_aaron_testset'
 
 # evaluate model
 
