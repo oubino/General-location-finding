@@ -4,7 +4,7 @@ import os
 import pickle
 import numpy as np
 
-import settings as S
+#import settings as S
 from data_loading import numpy_loc
 S.init()
 
