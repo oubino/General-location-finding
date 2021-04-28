@@ -12,7 +12,7 @@ from useful_functs import functions
 import settings as S
 from data_loading import numpy_loc
 
-order_mod = 1
+order_mod = 3
 
 class Resize(object):
 
@@ -57,18 +57,23 @@ class CentreCrop(object):
       d, h, w = image.shape[:3] # define image height, width, depth as first 3 values
       
       # location around which to crop
-      
-      if S.train_line == True:
-          crop_coords_1 = functions.load_obj_pickle(S.root, 'crop_coords_Oli')
-          crop_coords_2 = functions.load_obj_pickle(S.root, 'crop_coords_Aaron')
-          crop_coords = functions.line_learn_crop(crop_coords_1[patient], crop_coords_2[patient])
-      elif S.train_line == False:
-          crop_coords = functions.load_obj_pickle(S.root, 'crop_coords_' + S.clicker)
-          crop_coords = crop_coords[patient]
-      
-      x_crop = crop_coords['x']
-      y_crop = crop_coords['y']
-      z_crop = crop_coords['z']
+      if S.sliding_window == True:
+          # if in train then take random crop from image
+          
+          # if in test then slide window across
+          print('sliding window')
+      else:
+          if S.train_line == True:
+              crop_coords_1 = functions.load_obj_pickle(S.root, 'crop_coords_Oli')
+              crop_coords_2 = functions.load_obj_pickle(S.root, 'crop_coords_Aaron')
+              crop_coords = functions.line_learn_crop(crop_coords_1[patient], crop_coords_2[patient])
+          elif S.train_line == False:
+              crop_coords = functions.load_obj_pickle(S.root, 'crop_coords_' + S.clicker)
+              crop_coords = crop_coords[patient]
+          
+          x_crop = crop_coords['x']
+          y_crop = crop_coords['y']
+          z_crop = crop_coords['z']
                       
       # crop .. (30,100) removes first 30 pixels from LHS and last 100 pixels from RHS   
       x_left = max(int(np.round(x_crop)) - self.width/2, 0)
@@ -326,6 +331,7 @@ class Check_left_right(object):
 class Normalise_final(object):
     def __call__(self,sample):
         image, idx, patient, coords = sample['image'], sample['idx'], sample['patient'], sample['coords']
+        image = np.clip(image,0,1)
         max_val = np.amax(image)
         image /= max_val
             
