@@ -31,12 +31,12 @@ def pred_max(heatmap, landmark, landmarks):
     val = c[0][i][index][0][0][0]
     if i == 0:
       coords = torch.tensor([[x,y,z]]).to(S.device)
-      vals = torch.tensor(val).to(S.device)
+      vals = torch.tensor([val]).to(S.device)
     else: 
       coords_temp = torch.tensor([[x,y,z]]).to(S.device)
       coords = torch.cat((coords,coords_temp),dim = 0)
       
-      val_temp = torch.tensor(vals).to(S.device)
+      val_temp = torch.tensor([val]).to(S.device)
       vals = torch.cat((vals,val_temp),dim = 0)
 
   return coords, vals

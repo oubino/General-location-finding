@@ -210,19 +210,19 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
   
   # initiate max val as 0 for all patients - sliding window stuff
   # patients needs to be = ['0003.npy', '0004.npy', etc.]
-  
+  patients = data_loaders.print_ids
   val_max_list = {}
   coord_list = {}
   pat_index = {}
   for i in patients:
       val_max_list[i] = {}
-      coordlist[i] = {}
+      coord_list[i] = {}
       pat_index[i] = {} 
       for l in S.landmarks:
           val_max_list[i][l] = 0
           coord_list[i][l] = {'x':0, 'y':0, 'z':0}
   
-  for slid_index in sliding_points:
+  for slide_index in range(S.sliding_points):
       
       for batch in data_loaders.dataloaders['test']:
         image = batch['image'].to(S.device)
@@ -246,9 +246,9 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
               # if max value is greatest for this patient then save the predicted coord for this landmark
               if val_max[i] > val_max_list[i][l]:
                   coord_list[patient[i]][l]['x'], coord_list[patient[i]][l]['y'], coord_list[patient[i]][l]['z'] = pred_coords_max[i][0], pred_coords_max[i][1], pred_coords_max[i][2]                  
-                  pat_index[patient[i]] = slid_index
+                  pat_index[patient[i]] = slide_index
          
-        S.slid_window_index += 1
+        S.slide_index += 1
                   
   for p in patients:
      

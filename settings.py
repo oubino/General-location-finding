@@ -13,7 +13,7 @@ def init():
     global in_x, in_y, in_z, alpha, reg, gamma, lr_max, lr_min
     global step_size, threshold_img_print, normal_min, normal_max
     global normal_window, use_amp
-    global downsample_ratio_list, crop_list
+    global downsample_ratio_list
     global root, device
     global batch_acc_steps
     global coding_path
@@ -36,7 +36,7 @@ def init():
     global ct_print
     global k_fold_ids
     global batch_size_test, batch_acc_steps_test
-    global train_line, clicker, sliding_window
+    global train_line, clicker
          
     # paths
     locally_or_server = yes_or_no.question('locally(y) / server(n)')
@@ -160,9 +160,6 @@ def init():
     # if downsampling
     downsample_ratio_list = {}
     
-    # if cropping
-    crop_list = {}
-    
     # use predicted max - if want gauss fit set to false
     pred_max = True
     
@@ -235,6 +232,29 @@ def init():
             clicker = 'Abby_test_set'
     else:
         print('ERROR')
+        
+    
+def init_slide_window(patients):
+    global sliding_window, sliding_points, crop_coords_slide, slide_index
+    global crop_list
+
+    # sliding window
+    sliding_points = 2
+    slide_index = 0
+    crop_coords_slide = {}
+    # if cropping
+    crop_list = {}
+    
+    for p in patients:
+        crop_coords_slide[p] = {}
+        crop_list[p] = {}
+        for i in range(sliding_points):
+            crop_coords_slide[p][i] = {}
+            crop_coords_slide[p][i]['x'] = 50*i
+            crop_coords_slide[p][i]['y'] = 50*i
+            crop_coords_slide[p][i]['z'] = 50*i
+            crop_list[p][i]= {}
+    
      
 def init_new():
     # oli vs aaron settings 
@@ -245,7 +265,7 @@ def init_new():
     
     epoch_batch = int(input ("Epoch batch: "))
     num_epoch_batches = int(input ("Num epoch batch: "))
-    net_features= 32
+    net_features= 1
     scnet_feat = 64
     
     # -- AMEND -- 

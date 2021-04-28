@@ -32,7 +32,7 @@ def calc_loss_gauss(model, img, pred, target_coords, idx, metrics_landmarks, alp
     for l in S.landmarks:
       
       # location of prediction for all images 
-      pred_coords_max = functions.pred_max(pred, l, S.landmarks) # don't change to gauss fit as gauss fit takes too long
+      pred_coords_max = functions.pred_max(pred, l, S.landmarks)[0] # don't change to gauss fit as gauss fit takes too long
      
       # per landmark
       total_x_posn_landmark = 0
@@ -112,9 +112,9 @@ def calc_loss_gauss(model, img, pred, target_coords, idx, metrics_landmarks, alp
         regularization = (reg * squ_weights)     
         reg_loss = regularization
         alpha_loss = alpha * (S.sigmas[l].norm())**2    
-        p2p_loss = S.p2p_reg_term * img_landmark_point_to_point
+        #p2p_loss = S.p2p_reg_term * img_landmark_point_to_point
         
-        img_loss += alpha * (S.sigmas[l].norm())**2 + regularization + p2p_loss
+        img_loss += alpha * (S.sigmas[l].norm())**2 + regularization #+ p2p_loss
 
         # add to total loss
         total_batch_loss += img_loss
@@ -122,14 +122,14 @@ def calc_loss_gauss(model, img, pred, target_coords, idx, metrics_landmarks, alp
         total_reg_loss += reg_loss
         total_alpha_loss += alpha_loss
         total_point_to_point += img_landmark_point_to_point
-        total_p2p_loss += p2p_loss
+        #total_p2p_loss += p2p_loss
 
         # need to add data to metrics per landmark
         metrics_landmarks[l]['loss'] += img_loss.data.cpu().numpy() # loss per image per landmark
         metrics_landmarks[l]['sum loss'] += sum_loss.data.cpu().numpy() # sum loss per image per landmark
         metrics_landmarks[l]['reg loss'] += reg_loss.data.cpu().numpy() # reg loss per image per landmark
         metrics_landmarks[l]['alpha loss'] += alpha_loss.data.cpu().numpy() # alpha loss per image per landmark
-        metrics_landmarks[l]['p2p loss'] += p2p_loss.data.cpu().numpy() # p2p loss per image per landmark
+       # metrics_landmarks[l]['p2p loss'] += p2p_loss.data.cpu().numpy() # p2p loss per image per landmark
         metrics_landmarks[l]['mean x pred'] += pred_max_x.data.cpu().numpy() # x posn per image per landmark
         metrics_landmarks[l]['mean y pred'] += pred_max_y.data.cpu().numpy() # y posn per image per landmark
         metrics_landmarks[l]['mean z pred'] += pred_max_z.data.cpu().numpy() # z posn per image per landmark

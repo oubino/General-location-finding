@@ -10,6 +10,7 @@ from data_loading import data_loaders
 from useful_functs import functions
 from train import loss_func
 
+
 def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_epochs,best_loss, epochs_completed):
     best_model_wts = copy.deepcopy(model.state_dict())
 
@@ -26,13 +27,16 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
                 print('Learning rates (overall and for sigmas)')
                 for param_group in optimizer.param_groups:
                     print("LR", param_group['lr'])
-
                 model.train()  # Set model to training mode
+                data_loaders.dataset.__train__()
+                
             else:
                 print('')
                 print('Testing on 1 image from val set')
                 print('')
                 model.eval()   # Set model to evaluate mode
+                data_loaders.dataset.__train__()
+                
 
             metrics_total = defaultdict(float)
             metrics_landmarks = defaultdict(float)
