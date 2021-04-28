@@ -48,7 +48,7 @@ class CTDataset(Dataset):
             struc_coord_2 = struc_coord_2[sample['patient']]  
             struc_coord = functions.line_learn_loc(struc_coord_1, struc_coord_2)
         elif settings.train_line == False:
-            struc_coord = functions.load_obj_pickle(settings.root, 'coords_Aaron_test_set')# + settings.clicker)  
+            struc_coord = functions.load_obj_pickle(settings.root, 'coords_' + settings.clicker)  
             struc_coord = struc_coord[sample['patient']]
         sample['coords'] = struc_coord           
         
