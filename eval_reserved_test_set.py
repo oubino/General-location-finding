@@ -6,13 +6,17 @@ from useful_functs import yes_or_no
 import settings
 
 settings.init()
-settings.init_load()
+
 
 # cts and structures & csv path
 settings.root = r'/home/rankinaaron98/Facial_asymmetry_aaron_testset'
 
 # evaluate model
-
+downsample_q = input ("Downsample(y)/crop(n) ")
+if downsample_q == 'y':
+       downsample_user = True
+elif downsample_q == 'n':
+       downsample_user = False
 # initialise data loader
 data_loaders.init_reserved_test_set()
 
