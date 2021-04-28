@@ -233,7 +233,7 @@ def init():
         elif clicker_input == 'o':
             clicker = 'Oli_test_set'
         elif clicker_input == 'ab':
-            clicker = 'Abby_test_set'
+            clicker = 'Aba_test_set'
     else:
         print('ERROR')
      
