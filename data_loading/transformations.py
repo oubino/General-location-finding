@@ -89,10 +89,10 @@ class CentreCrop_test(object):
       z_right = d - z_left - self.depth
       
       # append crops to list
-      S.crop_list[patient][S.sliding_index] = {}
-      S.crop_list[patient][S.sliding_index]['x_left'] = x_left
-      S.crop_list[patient][S.sliding_index]['y_left'] = y_left
-      S.crop_list[patient][S.sliding_index]['z_left'] = z_left
+      S.crop_list[patient][S.slide_index] = {}
+      S.crop_list[patient][S.slide_index]['x_left'] = x_left
+      S.crop_list[patient][S.slide_index]['y_left'] = y_left
+      S.crop_list[patient][S.slide_index]['z_left'] = z_left
           
       for l in S.landmarks:              
           # need to amend coords of structure
@@ -108,8 +108,8 @@ class CentreCrop_test(object):
     
           # failsafe
           if x < 0 or x >= S.in_x or y < 0 or y >= S.in_y or z < 0 or z >= S.in_z:
-              print('exiting due to crop failsafe')
-              exit()
+              coords[l]['present'] = 0 # landmark not present
+              #exit()
                         
       if z_left < 0:
           image = np.pad(image, ((-z_left,0),(0, 0), (0, 0)))
@@ -140,25 +140,10 @@ class CentreCrop_train(object):
       image, idx, patient, coords = sample['image'], sample['idx'], sample['patient'], sample['coords']
       d, h, w = image.shape[:3] # define image height, width, depth as first 3 values
       
-      
       # need to change so if training then take random crop from image 
-      x_crop = 50
-      y_crop = 50
-      z_crop = 60 # needs to be random
-      """
-     else:
-          if S.train_line == True:
-              crop_coords_1 = functions.load_obj_pickle(S.root, 'crop_coords_Oli')
-              crop_coords_2 = functions.load_obj_pickle(S.root, 'crop_coords_Aaron')
-              crop_coords = functions.line_learn_crop(crop_coords_1[patient], crop_coords_2[patient])
-          elif S.train_line == False:
-              crop_coords = functions.load_obj_pickle(S.root, 'crop_coords_' + S.clicker)
-              crop_coords = crop_coords[patient]
-          
-          x_crop = crop_coords['x']
-          y_crop = crop_coords['y']
-          z_crop = crop_coords['z']
-          """
+      x_crop = random.randint(0,w)
+      y_crop = random.randint(0,h)
+      z_crop = random.randint(0,d)
                       
       # crop .. (30,100) removes first 30 pixels from LHS and last 100 pixels from RHS   
       x_left = max(int(np.round(x_crop)) - self.width/2, 0)
@@ -194,7 +179,6 @@ class CentreCrop_train(object):
           # failsafe
           if x < 0 or x >= S.in_x or y < 0 or y >= S.in_y or z < 0 or z >= S.in_z:
               coords[l]['present'] = 0 # landmark not present
-              print('exiting due to crop failsafe')
               #exit()
                         
       if z_left < 0:
@@ -435,18 +419,25 @@ class ToTensor(object):
             # need it in y, x, z                
             x, y, z = int(round(coords[l]['x'])), int(round(coords[l]['y'])), int(round(coords[l]['z']))
             # if z is 80 round to 79
-            if z >= S.in_z:
-                print('Z BIGGER THAN Z MAX')
+            if z == S.in_z:
+                print('z rounded down')
                 print(z)
                 z = S.in_z - 1
-            if y >= S.in_y:
-                print('Y BIGGER THAN Y MAX')
+            if y == S.in_y:
+                print('y rounded down')
                 print(y)
                 y = S.in_y - 1
-            if x >= S.in_x:
-                print('X BIGGER THAN X MAX')
+            if x == S.in_x:
+                print('x rounded down')
                 print(x)
                 x = S.in_x - 1
+            if coords[l]['present'] == 1:
+                if x > S.in_x or x < 0:
+                    print('x outside bounds of cropped image')
+                if y > S.in_y or y < 0:
+                    print('y outside bounds of cropped image')
+                if z > S.in_z or z < 0:
+                    print('z outside bounds of cropped image')
             #structure[z][y][x] = l
             coords[l]['x'], coords[l]['y'], coords[l]['z'] = x,y,z
             

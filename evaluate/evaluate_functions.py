@@ -19,7 +19,7 @@ from useful_functs import functions
 def performance_metrics(model,sigmas,gamma, epochs_completed, fold): 
     
   # so can print out test ids for each fold at end
-  S.k_fold_ids.append(data_loaders.print_ids)
+  S.k_fold_ids.append(data_loaders.test_set_ids)
   
   # create directory for this eval
   epochs_completed_string = str(epochs_completed)
@@ -160,7 +160,7 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
 def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold): 
   
   # so can print out test ids for each fold at end
-  S.k_fold_ids.append(data_loaders.print_ids)
+  S.k_fold_ids.append(data_loaders.test_set_ids)
   
   # create directory for this eval
   epochs_completed_string = str(epochs_completed)
@@ -210,25 +210,25 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
   
   # initiate max val as 0 for all patients - sliding window stuff
   # patients needs to be = ['0003.npy', '0004.npy', etc.]
-  patients = data_loaders.print_ids
+  patients = data_loaders.test_set_ids
   val_max_list = {}
   coord_list = {}
   pat_index = {}
-  for i in patients:
-      val_max_list[i] = {}
-      coord_list[i] = {}
-      pat_index[i] = {} 
+  for p in patients:
+      val_max_list[p] = {}
+      coord_list[p] = {}
+      pat_index[p] = 0
       for l in S.landmarks:
-          val_max_list[i][l] = 0
-          coord_list[i][l] = {'x':0, 'y':0, 'z':0}
-  
+          val_max_list[p][l] = 0
+          coord_list[p][l] = {'x':0, 'y':0, 'z':0}
+          
   for slide_index in range(S.sliding_points):
       
       for batch in data_loaders.dataloaders['test']:
         image = batch['image'].to(S.device)
         patient = batch['patient']
         pred = model(image)
-      
+        
         batch_number = 0
         
         for l in S.landmarks: # cycle over all landmarks
@@ -244,11 +244,11 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
                   pred_coords_max = functions.gauss_max(pred,l,height_guess,sigmas[l].item(), S.in_x, S.in_y, S.in_z, S.landmarks)  
             
               # if max value is greatest for this patient then save the predicted coord for this landmark
-              if val_max[i] > val_max_list[i][l]:
+              if val_max[i] > val_max_list[patient[i]][l]:
                   coord_list[patient[i]][l]['x'], coord_list[patient[i]][l]['y'], coord_list[patient[i]][l]['z'] = pred_coords_max[i][0], pred_coords_max[i][1], pred_coords_max[i][2]                  
                   pat_index[patient[i]] = slide_index
          
-        S.slide_index += 1
+      S.slide_index += 1
                   
   for p in patients:
      
@@ -258,6 +258,8 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
               pred_max_x, pred_max_y, pred_max_z =  coord_list[p][l]['x'], coord_list[p][l]['y'], coord_list[p][l]['z']
                 
               # convert pred to location in orig img
+              print('help')
+              print(p, pat_index)
               pred_max_x, pred_max_y, pred_max_z = functions.aug_to_orig(pred_max_x, pred_max_y, pred_max_z, S.downsample_user, p, pat_index[p])
         
               for k in keys: # clicker_1, clicker_2, and mean
@@ -282,18 +284,20 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
                       p2p_landmarks[k][l] = np.append(p2p_landmarks[k][l],img_landmark_point_to_point.cpu())
                       # if img_point_to_point > 20mm is an outlier
                       x_p2p, x_p2p_mm, y_p2p, y_p2p_mm, z_p2p, z_p2p_mm = functions.axis_p2p_err(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z, p)
-                      x_axis_err[k][l] = np.append(x_axis_err[k][l], x_p2p.cpu())
+                      """
+                      x_axis_err[k][l] = np.append(x_axis_err[k][l], x_p2p)
                       x_axis_err_mm[k][l] = np.append(x_axis_err_mm[k][l], x_p2p_mm.cpu())
                       y_axis_err[k][l] = np.append(y_axis_err[k][l], y_p2p.cpu())
                       y_axis_err_mm[k][l] = np.append(y_axis_err_mm[k][l], y_p2p_mm.cpu())
                       z_axis_err[k][l] = np.append(z_axis_err[k][l], z_p2p.cpu())
                       z_axis_err_mm[k][l] = np.append(z_axis_err_mm[k][l], z_p2p_mm.cpu())
+                      """
                       if img_landmark_point_to_point > 20:
                           outliers_landmarks[k][l] = np.append(outliers_landmarks[k][l],1)
                   
           # print 2D slice
           print('2D slice for landmark %1.0f' % l)
-          print_2D_slice_line(l, pred_max_x, pred_max_y, pred_max_z, struc_coord, eval_path, p)
+          #print_2D_slice_line(l, pred_max_x, pred_max_y, pred_max_z, struc_coord, eval_path, p)
         
 #batch_number += 1 # not sure where to put
    

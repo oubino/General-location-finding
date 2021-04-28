@@ -6,6 +6,7 @@ import time
 from torch.utils.tensorboard import SummaryWriter
 
 from useful_functs import yes_or_no
+from useful_functs import slide_coords
 
 
 def init():
@@ -210,7 +211,7 @@ def init():
     k_fold_ids = []   # k fold test
     
     # train line true
-    train_line_q = input ("Train/eval on a line (y/n)? If want to eval on reserved test put (r)")
+    train_line_q = input ("Train/eval on a line (y/n)? If want to eval on reserved test put (r) ")
     sliding_window = yes_or_no.question('Sliding window (y)/(n)')
     if train_line_q == 'y':
         train_line = True
@@ -239,7 +240,7 @@ def init_slide_window(patients):
     global crop_list
 
     # sliding window
-    sliding_points = 2
+    sliding_points = 75
     slide_index = 0
     crop_coords_slide = {}
     # if cropping
@@ -250,10 +251,12 @@ def init_slide_window(patients):
         crop_list[p] = {}
         for i in range(sliding_points):
             crop_coords_slide[p][i] = {}
-            crop_coords_slide[p][i]['x'] = 50*i
-            crop_coords_slide[p][i]['y'] = 50*i
-            crop_coords_slide[p][i]['z'] = 50*i
             crop_list[p][i]= {}
+            # work out crop coord locations for slide
+        crop_coords_slide[p] = slide_coords.coords(p, in_x, in_y, in_z, sliding_points)
+            
+            #crop_coords_slide[p][i]['x'] = (in_x/2)*i + in_x/2
+            
     
      
 def init_new():
@@ -265,7 +268,7 @@ def init_new():
     
     epoch_batch = int(input ("Epoch batch: "))
     num_epoch_batches = int(input ("Num epoch batch: "))
-    net_features= 1
+    net_features= 8
     scnet_feat = 64
     
     # -- AMEND -- 
@@ -293,7 +296,7 @@ def init_load():
     global landmarks_load, landmarks_load_loc
     global num_class_load, net_features_load, scnet_feat_load, sigmas_load
 
-    net_features_load = 32
+    net_features_load = 8
     scnet_feat_load = 64
     
     # -- AMEND -- 

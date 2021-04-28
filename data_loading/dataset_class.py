@@ -61,6 +61,9 @@ class CTDataset(Dataset):
     
     def __len__(self):
         return len(self.imgs) # get size of dataset
+    
+    def __pat__from__index(self, idx):
+        return self.imgs[idx]
 
     def __test__(self):
       self.test = True

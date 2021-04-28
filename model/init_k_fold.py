@@ -90,7 +90,9 @@ def init(init_fold):
         print('\n')
         print('Evaluating model')
         print('----------------')
-       # model.evaluate(fold)   
+        # initialise sliding window crop locations
+        settings.init_slide_window(test_ids)
+        model.evaluate(fold)   
         print('error counter')
         print(settings.error_counter)
         time_elapsed_fold = time.time() - start_time_fold
