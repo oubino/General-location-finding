@@ -8,7 +8,7 @@ import settings as S
 from data_loading import numpy_loc
 S.init()
 
-struc_path = r'/home/olive/data/Facial_asymmetry_oli_reclicks'
+struc_path = r'/home/rankinaaron98/data/Facial_asymmetry_aba_testset'
 
     
 def save_obj(obj, name):
