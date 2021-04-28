@@ -22,8 +22,9 @@ def load_obj(name):
 
 struc_list = list(sorted(os.listdir(os.path.join(struc_path, "Structures"))))
 structure_path = os.path.join(struc_path, "Structures")
-print(struc_list)
 print(structure_path)
+print(struc_list)
+
 
 coordinates = {}
 
