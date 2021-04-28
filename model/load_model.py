@@ -115,9 +115,9 @@ class load_model:
         self.model_load.eval()
         data_loaders.dataset.__test__() # sets whole dataset to test mode means it doesn't augment images
         if S.train_line == False:
-            evaluate_functions.performance_metrics(self.model_load,S.sigmas,S.gamma, self.epochs_completed, S.fold_load)
+            evaluate_functions.performance_metrics(self.model_load,S.sigmas,S.gamma, self.epochs_completed, fold)
         elif S.train_line == True:
-            evaluate_functions.performance_metrics_line(self.model_load,S.sigmas,S.gamma, self.epochs_completed, S.fold_load)
+            evaluate_functions.performance_metrics_line(self.model_load,S.sigmas,S.gamma, self.epochs_completed, fold)
     
     
     def save(self, fold):
