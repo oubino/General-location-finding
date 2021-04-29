@@ -36,7 +36,7 @@ def init():
     global ct_print
     global k_fold_ids
     global batch_size_test, batch_acc_steps_test
-    global train_line, clicker
+    global train_line, clicker, rts
 
 
     # paths
@@ -214,25 +214,32 @@ def init():
     k_fold_ids = []   # k fold test
     
     # train line true
-    train_line_q = input ("Train/eval on a line (y/n)? If want to eval on reserved test put (r): ")
-    if train_line_q == 'y':
-        train_line = True
-    elif train_line_q == 'n':
-        train_line = False
-        aaron_or_oli = yes_or_no.question('Aaron clicks(y) / Oli clicks (n): ')
-        if aaron_or_oli == True:
-            clicker = 'Aaron'
-        elif aaron_or_oli == False:
-            clicker = 'Oli'
-    elif train_line_q == 'r':
-        train_line = False # necessary for crop in transformations
-        clicker_input = input ('Aaron(a), Oli (o), Abby (ab): ')
-        if clicker_input == 'a':
-            clicker = 'Aaron_test_set'
-        elif clicker_input == 'o':
-            clicker = 'Oli_test_set'
-        elif clicker_input == 'ab':
-            clicker = 'Abby_test_set'
+    rts_q = input (" Eval on reserved test set? (y/n)? ")
+    train_line_q = input ("Train/eval on a line (y/n)? ")
+    if rts_q == 'n':
+        rts = False
+        if train_line_q == 'y':
+            train_line = True
+        elif train_line_q == 'n':
+            train_line = False
+            aaron_or_oli = yes_or_no.question('Aaron clicks(y) / Oli clicks (n): ')
+            if aaron_or_oli == True:
+                clicker = 'Aaron'
+            elif aaron_or_oli == False:
+                clicker = 'Oli'
+    elif rts_q == 'y':
+        rts = True
+        if train_line_q == 'n':
+            train_line = False # necessary for crop in transformations
+            clicker_input = input ('Aaron(a), Oli (o), Abby (ab): ')
+            if clicker_input == 'a':
+                clicker = 'Aaron_test_set'
+            elif clicker_input == 'o':
+                clicker = 'Oli_test_set'
+            elif clicker_input == 'ab':
+                clicker = 'Abby_test_set'
+        elif train_line_q == 'y':
+            train_line = True
     else:
         print('ERROR')
 
