@@ -57,6 +57,9 @@ class CentreCrop_test(object):
       d, h, w = image.shape[:3] # define image height, width, depth as first 3 values
       
       #print(S.crop_coords_slide)
+      print('slide index in transforms')
+      print(S.slide_index)
+      print(x_crop, y_crop, z_crop)
       x_crop = S.crop_coords_slide[patient][S.slide_index]['x']
       y_crop = S.crop_coords_slide[patient][S.slide_index]['y']
       z_crop = S.crop_coords_slide[patient][S.slide_index]['z']
