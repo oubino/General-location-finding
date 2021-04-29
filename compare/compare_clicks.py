@@ -58,8 +58,8 @@ def load_obj(root, name):
 # paths
 root = r'/home/olive/data/Facial_asymmetry_test_sets'
 
-clicker_1 = input('Clicker_1, e.g. Oli_test_set ') 
-clicker_2 = input('Clicker_2, e.g. Aaron_test_set ') 
+clicker_1 = input('Clicker_1, (e.g. Oli_test_set): ') 
+clicker_2 = input('Clicker_2, (e.g. Aaron_test_set): ') 
 
 hist_root = r'/home/rankinaaron98/data/Compare_aaron/Histograms_reclick__oli_aaron_testsets/'
 
@@ -126,8 +126,20 @@ for j in range(len(pat_list)):
         mean_z = ((com_list_clicker_1['%1.0f' % k][j][0] + com_list_clicker_2['%1.0f' % k][j][0])/2)
         coords = [mean_z, mean_y, mean_x]
         mean_list['%1.0f' % k].append(coords)
-    
+
+
+
+latex_line_mean = []
+latex_line_mean_std = []
+latex_line_x = []
+latex_line_y = []
+latex_line_z = []
+csv_line = []
+name_of_file = os.path.join(hist_root, clicker_1 +"_" + clicker_2 + "_compare.txt")
+txt_file = open(name_of_file, "a")    
 click_outlier_counter = 0
+
+
 if calc_deviations == True:
     # calculate deviation of arrays etc.
     for j in range(len(pat_list)):
@@ -175,6 +187,37 @@ if calc_deviations == True:
             histogram(y, 'y', k)
             histogram(z, 'z', k)
         
+        latex_line_landmark = ['landmark: ' + str(k)]
+        latex_line_temp_mean = [' & ' + str(round(mean,1))] 
+        latex_line_mean = latex_line_mean + latex_line_temp_mean    
+        
+        latex_line_temp_mean_std = [' & ' + str(round(mean,1))] 
+        latex_line_mean_std = latex_line_mean_std + latex_line_temp_mean_std    
+        
+        latex_line_temp_x = [' & ' + str(round(mean_x,1))] 
+        latex_line_x = latex_line_x + latex_line_temp_x    
+        
+        latex_line_temp_y = [' & ' + str(round(mean_y,1))] 
+        latex_line_y = latex_line_y + latex_line_temp_y   
+        
+        latex_line_temp_z = [' & ' + str(round(mean_z,1))] 
+        latex_line_z = latex_line_z + latex_line_temp_z    
+        # write in excel format for easy to calc folds 
+    
+        txt_file.writelines(latex_line_landmark)
+        txt_file.writelines(['\n'])
+        txt_file.writelines(latex_line_mean)
+        txt_file.writelines(['\n'])
+        txt_file.writelines(latex_line_mean_std)
+        txt_file.writelines(['\n'])
+        txt_file.writelines(latex_line_x)
+        txt_file.writelines(['\n'])
+        txt_file.writelines(latex_line_y)
+        txt_file.writelines(['\n'])
+        txt_file.writelines(latex_line_z)
+        txt_file.writelines(['\n'])
+        txt_file.writelines(['\n'])
+txt_file.close()        
     
 
 # for each landmark, list of the images with deviations greater than ceratin distance
@@ -184,7 +227,11 @@ print('\n')
 
 print('percentage of clicks which are outliers')
 print(100*click_outlier_counter/(len(pat_list)*len(landmarks)))
-            
+
+
+
+
+       
 # mean deviation per landmark
 print('mean deviation per landmark')
 print(mean_dev)
