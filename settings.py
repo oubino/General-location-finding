@@ -226,12 +226,8 @@ def init(reserved_test_set):
                 clicker = 'Oli'
     elif reserved_test_set == True:
         res_test_set = True
-        clicker_input = input ('Aaron/Oli (y), Abby (n)')
-        if clicker_input == 'y':
-            train_line = True
-        elif clicker_input == 'n':
-            train_line = False
-            clicker = 'Abby_test_set'
+        train_line = True
+
     else:
         print('ERROR')
      

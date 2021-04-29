@@ -45,12 +45,12 @@ class CTDataset(Dataset):
             if settings.res_test_set == False:
                 struc_coord_1 = functions.load_obj_pickle(settings.root, 'coords_Oli')
                 struc_coord_2 = functions.load_obj_pickle(settings.root, 'coords_Aaron')  
-            elif settings.res_test_set == False:
-                struc_coord_1 = functions.load_obj_pickle(settings.root, 'coords_Oli_test_set')
-                struc_coord_2 = functions.load_obj_pickle(settings.root, 'coords_Aaron_test_set')  
-            struc_coord_1 = struc_coord_1[sample['patient']]
-            struc_coord_2 = struc_coord_2[sample['patient']] 
-            struc_coord = functions.line_learn_loc(struc_coord_1, struc_coord_2)
+                struc_coord_1 = struc_coord_1[sample['patient']]
+                struc_coord_2 = struc_coord_2[sample['patient']] 
+                struc_coord = functions.line_learn_loc(struc_coord_1, struc_coord_2)
+            elif settings.res_test_set == True:
+                # shouldn't need this!
+                struc_coord = functions.line_learn_loc(struc_coord_1, struc_coord_2)
         elif settings.train_line == False:
             struc_coord = functions.load_obj_pickle(settings.root, 'coords_' + settings.clicker)  
             struc_coord = struc_coord[sample['patient']]
