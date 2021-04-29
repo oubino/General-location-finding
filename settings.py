@@ -268,7 +268,7 @@ def init_new():
     
     epoch_batch = int(input ("Epoch batch: "))
     num_epoch_batches = int(input ("Num epoch batch: "))
-    net_features= 8
+    net_features= 32
     scnet_feat = 64
     
     # -- AMEND -- 
@@ -296,7 +296,7 @@ def init_load():
     global landmarks_load, landmarks_load_loc
     global num_class_load, net_features_load, scnet_feat_load, sigmas_load
 
-    net_features_load = 8
+    net_features_load = 32
     scnet_feat_load = 64
     
     # -- AMEND -- 
