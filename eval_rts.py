@@ -5,6 +5,7 @@ from useful_functs import yes_or_no
 import settings
 settings.init()
 settings.root = r'/home/rankinaaron98/data/Facial_asymmetry_test_sets'
+settings.init_load()
 from data_loading import data_loaders
 from model import load_model   
 
