@@ -224,6 +224,9 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
           
   for slide_index in range(S.sliding_points):
       
+      print('slide index from eval vs slide index from settings')
+      print(slide_index, S.slide_index)
+      
       for batch in data_loaders.dataloaders['test']:
         image = batch['image'].to(S.device)
         patient = batch['patient']
