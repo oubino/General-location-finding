@@ -57,9 +57,14 @@ class CentreCrop(object):
       d, h, w = image.shape[:3] # define image height, width, depth as first 3 values
       
       if S.train_line == True:
-          crop_coords_1 = functions.load_obj_pickle(S.root, 'crop_coords_Oli')
-          crop_coords_2 = functions.load_obj_pickle(S.root, 'crop_coords_Aaron')
-          crop_coords = functions.line_learn_crop(crop_coords_1[patient], crop_coords_2[patient])
+          if S.res_test_set == False:
+              crop_coords_1 = functions.load_obj_pickle(S.root, 'crop_coords_Oli')
+              crop_coords_2 = functions.load_obj_pickle(S.root, 'crop_coords_Aaron')
+              crop_coords = functions.line_learn_crop(crop_coords_1[patient], crop_coords_2[patient])
+          elif S.res_test_set == True:
+              crop_coords_1 = functions.load_obj_pickle(S.root, 'crop_coords_Oli_test_set')
+              crop_coords_2 = functions.load_obj_pickle(S.root, 'crop_coords_Aaron_test_set')
+              crop_coords = functions.line_learn_crop(crop_coords_1[patient], crop_coords_2[patient])         
       elif S.train_line == False:
           crop_coords = functions.load_obj_pickle(S.root, 'crop_coords_' + S.clicker)
           crop_coords = crop_coords[patient]

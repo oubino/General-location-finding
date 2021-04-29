@@ -5,7 +5,7 @@ from model import load_model
 from useful_functs import yes_or_no
 import settings
 
-settings.init()
+settings.init(True)
 
 
 # cts and structures & csv path
