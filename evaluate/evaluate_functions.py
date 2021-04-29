@@ -255,7 +255,13 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
                   print(patient[i], slide_index, coord_list[patient[i]][l]['x'], coord_list[patient[i]][l]['y'], coord_list[patient[i]][l]['z'])
          
       S.slide_index += 1
-
+  
+  print('pred x, y, z pre aug')
+  print(coord_list)
+  
+  print('patient index')
+  print(pat_index)
+  
   for p in patients:
      
       for l in S.landmarks: # cycle over all landmarks
