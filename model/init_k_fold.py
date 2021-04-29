@@ -95,6 +95,8 @@ def init(init_fold):
         model.evaluate(fold)   
         print('error counter')
         print(settings.error_counter)
+        print('zero targets/non zero targets')
+        print(settings.zero_targets, settings.non_zero_targets)
         time_elapsed_fold = time.time() - start_time_fold
         end_time_fold = time.ctime(time_elapsed_fold * (settings.k_folds - fold - 1) + time.time())
         print('\n')

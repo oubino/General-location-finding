@@ -29,8 +29,6 @@ def calc_loss_gauss(model, img, pred, target_coords, idx, metrics_landmarks, alp
     total_point_to_point = 0
     total_p2p_loss = 0
     
-    non_zero_target = 0
-    zero_target = 0
     for l in S.landmarks:
       
       # location of prediction for all images 
@@ -74,13 +72,13 @@ def calc_loss_gauss(model, img, pred, target_coords, idx, metrics_landmarks, alp
         # create target gauss map
         if target_coords[l]['present'][i] == 1:
           #print('non zero target')
-          non_zero_target += 1
+          S.non_zero_targets += 1
           targ_gaus = functions.gaussian_map(structure_com_x,structure_com_y, structure_com_z,S.sigmas[l],gamma,x_size,y_size,z_size, output = True) 
           p2p_loss = S.p2p_reg_term * img_landmark_point_to_point
         else:
           # target is full of zeros
           #print('zero target')
-          zero_target += 1
+          S.zero_targets += 1
           targ_gaus = torch.zeros(S.in_y, S.in_x, S.in_z).to(S.device)
           # if landmark not present then no p2p loss
           p2p_loss = torch.tensor(0.0).to(S.device)
@@ -164,10 +162,6 @@ def calc_loss_gauss(model, img, pred, target_coords, idx, metrics_landmarks, alp
           
     # return mean batch loss
     mean_batch_loss = (total_batch_loss/img.size()[0]) # batch_size
-    
-    # print number of zero targets and non zero targets
-    print('zero targets, non zero targets in batch')
-    print(zero_target, non_zero_target)
     
     # mean loss per image
     

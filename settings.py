@@ -39,6 +39,7 @@ def init():
     global batch_size_test, batch_acc_steps_test
     global train_line, clicker
     global epoch_deep_saved
+    global zero_targets, non_zero_targets
          
     # paths
     locally_or_server = yes_or_no.question('locally(y) / server(n)')
@@ -233,6 +234,9 @@ def init():
             clicker = 'Abby_test_set'
     else:
         print('ERROR')
+        
+    zero_targets = 0
+    non_zero_targets = 0
         
     
 def init_slide_window(patients):
