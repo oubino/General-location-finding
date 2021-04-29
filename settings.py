@@ -37,6 +37,7 @@ def init():
     global k_fold_ids
     global batch_size_test, batch_acc_steps_test
     global train_line, clicker
+
          
     # paths
     locally_or_server = yes_or_no.question('locally(y) / server(n)')
@@ -218,20 +219,20 @@ def init():
         train_line = True
     elif train_line_q == 'n':
         train_line = False
-        aaron_or_oli = yes_or_no.question('Aaron clicks(y) / Oli clicks (n)')
+        aaron_or_oli = yes_or_no.question('Aaron clicks(y) / Oli clicks (n): ')
         if aaron_or_oli == True:
             clicker = 'Aaron'
         elif aaron_or_oli == False:
             clicker = 'Oli'
     elif train_line_q == 'r':
         train_line = False # necessary for crop in transformations
-        clicker_input = input ('Aaron(a), Oli (o), Abby (ab)')
+        clicker_input = input ('Aaron(a), Oli (o), Abby (ab): ')
         if clicker_input == 'a':
             clicker = 'Aaron_test_set'
         elif clicker_input == 'o':
             clicker = 'Oli_test_set'
         elif clicker_input == 'ab':
-            clicker = 'Abby_test_set'
+            clicker = 'Aba_test_set'
     else:
         print('ERROR')
      

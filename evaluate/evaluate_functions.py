@@ -19,7 +19,6 @@ from useful_functs import functions
 def performance_metrics(model,sigmas,gamma, epochs_completed, fold): 
     
   # so can print out test ids for each fold at end
-  S.k_fold_ids.append(data_loaders.print_ids)
   
   # create directory for this eval
   epochs_completed_string = str(epochs_completed)
@@ -29,7 +28,7 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
       os.mkdir(eval_path)
   except OSError as error:
       print(error)
-      
+  print(eval_path)    
   p2p_landmarks = defaultdict(float)
   outliers_landmarks = defaultdict(float)
   x_axis_err, x_axis_err_mm = defaultdict(float), defaultdict(float)
@@ -43,7 +42,7 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
     z_axis_err[l], z_axis_err_mm[l] = np.empty((0), float),  np.empty((0), float)
   # load in struc_coord  
   struc_coord = functions.load_obj_pickle(S.root, 'coords_' + S.clicker) 
-
+  print("clicker: " + S.clicker)
   for batch in data_loaders.dataloaders['test']:        
     patient = batch['patient']    
     image = batch['image'].to(S.device)        
@@ -113,7 +112,7 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
   
   latex_line = []
   csv_line = []
-  name_of_file = os.path.join(eval_path, "results.txt")
+  name_of_file = os.path.join(eval_path, S.clicker + "_results.txt")
   txt_file = open(name_of_file, "a")
   
   for l in S.landmarks:
@@ -123,13 +122,6 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
     std_mean = np.std(p2p_landmarks[l],ddof =1)*(len(p2p_landmarks[l]))**-0.5
     median = np.median(p2p_landmarks[l])
     outliers_perc = outliers_landmarks[l].sum()/len(p2p_landmarks[l]) * 100
-    print('    mean point to point error is ' + str(mean) + '+/-' + str(std_mean))
-    print('    median point to point error is ' + str(median))
-    print('    percentage of images which were outliers is ' + str(outliers_perc) + '%')
-    print('    sigma is ' + str(sigmas[l]))
-    print('    trained for ' + str(epochs_completed) + ' epochs')
-    print('    pred max used = %s' % S.pred_max)
-    print('\n')
     
     mean_x_err = np.mean(x_axis_err[l])
     mean_x_err_mm = np.mean(x_axis_err_mm[l])
@@ -138,10 +130,18 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
     mean_z_err = np.mean(z_axis_err[l])
     mean_z_err_mm = np.mean(z_axis_err_mm[l])
         
-    print('     mean error in x axis is: ' + str(mean_x_err) + ' (' + str(mean_x_err_mm) + ' mm)')
-    print('     mean error in y axis is: ' + str(mean_y_err) + ' (' + str(mean_y_err_mm) + ' mm)')
-    print('     mean error in z axis is: ' + str(mean_z_err) + ' (' + str(mean_z_err_mm) + ' mm)')
-        
+    print('    mean point to point error is ' + str(mean) + '+/-' + str(std_mean))
+    print('    mean error in x axis is: ' + str(mean_x_err) + ' (' + str(mean_x_err_mm) + ' mm)')
+    print('    mean error in y axis is: ' + str(mean_y_err) + ' (' + str(mean_y_err_mm) + ' mm)')
+    print('    mean error in z axis is: ' + str(mean_z_err) + ' (' + str(mean_z_err_mm) + ' mm)')
+    print('    median point to point error is ' + str(median))
+    print('    percentage of images which were outliers is ' + str(outliers_perc) + '%')
+    print('    sigma is ' + str(sigmas[l]))
+    print('    trained for ' + str(epochs_completed) + ' epochs')
+    print('    pred max used = %s' % S.pred_max)
+    print('\n')
+    
+    
     L = ['\n','Landmark %1.0f' % l, '\n', 
          '  mean point to point error is ' + str(mean) + '+/-' + str(std_mean), '\n',
          '  median point to point error is ' + str(median), '\n', 
@@ -227,7 +227,8 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
   struc_coord['clicker_1'] = struc_coord_clicker_1 
   struc_coord['clicker_2'] = struc_coord_clicker_2
   struc_coord['mean'] = struc_coord_mean
-  
+  print("clicker 1: " + struc_coord_clicker_1)
+  print("clicker 2: " + struc_coord_clicker_2)
   for batch in data_loaders.dataloaders['test']:
     image = batch['image'].to(S.device)
     patient = batch['patient']
@@ -306,15 +307,7 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
         mean = np.mean(p2p_landmarks[k][l])
         std_mean = np.std(p2p_landmarks[k][l],ddof =1)*(len(p2p_landmarks[k][l]))**-0.5
         median = np.median(p2p_landmarks[k][l])
-        outliers_perc = outliers_landmarks[k][l].sum()/len(p2p_landmarks[k][l]) * 100
-        print('    mean point to point error is ' + str(mean) + '+/-' + str(std_mean))
-        print('    median point to point error is ' + str(median))
-        print('    percentage of images which were outliers is ' + str(outliers_perc) + '%')
-        print('    sigma is ' + str(sigmas[l]))
-        print('    trained for ' + str(epochs_completed) + ' epochs')
-        print('    pred max used = %s' % S.pred_max)
-        print('\n')
-        
+        outliers_perc = outliers_landmarks[k][l].sum()/len(p2p_landmarks[k][l]) * 100  
         mean_x_err = np.mean(x_axis_err[k][l])
         mean_x_err_mm = np.mean(x_axis_err_mm[k][l])
         mean_y_err = np.mean(y_axis_err[k][l])
@@ -322,11 +315,18 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
         mean_z_err = np.mean(z_axis_err[k][l])
         mean_z_err_mm = np.mean(z_axis_err_mm[k][l])
         
-        print('     mean error in x axis is: ' + str(mean_x_err) + ' (' + str(mean_x_err_mm) + ' mm)')
-        print('     mean error in y axis is: ' + str(mean_y_err) + ' (' + str(mean_y_err_mm) + ' mm)')
-        print('     mean error in z axis is: ' + str(mean_z_err) + ' (' + str(mean_z_err_mm) + ' mm)')
+        print('    mean point to point error is ' + str(mean) + '+/-' + str(std_mean))
+        print('    median point to point error is ' + str(median))
+        print('    mean error in x axis is: ' + str(mean_x_err) + ' (' + str(mean_x_err_mm) + ' mm)')
+        print('    mean error in y axis is: ' + str(mean_y_err) + ' (' + str(mean_y_err_mm) + ' mm)')
+        print('    mean error in z axis is: ' + str(mean_z_err) + ' (' + str(mean_z_err_mm) + ' mm)')
+        print('    percentage of images which were outliers is ' + str(outliers_perc) + '%')
+        print('    sigma is ' + str(sigmas[l]))
+        print('    trained for ' + str(epochs_completed) + ' epochs')
+        print('    pred max used = %s' % S.pred_max)
+        print('\n')
         
-        
+     
         L = ['\n','Landmark %1.0f' % l, '\n', 
              '  mean point to point error is ' + str(mean) + '+/-' + str(std_mean), '\n',
              '  median point to point error is ' + str(median), '\n', 
