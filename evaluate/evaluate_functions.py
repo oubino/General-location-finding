@@ -224,9 +224,6 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
           
   for slide_index in range(S.sliding_points):
       
-      print('slide index from eval vs slide index from settings')
-      print(slide_index, S.slide_index)
-      
       for batch in data_loaders.dataloaders['test']:
         image = batch['image'].to(S.device)
         patient = batch['patient']
@@ -251,8 +248,8 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
                   val_max_list[patient[i]][l] = val_max[i] # update max val
                   coord_list[patient[i]][l]['x'], coord_list[patient[i]][l]['y'], coord_list[patient[i]][l]['z'] = pred_coords_max[i][0], pred_coords_max[i][1], pred_coords_max[i][2]                  
                   pat_index[patient[i]] = slide_index
-                  print('patient, slide, x, y, z')
-                  print(patient[i], slide_index, coord_list[patient[i]][l]['x'], coord_list[patient[i]][l]['y'], coord_list[patient[i]][l]['z'])
+                  print('patient, landmark, slide, x, y, z')
+                  print(patient[i], l, slide_index, coord_list[patient[i]][l]['x'], coord_list[patient[i]][l]['y'], coord_list[patient[i]][l]['z'])
          
       S.slide_index += 1
   
