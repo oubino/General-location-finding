@@ -248,8 +248,9 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
                   val_max_list[patient[i]][l] = val_max[i] # update max val
                   coord_list[patient[i]][l]['x'], coord_list[patient[i]][l]['y'], coord_list[patient[i]][l]['z'] = pred_coords_max[i][0], pred_coords_max[i][1], pred_coords_max[i][2]                  
                   pat_index[patient[i]] = slide_index
-                  print('patient, landmark, slide, x, y, z')
-                  print(patient[i], l, slide_index, coord_list[patient[i]][l]['x'], coord_list[patient[i]][l]['y'], coord_list[patient[i]][l]['z'])
+                  if slide_index == 34 or slide_index == 35 or slide_index == 36:   
+                      print('patient, landmark, slide, x, y, z')
+                      print(patient[i], l, slide_index, coord_list[patient[i]][l]['x'], coord_list[patient[i]][l]['y'], coord_list[patient[i]][l]['z'])
          
       S.slide_index += 1
   
