@@ -42,7 +42,7 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
     z_axis_err[l], z_axis_err_mm[l] = np.empty((0), float),  np.empty((0), float)
   # load in struc_coord  
   struc_coord = functions.load_obj_pickle(S.root, 'coords_' + S.clicker) 
-
+  print("clicker: " + S.clicker)
   for batch in data_loaders.dataloaders['test']:        
     patient = batch['patient']    
     image = batch['image'].to(S.device)        
@@ -227,7 +227,8 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
   struc_coord['clicker_1'] = struc_coord_clicker_1 
   struc_coord['clicker_2'] = struc_coord_clicker_2
   struc_coord['mean'] = struc_coord_mean
-  
+  print("clicker 1: " + struc_coord_clicker_1)
+  print("clicker 2: " + struc_coord_clicker_2)
   for batch in data_loaders.dataloaders['test']:
     image = batch['image'].to(S.device)
     patient = batch['patient']
