@@ -212,7 +212,6 @@ def init():
     
     # train line true
     train_line_q = input ("Train/eval on a line (y/n)? If want to eval on reserved test put (r) ")
-    sliding_window = yes_or_no.question('Sliding window (y)/(n)')
     if train_line_q == 'y':
         train_line = True
     elif train_line_q == 'n':
