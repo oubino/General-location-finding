@@ -142,9 +142,9 @@ class CentreCrop_train(object):
       d, h, w = image.shape[:3] # define image height, width, depth as first 3 values
       
       # need to change so if training then take random crop from image 
-      x_crop = random.randint(0,w)
-      y_crop = random.randint(0,h)
-      z_crop = random.randint(0,d)
+      x_crop = random.randint(S.in_x/2,w - S.in_x/2)
+      y_crop = random.randint(S.in_y/2,h - S.in_y/2)
+      z_crop = random.randint(S.in_z/2,d - S.in_z/2)
                       
       # crop .. (30,100) removes first 30 pixels from LHS and last 100 pixels from RHS   
       x_left = max(int(np.round(x_crop)) - self.width/2, 0)
