@@ -421,16 +421,10 @@ class ToTensor(object):
             x, y, z = int(round(coords[l]['x'])), int(round(coords[l]['y'])), int(round(coords[l]['z']))
             # if z is 80 round to 79
             if z == S.in_z:
-                print('z rounded down')
-                print(z)
                 z = S.in_z - 1
             if y == S.in_y:
-                print('y rounded down')
-                print(y)
                 y = S.in_y - 1
             if x == S.in_x:
-                print('x rounded down')
-                print(x)
                 x = S.in_x - 1
             if coords[l]['present'] == 1:
                 if x > S.in_x or x < 0:
