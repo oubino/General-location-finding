@@ -249,6 +249,8 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
                   pat_index[patient[i]] = slide_index
                   print('slide index')
                   print(slide_index)
+                  print(val_max[i])
+                  print(pred_coords_max[i][0], pred_coords_max[i][1], pred_coords_max[i][2])
          
       S.slide_index += 1
                   
