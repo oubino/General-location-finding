@@ -35,7 +35,6 @@ def init(fold, train_ids, test_ids):
     val_ids = train_ids[:index]
     train_ids = train_ids[index:]
     
-    print(dir(dataset))
     global test_set_ids
     test_set_ids = []
     for i in test_ids:
@@ -71,7 +70,6 @@ def init_load_k_fold(fold):
     val_ids = train_ids[:index]
     train_ids = train_ids[index:]
     
-    print(dir(dataset))
     global test_set_ids
     test_set_ids = []
     for i in test_ids:
