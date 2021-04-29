@@ -234,8 +234,8 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
   struc_coord['clicker_1'] = struc_coord_clicker_1 
   struc_coord['clicker_2'] = struc_coord_clicker_2
   struc_coord['mean'] = struc_coord_mean
-  print("clicker 1: " + struc_coord_clicker_1)
-  print("clicker 2: " + struc_coord_clicker_2)
+  #print("clicker 1: " + struc_coord_clicker_1)
+  #print("clicker 2: " + struc_coord_clicker_2)
 
   for batch in data_loaders.dataloaders['test']:
     image = batch['image'].to(S.device)
@@ -306,7 +306,7 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
       
       latex_line = []
       csv_line = []
-      name_of_file = os.path.join(eval_path, "results_%s.txt" % k)
+      name_of_file = os.path.join(eval_path, "results_line_%s.txt" % k)
       txt_file = open(name_of_file, "a")
       
       for l in S.landmarks:
