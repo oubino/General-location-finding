@@ -8,7 +8,7 @@ from torch.utils.tensorboard import SummaryWriter
 from useful_functs import yes_or_no
 
 
-def init():
+def init(reserved_test_set):
     global norm_mean, norm_std, batch_size, landmarks, sigmas, num_class
     global in_x, in_y, in_z, alpha, reg, gamma, lr_max, lr_min
     global step_size, threshold_img_print, normal_min, normal_max
@@ -36,7 +36,7 @@ def init():
     global ct_print
     global k_fold_ids
     global batch_size_test, batch_acc_steps_test
-    global train_line, clicker
+    global train_line, clicker, res_test_set
          
     # paths
     locally_or_server = yes_or_no.question('locally(y) / server(n)')
@@ -212,26 +212,22 @@ def init():
     k_folds = 5
     k_fold_ids = []   # k fold test
     
-    # train line true
-    train_line_q = input ("Train/eval on a line (y/n)? If want to eval on reserved test put (r) ")
-    if train_line_q == 'y':
+    if reserved_test_set == False:
+        # train line true
+        train_line_q = input ("Train/eval on a line (y/n)? If want to eval on reserved test put (r) ")
+        if train_line_q == 'y':
+            train_line = True
+        elif train_line_q == 'n':
+            train_line = False
+            aaron_or_oli = yes_or_no.question('Aaron clicks(y) / Oli clicks (n)')
+            if aaron_or_oli == True:
+                clicker = 'Aaron'
+            elif aaron_or_oli == False:
+                clicker = 'Oli'
+    elif reserved_test_set == True:
+        res_test_set = True
         train_line = True
-    elif train_line_q == 'n':
-        train_line = False
-        aaron_or_oli = yes_or_no.question('Aaron clicks(y) / Oli clicks (n)')
-        if aaron_or_oli == True:
-            clicker = 'Aaron'
-        elif aaron_or_oli == False:
-            clicker = 'Oli'
-    elif train_line_q == 'r':
-        train_line = False # necessary for crop in transformations
-        clicker_input = input ('Aaron(a), Oli (o), Abby (ab)')
-        if clicker_input == 'a':
-            clicker = 'Aaron_test_set'
-        elif clicker_input == 'o':
-            clicker = 'Oli_test_set'
-        elif clicker_input == 'ab':
-            clicker = 'Abby_test_set'
+
     else:
         print('ERROR')
      

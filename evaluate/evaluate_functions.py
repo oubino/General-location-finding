@@ -190,8 +190,12 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
       os.mkdir(eval_path)
   except OSError as error:
       print(error)
+
+  if S.res_test_set == False:
+      keys = ('clicker_1', 'clicker_2', 'mean')
+  elif S.res_test_set == True:
+      keys = ('clicker_1', 'clicker_2', 'clicker_3', 'mean')
       
-  keys = ('clicker_1', 'clicker_2', 'mean')
   p2p_landmarks = {}
   outliers_landmarks = {}
   x_axis_err, x_axis_err_mm = {}, {}
@@ -219,14 +223,26 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
         z_axis_err_mm[i][l] = np.empty((0), float)
     
   # load in struc_coord  
-  struc_coord_clicker_1 = functions.load_obj_pickle(S.root, 'coords_' + 'Oli') 
-  struc_coord_clicker_2 = functions.load_obj_pickle(S.root, 'coords_' + 'Aaron') 
-  struc_coord_mean = functions.mean_from_clickers(struc_coord_clicker_1, struc_coord_clicker_2)
+  if S.res_test_set == False:
+      struc_coord_clicker_1 = functions.load_obj_pickle(S.root, 'coords_' + 'Oli') 
+      struc_coord_clicker_2 = functions.load_obj_pickle(S.root, 'coords_' + 'Aaron') 
+      struc_coord_mean = functions.mean_from_clickers(struc_coord_clicker_1, struc_coord_clicker_2)
   
-  struc_coord = {}
-  struc_coord['clicker_1'] = struc_coord_clicker_1 
-  struc_coord['clicker_2'] = struc_coord_clicker_2
-  struc_coord['mean'] = struc_coord_mean
+      struc_coord = {}
+      struc_coord['clicker_1'] = struc_coord_clicker_1 
+      struc_coord['clicker_2'] = struc_coord_clicker_2
+      struc_coord['mean'] = struc_coord_mean
+  
+  elif S.res_test_set == True:
+      struc_coord_clicker_1 = functions.load_obj_pickle(S.root, 'coords_' + 'Oli_test_set') 
+      struc_coord_clicker_2 = functions.load_obj_pickle(S.root, 'coords_' + 'Aaron_test_set') 
+      struc_coord_mean = functions.mean_from_clickers(struc_coord_clicker_1, struc_coord_clicker_2)
+  
+      struc_coord = {}
+      struc_coord['clicker_1'] = struc_coord_clicker_1 
+      struc_coord['clicker_2'] = struc_coord_clicker_2
+      struc_coord['mean'] = struc_coord_mean
+      struc_coord['clicker_3'] = functions.load_obj_pickle(S.root, 'coords_' + 'Abby_test_set')
   
   for batch in data_loaders.dataloaders['test']:
     image = batch['image'].to(S.device)
