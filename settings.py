@@ -8,7 +8,7 @@ from torch.utils.tensorboard import SummaryWriter
 from useful_functs import yes_or_no
 
 
-def init():
+def init(reserved_test_set):
     global norm_mean, norm_std, batch_size, landmarks, sigmas, num_class
     global in_x, in_y, in_z, alpha, reg, gamma, lr_max, lr_min
     global step_size, threshold_img_print, normal_min, normal_max
@@ -38,7 +38,7 @@ def init():
     global batch_size_test, batch_acc_steps_test
     global train_line, clicker
 
-         
+
     # paths
     locally_or_server = yes_or_no.question('locally(y) / server(n)')
     if locally_or_server == True:
@@ -219,22 +219,24 @@ def init():
         train_line = True
     elif train_line_q == 'n':
         train_line = False
-        aaron_or_oli = yes_or_no.question('Aaron clicks(y) / Oli clicks (n): ')
+        aaron_or_oli = yes_or_no.question('Aaron clicks(y) / Oli clicks (n)')
         if aaron_or_oli == True:
             clicker = 'Aaron'
         elif aaron_or_oli == False:
             clicker = 'Oli'
     elif train_line_q == 'r':
         train_line = False # necessary for crop in transformations
-        clicker_input = input ('Aaron(a), Oli (o), Abby (ab): ')
+        clicker_input = input ('Aaron(a), Oli (o), Abby (ab)')
         if clicker_input == 'a':
             clicker = 'Aaron_test_set'
         elif clicker_input == 'o':
             clicker = 'Oli_test_set'
         elif clicker_input == 'ab':
-            clicker = 'Aba_test_set'
+            clicker = 'Abby_test_set'
     else:
         print('ERROR')
+
+   
      
 def init_new():
     # oli vs aaron settings 
