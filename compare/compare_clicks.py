@@ -58,8 +58,8 @@ def load_obj(root, name):
 # paths
 root = r'/home/olive/data/Facial_asymmetry_test_sets'
 
-clicker_1 = input('Clicker_1, e.g. Oli_test_set ') 
-clicker_2 = input('Clicker_2, e.g. Aaron_test_set ') 
+clicker_1 = input('Clicker_1, (e.g. Oli_test_set): ') 
+clicker_2 = input('Clicker_2, (e.g. Aaron_test_set): ') 
 
 hist_root = r'/home/rankinaaron98/data/Compare_aaron/Histograms_reclick__oli_aaron_testsets/'
 
@@ -204,17 +204,18 @@ if calc_deviations == True:
         latex_line_z = latex_line_z + latex_line_temp_z    
         # write in excel format for easy to calc folds 
     
-    txt_file.writelines(latex_line_landmark)
-    txt_file.writelines(latex_line_mean)
-    txt_file.writelines(['\n'])
-    txt_file.writelines(latex_line_mean_std)
-    txt_file.writelines(['\n'])
-    txt_file.writelines(latex_line_x)
-    txt_file.writelines(['\n'])
-    txt_file.writelines(latex_line_y)
-    txt_file.writelines(['\n'])
-    txt_file.writelines(latex_line_z)
-    txt_file.close()        
+        txt_file.writelines(latex_line_landmark)
+        txt_file.writelines(['\n'])
+        txt_file.writelines(latex_line_mean)
+        txt_file.writelines(['\n'])
+        txt_file.writelines(latex_line_mean_std)
+        txt_file.writelines(['\n'])
+        txt_file.writelines(latex_line_x)
+        txt_file.writelines(['\n'])
+        txt_file.writelines(latex_line_y)
+        txt_file.writelines(['\n'])
+        txt_file.writelines(latex_line_z)
+        txt_file.close()        
     
 
 # for each landmark, list of the images with deviations greater than ceratin distance
