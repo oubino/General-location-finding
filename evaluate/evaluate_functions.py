@@ -240,10 +240,15 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
               
               if S.pred_max == True:
                   pred_coords_max, val_max = functions.pred_max(pred, l, S.landmarks)[0], functions.pred_max(pred, l, S.landmarks)[1] # change to gauss fit
+                  print('help 2')
+                  print(pred_coords_max, val_max)
               else:
                   pred_coords_max = functions.gauss_max(pred,l,height_guess,sigmas[l].item(), S.in_x, S.in_y, S.in_z, S.landmarks)  
             
               # if max value is greatest for this patient then save the predicted coord for this landmark
+              print('help')
+              print(val_max[i])
+              print(val_max_list[patient[i]][l])
               if val_max[i] > val_max_list[patient[i]][l]:
                   coord_list[patient[i]][l]['x'], coord_list[patient[i]][l]['y'], coord_list[patient[i]][l]['z'] = pred_coords_max[i][0], pred_coords_max[i][1], pred_coords_max[i][2]                  
                   pat_index[patient[i]] = slide_index
@@ -258,8 +263,6 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
               pred_max_x, pred_max_y, pred_max_z =  coord_list[p][l]['x'], coord_list[p][l]['y'], coord_list[p][l]['z']
                 
               # convert pred to location in orig img
-              print('help')
-              print(p, pat_index)
               pred_max_x, pred_max_y, pred_max_z = functions.aug_to_orig(pred_max_x, pred_max_y, pred_max_z, S.downsample_user, p, pat_index[p])
         
               for k in keys: # clicker_1, clicker_2, and mean
