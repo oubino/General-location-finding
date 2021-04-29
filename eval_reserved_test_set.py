@@ -9,7 +9,7 @@ settings.init(True)
 
 
 # cts and structures & csv path
-settings.root = r'/home/rankinaaron98/Facial_asymmetry_aaron_testset'
+settings.root = r'/home/rankinaaron98/Facial_asymmetry_test_sets'
 
 # evaluate model
 downsample_q = input ("Downsample(y)/crop(n) ")
