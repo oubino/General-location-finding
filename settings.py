@@ -38,6 +38,7 @@ def init():
     global k_fold_ids
     global batch_size_test, batch_acc_steps_test
     global train_line, clicker
+    global epoch_deep_saved
          
     # paths
     locally_or_server = yes_or_no.question('locally(y) / server(n)')

@@ -293,8 +293,8 @@ class Shift(object):
                 coords[l]['y'] = coords[l]['y'] + y_shift
                 coords[l]['z'] = coords[l]['z'] + z_shift
             image = scipy.ndimage.shift(image, (z_shift, y_shift, x_shift), order = order_mod)
-        else:
-            print('shift out of bounds')
+        #else:
+            #print('shift out of bounds')
 
         return {'image': image, 'idx': idx, 'patient':patient, 'coords':coords}
         
@@ -324,8 +324,8 @@ class Flips_scipy(object):
                 #image = functions.rotate_img(image,angle, S.in_x, S.in_y, S.in_z, axis = [1,0])
                 for l in S.landmarks_total:
                     coords[l]['x'], coords[l]['y'], coords[l]['z'] = coords_rotat[l]['x'], coords_rotat[l]['y'], coords_rotat[l]['z']
-            else:
-                print('ROTATION OUT OF BOUNDS')
+            #else:
+            #    print('ROTATION OUT OF BOUNDS')
                 
 
         elif (random_number > 0.33) and (random_number <= 0.66):
@@ -340,8 +340,8 @@ class Flips_scipy(object):
                 image = scipy.ndimage.rotate(image, angle, axes = [1,2],reshape = False, order = order_mod)
                 for l in S.landmarks_total:
                     coords[l]['x'], coords[l]['y'], coords[l]['z'] = coords_rotat[l]['x'], coords_rotat[l]['y'], coords_rotat[l]['z']
-            else:
-                print('ROTATION OUT OF BOUNDS')
+            #else:
+            #    print('ROTATION OUT OF BOUNDS')
 
         else:
             #structure = scipy.ndimage.rotate(structure, angle, axes = [1,0], reshape = False, order = 0)
@@ -355,8 +355,8 @@ class Flips_scipy(object):
                 image = scipy.ndimage.rotate(image, angle, axes = [2,0],reshape = False, order = order_mod)
                 for l in S.landmarks_total:
                     coords[l]['x'], coords[l]['y'], coords[l]['z'] = coords_rotat[l]['x'], coords_rotat[l]['y'], coords_rotat[l]['z']
-            else:
-                print('ROTATION OUT OF BOUNDS')
+           # else:
+           #     print('ROTATION OUT OF BOUNDS')
                 
         return {'image': image, 'idx': idx, 'patient':patient, 'coords':coords}
       
