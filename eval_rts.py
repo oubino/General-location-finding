@@ -12,7 +12,7 @@ from data_loading import data_loaders
 print('here 4')
 from model import load_model   
 # cts and structures & csv path
-#settings.root = r'/home/rankinaaron98/Facial_asymmetry_aaron_testset'
+settings.root = r'/home/rankinaaron98/Facial_asymmetry_test_sets'
 print('here 5')
 # evaluate model
 '''downsample_q = input ("Downsample(y)/crop(n) ")
