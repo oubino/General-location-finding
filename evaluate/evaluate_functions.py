@@ -261,6 +261,9 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
           # convert pred to location in orig img
           pred_max_x, pred_max_y, pred_max_z = functions.aug_to_orig(pred_max_x, pred_max_y, pred_max_z, S.downsample_user, patient[i])
           
+          print('patient, x, y, z')
+          print(patient[i], pred_max_x, pred_max_y, pred_max_z)
+          
           for k in keys: # clicker_1, clicker_2, and mean
                         
                 struc_loc = struc_coord[k][patient[i]]
