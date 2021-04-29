@@ -245,15 +245,21 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
             
               # if max value is greatest for this patient then save the predicted coord for this landmark
               if val_max[i] > val_max_list[patient[i]][l]:
+                  val_max_list[patient[i]][l] = val_max[i] # update max val
                   coord_list[patient[i]][l]['x'], coord_list[patient[i]][l]['y'], coord_list[patient[i]][l]['z'] = pred_coords_max[i][0], pred_coords_max[i][1], pred_coords_max[i][2]                  
                   pat_index[patient[i]] = slide_index
-                  print('slide index')
-                  print(slide_index)
-                  print(val_max[i])
-                  print(pred_coords_max[i][0], pred_coords_max[i][1], pred_coords_max[i][2])
          
       S.slide_index += 1
                   
+  print('coordinate list')
+  print(coord_list)
+  
+  print('max val list')
+  print(val_max_list)
+  
+  print('slide for each patient with max val')
+  print(pat_index)
+
   for p in patients:
      
       for l in S.landmarks: # cycle over all landmarks
