@@ -77,7 +77,7 @@ landmarks = [1,2,3,4,5,6,7,8,9,10]
 limit = 20
 
 # common patients
-list = [x for x in patients_clicker_1 if x in patients_clicker_2]
+pat_list = [x for x in patients_clicker_1 if x in patients_clicker_2]
 
 com_list_clicker_1 = {}
 com_list_clicker_2 = {}
@@ -113,13 +113,13 @@ plot_histograms = question('histograms(y) / or not (n)')
 calc_deviations = question('calc deviations(y) / or not (n)')
 
 # for common structures add mean to array for both clicker_1 and clicker_2
-for p in list:
+for p in pat_list:
     for k in landmarks:
         com_list_clicker_1['%1.0f' % k].append([file_clicker_1[p][k]['z'], file_clicker_1[p][k]['y'], file_clicker_1[p][k]['x']])
         com_list_clicker_2['%1.0f' % k].append([file_clicker_2[p][k]['z'], file_clicker_2[p][k]['y'], file_clicker_2[p][k]['x']])
         
 # calculate mean of clicker_1 and clicker_2 from arrays
-for j in range(len(list)):
+for j in range(len(pat_list)):
     for k in landmarks:
         mean_x = ((com_list_clicker_1['%1.0f' % k][j][2] + com_list_clicker_2['%1.0f' % k][j][2])/2)
         mean_y = ((com_list_clicker_1['%1.0f' % k][j][1] + com_list_clicker_2['%1.0f' % k][j][1])/2)
@@ -130,9 +130,9 @@ for j in range(len(list)):
 click_outlier_counter = 0
 if calc_deviations == True:
     # calculate deviation of arrays etc.
-    for j in range(len(list)):
+    for j in range(len(pat_list)):
         for k in landmarks:
-            z_mm, y_mm, x_mm = pixel_to_mm(list[j])
+            z_mm, y_mm, x_mm = pixel_to_mm(pat_list[j])
             dev_x = (com_list_clicker_1['%1.0f' % k][j][2] - com_list_clicker_2['%1.0f' % k][j][2])*(x_mm)
             dev_y = (com_list_clicker_1['%1.0f' % k][j][1] - com_list_clicker_2['%1.0f' % k][j][1])*(y_mm)
             dev_z = (com_list_clicker_1['%1.0f' % k][j][0] - com_list_clicker_2['%1.0f' % k][j][0])*(z_mm)
@@ -142,8 +142,8 @@ if calc_deviations == True:
             dev_list_y['%1.0f' % k].append(dev_y)
             dev_list_z['%1.0f' % k].append(dev_z)
             if dev > limit:
-                dev_upper_limit_list['%1.0f' % k].append(list[j])
-                print('image: %s' % list[j])
+                dev_upper_limit_list['%1.0f' % k].append(pat_list[j])
+                print('image: %s' % pat_list[j])
                 print('landmark: %1.0f' % k)
                 print(dev)
                 click_outlier_counter += 1
@@ -155,7 +155,7 @@ if calc_deviations == True:
         a = dev_list['%1.0f' % k]
         mean = np.mean(a)
         mean_dev['%1.0f' % k].append(mean)
-        mean_dev_std['%1.0f' % k].append(np.std(a)*(len(list)**-0.5))
+        mean_dev_std['%1.0f' % k].append(np.std(a)*(len(pat_list)**-0.5))
         # for x y and z
         x = dev_list_x['%1.0f' % k]
         y = dev_list_y['%1.0f' % k]
@@ -183,7 +183,7 @@ print(dev_upper_limit_list)
 print('\n')
 
 print('percentage of clicks which are outliers')
-print(100*click_outlier_counter/(len(list)*len(landmarks)))
+print(100*click_outlier_counter/(len(pat_list)*len(landmarks)))
             
 # mean deviation per landmark
 print('mean deviation per landmark')
