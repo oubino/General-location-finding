@@ -215,7 +215,8 @@ if calc_deviations == True:
         txt_file.writelines(latex_line_y)
         txt_file.writelines(['\n'])
         txt_file.writelines(latex_line_z)
-        txt_file.close()        
+
+txt_file.close()        
     
 
 # for each landmark, list of the images with deviations greater than ceratin distance
