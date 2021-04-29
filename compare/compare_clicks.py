@@ -186,7 +186,7 @@ if calc_deviations == True:
             histogram(x, 'x', k)
             histogram(y, 'y', k)
             histogram(z, 'z', k)
-       
+        
         latex_line_landmark = ['landmark: ' + str(k)]
         latex_line_temp_mean = [' & ' + str(round(mean,1))] 
         latex_line_mean = latex_line_mean + latex_line_temp_mean    
@@ -215,7 +215,8 @@ if calc_deviations == True:
         txt_file.writelines(latex_line_y)
         txt_file.writelines(['\n'])
         txt_file.writelines(latex_line_z)
-
+        txt_file.writelines(['\n'])
+        txt_file.writelines(['\n'])
 txt_file.close()        
     
 
