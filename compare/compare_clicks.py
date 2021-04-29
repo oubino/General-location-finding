@@ -58,8 +58,8 @@ def load_obj(root, name):
 # paths
 root = r'/home/olive/data/Facial_asymmetry_test_sets'
 
-clicker_1 = 'Oli_test_set' 
-clicker_2 = 'Aaron_test_set'
+clicker_1 = input('Clicker_1, e.g. Oli_test_set ') 
+clicker_2 = input('Clicker_2, e.g. Aaron_test_set ') 
 
 hist_root = r'/home/rankinaaron98/data/Compare_aaron/Histograms_reclick__oli_aaron_testsets/'
 
