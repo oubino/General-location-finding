@@ -253,15 +253,6 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
                   pat_index[patient[i]] = slide_index
          
       S.slide_index += 1
-                  
-  print('coordinate list')
-  print(coord_list)
-  
-  print('max val list')
-  print(val_max_list)
-  
-  print('slide for each patient with max val')
-  print(pat_index)
 
   for p in patients:
      
@@ -272,6 +263,9 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
                 
               # convert pred to location in orig img
               pred_max_x, pred_max_y, pred_max_z = functions.aug_to_orig(pred_max_x, pred_max_y, pred_max_z, S.downsample_user, p, pat_index[p])
+              
+              print('patient, x, y, z')
+              print(p, pred_max_x, pred_max_y, pred_max_z)
         
               for k in keys: # clicker_1, clicker_2, and mean
                               
