@@ -8,7 +8,7 @@ import settings as S
 S.init()
 
 # pickle file location
-pickle_struc_path = r'/home/olive/data/Facial_asymmetry_reclicks'
+pickle_struc_path = r'/home/olive/data/Facial_asymmetry_test_sets'
 
 def save_obj(root, obj, name):
     with open(os.path.join(root, name) + '.pkl', 'wb') as f:
