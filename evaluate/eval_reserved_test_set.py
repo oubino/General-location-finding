@@ -5,19 +5,18 @@ from model import load_model
 from useful_functs import yes_or_no
 import settings
 
-<<<<<<< HEAD:evaluate/eval_reserved_test_set.py
 settings.init(True)
 
-=======
-settings.init()
-settings.init_load()
->>>>>>> parent of bf55f8c (fixing eval_reserve):eval_reserved_test_set.py
 
 # cts and structures & csv path
 settings.root = r'/home/rankinaaron98/Facial_asymmetry_test_sets'
 
 # evaluate model
-
+downsample_q = input ("Downsample(y)/crop(n) ")
+if downsample_q == 'y':
+       downsample_user = True
+elif downsample_q == 'n':
+       downsample_user = False
 # initialise data loader
 data_loaders.init_reserved_test_set()
 
