@@ -269,7 +269,7 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
               pred_max_x, pred_max_y, pred_max_z =  coord_list[p][l]['x'], coord_list[p][l]['y'], coord_list[p][l]['z']
                 
               # convert pred to location in orig img
-              pred_max_x, pred_max_y, pred_max_z = functions.aug_to_orig(pred_max_x, pred_max_y, pred_max_z, S.downsample_user, p, pat_index[p])
+              pred_max_x, pred_max_y, pred_max_z = functions.aug_to_orig(pred_max_x, pred_max_y, pred_max_z, S.downsample_user, p, pat_index[p][l])
               
               print('patient, x, y, z')
               print(p, pred_max_x, pred_max_y, pred_max_z)
