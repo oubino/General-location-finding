@@ -8,7 +8,7 @@ from torch.utils.tensorboard import SummaryWriter
 from useful_functs import yes_or_no
 
 
-def init(reserved_test_set):
+def init():
     global norm_mean, norm_std, batch_size, landmarks, sigmas, num_class
     global in_x, in_y, in_z, alpha, reg, gamma, lr_max, lr_min
     global step_size, threshold_img_print, normal_min, normal_max
