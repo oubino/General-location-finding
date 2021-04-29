@@ -36,8 +36,8 @@ def init():
     global ct_print
     global k_fold_ids
     global batch_size_test, batch_acc_steps_test
-    global train_line, clicker, sliding_window
-    global fold_load
+    global train_line, clicker
+
          
     # paths
     locally_or_server = yes_or_no.question('locally(y) / server(n)')
@@ -47,7 +47,7 @@ def init():
         if aaron_or_oli == True:
             # Aaron paths
             coding_path = r'C:\Users\ranki_252uikw\Documents\MPhysS2\General-location-finding'
-            root = r'C:\Users\ranki_252uikw\Documents\MPhysS2\Facial_asymmetry_reclicks' # note lack of " "
+            root = r'C:\Users\ranki_252uikw\Documents\MPhysS2\Facial_asymmetry_aaron_testset' # note lack of " "
             save_data_path = r'C:\Users\ranki_252uikw\Documents\MPhysS2\Results'
         elif aaron_or_oli == False:
             # Oli paths
@@ -214,8 +214,7 @@ def init():
     k_fold_ids = []   # k fold test
     
     # train line true
-    train_line_q = input ("Train/eval on a line (y/n)? If want to eval on reserved test put (r): ")
-    sliding_window = yes_or_no.question('Sliding window (y)/(n): ')
+    train_line_q = input ("Train/eval on a line (y/n)? If want to eval on reserved test put (r) ")
     if train_line_q == 'y':
         train_line = True
     elif train_line_q == 'n':

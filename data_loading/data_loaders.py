@@ -13,6 +13,7 @@ from data_loading import dataset_class as D
 import settings as S
 from data_loading import transformations as T
 import matplotlib.pyplot as plt
+import eval_reserved_test_set as eval_r
 
 
 #os.chdir(S.root) # change to data path and change back at end
