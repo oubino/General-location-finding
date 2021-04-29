@@ -1,6 +1,6 @@
 # global variable settings
 import settings
-settings.init(False)
+settings.init()
 
 # library imports
 from useful_functs import yes_or_no
