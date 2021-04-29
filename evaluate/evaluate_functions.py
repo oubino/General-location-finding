@@ -217,7 +217,7 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
   for p in patients:
       val_max_list[p] = {}
       coord_list[p] = {}
-      pat_index[p] = 0
+      pat_index[p] = {}
       for l in S.landmarks:
           val_max_list[p][l] = 0
           coord_list[p][l] = {'x':0, 'y':0, 'z':0}
