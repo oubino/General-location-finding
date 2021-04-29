@@ -62,7 +62,7 @@ class CentreCrop_test(object):
       x_crop = S.crop_coords_slide[patient][S.slide_index]['x']
       y_crop = S.crop_coords_slide[patient][S.slide_index]['y']
       z_crop = S.crop_coords_slide[patient][S.slide_index]['z']
-      print(x_crop, y_crop, z_crop)
+      #print(x_crop, y_crop, z_crop)
       """
      else:
           if S.train_line == True:

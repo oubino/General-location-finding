@@ -262,6 +262,9 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
   print('patient index')
   print(pat_index)
   
+  print('crop coords')
+  print(S.crop_coords_slide)
+  
   for p in patients:
      
       for l in S.landmarks: # cycle over all landmarks
