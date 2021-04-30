@@ -148,7 +148,7 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
             
 
             # deep copy the model
-            if phase == 'val' and epoch_loss < best_loss:
+            if phase == 'train' and epoch_loss < best_loss:
                 print("\n")
                 print("------ deep copy best model ------ ")
                 best_loss = epoch_loss
