@@ -273,14 +273,12 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
          
       S.slide_index += 1
   
-  print('pred x, y, z pre aug')
-  print(coord_list)
-  
-  print('patient index')
-  print(pat_index)
-  
-  print('crop coords')
-  print(S.crop_coords_slide)
+  # final locations dict
+  final_loc = {}
+  for p in patients:
+      final_loc[p] ={}
+      for l in S.landmarks:
+          final_loc[p][l]= {'x':0, 'y':0, 'z':0}
   
   for p in patients:
      
@@ -292,8 +290,8 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
               # convert pred to location in orig img
               pred_max_x, pred_max_y, pred_max_z = functions.aug_to_orig(pred_max_x, pred_max_y, pred_max_z, S.downsample_user, p, pat_index[p][l])
               
-              print('patient, x, y, z')
-              print(p, pred_max_x, pred_max_y, pred_max_z)
+              # final location add
+              final_loc[p][l]['x'], final_loc[p][l]['y'], final_loc[p][l]['z'] = pred_max_x, pred_max_y, pred_max_z
         
               for k in keys: # clicker_1, clicker_2, and mean
                               
@@ -403,7 +401,12 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
       txt_file.writelines(['\n'])
       txt_file.writelines(csv_line)
       txt_file.close()
-
+      
+  print('final locations')
+  print(final_loc)
+  
+  functions.save_obj(final_loc, eval_path, 'final_coords')
+  
 
 def print_2D_slice_line(landmark, pred_x, pred_y, pred_z, structure_coord, eval_path, patient):
     
