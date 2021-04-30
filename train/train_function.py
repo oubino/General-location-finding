@@ -34,7 +34,7 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
                 
             else:
                 print('')
-                print('Testing on 1 image from val set')
+                print('Testing on val set')
                 print('')
                 model.eval()   # Set model to evaluate mode
                 data_loaders.dataset.__test__()
