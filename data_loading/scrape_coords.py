@@ -9,6 +9,7 @@ from data_loading import numpy_loc
 S.init()
 
 struc_path = r'/home/olive/data/Facial_asymmetry_old_clicks/Facial_asymmetry_oli_common'
+clicker = 'Oli'
 
     
 def save_obj(obj, name):
@@ -52,8 +53,8 @@ for i in struc_list:
 
             
 
-save_obj(coordinates, 'coords_%s' % S.clicker)
+save_obj(coordinates, 'coords_%s' % clicker)
 
-a = load_obj('coords_%s' % S.clicker)
+a = load_obj('coords_%s' % clicker)
 print(a)
 
