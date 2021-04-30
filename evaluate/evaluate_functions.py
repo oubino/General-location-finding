@@ -41,72 +41,119 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
     x_axis_err[l], x_axis_err_mm[l] = np.empty((0), float),  np.empty((0), float)
     y_axis_err[l], y_axis_err_mm[l] = np.empty((0), float),  np.empty((0), float)
     z_axis_err[l], z_axis_err_mm[l] = np.empty((0), float),  np.empty((0), float)
+    
   # load in struc_coord  
   struc_coord = functions.load_obj_pickle(S.root, 'coords_' + S.clicker) 
-
-  for batch in data_loaders.dataloaders['test']:        
-    patient = batch['patient']    
-    image = batch['image'].to(S.device)        
-    pred = model(image)
-        
   
-    batch_number = 0
+  # initiate max val as 0 for all patients - sliding window stuff
+  # patients needs to be = ['0003.npy', '0004.npy', etc.]
+  patients = data_loaders.test_set_ids
+  val_max_list = {}
+  coord_list = {}
+  pat_index = {}
+  for p in patients:
+      val_max_list[p] = {}
+      coord_list[p] = {}
+      pat_index[p] = {}
+      for l in S.landmarks:
+          val_max_list[p][l] = 0
+          coord_list[p][l] = {'x':0, 'y':0, 'z':0}
+          pat_index[p][l] = 0
+  
+  for slide_index in range(S.sliding_points):
     
-    for l in S.landmarks: # cycle over all landmarks
-      
-      for i in range(image.size()[0]): # batch size
-        
-        struc_loc = struc_coord[patient[i]]
-
-        if struc_loc[l]['present'] == 1:
-        # change to top structure
-          dimension = 3
-          height_guess = ((gamma) * (2*np.pi)**(-dimension/2) * sigmas[l].item() ** (-dimension)) 
-          
-          if S.pred_max == True:
-              pred_coords_max = functions.pred_max(pred, l, S.landmarks) # change to gauss fit
-          else:
-              pred_coords_max = functions.gauss_max(pred,l,height_guess,sigmas[l].item(), S.in_x, S.in_y, S.in_z, S.landmarks)  
-          
-          structure_max_x, structure_max_y, structure_max_z = struc_loc[l]['x'],struc_loc[l]['y'], struc_loc[l]['z'] 
-          pred_max_x, pred_max_y, pred_max_z =  pred_coords_max[i][0], pred_coords_max[i][1], pred_coords_max[i][2] 
-          
-          # convert pred to location in orig img
-          pred_max_x, pred_max_y, pred_max_z = functions.aug_to_orig(pred_max_x, pred_max_y, pred_max_z, S.downsample_user, patient[i])
-          
-          # print out 3D images for first one in batch
-          #if batch_number == 0 and i == 0: # for first batch 
-            # now need to choose first in batch i.e. # image[0]
-            #print('3D plots for landmark %1.0f' % l)
-            #print_3D_heatmap(image[i], structure[i], pred[i], l, eval_path, patient[i])
-            #print_3D_gauss_heatmap(image[i], structure_max_x, structure_max_y, structure_max_z, pred[i], l, sigmas[l], eval_path, patient[i])
-            #print('\n')
-            #print('Structure LOC for landmark %1.0f:' % l)
-            #print(structure_max_x, structure_max_y, structure_max_z)
-            #print('Predicted LOC for landmark %1.0f:' % l)
-            #print(pred_max_x, pred_max_y, pred_max_z)
-            #print('\n')
-            # print 2D slice
-            #print('2D slice for landmark %1.0f' % l)
-            #print_2D_slice(l, pred_max_x, pred_max_y, pred_max_z, structure_max_x, structure_max_y, structure_max_z ,eval_path, patient[i])
-                      
-          # point to point takes in original structure location!!
-          img_landmark_point_to_point = functions.point_to_point_mm(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z, patient[i])
-          p2p_landmarks[l] = np.append(p2p_landmarks[l],img_landmark_point_to_point.cpu())
-          x_p2p, x_p2p_mm, y_p2p, y_p2p_mm, z_p2p, z_p2p_mm = functions.axis_p2p_err(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z, patient[i])
-          x_axis_err[l] = np.append(x_axis_err[l], x_p2p.cpu())
-          x_axis_err_mm[l] = np.append(x_axis_err_mm[l], x_p2p_mm.cpu())
-          y_axis_err[l] = np.append(y_axis_err[l], y_p2p.cpu())
-          y_axis_err_mm[l] = np.append(y_axis_err_mm[l], y_p2p_mm.cpu())
-          z_axis_err[l] = np.append(z_axis_err[l], z_p2p.cpu())
-          z_axis_err_mm[l] = np.append(z_axis_err_mm[l], z_p2p_mm.cpu())
-          
-         # x_axis_err[l] = np.append(x_axis_err[l], )
-          # if img_point_to_point > 20mm is an outlier
-          if img_landmark_point_to_point > 20:
-            outliers_landmarks[l] = np.append(outliers_landmarks[l],1)
+      for batch in data_loaders.dataloaders['test']:        
+        patient = batch['patient']    
+        image = batch['image'].to(S.device)        
+        pred = model(image)
             
-    batch_number += 1 # not sure where to put
+      
+        #batch_number = 0
+        
+        for l in S.landmarks: # cycle over all landmarks
+          
+          for i in range(image.size()[0]): # batch size
+            
+            #struc_loc = struc_coord[patient[i]]
+    
+            #if struc_loc[l]['present'] == 1:
+            # change to top structure
+              dimension = 3
+              height_guess = ((gamma) * (2*np.pi)**(-dimension/2) * sigmas[l].item() ** (-dimension)) 
+              
+              if S.pred_max == True:
+                  pred_coords_max, val_max = functions.pred_max(pred, l, S.landmarks)[0], functions.pred_max(pred, l, S.landmarks)[1] # change to gauss fit
+              else:
+                  pred_coords_max = functions.gauss_max(pred,l,height_guess,sigmas[l].item(), S.in_x, S.in_y, S.in_z, S.landmarks)  
+            
+              # if max value is greatest for this patient then save the predicted coord for this landmark
+              if val_max[i] > val_max_list[patient[i]][l]:
+                  val_max_list[patient[i]][l] = val_max[i] # update max val
+                  coord_list[patient[i]][l]['x'], coord_list[patient[i]][l]['y'], coord_list[patient[i]][l]['z'] = pred_coords_max[i][0], pred_coords_max[i][1], pred_coords_max[i][2]                  
+                  pat_index[patient[i]][l] = slide_index
+              
+      S.slide_index += 1
+  S.slide_index = 0
+  
+  # final locations dict
+  final_loc = {}
+  for p in patients:
+      final_loc[p] ={}
+      for l in S.landmarks:
+          final_loc[p][l]= {'x':0, 'y':0, 'z':0}
+
+  for p in patients:
+      
+      for l in S.landmarks:
+            
+              pred_max_x, pred_max_y, pred_max_z =  coord_list[p][l]['x'], coord_list[p][l]['y'], coord_list[p][l]['z']
+              
+              # convert pred to location in orig img
+              pred_max_x, pred_max_y, pred_max_z = functions.aug_to_orig(pred_max_x, pred_max_y, pred_max_z, S.downsample_user, p, pat_index[p][l])
+              
+              # final location add
+              final_loc[p][l]['x'], final_loc[p][l]['y'], final_loc[p][l]['z'] = pred_max_x, pred_max_y, pred_max_z
+              
+              struc_loc = struc_coord[p]
+              
+              if struc_loc[l]['present'] == 1:
+                  
+                  structure_max_x, structure_max_y, structure_max_z = struc_loc[l]['x'],struc_loc[l]['y'], struc_loc[l]['z']      
+                      
+              
+                  # print out 3D images for first one in batch
+                  #if batch_number == 0 and i == 0: # for first batch 
+                  # now need to choose first in batch i.e. # image[0]
+                  #print('3D plots for landmark %1.0f' % l)
+                  #print_3D_heatmap(image[i], structure[i], pred[i], l, eval_path, patient[i])
+                  #print_3D_gauss_heatmap(image[i], structure_max_x, structure_max_y, structure_max_z, pred[i], l, sigmas[l], eval_path, patient[i])
+                  #print('\n')
+                  #print('Structure LOC for landmark %1.0f:' % l)
+                    #print(structure_max_x, structure_max_y, structure_max_z)
+                    #print('Predicted LOC for landmark %1.0f:' % l)
+                    #print(pred_max_x, pred_max_y, pred_max_z)
+                    #print('\n')
+                    # print 2D slice
+                    #print('2D slice for landmark %1.0f' % l)
+                    #print_2D_slice(l, pred_max_x, pred_max_y, pred_max_z, structure_max_x, structure_max_y, structure_max_z ,eval_path, patient[i])
+                          
+                  # point to point takes in original structure location!!
+                  img_landmark_point_to_point = functions.point_to_point_mm(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z, patient[i])
+                  p2p_landmarks[l] = np.append(p2p_landmarks[l],img_landmark_point_to_point.cpu())
+                  x_p2p, x_p2p_mm, y_p2p, y_p2p_mm, z_p2p, z_p2p_mm = functions.axis_p2p_err(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z, patient[i])
+                  x_axis_err[l] = np.append(x_axis_err[l], x_p2p.cpu())
+                  x_axis_err_mm[l] = np.append(x_axis_err_mm[l], x_p2p_mm.cpu())
+                  y_axis_err[l] = np.append(y_axis_err[l], y_p2p.cpu())
+                  y_axis_err_mm[l] = np.append(y_axis_err_mm[l], y_p2p_mm.cpu())
+                  z_axis_err[l] = np.append(z_axis_err[l], z_p2p.cpu())
+                  z_axis_err_mm[l] = np.append(z_axis_err_mm[l], z_p2p_mm.cpu())
+                  
+                 # x_axis_err[l] = np.append(x_axis_err[l], )
+                  # if img_point_to_point > 20mm is an outlier
+                  if img_landmark_point_to_point > 20:
+                    outliers_landmarks[l] = np.append(outliers_landmarks[l],1)
+                
+        #batch_number += 1 # not sure where to put
     
   print('\n')
   print('Results summary')    
@@ -220,8 +267,12 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
         z_axis_err_mm[i][l] = np.empty((0), float)
     
   # load in struc_coord  
-  struc_coord_clicker_1 = functions.load_obj_pickle(S.root, 'coords_' + 'Oli') 
-  struc_coord_clicker_2 = functions.load_obj_pickle(S.root, 'coords_' + 'Aaron') 
+  if S.rts == False:
+      struc_coord_clicker_1 = functions.load_obj_pickle(S.root, 'coords_' + 'Oli') 
+      struc_coord_clicker_2 = functions.load_obj_pickle(S.root, 'coords_' + 'Aaron') 
+  elif S.rts == True:
+      struc_coord_clicker_1 = functions.load_obj_pickle(S.root, 'coords_' + 'Oli_testset') 
+      struc_coord_clicker_2 = functions.load_obj_pickle(S.root, 'coords_' + 'Aaron_testset') 
   struc_coord_mean = functions.mean_from_clickers(struc_coord_clicker_1, struc_coord_clicker_2)
   
   struc_coord = {}
@@ -285,7 +336,7 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
      
       for l in S.landmarks: # cycle over all landmarks
               
-          for i in range(image.size()[0]): # batch size
+          #for i in range(image.size()[0]): # batch size
               pred_max_x, pred_max_y, pred_max_z =  coord_list[p][l]['x'], coord_list[p][l]['y'], coord_list[p][l]['z']
                 
               # convert pred to location in orig img
