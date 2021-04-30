@@ -419,13 +419,19 @@ class ToTensor(object):
             # structure is z, y, x
             # need it in y, x, z                
             x, y, z = int(round(coords[l]['x'])), int(round(coords[l]['y'])), int(round(coords[l]['z']))
-            # if z is 80 round to 79
+            # if z is 80 or -1 round to 79 or 0 respectively
             if z == S.in_z:
                 z = S.in_z - 1
             if y == S.in_y:
                 y = S.in_y - 1
             if x == S.in_x:
                 x = S.in_x - 1
+            if x == -1:
+                x = 0
+            if y == -1:
+                y = 0
+            if z == -1:
+                z = 0
             if coords[l]['present'] == 1:
                 if x > S.in_x or x < 0:
                     print('x outside bounds of cropped image')
