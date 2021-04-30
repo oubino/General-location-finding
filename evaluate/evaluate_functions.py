@@ -32,15 +32,15 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
       
   p2p_landmarks = defaultdict(float)
   outliers_landmarks = defaultdict(float)
-  #x_axis_err, x_axis_err_mm = defaultdict(float), defaultdict(float)
-  #y_axis_err, y_axis_err_mm = defaultdict(float), defaultdict(float)
-  #z_axis_err, z_axis_err_mm = defaultdict(float), defaultdict(float)
+  x_axis_err, x_axis_err_mm = defaultdict(float), defaultdict(float)
+  y_axis_err, y_axis_err_mm = defaultdict(float), defaultdict(float)
+  z_axis_err, z_axis_err_mm = defaultdict(float), defaultdict(float)
   for l in S.landmarks:
     p2p_landmarks[l] = np.empty((0), float)
     outliers_landmarks[l] = np.empty((0), float)
-   # x_axis_err[l], x_axis_err_mm[l] = np.empty((0), float),  np.empty((0), float)
-   # y_axis_err[l], y_axis_err_mm[l] = np.empty((0), float),  np.empty((0), float)
-   # z_axis_err[l], z_axis_err_mm[l] = np.empty((0), float),  np.empty((0), float)
+    x_axis_err[l], x_axis_err_mm[l] = np.empty((0), float),  np.empty((0), float)
+    y_axis_err[l], y_axis_err_mm[l] = np.empty((0), float),  np.empty((0), float)
+    z_axis_err[l], z_axis_err_mm[l] = np.empty((0), float),  np.empty((0), float)
   # load in struc_coord  
   struc_coord = functions.load_obj_pickle(S.root, 'coords_' + S.clicker) 
 
@@ -93,6 +93,13 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
           # point to point takes in original structure location!!
           img_landmark_point_to_point = functions.point_to_point_mm(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z, patient[i])
           p2p_landmarks[l] = np.append(p2p_landmarks[l],img_landmark_point_to_point.cpu())
+          x_p2p, x_p2p_mm, y_p2p, y_p2p_mm, z_p2p, z_p2p_mm = functions.axis_p2p_err(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z, patient[i])
+          x_axis_err[l] = np.append(x_axis_err[l], x_p2p.cpu())
+          x_axis_err_mm[l] = np.append(x_axis_err_mm[l], x_p2p_mm.cpu())
+          y_axis_err[l] = np.append(y_axis_err[l], y_p2p.cpu())
+          y_axis_err_mm[l] = np.append(y_axis_err_mm[l], y_p2p_mm.cpu())
+          z_axis_err[l] = np.append(z_axis_err[l], z_p2p.cpu())
+          z_axis_err_mm[l] = np.append(z_axis_err_mm[l], z_p2p_mm.cpu())
           
          # x_axis_err[l] = np.append(x_axis_err[l], )
           # if img_point_to_point > 20mm is an outlier
@@ -117,7 +124,18 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
     std_mean = np.std(p2p_landmarks[l],ddof =1)*(len(p2p_landmarks[l]))**-0.5
     median = np.median(p2p_landmarks[l])
     outliers_perc = outliers_landmarks[l].sum()/len(p2p_landmarks[l]) * 100
+    
+    mean_x_err = np.mean(x_axis_err[l])
+    mean_x_err_mm = np.mean(x_axis_err_mm[l])
+    mean_y_err = np.mean(y_axis_err[l])
+    mean_y_err_mm = np.mean(y_axis_err_mm[l])
+    mean_z_err = np.mean(z_axis_err[l])
+    mean_z_err_mm = np.mean(z_axis_err_mm[l])
+    
     print('    mean point to point error is ' + str(mean) + '+/-' + str(std_mean))
+    print('    mean error in x axis is: ' + str(mean_x_err) + ' (' + str(mean_x_err_mm) + ' mm)')
+    print('    mean error in y axis is: ' + str(mean_y_err) + ' (' + str(mean_y_err_mm) + ' mm)')
+    print('    mean error in z axis is: ' + str(mean_z_err) + ' (' + str(mean_z_err_mm) + ' mm)')
     print('    median point to point error is ' + str(median))
     print('    percentage of images which were outliers is ' + str(outliers_perc) + '%')
     print('    sigma is ' + str(sigmas[l]))
@@ -128,6 +146,9 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
     L = ['\n','Landmark %1.0f' % l, '\n', 
          '  mean point to point error is ' + str(mean) + '+/-' + str(std_mean), '\n',
          '  median point to point error is ' + str(median), '\n', 
+         '  mean error in x axis is: ' + str(mean_x_err) + ' (' + str(mean_x_err_mm) + ' mm)', '\n',
+         '  mean error in y axis is: ' + str(mean_y_err) + ' (' + str(mean_y_err_mm) + ' mm)', '\n',
+         '  mean error in z axis is: ' + str(mean_z_err) + ' (' + str(mean_z_err_mm) + ' mm)', '\n',
          '  percentage of images which were outliers is ' + str(outliers_perc) + '%', '\n',
          '  sigma is ' + str(sigmas[l]), '\n', 
          '  pred max used = ' + str(S.pred_max), '\n',
@@ -296,14 +317,12 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
                       p2p_landmarks[k][l] = np.append(p2p_landmarks[k][l],img_landmark_point_to_point.cpu())
                       # if img_point_to_point > 20mm is an outlier
                       x_p2p, x_p2p_mm, y_p2p, y_p2p_mm, z_p2p, z_p2p_mm = functions.axis_p2p_err(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z, p)
-                      """
-                      x_axis_err[k][l] = np.append(x_axis_err[k][l], x_p2p)
+                      x_axis_err[k][l] = np.append(x_axis_err[k][l], x_p2p.cpu())
                       x_axis_err_mm[k][l] = np.append(x_axis_err_mm[k][l], x_p2p_mm.cpu())
                       y_axis_err[k][l] = np.append(y_axis_err[k][l], y_p2p.cpu())
                       y_axis_err_mm[k][l] = np.append(y_axis_err_mm[k][l], y_p2p_mm.cpu())
                       z_axis_err[k][l] = np.append(z_axis_err[k][l], z_p2p.cpu())
                       z_axis_err_mm[k][l] = np.append(z_axis_err_mm[k][l], z_p2p_mm.cpu())
-                      """
                       if img_landmark_point_to_point > 20:
                           outliers_landmarks[k][l] = np.append(outliers_landmarks[k][l],1)
                   
@@ -331,14 +350,6 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
         std_mean = np.std(p2p_landmarks[k][l],ddof =1)*(len(p2p_landmarks[k][l]))**-0.5
         median = np.median(p2p_landmarks[k][l])
         outliers_perc = outliers_landmarks[k][l].sum()/len(p2p_landmarks[k][l]) * 100
-        print('    mean point to point error is ' + str(mean) + '+/-' + str(std_mean))
-        print('    median point to point error is ' + str(median))
-        print('    percentage of images which were outliers is ' + str(outliers_perc) + '%')
-        print('    sigma is ' + str(sigmas[l]))
-        print('    trained for ' + str(epochs_completed) + ' epochs')
-        print('    pred max used = %s' % S.pred_max)
-        print('\n')
-        
         mean_x_err = np.mean(x_axis_err[k][l])
         mean_x_err_mm = np.mean(x_axis_err_mm[k][l])
         mean_y_err = np.mean(y_axis_err[k][l])
@@ -346,9 +357,17 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
         mean_z_err = np.mean(z_axis_err[k][l])
         mean_z_err_mm = np.mean(z_axis_err_mm[k][l])
         
-        print('     mean error in x axis is: ' + str(mean_x_err) + '(' + str(mean_x_err_mm) + 'mm)')
-        print('     mean error in y axis is: ' + str(mean_y_err) + '(' + str(mean_y_err_mm) + 'mm)')
-        print('     mean error in z axis is: ' + str(mean_z_err) + '(' + str(mean_z_err_mm) + 'mm)')
+        print('    mean point to point error is ' + str(mean) + '+/-' + str(std_mean))
+        print('    median point to point error is ' + str(median))
+        print('    mean error in x axis is: ' + str(mean_x_err) + ' (' + str(mean_x_err_mm) + ' mm)')
+        print('    mean error in y axis is: ' + str(mean_y_err) + ' (' + str(mean_y_err_mm) + ' mm)')
+        print('    mean error in z axis is: ' + str(mean_z_err) + ' (' + str(mean_z_err_mm) + ' mm)')
+        print('    percentage of images which were outliers is ' + str(outliers_perc) + '%')
+        print('    sigma is ' + str(sigmas[l]))
+        print('    trained for ' + str(epochs_completed) + ' epochs')
+        print('    pred max used = %s' % S.pred_max)
+        print('\n')
+        
         
         
         L = ['\n','Landmark %1.0f' % l, '\n', 
