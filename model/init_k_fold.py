@@ -78,7 +78,7 @@ def init(init_fold):
             start_time = time.time()
             print('Training model')
             print('--------------')
-            model.train(False)
+            model.train(False, fold)
             time_elapsed = time.time() - start_time
             end_time = time.ctime(time_elapsed * (settings.num_epoch_batches - i - 2) + time.time())
             print('\n')

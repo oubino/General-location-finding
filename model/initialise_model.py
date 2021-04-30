@@ -41,14 +41,14 @@ class initialise_model:
         self.scheduler = lr_scheduler.StepLR(self.optimizer, step_size=20000, gamma=0.1)
         self.scaler = torch.cuda.amp.GradScaler(enabled=S.use_amp)
         
-    def train(self, first_train):
+    def train(self, first_train, fold):
         
         if first_train == True:
             self.best_loss = 1e10
             self.epochs_completed = 0
     
         data_loaders.dataset.__train__() 
-        self.model, self.best_loss, self.epochs_completed = train_function.train_model(self.model, self.scaler, self.optimizer, self.scheduler, S.alpha,S.reg,S.gamma,S.sigmas, num_epochs=S.epoch_batch, best_loss = self.best_loss, epochs_completed = self.epochs_completed)
+        self.model, self.best_loss, self.epochs_completed = train_function.train_model(self.model, self.scaler, self.optimizer, self.scheduler, S.alpha,S.reg,S.gamma,S.sigmas, num_epochs=S.epoch_batch, best_loss = self.best_loss, epochs_completed = self.epochs_completed, fold = fold)
     
     def evaluate(self, fold):
         

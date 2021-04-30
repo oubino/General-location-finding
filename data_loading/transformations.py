@@ -429,10 +429,13 @@ class ToTensor(object):
             if coords[l]['present'] == 1:
                 if x > S.in_x or x < 0:
                     print('x outside bounds of cropped image')
+                    print(x)
                 if y > S.in_y or y < 0:
                     print('y outside bounds of cropped image')
+                    print(y)
                 if z > S.in_z or z < 0:
                     print('z outside bounds of cropped image')
+                    print(z)
             #structure[z][y][x] = l
             coords[l]['x'], coords[l]['y'], coords[l]['z'] = x,y,z
             
