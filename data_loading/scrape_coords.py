@@ -8,7 +8,7 @@ import settings as S
 from data_loading import numpy_loc
 S.init()
 
-struc_path = r'/home/olive/data/Facial_asymmetry_old_clicks/Facial_asymmetry_oli_common'
+struc_path = r'/home/olive/data/Facial_asymmetry_old_clicks/Facial_asymmetry_oli_testset'
 clicker = 'Oli'
 
     
