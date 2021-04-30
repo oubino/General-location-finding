@@ -101,7 +101,7 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
           z_axis_err_mm[l] = np.append(z_axis_err_mm[l], z_p2p_mm.cpu())
         
           # if img_point_to_point > 20mm is an outlier
-          if img_landmark_point_to_point > 20:
+          if img_landmark_point_to_point > 10:
             outliers_landmarks[l] = np.append(outliers_landmarks[l],1)
             
     batch_number += 1 # not sure where to put
@@ -292,7 +292,7 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
                   y_axis_err_mm[k][l] = np.append(y_axis_err_mm[k][l], y_p2p_mm.cpu())
                   z_axis_err[k][l] = np.append(z_axis_err[k][l], z_p2p.cpu())
                   z_axis_err_mm[k][l] = np.append(z_axis_err_mm[k][l], z_p2p_mm.cpu())
-                  if img_landmark_point_to_point > 20:
+                  if img_landmark_point_to_point > 10:
                     outliers_landmarks[k][l] = np.append(outliers_landmarks[k][l],1)
                     
           # print 2D slice

@@ -189,7 +189,7 @@ def init():
     img_counter_3 = 0
 
     # adaptive wing loss
-    wing_loss = False
+    wing_loss = True
     # our max for heatmap is pre_factor 
     # ((gamma) * (2*np.pi)**(-dimension/2) * sigma ** (-dimension))  roughly 1
     # from paper, Wang et al
