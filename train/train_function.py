@@ -37,7 +37,7 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
                 print('Testing on 1 image from val set')
                 print('')
                 model.eval()   # Set model to evaluate mode
-                data_loaders.dataset.__train__()
+                data_loaders.dataset.__test__()
                 
 
             metrics_total = defaultdict(float)
@@ -49,64 +49,78 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
             imgs_in_set = 0 # i.e. counts total number of images in train or val or test set
             iters_to_acc = math.floor((data_loaders.batch_acc_batches)/S.batch_acc_steps)
             #batch_number = 1
-            for i, batch in enumerate(data_loaders.dataloaders[phase]):
-                    # print dataloader 
-                    inputs = batch['image']
-                    idx = batch['idx']
-                    target_coords = batch['coords']
-                   # print(labels.size())
-                    inputs = inputs.float().to(S.device)
-                    #target_coords = target_coords.to(S.device)
-                    patients = batch['patient']
-                    
-                    # target_coords is a dictioanry so is [landmarks]['x'][batch_id]
-
-                    # zero the parameter gradients
-                    #print('zero the grad')
-                    #optimizer.zero_grad() 
-                    # amp mod
-                    #print(optimizer.parameter())
-                    #sigma.zero_grad
-
-                    # forward
-                    # track history only if in train
-                    with torch.set_grad_enabled(phase == 'train'):
+            if phase == 'train':
+                for i, batch in enumerate(data_loaders.dataloaders[phase]):
+                        inputs = batch['image']
+                        idx = batch['idx']
+                        target_coords = batch['coords']
+                        inputs = inputs.float().to(S.device)
+                        patients = batch['patient']
                         
-                        with torch.cuda.amp.autocast(enabled = S.use_amp):
-                            outputs = model((inputs))
-                            # 1. convert masks to heatmaps inside loss function (allows sigma optimisation)
-                            loss = loss_func.calc_loss_gauss(model, inputs, outputs, target_coords, idx, metrics_landmarks,alpha,reg,gamma,imgs_in_set,sigmas)
+                        # target_coords is a dictioanry so is [landmarks]['x'][batch_id]
+    
+                        # forward
+                        # track history only if in train
+                        with torch.set_grad_enabled(phase == 'train'):
                             
-                            # iters to accumulate set to 12 this would mean 12 x 3 = 36 images before optim.step()
-                            # if 75 images will step twice then is left over with 3 images - need to scale by this
-                            # so need to scale
-                            #if (i+1) > (S.batch_acc_steps * iters_to_acc): 
-                                #print('Leftover batch')
-                                #print(i+1)
-                                #print((data_loaders.batch_acc_batches - S.batch_acc_steps*iters_to_acc))
-                            #    loss = loss/((data_loaders.batch_acc_batches - S.batch_acc_steps*iters_to_acc))
-                            #else:
-                               # print(iters_to_acc, i)
-
-                             #   loss = loss/iters_to_acc
-
-
-                        # backward + optimize only if in training phase
-                        if phase == 'train':
-                            scaler.scale(loss).backward()
-                            #print(time.time()-start_time)
-                            #print(i+1 % data_loaders.batch_acc_batches, i+1 % iters_to_acc )
-                            #if ((i+1) % data_loaders.batch_acc_batches == 0) or ((i+1) % iters_to_acc == 0):
-                             #   print('reached', data_loaders.batch_acc_batches, i+1)
-                            scaler.step(optimizer)
-                            scaler.update() 
-                            scheduler.step()
-                            optimizer.zero_grad()
-                              #  print(time.time()-start_time_op)
-
-                    # statistics
-                    imgs_in_set += inputs.size(0)
-                    #batch_number += 1
+                            with torch.cuda.amp.autocast(enabled = S.use_amp):
+                                outputs = model((inputs))
+                                # 1. convert masks to heatmaps inside loss function (allows sigma optimisation)
+                                loss = loss_func.calc_loss_gauss(model, inputs, outputs, target_coords, idx, metrics_landmarks,alpha,reg,gamma,imgs_in_set,sigmas)
+                                
+                                # iters to accumulate set to 12 this would mean 12 x 3 = 36 images before optim.step()
+                                # if 75 images will step twice then is left over with 3 images - need to scale by this
+                                # so need to scale
+                                #if (i+1) > (S.batch_acc_steps * iters_to_acc): 
+                                    #print('Leftover batch')
+                                    #print(i+1)
+                                    #print((data_loaders.batch_acc_batches - S.batch_acc_steps*iters_to_acc))
+                                #    loss = loss/((data_loaders.batch_acc_batches - S.batch_acc_steps*iters_to_acc))
+                                #else:
+                                   # print(iters_to_acc, i)
+    
+                                 #   loss = loss/iters_to_acc
+    
+    
+                            # backward + optimize only if in training phase
+                            #if phase == 'train':
+                                scaler.scale(loss).backward()
+                                #print(time.time()-start_time)
+                                #print(i+1 % data_loaders.batch_acc_batches, i+1 % iters_to_acc )
+                                #if ((i+1) % data_loaders.batch_acc_batches == 0) or ((i+1) % iters_to_acc == 0):
+                                 #   print('reached', data_loaders.batch_acc_batches, i+1)
+                                scaler.step(optimizer)
+                                scaler.update() 
+                                scheduler.step()
+                                optimizer.zero_grad()
+    
+                        # statistics
+                        imgs_in_set += inputs.size(0)
+            elif phase == 'val':
+                for slide_index in range(S.sliding_points):
+                    for i, batch in enumerate(data_loaders.dataloaders[phase]):
+                        inputs = batch['image']
+                        idx = batch['idx']
+                        target_coords = batch['coords']
+                        inputs = inputs.float().to(S.device)
+                        patients = batch['patient']
+                        
+                        # target_coords is a dictioanry so is [landmarks]['x'][batch_id]
+    
+                        # forward
+                        # track history only if in train
+                        with torch.set_grad_enabled(phase == 'train'):
+                            
+                            with torch.cuda.amp.autocast(enabled = S.use_amp):
+                                outputs = model((inputs))
+                                # 1. convert masks to heatmaps inside loss function (allows sigma optimisation)
+                                loss = loss_func.calc_loss_gauss(model, inputs, outputs, target_coords, idx, metrics_landmarks,alpha,reg,gamma,imgs_in_set,sigmas)
+    
+                        # statistics
+                        imgs_in_set += inputs.size(0)
+                S.slide_index = 0
+                    
+                    
                 
             print('Images in set')    
             print(imgs_in_set)
@@ -149,7 +163,7 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
             
 
             # deep copy the model
-            if phase == 'train' and epoch_loss < best_loss:
+            if phase == 'val' and epoch_loss < best_loss:
                 print("\n")
                 print("------ deep copy best model ------ ")
                 best_loss = epoch_loss

@@ -91,7 +91,8 @@ def init(init_fold):
         print('Evaluating model')
         print('----------------')
         # initialise sliding window crop locations
-        settings.init_slide_window(data_loaders.test_set_ids)
+        slid_wind_ids = data_loaders.test_set_ids + data_loaders.val_set_ids
+        settings.init_slide_window(slid_wind_ids)
         model.evaluate(fold)   
         print('error counter')
         print(settings.error_counter)

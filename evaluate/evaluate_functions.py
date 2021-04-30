@@ -251,7 +251,7 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
         patient = batch['patient']
         pred = model(image)
         
-        batch_number = 0
+        #batch_number = 0
         
         for l in S.landmarks: # cycle over all landmarks
           
@@ -272,7 +272,8 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
                   pat_index[patient[i]][l] = slide_index
          
       S.slide_index += 1
-  
+  S.slide_index = 0
+    
   # final locations dict
   final_loc = {}
   for p in patients:

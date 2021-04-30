@@ -35,10 +35,13 @@ def init(fold, train_ids, test_ids):
     val_ids = train_ids[:index]
     train_ids = train_ids[index:]
     
-    global test_set_ids
+    global test_set_ids, val_set_ids
     test_set_ids = []
+    val_set_ids = []
     for i in test_ids:
         test_set_ids.append(dataset._CTDataset__pat__from__index(i))
+    for i in val_ids:
+        val_set_ids.append(dataset._CTDataset__pat__from__index(i))
         
     # so can print out test ids at end
     val_subsampler = torch.utils.data.SubsetRandomSampler(val_ids)
@@ -70,10 +73,13 @@ def init_load_k_fold(fold):
     val_ids = train_ids[:index]
     train_ids = train_ids[index:]
     
-    global test_set_ids
+    global test_set_ids, val_set_ids
     test_set_ids = []
+    val_set_ids = []
     for i in test_ids:
         test_set_ids.append(dataset._CTDataset__pat__from__index(i))
+    for i in val_ids:
+        val_set_ids.append(dataset._CTDataset__pat__from__index(i))
     
     val_subsampler = torch.utils.data.SubsetRandomSampler(val_ids)
     train_subsampler = torch.utils.data.SubsetRandomSampler(train_ids)
