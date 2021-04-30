@@ -406,7 +406,7 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
   print('final locations')
   print(final_loc)
   
-  functions.save_obj(final_loc, eval_path, 'final_coords')
+  functions.save_obj_pickle(final_loc, eval_path, 'final_coords')
   
 
 def print_2D_slice_line(landmark, pred_x, pred_y, pred_z, structure_coord, eval_path, patient):
