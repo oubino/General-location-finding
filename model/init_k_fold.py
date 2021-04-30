@@ -70,7 +70,7 @@ def init(init_fold):
         model = initialise_model.initialise_model()
         print('Training model')
         print('--------------')
-        model.train(True)
+        model.train(True, fold)
         print('Saving model to files')
         print('------------')
         model.save(fold)
