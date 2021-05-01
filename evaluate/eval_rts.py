@@ -16,6 +16,9 @@ from model import load_model
 # initialise data loader
 data_loaders.init_reserved_test_set()
 
+# init slid window
+settings.init_slide_window(data_loaders.test_set_ids)
+
 # load in appropriate model
 load_transfered_model = yes_or_no.question('are you loading in a model which was saved as a transfered model')
 model = load_model.load_model(load_transfered_model)
