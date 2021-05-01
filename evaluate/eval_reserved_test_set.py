@@ -8,7 +8,7 @@ settings.init(True) # rts eval true
 # cts and structures & csv path
 settings.root = r'/home/rankinaaron98/data/Facial_asymmetry_test_sets'
 settings.init_load()
-
+print('root before data loaders: ' + settings.root)
 from data_loading import data_loaders
 from model import load_model
 # evaluate model
