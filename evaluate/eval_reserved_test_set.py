@@ -22,5 +22,5 @@ model = load_model.load_model(load_transfered_model)
 print('\n')
 print('Evaluating model')
 print('----------------')
-model.evaluate_pre_train()
+model.evaluate_pre_train(fold = settings.fold_load)
 
