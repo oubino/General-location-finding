@@ -8,7 +8,7 @@ from torch.utils.tensorboard import SummaryWriter
 from useful_functs import yes_or_no
 
 
-def init():
+def init(rts_q):
     global norm_mean, norm_std, batch_size, landmarks, sigmas, num_class
     global in_x, in_y, in_z, alpha, reg, gamma, lr_max, lr_min
     global step_size, threshold_img_print, normal_min, normal_max
@@ -214,9 +214,9 @@ def init():
     k_fold_ids = []   # k fold test
     
     # train line true
-    rts_q = input (" Eval on reserved test set? (y/n)? ")
+    #rts_q = input (" Eval on reserved test set? (y/n)? ")
     train_line_q = input ("Train/eval on a line (y/n)? ")
-    if rts_q == 'n':
+    if rts_q == False:
         rts = False
         if train_line_q == 'y':
             train_line = True
@@ -227,7 +227,7 @@ def init():
                 clicker = 'Aaron'
             elif aaron_or_oli == False:
                 clicker = 'Oli'
-    elif rts_q == 'y':
+    elif rts_q == True:
         rts = True
         if train_line_q == 'n':
             train_line = False # necessary for crop in transformations
