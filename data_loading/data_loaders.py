@@ -108,7 +108,7 @@ def init_reserved_test_set():
     
     global test_set_ids
     test_set_ids = []
-    for i in len(dataset):
+    for i in range(len(dataset)):
         test_set_ids.append(dataset._CTDataset__pat__from__index(i))
     
     
