@@ -6,10 +6,10 @@ from useful_functs import yes_or_no
 import settings
 
 settings.init()
+# cts and structures & csv path
+settings.root = r'/home/rankinaaron98/data/Facial_asymmetry_test_sets'
 settings.init_load()
 
-# cts and structures & csv path
-settings.root = r'/home/olive/data/Test_set'
 
 # evaluate model
 
