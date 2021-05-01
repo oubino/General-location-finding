@@ -19,7 +19,7 @@ from useful_functs import functions
 def performance_metrics(model,sigmas,gamma, epochs_completed, fold): 
     
   # so can print out test ids for each fold at end
- # S.k_fold_ids.append(data_loaders.test_set_ids)
+  S.k_fold_ids.append(data_loaders.test_set_ids)
   
   # create directory for this eval
   epochs_completed_string = str(epochs_completed)
@@ -228,7 +228,7 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
 def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold): 
   
   # so can print out test ids for each fold at end
-  #S.k_fold_ids.append(data_loaders.test_set_ids)
+  S.k_fold_ids.append(data_loaders.test_set_ids)
   
   # create directory for this eval
   epochs_completed_string = str(epochs_completed)
