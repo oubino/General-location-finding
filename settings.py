@@ -40,8 +40,8 @@ def init(rts_q):
     global train_line, clicker
     global epoch_deep_saved
     global zero_targets, non_zero_targets
-    global sliding_points
-         
+    global sliding_window, sliding_points, crop_coords_slide, slide_index
+    global crop_list     
     # paths
     locally_or_server = yes_or_no.question('locally(y) / server(n)')
     if locally_or_server == True:
@@ -246,19 +246,18 @@ def init(rts_q):
     zero_targets = 0
     non_zero_targets = 0
     
-    sliding_points = 75
-        
     
-def init_slide_window(patients):
-    global sliding_window, sliding_points, crop_coords_slide, slide_index
-    global crop_list
-
-    # sliding window
     sliding_points = 75
     slide_index = 0
     crop_coords_slide = {}
     # if cropping
-    crop_list = {}
+    crop_list = {}    
+    
+def init_slide_window(patients):
+    
+
+    # sliding window
+   
     
     for p in patients:
         crop_coords_slide[p] = {}
