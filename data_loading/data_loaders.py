@@ -106,6 +106,10 @@ def init_reserved_test_set():
         'test':test_set
     }
     
+    global test_set_ids
+    
+    test_set_ids = []
+    
     global dataloaders
     # Load data in
     dataloaders = {
