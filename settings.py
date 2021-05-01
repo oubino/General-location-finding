@@ -245,6 +245,8 @@ def init(rts_q):
         
     zero_targets = 0
     non_zero_targets = 0
+    
+    sliding_points = 75
         
     
 def init_slide_window(patients):
