@@ -40,6 +40,7 @@ def init(rts_q):
     global train_line, clicker
     global epoch_deep_saved
     global zero_targets, non_zero_targets
+    global rts 
        
     # paths
     locally_or_server = yes_or_no.question('locally(y) / server(n)')
