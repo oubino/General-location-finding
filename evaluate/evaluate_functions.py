@@ -285,8 +285,8 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
       struc_coord_clicker_1 = functions.load_obj_pickle(S.root, 'coords_' + 'Oli') 
       struc_coord_clicker_2 = functions.load_obj_pickle(S.root, 'coords_' + 'Aaron') 
   elif S.rts == True:
-      struc_coord_clicker_1 = functions.load_obj_pickle(S.root, 'coords_' + 'Oli_testset') 
-      struc_coord_clicker_2 = functions.load_obj_pickle(S.root, 'coords_' + 'Aaron_testset') 
+      struc_coord_clicker_1 = functions.load_obj_pickle(S.root, 'coords_' + 'Oli_test_set') 
+      struc_coord_clicker_2 = functions.load_obj_pickle(S.root, 'coords_' + 'Aaron_test_set') 
   struc_coord_mean = functions.mean_from_clickers(struc_coord_clicker_1, struc_coord_clicker_2)
   
   struc_coord = {}
