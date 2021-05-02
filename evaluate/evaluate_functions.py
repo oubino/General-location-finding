@@ -112,7 +112,10 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
   
   latex_line = []
   csv_line = []
-  name_of_file = os.path.join(eval_path, S.clicker + "_results_new.txt")
+  if S.rts == True:
+        name_of_file = os.path.join(eval_path, S.clicker + "results_rts_new_%s.txt")
+  elif S.rts == False:
+        name_of_file = os.path.join(eval_path, S.clicker + "results_new_%s.txt")
   txt_file = open(name_of_file, "a")
   
   for l in S.landmarks:
@@ -320,7 +323,11 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
       
       latex_line = []
       csv_line = []
-      name_of_file = os.path.join(eval_path, "results_line_new_%s.txt" % k)
+      if S.rts == True:
+          name_of_file = os.path.join(eval_path, "results_rts_line_new_%s.txt" % k)
+      elif S.rts == False:
+          name_of_file = os.path.join(eval_path, "results_line_new_%s.txt" % k)
+
       txt_file = open(name_of_file, "a")
       
       for l in S.landmarks:
