@@ -174,7 +174,10 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
     std_mean = np.std(p2p_landmarks[l],ddof =1)*(len(p2p_landmarks[l]))**-0.5
     median = np.median(p2p_landmarks[l])
     outliers_perc = outliers_landmarks[l].sum()/len(p2p_landmarks[l]) * 100
-    
+    upper_perc = np.percentile(p2p_landmarks[l], 75)
+    lower_perc = np.percentile(p2p_landmarks[l], 25)
+    error_min = np.amin(p2p_landmarks[l])
+    error_max = np.amax(p2p_landmarks[l])
     mean_x_err = np.mean(x_axis_err[l])
     mean_x_err_mm = np.mean(x_axis_err_mm[l])
     mean_y_err = np.mean(y_axis_err[l])
@@ -183,10 +186,14 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
     mean_z_err_mm = np.mean(z_axis_err_mm[l])
     
     print('    mean point to point error is ' + str(mean) + '+/-' + str(std_mean))
+    print('    median point to point error is ' + str(median))
+    print('    75th percentile is: ' + str(upper_perc))
+    print('    25th percentile is  ' + str(lower_perc))
+    print('    minimum point to point error is: ' + str(error_min))
+    print('    maximum point to point error is: ' + str(error_max))
     print('    mean error in x axis is: ' + str(mean_x_err) + ' (' + str(mean_x_err_mm) + ' mm)')
     print('    mean error in y axis is: ' + str(mean_y_err) + ' (' + str(mean_y_err_mm) + ' mm)')
     print('    mean error in z axis is: ' + str(mean_z_err) + ' (' + str(mean_z_err_mm) + ' mm)')
-    print('    median point to point error is ' + str(median))
     print('    percentage of images which were outliers is ' + str(outliers_perc) + '%')
     print('    sigma is ' + str(sigmas[l]))
     print('    trained for ' + str(epochs_completed) + ' epochs')
@@ -196,6 +203,10 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
     L = ['\n','Landmark %1.0f' % l, '\n', 
          '  mean point to point error is ' + str(mean) + '+/-' + str(std_mean), '\n',
          '  median point to point error is ' + str(median), '\n', 
+         '  75th percentile is: ' + str(upper_perc), '\n',
+         '  25th percentile is  ' + str(lower_perc), '\n',
+         '  minimum point to point error is: ' + str(error_min), '\n',
+         '  maximum point to point error is: ' + str(error_max), '\n',
          '  mean error in x axis is: ' + str(mean_x_err) + ' (' + str(mean_x_err_mm) + ' mm)', '\n',
          '  mean error in y axis is: ' + str(mean_y_err) + ' (' + str(mean_y_err_mm) + ' mm)', '\n',
          '  mean error in z axis is: ' + str(mean_z_err) + ' (' + str(mean_z_err_mm) + ' mm)', '\n',
@@ -402,6 +413,10 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
         mean = np.mean(p2p_landmarks[k][l])
         std_mean = np.std(p2p_landmarks[k][l],ddof =1)*(len(p2p_landmarks[k][l]))**-0.5
         median = np.median(p2p_landmarks[k][l])
+        upper_perc = np.percentile(p2p_landmarks[k][l], 75)
+        lower_perc = np.percentile(p2p_landmarks[k][l], 25)
+        error_min = np.amin(p2p_landmarks[k][l])
+        error_max = np.amax(p2p_landmarks[k][l])
         outliers_perc = outliers_landmarks[k][l].sum()/len(p2p_landmarks[k][l]) * 100
         mean_x_err = np.mean(x_axis_err[k][l])
         mean_x_err_mm = np.mean(x_axis_err_mm[k][l])
@@ -412,6 +427,12 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
         
         print('    mean point to point error is ' + str(mean) + '+/-' + str(std_mean))
         print('    median point to point error is ' + str(median))
+        print('    mean point to point error is ' + str(mean) + '+/-' + str(std_mean))
+        print('    median point to point error is ' + str(median))
+        print('    75th percentile is: ' + str(upper_perc))
+        print('    25th percentile is  ' + str(lower_perc))
+        print('    minimum point to point error is: ' + str(error_min))
+        print('    maximum point to point error is: ' + str(error_max))
         print('    mean error in x axis is: ' + str(mean_x_err) + ' (' + str(mean_x_err_mm) + ' mm)')
         print('    mean error in y axis is: ' + str(mean_y_err) + ' (' + str(mean_y_err_mm) + ' mm)')
         print('    mean error in z axis is: ' + str(mean_z_err) + ' (' + str(mean_z_err_mm) + ' mm)')
@@ -426,6 +447,10 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
         L = ['\n','Landmark %1.0f' % l, '\n', 
              '  mean point to point error is ' + str(mean) + '+/-' + str(std_mean), '\n',
              '  median point to point error is ' + str(median), '\n', 
+             '  75th percentile is: ' + str(upper_perc), '\n',
+             '  25th percentile is  ' + str(lower_perc), '\n',
+             '  minimum point to point error is: ' + str(error_min), '\n',
+             '  maximum point to point error is: ' + str(error_max), '\n',
              '  percentage of images which were outliers is ' + str(outliers_perc) + '%', '\n',
              '  mean error in x axis is: ' + str(mean_x_err) + '(' + str(mean_x_err_mm) + 'mm)', '\n',
              '  mean error in y axis is: ' + str(mean_y_err) + '(' + str(mean_y_err_mm) + 'mm)', '\n',
