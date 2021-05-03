@@ -156,7 +156,7 @@ def init(rts_q):
     normal_window = 1800
     
     # mixed precision
-    use_amp = False
+    use_amp = True
     
     # if downsampling
     downsample_ratio_list = {}
@@ -165,7 +165,7 @@ def init(rts_q):
     crop_list = {}
     
     # use predicted max - if want gauss fit set to false
-    pred_max = False
+    pred_max = True
     
     # unique timestamp for model
     time_stamp = time.strftime("%Y%m%d-%H%M%S")
