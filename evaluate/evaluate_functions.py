@@ -19,6 +19,8 @@ from useful_functs import functions
 def performance_metrics(model,sigmas,gamma, epochs_completed, fold): 
     
   # so can print out test ids for each fold at end
+  # final locations dict
+  final_loc = {}
   
   # create directory for this eval
   epochs_completed_string = str(epochs_completed)
@@ -47,14 +49,14 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
     patient = batch['patient']    
     image = batch['image'].to(S.device)        
     pred = model(image)
-        
-  
-    batch_number = 0
-    
-    for l in S.landmarks: # cycle over all landmarks
+              
       
-      for i in range(image.size()[0]): # batch size
-        
+    for i in range(image.size()[0]): # batch size
+    
+      final_loc[patient[i]] = {}
+      
+      for l in S.landmarks: # cycle over all landmarks
+                  
         struc_loc = struc_coord[patient[i]]
 
         if struc_loc[l]['present'] == 1:
@@ -72,6 +74,8 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
           
           # convert pred to location in orig img
           pred_max_x, pred_max_y, pred_max_z = functions.aug_to_orig(pred_max_x, pred_max_y, pred_max_z, S.downsample_user, patient[i])
+          
+          final_loc[patient[i]][l]= {'x':pred_max_x, 'y':pred_max_y, 'z':pred_max_z}
           
           # print out 3D images for first one in batch
           #if batch_number == 0 and i == 0: # for first batch 
@@ -104,7 +108,6 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
           if img_landmark_point_to_point > 10:
             outliers_landmarks[l] = np.append(outliers_landmarks[l],1)
             
-    batch_number += 1 # not sure where to put
     
   print('\n')
   print('Results summary')    
@@ -175,12 +178,19 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
   txt_file.writelines(['\n'])
   txt_file.writelines(csv_line)
   txt_file.close()
+  
+  print('final locations')
+  print(final_loc)
+  
+  functions.save_obj_pickle(final_loc, eval_path, 'final_coords')
        
 
 def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold): 
   
   # so can print out test ids for each fold at end
   #S.k_fold_ids.append(data_loaders.print_ids)
+   # final locations dict
+  final_loc = {}
   
   # create directory for this eval
   epochs_completed_string = str(epochs_completed)
@@ -241,13 +251,13 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
     image = batch['image'].to(S.device)
     patient = batch['patient']
     pred = model(image)
-  
-    batch_number = 0
-    
-    for l in S.landmarks: # cycle over all landmarks
+           
+    for i in range(image.size()[0]): # batch size
       
-      for i in range(image.size()[0]): # batch size
-          
+      final_loc[patient[i]] = {}
+    
+      for l in S.landmarks: # cycle over all landmarks
+   
           dimension = 3
           height_guess = ((gamma) * (2*np.pi)**(-dimension/2) * sigmas[l].item() ** (-dimension)) 
           
@@ -261,8 +271,7 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
           # convert pred to location in orig img
           pred_max_x, pred_max_y, pred_max_z = functions.aug_to_orig(pred_max_x, pred_max_y, pred_max_z, S.downsample_user, patient[i])
           
-          print('patient, x, y, z')
-          print(patient[i], pred_max_x, pred_max_y, pred_max_z)
+          final_loc[patient[i]][l] = {'x':pred_max_x, 'y':pred_max_y, 'z':pred_max_z}
           
           for k in keys: # clicker_1, clicker_2, and mean
                         
@@ -299,7 +308,6 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
           print('2D slice for landmark %1.0f' % l)
           print_2D_slice_line(l, pred_max_x, pred_max_y, pred_max_z, struc_coord, eval_path, patient[i])
             
-    batch_number += 1 # not sure where to put
    
   for k in keys:
       
@@ -371,7 +379,11 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
       txt_file.writelines(['\n'])
       txt_file.writelines(csv_line)
       txt_file.close()
-
+  
+  print('final locations')
+  print(final_loc)
+  
+  functions.save_obj_pickle(final_loc, eval_path, 'final_coords')
 
 def print_2D_slice_line(landmark, pred_x, pred_y, pred_z, structure_coord, eval_path, patient):
     
