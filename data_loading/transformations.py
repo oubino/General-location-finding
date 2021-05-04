@@ -117,6 +117,10 @@ class CentreCrop_test(object):
       elif z_left >= 0:
           image_crop = skimage.util.crop(image, ((z_left,z_right),(y_left, y_right), (x_left, x_right)))
           
+      if x_left < 0 or y_left < 0:
+          print('error in crop x left y left')
+          exit()
+          
       if image_crop.shape[0] != S.in_z:
         print('crop error')
         print('image shape orig')
