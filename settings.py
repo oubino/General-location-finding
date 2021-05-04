@@ -165,7 +165,7 @@ def init(rts_q):
     crop_list = {}
     
     # use predicted max - if want gauss fit set to false
-    pred_max = True
+    pred_max = False
     
     # unique timestamp for model
     time_stamp = time.strftime("%Y%m%d-%H%M%S")
@@ -189,7 +189,7 @@ def init(rts_q):
     img_counter_3 = 0
 
     # adaptive wing loss
-    wing_loss = True
+    wing_loss = False
     # our max for heatmap is pre_factor 
     # ((gamma) * (2*np.pi)**(-dimension/2) * sigma ** (-dimension))  roughly 1
     # from paper, Wang et al

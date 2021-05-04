@@ -326,7 +326,7 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
       if S.rts == True:
           name_of_file = os.path.join(eval_path, "results_rts_line_new_%s.txt" % k)
       elif S.rts == False:
-          name_of_file = os.path.join(eval_path, "results_line_new_%s.txt" % k)
+          name_of_file = os.path.join(eval_path, "results_line_new_Gauss%s.txt" % k)
 
       txt_file = open(name_of_file, "a")
       
