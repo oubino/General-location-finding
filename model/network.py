@@ -99,7 +99,7 @@ class UNet3d(nn.Module):
         x5 = self.enc4(x4)
         x10 = self.enc5(x5)
 
-        x11 = self.dec0(x5,x10)
+        x11 = self.dec0(x10,x5) # note switched to x10,x5
         x6 = self.dec1(x11, x4)
         x7 = self.dec2(x6, x3)
         x8 = self.dec3(x7, x2)
@@ -124,12 +124,14 @@ class Transfer_model(nn.Module):
         x4 = self.pre_trained[3](x3)
         x5 = self.pre_trained[4](x4)
         
-        # missing extra enc5 and dec0 added in 23/3/21 19:27
+        # extra enc & dec
+        x10 = self.pre_trained[5](x5)
+        x11 = self.pre_trained[6](x10,x5)
         
-        x6 = self.pre_trained[5](x5,x4)
-        x7 = self.pre_trained[6](x6, x3)
-        x8 = self.pre_trained[7](x7, x2)
-        x9 = self.pre_trained[8](x8, x1)
+        x6 = self.pre_trained[7](x11,x4) # was x5,x4
+        x7 = self.pre_trained[8](x6, x3)
+        x8 = self.pre_trained[9](x7, x2)
+        x9 = self.pre_trained[10](x8, x1)
         
         output = self.out(x9)
         return output 
