@@ -172,9 +172,9 @@ if calc_deviations == True:
         x = dev_list_x['%1.0f' % k]
         y = dev_list_y['%1.0f' % k]
         z = dev_list_z['%1.0f' % k]
-        mean_x = np.mean(x)
-        mean_y = np.mean(y)
-        mean_z = np.mean(z)
+        mean_x = np.mean(x.numpy())
+        mean_y = np.mean(y.numpy())
+        mean_z = np.mean(z.numpy())
         mean_dev_x['%1.0f' % k].append(mean_x)
         mean_dev_y['%1.0f' % k].append(mean_y)
         mean_dev_z['%1.0f' % k].append(mean_z)
