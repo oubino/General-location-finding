@@ -164,6 +164,11 @@ class CentreCrop_test(object):
       z_left = min(z_left, d - self.depth) # e.g. x left max is 150, min is 0
       z_right = d - z_left - self.depth
       
+      # convert to int
+      z_left, z_right = int(z_left), int(z_right)
+      y_left, y_right = int(y_left), int(y_right)
+      x_left, x_right = int(x_left), int(x_right)
+      
       # append crops to list
       S.crop_list[patient][S.slide_index] = {}
       S.crop_list[patient][S.slide_index]['x_left'] = x_left
@@ -189,8 +194,6 @@ class CentreCrop_test(object):
                         
       if z_left < 0:
           image = np.pad(image, ((-z_left,0),(0, 0), (0, 0)))
-          print('y left/right, xleft/right')
-          print(y_left,y_right,x_left,x_right)
           image_crop = skimage.util.crop(image, ((0,0),(y_left, y_right), (x_left, x_right)))
       elif z_left >= 0:
           image_crop = skimage.util.crop(image, ((z_left,z_right),(y_left, y_right), (x_left, x_right)))
