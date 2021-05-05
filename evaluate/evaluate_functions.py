@@ -113,7 +113,7 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
               
               # final location add
               final_loc[p][l]['x'], final_loc[p][l]['y'], final_loc[p][l]['z'] = pred_max_x, pred_max_y, pred_max_z
-              
+              '''
               struc_loc = struc_coord[p]
               
               if struc_loc[l]['present'] == 1:
@@ -135,6 +135,7 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
                     #print('\n')
                     # print 2D slice
                     #print('2D slice for landmark %1.0f' % l)
+                 
                   print_2D_slice(l, pred_max_x, pred_max_y, pred_max_z, structure_max_x, structure_max_y, structure_max_z ,eval_path, patient[i])
                           
                   # point to point takes in original structure location!!
@@ -146,19 +147,18 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
                   y_axis_err[l] = np.append(y_axis_err[l], y_p2p.cpu())
                   y_axis_err_mm[l] = np.append(y_axis_err_mm[l], y_p2p_mm.cpu())
                   z_axis_err[l] = np.append(z_axis_err[l], z_p2p.cpu())
-                  z_axis_err_mm[l] = np.append(z_axis_err_mm[l], z_p2p_mm.cpu())
-                  
-                 # x_axis_err[l] = np.append(x_axis_err[l], )
+                  z_axis_err_mm[l] = np.append(z_axis_err_mm[l], z_p2p_mm.cpu()) 
+                 
                   # if img_point_to_point > 20mm is an outlier
                   if img_landmark_point_to_point > 10:
                     outliers_landmarks[l] = np.append(outliers_landmarks[l],1)
-                
+                  '''
         #batch_number += 1 # not sure where to put
     
   print('\n')
   print('Results summary')    
   print('---------------')
-  
+  '''
   latex_line = []
   csv_line = []
   if S.rts == True:
@@ -237,7 +237,12 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
   txt_file.writelines(['\n'])
   txt_file.writelines(csv_line)
   txt_file.close()
-       
+  '''     
+  print('final locations')
+  print(final_loc)
+  
+  functions.save_obj_pickle(final_loc, eval_path, 'final_coords_no_struc')
+
 
 def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold): 
   
