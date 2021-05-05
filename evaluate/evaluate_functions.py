@@ -237,6 +237,11 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
   txt_file.writelines(['\n'])
   txt_file.writelines(csv_line)
   txt_file.close()
+  
+  print('final locations')
+  print(final_loc)
+  
+  functions.save_obj_pickle(final_loc, eval_path, 'final_coords')
        
 
 def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold): 
