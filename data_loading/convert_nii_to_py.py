@@ -1,4 +1,4 @@
-# convert .nii to .py and save
+# convert cts and structures from .nii to .py and save
 
 import SimpleITK as sitk
 import numpy as np

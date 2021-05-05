@@ -3,9 +3,9 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 
-root = r'/home/olive/data/HNSCC_deepmind_cropped'
-cts = os.path.join(root, "CTs_amend")
-ct_list = list(sorted(os.listdir(os.path.join(root, "CTs"))))
+root = r'/home/oli/data/paed_dataset'
+cts = os.path.join(root, "CTs")
+ct_list = list(sorted(os.listdir(cts)))
 hist_root = os.path.join(root, "histograms")
 
 def histogram(data, patient):
@@ -31,12 +31,13 @@ def histogram(data, patient):
 
 
 # amended cts
+"""
 amend_cts = os.path.join(root, "CTs_amend")
 try: 
     os.mkdir(amend_cts)
 except OSError as error:
     print(error)
-
+"""
 
 for i in ct_list:
     img_path = os.path.join(root, "CTs", i) 
@@ -44,11 +45,13 @@ for i in ct_list:
     min_val = np.amin(img)
     max_val = np.amax(img)
     #histogram(img,i)
-    if min_val == -1023.0:
+    
+    if min_val < 0:
         print(i, min_val)
         #histogram(img,i) #seemed to be just case of needing to add
-        img = img + 1023
-        img_save_path = os.path.join(amend_cts, i) 
-        np.save(img_save_path, img)
+        #img = img + 1023
+        #img_save_path = os.path.join(amend_cts, i) 
+        #np.save(img_save_path, img)
+        
         
         
