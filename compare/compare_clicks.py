@@ -56,16 +56,17 @@ def load_obj(root, name):
         return pickle.load(f)
 
 # paths
-root = r'/home/olive/data/Facial_asymmetry_test_sets'
+csv_root = r'/home/data/paed_dataset/test'
+root = r'/home/oli/data/results/oli/run_folder/eval_100_3'
 
-clicker_1 = input('Clicker_1, (e.g. Oli_test_set): ') 
-clicker_2 = input('Clicker_2, (e.g. Aaron_test_set): ') 
+#clicker_1 = input('Clicker_1, (e.g. Oli_test_set): ') 
+#clicker_2 = input('Clicker_2, (e.g. Aaron_test_set): ') 
 
 hist_root = r'/home/rankinaaron98/data/Compare_aaron/Histograms_reclick__oli_aaron_testsets/'
 
 # load in pickle file
-file_clicker_1 = load_obj(root, 'coords_' + clicker_1)
-file_clicker_2 = load_obj(root, 'coords_' + clicker_2)
+file_clicker_1 = load_obj(root, 'final_coords_no_struc')
+file_clicker_2 = load_obj(root, 'final_coords_no_struc_2')
 
 patients_clicker_1 = list(file_clicker_1.keys())
 patients_clicker_2 = list(file_clicker_2.keys())
@@ -135,7 +136,7 @@ latex_line_x = []
 latex_line_y = []
 latex_line_z = []
 csv_line = []
-name_of_file = os.path.join(hist_root, clicker_1 +"_" + clicker_2 + "_compare.txt")
+name_of_file = os.path.join(root, paed_struc + "_compare.txt")
 txt_file = open(name_of_file, "a")    
 click_outlier_counter = 0
 
