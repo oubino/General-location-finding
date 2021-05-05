@@ -136,7 +136,7 @@ latex_line_x = []
 latex_line_y = []
 latex_line_z = []
 csv_line = []
-name_of_file = os.path.join(root, paed_struc + "_compare.txt")
+name_of_file = os.path.join(root, "paed_struc_compare.txt")
 txt_file = open(name_of_file, "a")    
 click_outlier_counter = 0
 
