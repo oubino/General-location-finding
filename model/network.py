@@ -135,6 +135,77 @@ class Transfer_model(nn.Module):
         
         output = self.out(x9)
         return output 
+    
+class FinalConvTranspose(nn.Module):
+    """
+    FinalConvTranpose
+    """
+    def __init__(self, in_channels):
+        super().__init__()
+        self.up = nn.ConvTranspose3d(in_channels // 2, in_channels // 2, kernel_size=2, stride=2)
+
+    def forward(self, x1, x2):
+        x1 = self.up(x1)
+
+        diffZ = x2.size()[2] - x1.size()[2]
+        diffY = x2.size()[3] - x1.size()[3]
+        diffX = x2.size()[4] - x1.size()[4]
+        x1 = F.pad(x1, [diffX // 2, diffX - diffX // 2, diffY // 2, diffY - diffY // 2, diffZ // 2, diffZ - diffZ // 2])
+
+        x = torch.cat([x2, x1], dim=1)
+        return x
+    
+class multiple_heads(nn.Module):
+    def __init__(self, in_channels, n_classes, s_channels):
+        super().__init__()
+        self.in_channels = in_channels
+        self.n_classes = n_classes
+        self.s_channels = s_channels
+
+        self.conv = ConvUnit(in_channels, s_channels)
+        self.enc1 = EncoderUnit(s_channels, 2 * s_channels)
+        self.enc2 = EncoderUnit(2 * s_channels, 4 * s_channels)
+        self.enc3 = EncoderUnit(4 * s_channels, 8 * s_channels)
+        self.enc4 = EncoderUnit(8 * s_channels, 8 * s_channels)
+
+        self.dec1 = DecoderUnit(16 * s_channels, 4 * s_channels)
+        self.dec2 = DecoderUnit(8 * s_channels, 2 * s_channels)
+        self.dec3 = DecoderUnit(4 * s_channels, s_channels)
+        
+        self.dec4 = FinalConvTranspose(2 * s_channels)
+        
+        self.dec5 = nn.ModuleList()
+        for i in range(len(S.landmarks)):
+            self.dec5.append(ConvUnit(2*s_channels, s_channels))
+        #self.dec5 = ConvUnit(2*s_channels, s_channels)
+        
+        self.out = nn.ModuleList()
+        for i in range(len(S.landmarks)):
+            self.out.append(OutConv(s_channels, 1))
+        
+        #self.out = OutConv(s_channels, 1)
+
+    def forward(self, x):
+        x1 = self.conv(x)
+        x2 = self.enc1(x1)
+        x3 = self.enc2(x2)
+        x4 = self.enc3(x3)
+        x5 = self.enc4(x4)
+
+        x6 = self.dec1(x5, x4)
+        x7 = self.dec2(x6, x3)
+        x8 = self.dec3(x7, x2)
+        x9 = self.dec4(x8, x1)
+
+        x10 = []
+        for i in range(len(S.landmarks)):
+          x10.append(self.dec5[i](x9))
+               
+        outputs = []
+        for i in range(len(S.landmarks)):
+          outputs.append(self.out[i](x10[i]))
+
+        return outputs
         
 # SCNET 3D
 
