@@ -14,7 +14,7 @@ def question(question):
             return False
 
 def pixel_to_mm(patient):
-    data = csv.reader(open(os.path.join(root, 'image_dimensions.csv')),delimiter=',')
+    data = csv.reader(open(os.path.join(csv_root, 'image_dimensions.csv')),delimiter=',')
     next(data) # skip first line
     list_img = list(data)#, key=operator.itemgetter(0))
     # sortedlist[img_number][0 = name, 1 = x/y, 2 = z]
