@@ -70,7 +70,7 @@ def init(init_fold):
         model = initialise_model.initialise_model()
         print('Training model')
         print('--------------')
-        model.train(True)
+        model.train(True, fold)
         print('Saving model to files')
         print('------------')
         model.save(fold)
@@ -78,7 +78,7 @@ def init(init_fold):
             start_time = time.time()
             print('Training model')
             print('--------------')
-            model.train(False)
+            model.train(False, fold)
             time_elapsed = time.time() - start_time
             end_time = time.ctime(time_elapsed * (settings.num_epoch_batches - i - 2) + time.time())
             print('\n')
@@ -90,6 +90,9 @@ def init(init_fold):
         print('\n')
         print('Evaluating model')
         print('----------------')
+        # initialise sliding window crop locations
+        slid_wind_ids = data_loaders.test_set_ids + data_loaders.val_set_ids
+        settings.init_slide_window(slid_wind_ids)
         model.evaluate(fold)   
         print('error counter')
         print(settings.error_counter)

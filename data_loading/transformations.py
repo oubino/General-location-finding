@@ -46,7 +46,7 @@ class Resize(object):
       
       return {'image':image, 'idx': idx, 'patient':patient, 'coords':coords} # note note !'structure': structure_new
 
-class CentreCrop(object):    
+class CentreCrop_train(object):    
   def __init__(self, depth, width, height):
       self.depth = depth
       self.width = width
@@ -57,17 +57,12 @@ class CentreCrop(object):
       d, h, w = image.shape[:3] # define image height, width, depth as first 3 values
       
       if S.train_line == True:
-          if S.rts == False:
-              crop_coords_1 = functions.load_obj_pickle(S.root, 'crop_coords_Oli')
-              crop_coords_2 = functions.load_obj_pickle(S.root, 'crop_coords_Aaron')
-              crop_coords = functions.line_learn_crop(crop_coords_1[patient], crop_coords_2[patient])
-          elif S.rts == True:
-              crop_coords_1 = functions.load_obj_pickle(S.root, 'crop_coords_Oli_test_set')
-              crop_coords_2 = functions.load_obj_pickle(S.root, 'crop_coords_Aaron_test_set')
-              crop_coords = functions.line_learn_crop(crop_coords_1[patient], crop_coords_2[patient])         
+            crop_coords_1 = functions.load_obj_pickle(S.root, 'crop_coords_Oli')
+            crop_coords_2 = functions.load_obj_pickle(S.root, 'crop_coords_Aaron')
+            crop_coords = functions.line_learn_crop(crop_coords_1[patient], crop_coords_2[patient])      
       elif S.train_line == False:
-          crop_coords = functions.load_obj_pickle(S.root, 'crop_coords_' + S.clicker)
-          crop_coords = crop_coords[patient]
+            crop_coords = functions.load_obj_pickle(S.root, 'crop_coords_' + S.clicker)
+            crop_coords = crop_coords[patient]
         
       x_crop = crop_coords['x']
       y_crop = crop_coords['y']
@@ -87,10 +82,10 @@ class CentreCrop(object):
       z_right = d - z_left - self.depth
       
       # append crops to list
-      S.crop_list[patient] = {}
-      S.crop_list[patient]['x_left'] = x_left
-      S.crop_list[patient]['y_left'] = y_left
-      S.crop_list[patient]['z_left'] = z_left
+      #S.crop_list[patient] = {}
+      #S.crop_list[patient]['x_left'] = x_left
+      #S.crop_list[patient]['y_left'] = y_left
+      #S.crop_list[patient]['z_left'] = z_left
           
       for l in S.landmarks:              
           # need to amend coords of structure
@@ -106,14 +101,101 @@ class CentreCrop(object):
     
           # failsafe
           if x < 0 or x >= S.in_x or y < 0 or y >= S.in_y or z < 0 or z >= S.in_z:
-              print('exiting due to crop failsafe')
-              exit()
+              coords[l]['present'] = 0 # landmark not present
                         
       if z_left < 0:
           image = np.pad(image, ((-z_left,0),(0, 0), (0, 0)))
           image_crop = skimage.util.crop(image, ((0,0),(y_left, y_right), (x_left, x_right)))
       elif z_left >= 0:
           image_crop = skimage.util.crop(image, ((z_left,z_right),(y_left, y_right), (x_left, x_right)))
+          
+      if image_crop.shape[0] != S.in_z:
+        print('crop error')
+        print('image shape orig')
+        print(image.shape)
+        print('image shape')
+        print(image_crop.shape)
+        print('zleft, z right')
+        print(z_left, z_right)
+        print('z_left+z_right vs d - self.depth')
+        print(z_left + z_right,d - self.depth )
+          
+      return {'image':image_crop, 'idx':idx, 'patient':patient, 'coords':coords} # note note !
+    
+class CentreCrop_test(object):    
+  def __init__(self, depth, width, height):
+      self.depth = depth
+      self.width = width
+      self.height = height
+                          
+  def __call__(self, sample):
+      image, idx, patient, coords = sample['image'], sample['idx'], sample['patient'], sample['coords']
+      d, h, w = image.shape[:3] # define image height, width, depth as first 3 values
+      #print(S.crop_coords_slide)
+      x_crop = S.crop_coords_slide[patient][S.slide_index]['x']
+      y_crop = S.crop_coords_slide[patient][S.slide_index]['y']
+      z_crop = S.crop_coords_slide[patient][S.slide_index]['z']
+      #print(x_crop, y_crop, z_crop)
+      """
+     else:
+          if S.train_line == True:
+              crop_coords_1 = functions.load_obj_pickle(S.root, 'crop_coords_Oli')
+              crop_coords_2 = functions.load_obj_pickle(S.root, 'crop_coords_Aaron')
+              crop_coords = functions.line_learn_crop(crop_coords_1[patient], crop_coords_2[patient])
+          elif S.train_line == False:
+              crop_coords = functions.load_obj_pickle(S.root, 'crop_coords_' + S.clicker)
+              crop_coords = crop_coords[patient]
+          
+          x_crop = crop_coords['x']
+          y_crop = crop_coords['y']
+          z_crop = crop_coords['z']
+          """
+                      
+      # crop .. (30,100) removes first 30 pixels from LHS and last 100 pixels from RHS   
+      x_left = max(int(np.round(x_crop)) - self.width/2, 0)
+      x_left = min(x_left, w - self.width) # e.g. x left max is 150, min is 0
+      x_right = w - x_left - self.width
+      
+      y_left = max(int(np.round(y_crop)) - self.height/2, 0)
+      y_left = min(y_left, h- self.height) # e.g. x left max is 150, min is 0
+      y_right = h - y_left - self.height
+    
+      z_left = max(int(np.round(z_crop)) - self.depth/2, 0)
+      z_left = min(z_left, d - self.depth) # e.g. x left max is 150, min is 0
+      z_right = d - z_left - self.depth
+      
+      # append crops to list
+      S.crop_list[patient][S.slide_index] = {}
+      S.crop_list[patient][S.slide_index]['x_left'] = x_left
+      S.crop_list[patient][S.slide_index]['y_left'] = y_left
+      S.crop_list[patient][S.slide_index]['z_left'] = z_left
+          
+      for l in S.landmarks:              
+          # need to amend coords of structure
+          x,y, z = coords[l]['x'], coords[l]['y'], coords[l]['z']
+         
+          # post coords
+          x = x - x_left
+          y = y - y_left
+          z = z - z_left
+          coords[l]['x'] = x
+          coords[l]['y'] = y
+          coords[l]['z'] = z
+    
+          # failsafe
+          if x < 0 or x >= S.in_x or y < 0 or y >= S.in_y or z < 0 or z >= S.in_z:
+              coords[l]['present'] = 0 # landmark not present
+              #exit()
+                        
+      if z_left < 0:
+          image = np.pad(image, ((-z_left,0),(0, 0), (0, 0)))
+          image_crop = skimage.util.crop(image, ((0,0),(y_left, y_right), (x_left, x_right)))
+      elif z_left >= 0:
+          image_crop = skimage.util.crop(image, ((z_left,z_right),(y_left, y_right), (x_left, x_right)))
+          
+      if x_left < 0 or y_left < 0:
+          print('error in crop x left y left')
+          exit()
           
       if image_crop.shape[0] != S.in_z:
         print('crop error')
@@ -220,8 +302,8 @@ class Shift(object):
                 coords[l]['y'] = coords[l]['y'] + y_shift
                 coords[l]['z'] = coords[l]['z'] + z_shift
             image = scipy.ndimage.shift(image, (z_shift, y_shift, x_shift), order = order_mod)
-        else:
-            print('shift out of bounds')
+        #else:
+        #    print('shift out of bounds')
 
         return {'image': image, 'idx': idx, 'patient':patient, 'coords':coords}
         
@@ -251,8 +333,8 @@ class Flips_scipy(object):
                 #image = functions.rotate_img(image,angle, S.in_x, S.in_y, S.in_z, axis = [1,0])
                 for l in S.landmarks_total:
                     coords[l]['x'], coords[l]['y'], coords[l]['z'] = coords_rotat[l]['x'], coords_rotat[l]['y'], coords_rotat[l]['z']
-            else:
-                print('ROTATION OUT OF BOUNDS')
+            #else:
+            #    print('ROTATION OUT OF BOUNDS')
                 
 
         elif (random_number > 0.33) and (random_number <= 0.66):
@@ -267,8 +349,8 @@ class Flips_scipy(object):
                 image = scipy.ndimage.rotate(image, angle, axes = [1,2],reshape = False, order = order_mod)
                 for l in S.landmarks_total:
                     coords[l]['x'], coords[l]['y'], coords[l]['z'] = coords_rotat[l]['x'], coords_rotat[l]['y'], coords_rotat[l]['z']
-            else:
-                print('ROTATION OUT OF BOUNDS')
+            #else:
+            #    print('ROTATION OUT OF BOUNDS')
 
         else:
             #structure = scipy.ndimage.rotate(structure, angle, axes = [1,0], reshape = False, order = 0)
@@ -282,8 +364,8 @@ class Flips_scipy(object):
                 image = scipy.ndimage.rotate(image, angle, axes = [2,0],reshape = False, order = order_mod)
                 for l in S.landmarks_total:
                     coords[l]['x'], coords[l]['y'], coords[l]['z'] = coords_rotat[l]['x'], coords_rotat[l]['y'], coords_rotat[l]['z']
-            else:
-                print('ROTATION OUT OF BOUNDS')
+            #else:
+            #    print('ROTATION OUT OF BOUNDS')
                 
         return {'image': image, 'idx': idx, 'patient':patient, 'coords':coords}
       
@@ -347,18 +429,28 @@ class ToTensor(object):
             # need it in y, x, z                
             x, y, z = int(round(coords[l]['x'])), int(round(coords[l]['y'])), int(round(coords[l]['z']))
             # if z is 80 round to 79
-            if z >= S.in_z:
-                print('Z BIGGER THAN Z MAX')
-                print(z)
+            if z == S.in_z:
                 z = S.in_z - 1
-            if y >= S.in_y:
-                print('Y BIGGER THAN Y MAX')
-                print(y)
+            if y == S.in_y:
                 y = S.in_y - 1
-            if x >= S.in_x:
-                print('X BIGGER THAN X MAX')
-                print(x)
+            if x == S.in_x:
                 x = S.in_x - 1
+            if x == -1:
+                x = 0
+            if y == -1:
+                y = 0
+            if z == -1:
+                z = 0
+            if coords[l]['present'] == 1:
+                if x > S.in_x or x < 0:
+                    print('x outside bounds of cropped image')
+                    print(x)
+                if y > S.in_y or y < 0:
+                    print('y outside bounds of cropped image')
+                    print(y)
+                if z > S.in_z or z < 0:
+                    print('z outside bounds of cropped image')
+                    print(z)
             #structure[z][y][x] = l
             coords[l]['x'], coords[l]['y'], coords[l]['z'] = x,y,z
             

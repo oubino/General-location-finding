@@ -28,13 +28,18 @@ def pred_max(heatmap, landmark, landmarks):
     y = c[1][i][index][0][0][0]
     x = b[1][i][index][y][0][0]
     z = a[1][i][index][y][x][0]
+    val = c[0][i][index][0][0][0]
     if i == 0:
       coords = torch.tensor([[x,y,z]]).to(S.device)
+      vals = torch.tensor([val]).to(S.device)
     else: 
       coords_temp = torch.tensor([[x,y,z]]).to(S.device)
       coords = torch.cat((coords,coords_temp),dim = 0)
+      
+      val_temp = torch.tensor([val]).to(S.device)
+      vals = torch.cat((vals,val_temp),dim = 0)
 
-  return coords   
+  return coords, vals 
 
 # pred max gives maximum for each z layer between certain range of z 
 
@@ -286,7 +291,7 @@ def mean_from_clickers(coords_1, coords_2):
     return coords
     
 
-def aug_to_orig(pred_max_x, pred_max_y, pred_max_z, downsample, patient):
+def aug_to_orig(pred_max_x, pred_max_y, pred_max_z, downsample, patient, slid_index):
     if downsample == True: # convert a downsample
         # convert pred max to location in full size image
           if patient in S.downsample_ratio_list:
@@ -300,9 +305,9 @@ def aug_to_orig(pred_max_x, pred_max_y, pred_max_z, downsample, patient):
     elif downsample == False: # convert a crop
         # convert pred max to location in full size image
         if patient in S.crop_list:
-            pred_max_x = pred_max_x + S.crop_list[patient]['x_left']
-            pred_max_y = pred_max_y + S.crop_list[patient]['y_left']
-            pred_max_z = pred_max_z + S.crop_list[patient]['z_left']
+            pred_max_x = pred_max_x + S.crop_list[patient][slid_index]['x_left']
+            pred_max_y = pred_max_y + S.crop_list[patient][slid_index]['y_left']
+            pred_max_z = pred_max_z + S.crop_list[patient][slid_index]['z_left']
         else:
             print('aug to orig error')
             exit()

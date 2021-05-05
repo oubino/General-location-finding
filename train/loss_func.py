@@ -32,7 +32,7 @@ def calc_loss_gauss(model, img, pred, target_coords, idx, metrics_landmarks, alp
     for l in S.landmarks:
       
       # location of prediction for all images 
-      pred_coords_max = functions.pred_max(pred, l, S.landmarks) # don't change to gauss fit as gauss fit takes too long
+      pred_coords_max = functions.pred_max(pred, l, S.landmarks)[0] # don't change to gauss fit as gauss fit takes too long
      
       # per landmark
       total_x_posn_landmark = 0
@@ -72,10 +72,13 @@ def calc_loss_gauss(model, img, pred, target_coords, idx, metrics_landmarks, alp
         # create target gauss map
         if target_coords[l]['present'][i] == 1:
           targ_gaus = functions.gaussian_map(structure_com_x,structure_com_y, structure_com_z,S.sigmas[l],gamma,x_size,y_size,z_size, output = True) 
+          p2p_loss = S.p2p_reg_term * img_landmark_point_to_point
         else:
           # target is full of zeros
           print('zero target')
           targ_gaus = torch.zeros(S.in_y, S.in_x, S.in_z).to(S.device)
+          # if landmark absent then no p2p loss
+          p2p_loss = torch.tensor(0.0).to(S.device)
 
         # pred heatmap is based on image in batch & landmark
         index = S.landmarks.index(l)
@@ -112,7 +115,6 @@ def calc_loss_gauss(model, img, pred, target_coords, idx, metrics_landmarks, alp
         regularization = (reg * squ_weights)     
         reg_loss = regularization
         alpha_loss = alpha * (S.sigmas[l].norm())**2    
-        p2p_loss = S.p2p_reg_term * img_landmark_point_to_point
         
         img_loss += alpha * (S.sigmas[l].norm())**2 + regularization + p2p_loss
 

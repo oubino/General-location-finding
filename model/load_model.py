@@ -85,7 +85,7 @@ class load_model:
         """
         
         
-    def train(self, first_train, transfer_learn_decision):
+    def train(self, first_train, transfer_learn_decision, fold):
         # for first train load in best loss and epochs completed
         if first_train == True:
             self.best_loss = torch.load(paths.PATH_val_loss_load)['best_val_loss']
@@ -94,7 +94,7 @@ class load_model:
         print('best loss is ')
         print(self.best_loss)
         data_loaders.dataset.__train__() 
-        self.model_load, self.best_loss, self.epochs_completed = train_function.train_model(self.model_load, self.scaler_load, self.optimizer_load, self.scheduler, S.alpha,S.reg,S.gamma,S.sigmas, num_epochs=S.epoch_batch, best_loss = self.best_loss, epochs_completed = self.epochs_completed)
+        self.model_load, self.best_loss, self.epochs_completed = train_function.train_model(self.model_load, self.scaler_load, self.optimizer_load, self.scheduler, S.alpha,S.reg,S.gamma,S.sigmas, num_epochs=S.epoch_batch, best_loss = self.best_loss, epochs_completed = self.epochs_completed, fold = fold)
         
     def evaluate_post_train(self, fold):
         

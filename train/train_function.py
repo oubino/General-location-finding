@@ -4,14 +4,16 @@ import copy
 from collections import defaultdict
 import torch
 import math
+import os
 
 import settings as S
 from data_loading import data_loaders
 from useful_functs import functions
 from train import loss_func
 
-def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_epochs,best_loss, epochs_completed):
+def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_epochs,best_loss, epochs_completed, fold):
     best_model_wts = copy.deepcopy(model.state_dict())
+    fold = functions.string(fold)
 
     for epoch in range(num_epochs):
         print('Epoch {}/{}'.format((epoch + 1), num_epochs))
@@ -30,7 +32,7 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
                 model.train()  # Set model to training mode
             else:
                 print('')
-                print('Testing on 1 image from val set')
+                print('Testing on val set')
                 print('')
                 model.eval()   # Set model to evaluate mode
 
@@ -143,6 +145,7 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
             
 
             # deep copy the model
+            # note validation is done NOT using sliding window
             if phase == 'val' and epoch_loss < best_loss:
                 print("\n")
                 print("------ deep copy best model ------ ")
@@ -150,6 +153,13 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
                 print('  ' + 'best val loss: {:4f}'.format(best_loss))
                 print('\n')
                 best_model_wts = copy.deepcopy(model.state_dict())
+                
+                S.epoch_deep_saved = epochs_completed + epoch + 1
+                name_of_file = os.path.join(S.run_path, "epoch_saved_%s.txt" % fold)
+                txt_file = open(name_of_file, "a")
+                L = ['epoch saved %1.0f' % S.epoch_deep_saved,'\n']
+                txt_file.writelines(L)
+                txt_file.close()
                 # save model/optimizer etc. based on current time
                 
 

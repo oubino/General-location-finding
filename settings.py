@@ -6,14 +6,14 @@ import time
 from torch.utils.tensorboard import SummaryWriter
 
 from useful_functs import yes_or_no
-
+from useful_functs import slide_coords
 
 def init(rts_q):
     global norm_mean, norm_std, batch_size, landmarks, sigmas, num_class
     global in_x, in_y, in_z, alpha, reg, gamma, lr_max, lr_min
     global step_size, threshold_img_print, normal_min, normal_max
     global normal_window, use_amp
-    global downsample_ratio_list, crop_list
+    global downsample_ratio_list #, crop_list
     global root, device
     global batch_acc_steps
     global coding_path
@@ -37,7 +37,7 @@ def init(rts_q):
     global k_fold_ids
     global batch_size_test, batch_acc_steps_test
     global train_line, clicker, rts
-
+    global epoch_deep_saved
 
     # paths
     
@@ -172,7 +172,7 @@ def init(rts_q):
     downsample_ratio_list = {}
     
     # if cropping
-    crop_list = {}
+    #crop_list = {}
     
     # use predicted max - if want gauss fit set to false
     pred_max = True
@@ -253,6 +253,28 @@ def init(rts_q):
     else:
         print('ERROR')
 
+def init_slide_window(patients):
+    global sliding_window, sliding_points, crop_coords_slide, slide_index
+    global crop_list
+
+    # sliding window
+
+    sliding_points = 75
+    slide_index = 0
+    crop_coords_slide = {}
+    # if cropping
+    crop_list = {}
+
+    for p in patients:
+        crop_coords_slide[p] = {}
+        crop_list[p] = {}
+        for i in range(sliding_points):
+            crop_coords_slide[p][i] = {}
+            crop_list[p][i]= {}
+            # work out crop coord locations for slide
+        crop_coords_slide[p] = slide_coords.coords(p, in_x, in_y, in_z, sliding_points)
+
+            #crop_coords_slide[p][i]['x'] = (in_x/2)*i + in_x/2
    
      
 def init_new():

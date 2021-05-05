@@ -22,8 +22,8 @@ if S.downsample_user == True:
     trans_plain = transforms.Compose([T.Normalise(S.normal_min, S.normal_max, S.normal_window), T.Resize(S.in_z,S.in_x,S.in_y),T.Upsidedown_scipy(), T.Check_left_right(), T.Normalise_final(), T.ToTensor()])
     trans_augment = transforms.Compose([T.Normalise(S.normal_min, S.normal_max, S.normal_window), T.Resize(S.in_z,S.in_x,S.in_y),T.Upsidedown_scipy(), T.Shift(), T.Flips_scipy(), T.Horizontal_flip(), T.Check_left_right(), T.Normalise_final(), T.ToTensor()])
 elif S.downsample_user == False:
-    trans_plain = transforms.Compose([T.Normalise(S.normal_min, S.normal_max, S.normal_window), T.CentreCrop(S.in_z,S.in_x,S.in_y), T.Upsidedown_scipy(), T.Check_left_right(), T.Normalise_final(), T.ToTensor()])
-    trans_augment = transforms.Compose([T.Normalise(S.normal_min, S.normal_max, S.normal_window), T.CentreCrop(S.in_z,S.in_x,S.in_y),T.Upsidedown_scipy(), T.Shift(), T.Flips_scipy(), T.Horizontal_flip(), T.Check_left_right(), T.Normalise_final(), T.ToTensor()])
+    trans_plain = transforms.Compose([T.Normalise(S.normal_min, S.normal_max, S.normal_window), T.CentreCrop_test(S.in_z,S.in_x,S.in_y), T.Upsidedown_scipy(), T.Check_left_right(), T.Normalise_final(), T.ToTensor()])
+    trans_augment = transforms.Compose([T.Normalise(S.normal_min, S.normal_max, S.normal_window), T.CentreCrop_train(S.in_z,S.in_x,S.in_y),T.Upsidedown_scipy(), T.Shift(), T.Flips_scipy(), T.Horizontal_flip(), T.Check_left_right(), T.Normalise_final(), T.ToTensor()])
 
 #S.root_struc,
 dataset = D.CTDataset(S.root, transform_train = trans_augment, transform_test = trans_plain, test = False)
@@ -36,9 +36,13 @@ def init(fold, train_ids, test_ids):
     val_ids = train_ids[:index]
     train_ids = train_ids[index:]
     
-    global print_ids
-    print_ids = test_ids
-    # so can print out test ids at end
+    global test_set_ids, val_set_ids
+    test_set_ids = []
+    val_set_ids = []
+    for i in test_ids:
+        test_set_ids.append(dataset._CTDataset__pat__from__index(i))
+    for i in val_ids:
+        val_set_ids.append(dataset._CTDataset__pat__from__index(i))
     
     val_subsampler = torch.utils.data.SubsetRandomSampler(val_ids)
     train_subsampler = torch.utils.data.SubsetRandomSampler(train_ids)
@@ -69,8 +73,14 @@ def init_load_k_fold(fold):
     val_ids = train_ids[:index]
     train_ids = train_ids[index:]
     
-    global print_ids
-    print_ids = test_ids
+    global test_set_ids, val_set_ids
+    test_set_ids = []
+    val_set_ids = []
+    for i in test_ids:
+        test_set_ids.append(dataset._CTDataset__pat__from__index(i))
+    for i in val_ids:
+        val_set_ids.append(dataset._CTDataset__pat__from__index(i))
+    
     
     val_subsampler = torch.utils.data.SubsetRandomSampler(val_ids)
     train_subsampler = torch.utils.data.SubsetRandomSampler(train_ids)
@@ -97,10 +107,15 @@ def init_reserved_test_set():
         'test':test_set
     }
     
+    global test_set_ids
+    test_set_ids = []
+    for i in range(len(dataset)):
+        test_set_ids.append(dataset._CTDataset__pat__from__index(i))
+    
     global dataloaders
     # Load data in
     dataloaders = {
-        'test': DataLoader(test_set,batch_size = 1, shuffle = False, num_workers=0)
+        'test': DataLoader(test_set,batch_size = S.batch_size_test, shuffle = False, num_workers=0)
     }
     
 """

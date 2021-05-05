@@ -13,6 +13,9 @@ def init(fold):
     #else:
     data_loaders.init_load_k_fold(int(fold))  
     settings.tensorboard_init(fold) # initialise tensorboard writer
+    # initialise sliding window crop locations
+    slid_wind_ids = data_loaders.test_set_ids + data_loaders.val_set_ids
+    settings.init_slide_window(slid_wind_ids)
 
     load_transfered_model = yes_or_no.question('are you loading in a model which was saved as a transfered model')
     model = load_model.load_model(load_transfered_model)
@@ -33,14 +36,14 @@ def init(fold):
             model.transfer_learn_unet_final_layer(class_number, feature_number)
         print('Training model')
         print('------------')
-        model.train(True, transfer_learn_decision)
+        model.train(True, transfer_learn_decision, fold)
         print('Saving model to files')
         print('------------')
         model.save(fold)
         for i in range(settings.num_epoch_batches - 1):
             print('Training model')
             print('------------')
-            model.train(False, transfer_learn_decision)
+            model.train(False, transfer_learn_decision, fold)
             print('Saving model to files')
             print('------------')
             model.save(fold)
