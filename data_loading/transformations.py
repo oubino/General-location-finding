@@ -413,20 +413,20 @@ class Check_left_right(object):
 
 class Normalise_final(object):
     def __call__(self,sample):
-        image, idx, patient, coords = sample['image'], sample['idx'], sample['patient'], sample['coords']
+        image, idx, patient= sample['image'], sample['idx'], sample['patient']#,, coords  sample['coords']
         image = np.clip(image,0,1)
         max_val = np.amax(image)
         image /= max_val
             
-        return {'image': image, 'idx': idx, 'patient':patient, 'coords':coords}   
+        return {'image': image, 'idx': idx, 'patient':patient}#, 'coords':coords}   
 
 
 class ToTensor(object):
     """Convert ndarrays in sample to Tensors."""
 
     def __call__(self, sample):
-        image, idx, patient, coords = sample['image'], sample['idx'], sample['patient'], sample['coords']
-        
+        image, idx, patient = sample['image'], sample['idx'], sample['patient']#,, coords sample['coords']
+        '''
         for l in S.landmarks_total:
             # structure is z, y, x
             # need it in y, x, z                
@@ -456,7 +456,7 @@ class ToTensor(object):
                     print(z)
             #structure[z][y][x] = l
             coords[l]['x'], coords[l]['y'], coords[l]['z'] = x,y,z
-            
+          '''  
             #print_2D_slice(image, l, x, y, z, patient)
             
         # swap color axis because
@@ -465,7 +465,7 @@ class ToTensor(object):
         image = image.transpose(1,2,0)
         image = torch.from_numpy(image).float() # dont know why images/mask casted to float here but need to do it again later
         image = image.unsqueeze(0)
-        return {'image': image,'idx': idx, 'patient':patient, 'coords':coords}
+        return {'image': image,'idx': idx, 'patient':patient}#, 'coords':coords}
     
 
 
