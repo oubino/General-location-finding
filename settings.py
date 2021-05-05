@@ -41,51 +41,52 @@ def init(rts_q):
 
     # paths
     
-    '''
-    locally_or_server = yes_or_no.question('locally(y) / server(n)')
-    if locally_or_server == True:
-        # use local paths and ask Aaron/Oli for local paths 
-        aaron_or_oli = yes_or_no.question('aaron(y) / oli (n)')
-        if aaron_or_oli == True:
-            # Aaron paths
-            coding_path = r'C:\Users\ranki_252uikw\Documents\MPhysS2\General-location-finding'
-            root = r'C:\Users\ranki_252uikw\Documents\MPhysS2\Facial_asymmetry_aaron_testset' # note lack of " "
-            save_data_path = r'C:\Users\ranki_252uikw\Documents\MPhysS2\Results'
-        elif aaron_or_oli == False:
-            # Oli paths
-            coding_path = r'C:\Users\olive\OneDrive\Documents\GitHub\General-location-finding'
-            root = r'C:\Users\olive\OneDrive\Documents\MPhys\3D_data\Facial_asymmetry_reclicks' # note lack of " "
-            save_data_path = r'C:\Users\olive\OneDrive\Documents\MPhys\Sem 2\Results'
-    elif locally_or_server == False:
-        # use server paths for data and code for Aaron/Oli
-        aaron_or_oli = yes_or_no.question('aaron(y) / oli (n)')
-        if aaron_or_oli == True:
-            # Aaron paths
-            coding_path = r'/home/rankinaaron98/General-location-finding'
-            root = r'/home/rankinaaron98/data/Facial_asymmetry_reclicks'
-            save_data_path = r'/home/rankinaaron98/data/results/Aaron'
-        # load model path
-        elif aaron_or_oli == False:           
-            google_oli = yes_or_no.question('are you accessing through: sdk (n)/google (y)')
-            if google_oli == False:  
+    Paed_q = yes_or_no.question('Paediatric data (y) / Adult data (n): ')
+    if Paed_q == False:
+        locally_or_server = yes_or_no.question('locally(y) / server(n): ')
+        if locally_or_server == True:
+            # use local paths and ask Aaron/Oli for local paths 
+            aaron_or_oli = yes_or_no.question('aaron(y) / oli (n): ')
+            if aaron_or_oli == True:
+                # Aaron paths
+                coding_path = r'C:\Users\ranki_252uikw\Documents\MPhysS2\General-location-finding'
+                root = r'C:\Users\ranki_252uikw\Documents\MPhysS2\Facial_asymmetry_aaron_testset' # note lack of " "
+                save_data_path = r'C:\Users\ranki_252uikw\Documents\MPhysS2\Results'
+            elif aaron_or_oli == False:
                 # Oli paths
-                coding_path = r'/home/olive/GitHub/General-location-finding'
-                root = r'/home/olive/data/Facial_asymmetry_reclicks'
-                save_data_path = r'/home/olive/data/results/Oli'
-            elif google_oli == True:
-                # google Oli paths
-                coding_path = r'/home/oliver_umney/GitHub/General-location-finding'
-                root = r'/home/oliver_umney/data/Facial_asymmetry_reclicks'
-                save_data_path =  r'/home/oliver_umney/data/results/oliver_umney_web' 
-
-    '''
-    coding_path = r'/home/oli/GitHub/General-location-finding'
-    train_or_test = yes_or_no.question('train(y) vs test(n')
-    if train_or_test == True:
-        root = r'/home/oli/data/paed_dataset/train'
-    elif train_or_test == False:
-        root = r'/home/oli/data/paed_dataset/test'
-    save_data_path =  r'/home/oli/data/results/oli' 
+                coding_path = r'C:\Users\olive\OneDrive\Documents\GitHub\General-location-finding'
+                root = r'C:\Users\olive\OneDrive\Documents\MPhys\3D_data\Facial_asymmetry_reclicks' # note lack of " "
+                save_data_path = r'C:\Users\olive\OneDrive\Documents\MPhys\Sem 2\Results'
+        elif locally_or_server == False:
+            # use server paths for data and code for Aaron/Oli
+            aaron_or_oli = yes_or_no.question('aaron(y) / oli (n)')
+            if aaron_or_oli == True:
+                # Aaron paths
+                coding_path = r'/home/rankinaaron98/General-location-finding'
+                root = r'/home/rankinaaron98/data/Facial_asymmetry_reclicks'
+                save_data_path = r'/home/rankinaaron98/data/results/Aaron'
+            # load model path
+            elif aaron_or_oli == False:           
+                google_oli = yes_or_no.question('are you accessing through: sdk (n)/google (y)')
+                if google_oli == False:  
+                    # Oli paths
+                    coding_path = r'/home/olive/GitHub/General-location-finding'
+                    root = r'/home/olive/data/Facial_asymmetry_reclicks'
+                    save_data_path = r'/home/olive/data/results/Oli'
+                elif google_oli == True:
+                    # google Oli paths
+                    coding_path = r'/home/oliver_umney/GitHub/General-location-finding'
+                    root = r'/home/oliver_umney/data/Facial_asymmetry_reclicks'
+                    save_data_path =  r'/home/oliver_umney/data/results/oliver_umney_web' 
+    
+    elif Paed_q == True:
+        coding_path = r'/home/oli/GitHub/General-location-finding'
+        train_or_test = yes_or_no.question('train(y) vs test(n): ')
+        if train_or_test == True:
+            root = r'/home/oli/data/paed_dataset/train'
+        elif train_or_test == False:
+            root = r'/home/oli/data/paed_dataset/test'
+        save_data_path =  r'/home/oli/data/results/oli' 
    
     # results directory
     print('Results directory:')
@@ -184,7 +185,7 @@ def init(rts_q):
     UNET_model_user = True
     
     # decision on whether to crop or downsample
-    downsample_q = input ("Downsample(y)/crop(n) ")
+    downsample_q = input ("Downsample(y)/crop(n): ")
     if downsample_q == 'y':
         downsample_user = True
     elif downsample_q == 'n':
@@ -225,7 +226,7 @@ def init(rts_q):
     
     # train line true
     #rts_q = input (" Eval on reserved test set? (y/n)? ")
-    train_line_q = input ("Train/eval on a line (y/n)? ")
+    train_line_q = input ("Train/eval on a line (y/n)?: ")
     if rts_q == False:
         rts = False
         if train_line_q == 'y':
