@@ -95,6 +95,10 @@ def init(rts_q):
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     print('Device working on: ')
     print(device)
+    
+    # root
+    print('root')
+    print(root)
         
     # batch size
     change_batch_size = yes_or_no.question('Would you like to change batch size from default(3): ')
