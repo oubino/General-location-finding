@@ -40,6 +40,8 @@ def init(rts_q):
 
 
     # paths
+    
+    """
     locally_or_server = yes_or_no.question('locally(y) / server(n)')
     if locally_or_server == True:
         # use local paths and ask Aaron/Oli for local paths 
@@ -76,7 +78,11 @@ def init(rts_q):
                 root = r'/home/oliver_umney/data/Facial_asymmetry_reclicks'
                 save_data_path =  r'/home/oliver_umney/data/results/oliver_umney_web' 
 
-
+    """
+    coding_path = r'/home/oli/GitHub/General-location-finding'
+    root = r'/home/oli/data/paed_dataset/train'
+    save_data_path =  r'/home/oli/data/results/oli' 
+    
     # results directory
     print('Results directory:')
     print(save_data_path)
