@@ -15,7 +15,7 @@ def load_obj(path, name):
     with open(os.path.join(path, name) + '.pkl', 'rb') as f:
         return pickle.load(f)
     
-root = r'/home/oli/data/paed_dataset'
+root = r'/home/oli/data/paed_dataset/test'
 
 struc_list = list(sorted(os.listdir(os.path.join(root, "Structures"))))
 structure_path = os.path.join(root, "Structures")
@@ -59,6 +59,7 @@ except OSError as error:
 """
 
 for i in struc_list:
+    print(i)
     if coordinates[i][1]['z'] > coordinates[i][9]['z']:
         print('upside down')
         print(i)

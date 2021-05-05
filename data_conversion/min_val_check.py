@@ -3,7 +3,7 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 
-root = r'/home/oli/data/paed_dataset'
+root = r'/home/oli/data/paed_dataset/test'
 cts = os.path.join(root, "CTs")
 ct_list = list(sorted(os.listdir(cts)))
 hist_root = os.path.join(root, "histograms")
@@ -45,6 +45,7 @@ for i in ct_list:
     min_val = np.amin(img)
     max_val = np.amax(img)
     #histogram(img,i)
+    print(i)
     
     if min_val < 0:
         print(i, min_val)
