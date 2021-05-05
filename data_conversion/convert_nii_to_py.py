@@ -7,8 +7,8 @@ import csv
 import matplotlib.pyplot as plt
 
 # input paths
-nii_path = r'/home/oli/data/paed_structures'
-nii_path_ct = r'/home/oli/data/paed_cts'
+nii_path = r'/home/oli/data/paed_cts/landmarks_paeds_aba'
+nii_path_ct = r'/home/oli/data/paed_cts/CTs'
 
 # output paths
 struc_path =  r'/home/oli/data/paed_dataset/Structures'
@@ -19,7 +19,7 @@ hist_root = r'/home/oli/data/paed_dataset/Histograms'
 try:  
     os.mkdir(struc_path)  
     os.mkdir(ct_path)
-   # os.mkdir(hist_root)
+    os.mkdir(hist_root)
 except OSError as error:  
     print(error) 
 
