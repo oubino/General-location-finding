@@ -16,7 +16,7 @@ class ConvUnit(nn.Module):
     def __init__(self, in_channels, out_channels):
         super().__init__()
         self.double_conv = nn.Sequential(
-            nn.Conv3d(in_channels, out_channels, kernel_size = 3, padding = 1),
+            nn.Conv3d(in_channels, out_channels, kernel_size = 3, padding = 1), # if want dilated conv set padding = 2, dilation = 2 in this and conv3d below
             nn.BatchNorm3d(out_channels),
             nn.ReLU(inplace=True), # inplace=True means it changes the input directly, input is lost
 
