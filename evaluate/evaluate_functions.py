@@ -242,7 +242,8 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
   print(final_loc)
   
   functions.save_obj_pickle(final_loc, eval_path, 'final_coords')
-       
+  print('test set ids:')
+  print(patients)     
 
 def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold): 
   

@@ -66,13 +66,14 @@ def init_load_k_fold(fold):
     kfold_list = list(kfold.split(dataset))
     train_ids = kfold_list[fold][0]
     test_ids = kfold_list[fold][1]
-              
+    print('train size before: ' + str(len(train_ids)))         
     # split train_ids into val and train
-    index = int(len(train_ids)/10) # val ids are first 10 percent
+    index = int(len(train_ids)/4) # val ids are first 10 percent
     
     val_ids = train_ids[:index]
     train_ids = train_ids[index:]
-    
+    print('train size before: ' + str(len(train_ids)))
+    print('val size: ' + str(len(val_ids)))
     global test_set_ids, val_set_ids
     test_set_ids = []
     val_set_ids = []
