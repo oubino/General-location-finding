@@ -39,7 +39,7 @@ class CTDataset(Dataset):
         sample = {'image': img} # both are nd.arrays, stored in sample dataset
         sample['idx'] = idx # should print out which image is problematic
         sample['patient'] = self.imgs[idx]
-
+        '''
         # load in structure coords
         if settings.train_line == True:
             if settings.rts == False:
@@ -56,7 +56,7 @@ class CTDataset(Dataset):
             struc_coord = functions.load_obj_pickle(settings.root, 'coords_' + settings.clicker)  
             struc_coord = struc_coord[sample['patient']]
         sample['coords'] = struc_coord           
-        
+        '''
         if (self.transform_train) and (self.test == False):
             sample = self.transform_train(sample)
         if (self.transform_test) and (self.test == True):

@@ -129,7 +129,7 @@ class CentreCrop_test(object):
       self.height = height
                           
   def __call__(self, sample):
-      image, idx, patient, coords = sample['image'], sample['idx'], sample['patient'], sample['coords']
+      image, idx, patient = sample['image'], sample['idx'], sample['patient']#, , coordssample['coords']
       d, h, w = image.shape[:3] # define image height, width, depth as first 3 values
       #print(S.crop_coords_slide)
       x_crop = S.crop_coords_slide[patient][S.slide_index]['x']
@@ -169,7 +169,7 @@ class CentreCrop_test(object):
       S.crop_list[patient][S.slide_index]['x_left'] = x_left
       S.crop_list[patient][S.slide_index]['y_left'] = y_left
       S.crop_list[patient][S.slide_index]['z_left'] = z_left
-          
+      '''   
       for l in S.landmarks:              
           # need to amend coords of structure
           x,y, z = coords[l]['x'], coords[l]['y'], coords[l]['z']
@@ -186,6 +186,7 @@ class CentreCrop_test(object):
           if x < 0 or x >= S.in_x or y < 0 or y >= S.in_y or z < 0 or z >= S.in_z:
               coords[l]['present'] = 0 # landmark not present
               #exit()
+      '''
       x_left, x_right = int(x_left), int(x_right)
       y_left, y_right = int(y_left), int(y_right)           
       z_left, z_right = int(z_left), int(z_right)
@@ -210,7 +211,7 @@ class CentreCrop_test(object):
         print('z_left+z_right vs d - self.depth')
         print(z_left + z_right,d - self.depth )
           
-      return {'image':image_crop, 'idx':idx, 'patient':patient, 'coords':coords} # note note !
+      return {'image':image_crop, 'idx':idx, 'patient':patient}#, 'coords':coords} # note note !
     
 class Upsidedown_scipy(object):
     def __call__(self,sample):

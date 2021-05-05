@@ -43,7 +43,7 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
     z_axis_err[l], z_axis_err_mm[l] = np.empty((0), float),  np.empty((0), float)
     
   # load in struc_coord  
-  struc_coord = functions.load_obj_pickle(S.root, 'coords_' + S.clicker) 
+  #struc_coord = functions.load_obj_pickle(S.root, 'coords_' + S.clicker) 
   
   # initiate max val as 0 for all patients - sliding window stuff
   # patients needs to be = ['0003.npy', '0004.npy', etc.]
@@ -241,7 +241,7 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
   print('final locations')
   print(final_loc)
   
-  functions.save_obj_pickle(final_loc, eval_path, 'final_coords_no_struc')
+  functions.save_obj_pickle(final_loc, eval_path, 'final_coords_no_struc_2')
 
 
 def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold): 
