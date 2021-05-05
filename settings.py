@@ -81,7 +81,6 @@ def init(rts_q):
     
     elif Paed_q == True:
         coding_path = r'/home/oli/GitHub/General-location-finding'
-        train_or_test = yes_or_no.question('train(y) vs test(n): ')
         if rts_q == False:
             root = r'/home/oli/data/paed_dataset/train'
         elif rts_q == True:
