@@ -80,7 +80,11 @@ def init(rts_q):
 
     """
     coding_path = r'/home/oli/GitHub/General-location-finding'
-    root = r'/home/oli/data/paed_dataset/train'
+    train_or_test = yes_or_no.question('train(y) vs test(n')
+    if train_or_test == True:
+        root = r'/home/oli/data/paed_dataset/train'
+    elif train_or_test == False:
+        root = r'/home/oli/data/paed_dataset/test'
     save_data_path =  r'/home/oli/data/results/oli' 
     
     # results directory
