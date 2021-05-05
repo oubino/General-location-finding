@@ -81,10 +81,9 @@ def init(rts_q):
     
     elif Paed_q == True:
         coding_path = r'/home/oli/GitHub/General-location-finding'
-        train_or_test = yes_or_no.question('train(y) vs test(n): ')
-        if train_or_test == True:
+        if rts_q == False:
             root = r'/home/oli/data/paed_dataset/train'
-        elif train_or_test == False:
+        elif rts_q == True:
             root = r'/home/oli/data/paed_dataset/test'
         save_data_path =  r'/home/oli/data/results/oli' 
    
@@ -96,6 +95,10 @@ def init(rts_q):
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     print('Device working on: ')
     print(device)
+    
+    # root
+    print('root')
+    print(root)
         
     # batch size
     change_batch_size = yes_or_no.question('Would you like to change batch size from default(3): ')
