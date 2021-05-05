@@ -4,7 +4,8 @@
 from useful_functs import yes_or_no
 import settings
 settings.init(True) # rts is True
-#settings.root = r'/home/rankinaaron98/data/Facial_asymmetry_test_sets'
+if settings.paed_bool == False:
+    settings.root = r'/home/rankinaaron98/data/Facial_asymmetry_test_sets' # set the reserved test set root
 settings.init_load()
 from data_loading import data_loaders
 from model import load_model   
