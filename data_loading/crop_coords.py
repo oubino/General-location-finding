@@ -2,13 +2,11 @@
 
 import os
 import pickle
-import numpy as np
 
-import settings as S
-S.init()
+clicker = "Oli" # as should only need the train crop coords
 
 # pickle file location
-pickle_struc_path = r'/home/oli/data/paed_dataset'
+pickle_struc_path = r'/home/oli/data/paed_dataset/train'
 
 def save_obj(root, obj, name):
     with open(os.path.join(root, name) + '.pkl', 'wb') as f:
@@ -19,7 +17,7 @@ def load_obj(root, name):
         return pickle.load(f)
     
 # load in pickle file
-file = load_obj(pickle_struc_path, 'coords_' + S.clicker)
+file = load_obj(pickle_struc_path, 'coords_' + clicker)
 
 # average of HMl and HMr location
 patients = list(file.keys())
@@ -34,7 +32,7 @@ for i in patients:
     crop_coords[i]['x'], crop_coords[i]['y'], crop_coords[i]['z'] = x,y,z
     
 # save pickel file as crop_coords_clicker
-save_obj(pickle_struc_path, crop_coords,'crop_coords_%s' % S.clicker)
+save_obj(pickle_struc_path, crop_coords,'crop_coords_%s' % clicker)
 
-a = load_obj(pickle_struc_path, 'crop_coords_%s' % S.clicker)
+a = load_obj(pickle_struc_path, 'crop_coords_%s' % clicker)
 print(a)

@@ -4,7 +4,6 @@ import os
 import pickle
 import numpy as np
 
-import settings as S
 from data_loading import numpy_loc
 
     
@@ -16,8 +15,6 @@ def load_obj(path, name):
     with open(os.path.join(path, name) + '.pkl', 'rb') as f:
         return pickle.load(f)
     
-S.init(False)
-
 root = r'/home/oli/data/paed_dataset'
 
 struc_list = list(sorted(os.listdir(os.path.join(root, "Structures"))))
