@@ -38,11 +38,13 @@ def init(rts_q):
     global batch_size_test, batch_acc_steps_test
     global train_line, clicker, rts
     global epoch_deep_saved
+    global paed_bool
 
     # paths
     
     Paed_q = yes_or_no.question('Paediatric data (y) / Adult data (n): ')
     if Paed_q == False:
+        paed_bool = False
         locally_or_server = yes_or_no.question('locally(y) / server(n): ')
         if locally_or_server == True:
             # use local paths and ask Aaron/Oli for local paths 
@@ -80,6 +82,7 @@ def init(rts_q):
                     save_data_path =  r'/home/oliver_umney/data/results/oliver_umney_web' 
     
     elif Paed_q == True:
+        paed_bool = True
         coding_path = r'/home/oli/GitHub/General-location-finding'
         if rts_q == False:
             root = r'/home/oli/data/paed_dataset/train'

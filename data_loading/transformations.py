@@ -81,6 +81,11 @@ class CentreCrop_train(object):
       z_left = min(z_left, d - self.depth) # e.g. x left max is 150, min is 0
       z_right = d - z_left - self.depth
       
+      # convert to int
+      z_left, z_right = int(z_left), int(z_right)
+      y_left, y_right = int(y_left), int(y_right)
+      x_left, x_right = int(x_left), int(x_right)
+      
       # append crops to list
       #S.crop_list[patient] = {}
       #S.crop_list[patient]['x_left'] = x_left
