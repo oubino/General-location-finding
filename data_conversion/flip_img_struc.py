@@ -15,7 +15,7 @@ def load_obj(path, name):
     with open(os.path.join(path, name) + '.pkl', 'rb') as f:
         return pickle.load(f)
     
-root = r'/home/oli/data/paed_dataset'
+root = r'/home/oli/data/paed_dataset/train'
 
 struc_list = list(sorted(os.listdir(os.path.join(root, "Structures"))))
 structure_path = os.path.join(root, "Structures")
