@@ -150,7 +150,7 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
                   
                  # x_axis_err[l] = np.append(x_axis_err[l], )
                   # if img_point_to_point > 20mm is an outlier
-                  if img_landmark_point_to_point > 20:
+                  if img_landmark_point_to_point > 10:
                     outliers_landmarks[l] = np.append(outliers_landmarks[l],1)
                 
         #batch_number += 1 # not sure where to put
