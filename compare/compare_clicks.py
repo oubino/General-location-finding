@@ -56,7 +56,7 @@ def load_obj(root, name):
         return pickle.load(f)
 
 # paths
-csv_root = r'/home/data/paed_dataset/test'
+csv_root = r'/home/oli/data/paed_dataset/test'
 root = r'/home/oli/data/results/oli/run_folder/eval_100_3'
 
 #clicker_1 = input('Clicker_1, (e.g. Oli_test_set): ') 
