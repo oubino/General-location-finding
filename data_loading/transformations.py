@@ -186,7 +186,9 @@ class CentreCrop_test(object):
           if x < 0 or x >= S.in_x or y < 0 or y >= S.in_y or z < 0 or z >= S.in_z:
               coords[l]['present'] = 0 # landmark not present
               #exit()
-                        
+      x_left, x_right = int(x_left), int(x_right)
+      y_left, y_right = int(y_left), int(y_right)           
+      z_left, z_right = int(z_left), int(z_right)
       if z_left < 0:
           image = np.pad(image, ((-z_left,0),(0, 0), (0, 0)))
           image_crop = skimage.util.crop(image, ((0,0),(y_left, y_right), (x_left, x_right)))
