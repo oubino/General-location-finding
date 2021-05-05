@@ -5,11 +5,11 @@ pred_coords_1 = F.load_obj_pickle(root, 'final_coords_no_struc')
 pred_coords_2 = F.load_obj_pickle(root, 'final_coords_no_struc_2')
 
 
-print(pred_coords_1)
+#print(pred_coords_1)
 
 print('---------------------------------')
 
-print(pred_coords_2)
+#print(pred_coords_2)
 
 
 dev_list = {}
@@ -39,9 +39,9 @@ for i in pred_coords_1.keys():
         z_dev = z_1 - z_2
         dev = math.sqrt(abs(x_dev)**2 + abs(y_dev)**2 + abs(z_dev)**2)
         print(dev)
-        dev_list['%1.0f' % i].append(dev)
-        dev_list_x['%1.0f' % i].append(x_dev)
-        dev_list_y['%1.0f' % i].append(y_dev)
-        dev_list_z['%1.0f' % i].append(z_dev)
+ #       dev_list['%1.0f' % i].append(dev)
+  #      dev_list_x['%1.0f' % i].append(x_dev)
+   #     dev_list_y['%1.0f' % i].append(y_dev)
+    #    dev_list_z['%1.0f' % i].append(z_dev)
         
         
