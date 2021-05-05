@@ -10,7 +10,7 @@ import settings as S
 from data_loading import numpy_loc
 S.init(False)
 
-root = r'/home/olive/data/HNSCC_deepmind_cropped'
+root = r'/home/oli/data/paed_dataset'
 
     
 def save_obj(obj, name):
