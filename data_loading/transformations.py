@@ -264,7 +264,7 @@ class Normalise(object):
       self.window = window
                           
   def __call__(self, sample):
-      image, idx, patient, coords = sample['image'], sample['idx'], sample['patient'], sample['coords']     
+      image, idx, patient = sample['image'], sample['idx'], sample['patient'],#, coords sample['coords']     
       
       # need to normalise around different values
       if np.round(np.amin(image)) < 0:
@@ -286,7 +286,7 @@ class Normalise(object):
       #print('min/max value post normalise')
       #print(np.amin(image), np.amax(image)) 
       
-      return {'image':image, 'idx': idx, 'patient':patient, 'coords': coords} # note note !
+      return {'image':image, 'idx': idx, 'patient':patient}#, 'coords': coords} # note note !
   
 class Shift(object):
     def __call__(self, sample):
