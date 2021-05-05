@@ -8,8 +8,7 @@ import settings as S
 from data_loading import numpy_loc
 S.init()
 
-struc_path = r'/home/rankinaaron98/data/Facial_asymmetry_aaron_testset'
-
+struc_path = r'/home/oli/data/paed_dataset'
     
 def save_obj(obj, name):
     with open(os.path.join(struc_path, name) + '.pkl', 'wb') as f:
@@ -43,16 +42,13 @@ for i in struc_list:
         coords, coords_present = coord_calc[0], coord_calc[1]
         if sum(coords) != 0 :
             x, y, z = coords[0], coords[1], coords[2]
-            #structure_mod[z][y][x] = l
             coordinates[i][l]['x'], coordinates[i][l]['y'], coordinates[i][l]['z'] = x,y,z
             #coordinates[i][l]['locat'] = S.landmarks_total_loc[l]
             coordinates[i][l]['present'] = 1 # 1 
         else:
-            #coordinates[i][l]['locat'] = 'absent'
             coordinates[i][l]['present'] = 0
 
             
-
 save_obj(coordinates, 'coords_%s' % S.clicker)
 
 a = load_obj('coords_%s' % S.clicker)
