@@ -38,7 +38,7 @@ for i in pred_coords_1.keys():
         y_dev = y_1 - y_2
         z_dev = z_1 - z_2
         dev = math.sqrt(abs(x_dev)**2 + abs(y_dev)**2 + abs(z_dev)**2)
-        print('i: ' + i + 'l: ' + l + 'dev:' + dev)
+        print('i: ' + str(i) + 'l: ' + str(l) + 'dev:' + str(dev))
  #       dev_list['%1.0f' % i].append(dev)
   #      dev_list_x['%1.0f' % i].append(x_dev)
    #     dev_list_y['%1.0f' % i].append(y_dev)
