@@ -41,7 +41,7 @@ def init(rts_q):
 
     # paths
     
-    
+    '''
     locally_or_server = yes_or_no.question('locally(y) / server(n)')
     if locally_or_server == True:
         # use local paths and ask Aaron/Oli for local paths 
@@ -86,7 +86,7 @@ def init(rts_q):
     elif train_or_test == False:
         root = r'/home/oli/data/paed_dataset/test'
     save_data_path =  r'/home/oli/data/results/oli' 
-    '''
+   
     # results directory
     print('Results directory:')
     print(save_data_path)

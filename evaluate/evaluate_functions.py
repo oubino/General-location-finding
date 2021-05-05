@@ -135,7 +135,7 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
                     #print('\n')
                     # print 2D slice
                     #print('2D slice for landmark %1.0f' % l)
-                    #print_2D_slice(l, pred_max_x, pred_max_y, pred_max_z, structure_max_x, structure_max_y, structure_max_z ,eval_path, patient[i])
+                  print_2D_slice(l, pred_max_x, pred_max_y, pred_max_z, structure_max_x, structure_max_y, structure_max_z ,eval_path, patient[i])
                           
                   # point to point takes in original structure location!!
                   img_landmark_point_to_point = functions.point_to_point_mm(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z, patient[i])
