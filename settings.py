@@ -41,7 +41,7 @@ def init(rts_q):
 
     # paths
     
-    """
+    
     locally_or_server = yes_or_no.question('locally(y) / server(n)')
     if locally_or_server == True:
         # use local paths and ask Aaron/Oli for local paths 
@@ -78,7 +78,7 @@ def init(rts_q):
                 root = r'/home/oliver_umney/data/Facial_asymmetry_reclicks'
                 save_data_path =  r'/home/oliver_umney/data/results/oliver_umney_web' 
 
-    """
+    '''
     coding_path = r'/home/oli/GitHub/General-location-finding'
     train_or_test = yes_or_no.question('train(y) vs test(n')
     if train_or_test == True:
@@ -86,7 +86,7 @@ def init(rts_q):
     elif train_or_test == False:
         root = r'/home/oli/data/paed_dataset/test'
     save_data_path =  r'/home/oli/data/results/oli' 
-    
+    '''
     # results directory
     print('Results directory:')
     print(save_data_path)
@@ -199,7 +199,7 @@ def init(rts_q):
     img_counter_3 = 0
 
     # adaptive wing loss
-    wing_loss = False
+    wing_loss = True
     # our max for heatmap is pre_factor 
     # ((gamma) * (2*np.pi)**(-dimension/2) * sigma ** (-dimension))  roughly 1
     # from paper, Wang et al
