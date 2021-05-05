@@ -45,6 +45,7 @@ for i in ct_list:
     min_val = np.amin(img)
     max_val = np.amax(img)
     #histogram(img,i)
+    print(i)
     
     if min_val < 0:
         print(i, min_val)

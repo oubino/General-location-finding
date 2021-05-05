@@ -59,6 +59,7 @@ except OSError as error:
 """
 
 for i in struc_list:
+    print(i)
     if coordinates[i][1]['z'] > coordinates[i][9]['z']:
         print('upside down')
         print(i)
