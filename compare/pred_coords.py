@@ -25,7 +25,7 @@ mean_dev_std = {}
 mean_list = {}
 
 landmarks = [1,2,3,4,5,6,7,8,9,10]
-for i in pred_coords_1.keys(pred_coords_1):
+for i in pred_coords_1.keys():
     for l in landmarks:
         x_1 = pred_coords_1[i][l]['x']
         x_2 = pred_coords_2[i][l]['x']
