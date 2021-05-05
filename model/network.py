@@ -136,10 +136,67 @@ class Transfer_model(nn.Module):
         output = self.out(x9)
         return output 
     
+"""
+# this window level would need to be called as first function on x in forward of UNet i.e. x_mod = self.window_level(x) ; x1 = self.conv(x_mod) ; etc.
+
+class window_level(nn.Module):
+    '''
+    Implementation of window level.
+    Shape:
+        - Input: (N, *) where * means, any number of additional
+          dimensions
+        - Output: (N, *), same shape as the input
+    Parameters:
+        - sigma - trainable parameter
+        - theta - trainable parameter
+    Examples:
+        >>> a1 = soft_exponential(256)
+        >>> x = torch.randn(256)
+        >>> x = a1(x)
+    '''
+    def __init__(self, sigma = None, theta = None, beta = None):
+        '''
+        Initialization.
+        INPUT:
+            - in_features: shape of the input
+            - sigma: trainable parameter
+            - theta: trainable parameter
+            - gamma: trainable parameter
+            alpha/theta/sigma is initialized -> 20->50 window by default
+        '''
+        super(window_level,self).__init__()
+        #self.in_features = in_features
+
+        # initialize alpha
+        if sigma == None:
+            self.sigma = Parameter(torch.tensor(7.58090430e+07)) # create a tensor out of alpha
+        else:
+            self.sigma = Parameter(torch.tensor(sigma)) # create a tensor out of alpha
+        if theta == None:
+          self.theta = Parameter(torch.tensor(2.49310306e-03))
+        else:
+          self.theta = Parameter(torch.tensor(theta))
+        if beta == None:
+          self.beta = Parameter(torch.tensor(1.71418176e-01))
+        else:
+          self.beta = Parameter(torch.tensor(beta))
+    
+        self.sigma.requiresGrad = True # set requiresGrad to true!
+        self.beta.requiresGrad = True
+        self.theta.requiresGrad = True
+
+    def forward(self, x):
+        '''
+        Forward pass of the function.
+        Applies the function to the input elementwise.
+        '''
+        alpha = 1/(self.sigma/self.theta + 1)
+        return alpha*(self.sigma - torch.exp(-self.beta*x))/(self.theta + torch.exp(-self.beta*x)) + alpha
+    
 class FinalConvTranspose(nn.Module):
-    """
+    
     FinalConvTranpose
-    """
+    
     def __init__(self, in_channels):
         super().__init__()
         self.up = nn.ConvTranspose3d(in_channels // 2, in_channels // 2, kernel_size=2, stride=2)
@@ -417,3 +474,4 @@ class SCNET(nn.Module): # need to add bottleneck
         )
         return upsample_block_11
 
+"""
