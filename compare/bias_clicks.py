@@ -196,9 +196,9 @@ for p in pat_list:
                      dev_list_z_a['%1.0f' % k].append(dev_z_a)
                     '''
                    if n == 'Aaron':
-                       Deviations[j][l]['Aaron']['x'], Deviations[j][l]['Aaron']['y'], Deviations[j][l]['Aaron']['z'] = dev_x_a, dev_y_a, dev_z_a
+                       Deviations[j][l][n]['x'], Deviations[j][l][n]['y'], Deviations[j][l][n]['z'] = dev_x_a, dev_y_a, dev_z_a
                    elif n == 'Oli':
-                       Deviations[j][l]['Oli']['x'], Deviations[j][l]['Oli']['y'], Deviations[j][l]['Oli']['z'] = dev_x_o, dev_y_o, dev_z_o
+                       Deviations[j][l][n]['x'], Deviations[j][l][n]['y'], Deviations[j][l][n]['z'] = dev_x_o, dev_y_o, dev_z_o
                         
              
 
