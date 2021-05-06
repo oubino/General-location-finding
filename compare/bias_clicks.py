@@ -162,13 +162,20 @@ click_outlier_counter = 0
 
 
 if calc_deviations == True:
-    # calculate deviation of arrays etc.
-    for j in range(len(pat_list)):
+    oli_devs ={}
+    aaron_devs = {}
+    for p in pat_list:
+        oli_devs[p] = {} 
+        aaron_devs[p] = {} # each patient has dictioanary
         for k in landmarks:
-            z_mm, y_mm, x_mm = pixel_to_mm(pat_list[j])
-            dev_x_o = (com_list_clicker_1['%1.0f' % k][j][2] - com_list_clicker_ab['%1.0f' % k][j][2])*(x_mm)
-            dev_y_o = (com_list_clicker_1['%1.0f' % k][j][1] - com_list_clicker_ab['%1.0f' % k][j][1])*(y_mm)
-            dev_z_o = (com_list_clicker_1['%1.0f' % k][j][0] - com_list_clicker_ab['%1.0f' % k][j][0])*(z_mm)
+   #         oli_x, oli_y, oli_z = dev_list_x_o[k], dev_list_y_o[k], dev_z_o[k]  
+            oli_devs[p][k] = {'x':0, 'y':0, 'z':0}
+            aaron_devs[p][k] = {'x':0, 'y':0, 'z':0}# calculate deviation of arrays etc.
+            
+            z_mm, y_mm, x_mm = pixel_to_mm(pat_list[p])
+            dev_x_o = (com_list_clicker_1['%1.0f' % k][p][2] - com_list_clicker_ab['%1.0f' % k][p][2])*(x_mm)
+            dev_y_o = (com_list_clicker_1['%1.0f' % k][p][1] - com_list_clicker_ab['%1.0f' % k][p][1])*(y_mm)
+            dev_z_o = (com_list_clicker_1['%1.0f' % k][p][0] - com_list_clicker_ab['%1.0f' % k][p][0])*(z_mm)
             dev_o = math.sqrt(abs(dev_x_o)**2 + abs(dev_y_o)**2 + abs(dev_z_o)**2)
             dev_list_o['%1.0f' % k].append(dev_o)
             dev_list_x_o['%1.0f' % k].append(dev_x_o)
@@ -184,16 +191,10 @@ if calc_deviations == True:
             dev_list_y_a['%1.0f' % k].append(dev_y_a)
             dev_list_z_a['%1.0f' % k].append(dev_z_a)
             
+            oli_devs[p][k]['x'].append(dev_x_o), oli_devs[p][k]['y'].append(dev_y_o), oli_devs[p][k]['z'].append(dev_z_o) 
+            
      
-oli_devs ={}
-aaron_devs = {}
-for p in pat_list:
-    oli_devs[p] = {} 
-    aaron_devs[p] = {} # each patient has dictioanary
-    for k in landmarks:
-       oli_x, oli_y, oli_z = dev_list_x_o[k], dev_list_y_o[k], dev_z_o[k]  
-       oli_devs[p][k] = {'x': oli_x, 'y':oli_y, 'z':oli_z}
-       aaron_devs[p][k] = {'x':0, 'y':0, 'z':0}
+
         
         
 #aaron_devs_axis = {'patient': {['x':[], 'y':[], 'z':[]}}
