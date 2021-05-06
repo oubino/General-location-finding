@@ -166,7 +166,7 @@ for p in pat_list:
     # each patient has dictioanary
     Deviations[p] = {}
     #z_mm, y_mm, x_mm = pixel_to_mm(pat_list[p])
-    for l in range(len(landmarks)):
+    for l in range(len(landmarks)+1):
         # dictionary for each clicker
         Deviations[p][l] = {}
         for n in clickers: 
