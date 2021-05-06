@@ -147,20 +147,28 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
 
             # deep copy the model
             # note validation is done NOT using sliding window
-            #if phase == 'val' and epoch_loss < best_loss:
-            print("\n")
-            print("------ deep copy best model ------ ")
-            best_loss = epoch_loss
-            print('  ' + 'best val loss: {:4f}'.format(best_loss))
-            print('\n')
-            best_model_wts = copy.deepcopy(model.state_dict())
-            
-            S.epoch_deep_saved = epochs_completed + epoch + 1
-            name_of_file = os.path.join(S.run_path, "epoch_saved_%s.txt" % fold)
-            txt_file = open(name_of_file, "a")
-            L = ['epoch saved %1.0f' % S.epoch_deep_saved,'\n']
-            txt_file.writelines(L)
-            txt_file.close()
+            if phase == 'val' and epoch == 0:
+                print("\n")
+                print("------ deep copy after 1st epoch ------ ")
+                best_loss = epoch_loss
+                print('  ' + 'best val loss: {:4f}'.format(best_loss))
+                print('\n')
+                best_model_wts = copy.deepcopy(model.state_dict())
+                
+            if phase == 'val' and epoch_loss < best_loss:
+                print("\n")
+                print("------ deep copy best model ------ ")
+                best_loss = epoch_loss
+                print('  ' + 'best val loss: {:4f}'.format(best_loss))
+                print('\n')
+                best_model_wts = copy.deepcopy(model.state_dict())
+                
+                S.epoch_deep_saved = epochs_completed + epoch + 1
+                name_of_file = os.path.join(S.run_path, "epoch_saved_%s.txt" % fold)
+                txt_file = open(name_of_file, "a")
+                L = ['epoch saved %1.0f' % S.epoch_deep_saved,'\n']
+                txt_file.writelines(L)
+                txt_file.close()
                 # save model/optimizer etc. based on current time
                 
 

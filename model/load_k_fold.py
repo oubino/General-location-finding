@@ -23,7 +23,7 @@ def init(fold):
     if train_decision == True:
         # if train is true then ask number of epochs to train for otherwise don't need to as just eval
         settings.epoch_batch = int(input ("Epoch batch: "))
-        settings.num_epoch_batches = int(input ("Num epoch batch: "))
+        settings.num_epoch_batches = 1
         freeze_decision = yes_or_no.question('freeze all but last layer?')
         if freeze_decision == True:
             model.freeze_final_layers()
