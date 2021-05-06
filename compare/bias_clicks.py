@@ -4,7 +4,11 @@ import math
 import csv
 import pickle
 import matplotlib.pyplot as plt
-from itertools import chain
+import pandas as pd
+import seaborn as sns
+sns.set_theme(style="darkgird")
+
+
 def question(question):
     while "the answer is invalid":
         reply = str(input(question+' (y/n): ')).lower().strip()
@@ -181,20 +185,24 @@ if calc_deviations == True:
             dev_list_z_a['%1.0f' % k].append(dev_z_a)
             
      
-oli_devs_axis = {'x':[], 'y':[], 'z':[]}
-oli_devs_axis['x'] = dev_list_x_o
-oli_devs_axis['y'] = dev_list_y_o
-oli_devs_axis['z'] = dev_list_z_o
+oli_devs ={}
+aaron_devs = {}
+for p in pat_list:
+    oli_devs[p] = {} 
+    aaron_devs[p] = {} # each patient has dictioanary
+    for k in landmarks:
+       oli_devs[p][k] = {'x': dev_list_x_o[k], 'y':dev_list_y_o[k], 'z':dev_list_z_o[k]}
+       aaron_devs[p][k] = {'x':0, 'y':0, 'z':0}
+        
+        
+#aaron_devs_axis = {'patient': {['x':[], 'y':[], 'z':[]}}
+#aron_devs_axis['x'] = dev_list_x_a
+#aaron_devs_axis['y'] = dev_list_y_a
+#aaron_devs_axis['z'] = dev_list_z_a
 
+print(oli_devs)
+print(aaron_devs)
 '''
-aaron_devs_axis = {'patient': ['x':[], 'y':[], 'z':[] ]}
-aaron_devs_axis['x'] = dev_list_x_a
-aaron_devs_axis['y'] = dev_list_y_a
-aaron_devs_axis['z'] = dev_list_z_a
-
-print(oli_devs_axis)
-print(aaron_devs_axis)
-
 # plot
 fig, ax = plt.subplots()
 for i in range(len(dev_list_x_a)):
@@ -205,13 +213,10 @@ ax.legend
 
 
 
-def print_2D_slice(landmark, pred_x, pred_y, pred_z, struc_x, struc_y, struc_z, eval_path, patient):
+def print_scatter(landmark, pred_x, pred_y, pred_z, struc_x, struc_y, struc_z, eval_path, patient):
     
     # image
     #  D x H x W
-    img_path = os.path.join(S.root, "CTs", patient) 
-    img = np.load(img_path)
-        
     plt.figure(figsize=(7, 7))
         
     pred_z = int(pred_z) # convert to nearest int
@@ -219,7 +224,7 @@ def print_2D_slice(landmark, pred_x, pred_y, pred_z, struc_x, struc_y, struc_z, 
     
     # ---- plot as point ------
     plt.imshow(img,cmap = 'Greys_r', alpha = 0.9)
-    plt.plot(struc_x, struc_y, color = 'red', marker = 'x', label = 'target')
+    plt.scatter(, struc_y, color = 'red', marker = 'x', label = 'target')
     plt.plot(pred_x.cpu().numpy(), pred_y.cpu().numpy(),color='green', marker='o', label = 'pred')
     # add z annotation
     plt.annotate("%1.0f" % pred_z,(pred_x.cpu().numpy(), pred_y.cpu().numpy()), color = 'green')
