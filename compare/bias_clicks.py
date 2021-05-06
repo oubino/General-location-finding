@@ -181,11 +181,11 @@ if calc_deviations == True:
             dev_list_z_a['%1.0f' % k].append(dev_z_a)
             
       
-print('x dev: ' + str(dev_list_x_a))
-print('-------------------------')
-print('y dev: ' + str(dev_list_y_a))
-print('--------------------------')
-print('z dev: ' + str(dev_list_z_a))
+#print('x dev: ' + str(dev_list_x_a))
+#print('-------------------------')
+#print('y dev: ' + str(dev_list_y_a))
+#print('--------------------------')
+#print('z dev: ' + str(dev_list_z_a))
 
 oli_devs_axis = {}
 aaron_devs_axis = {}
