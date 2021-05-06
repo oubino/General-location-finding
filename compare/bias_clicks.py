@@ -173,32 +173,33 @@ for p in pat_list:
         for n in clickers: 
            Deviations[p][l][n] = {'x':0, 'y':0, 'z':0}
            print(Deviations)
-           dev_x_o = (com_list_clicker_1['%1.0f' % l][p][2] - com_list_clicker_ab['%1.0f' % l][p][2])#*(x_mm)
-           dev_y_o = (com_list_clicker_1['%1.0f' % l][p][1] - com_list_clicker_ab['%1.0f' % l][p][1])#*(y_mm)
-           dev_z_o = (com_list_clicker_1['%1.0f' % l][p][0] - com_list_clicker_ab['%1.0f' % l][p][0])#*(z_mm)
-           '''
-             dev_o = math.sqrt(abs(dev_x_o)**2 + abs(dev_y_o)**2 + abs(dev_z_o)**2)
-             dev_list_o['%1.0f' % k].append(dev_o)
-             dev_list_x_o['%1.0f' % k].append(dev_x_o)
-             dev_list_y_o['%1.0f' % k].append(dev_y_o)
-             dev_list_z_o['%1.0f' % k].append(dev_z_o)
-           '''
-           dev_x_a = (com_list_clicker_2['%1.0f' % l][p][2] - com_list_clicker_ab['%1.0f' % l][p][2])#*(x_mm)
-           dev_y_a = (com_list_clicker_2['%1.0f' % l][p][1] - com_list_clicker_ab['%1.0f' % l][p][1])#*(y_mm)
-           dev_z_a = (com_list_clicker_2['%1.0f' % l][p][0] - com_list_clicker_ab['%1.0f' % l][p][0])#*(z_mm)
-             
-           '''
-             dev_a = math.sqrt(abs(dev_x_a)**2 + abs(dev_y_a)**2 + abs(dev_z_a)**2)
-             dev_list_a['%1.0f' % k].append(dev_a)
-             dev_list_x_a['%1.0f' % k].append(dev_x_a)
-             dev_list_y_a['%1.0f' % k].append(dev_y_a)
-             dev_list_z_a['%1.0f' % k].append(dev_z_a)
-            '''
-           if n == 'Aaron':
-               Deviations[p][l]['Aaron']['x'], Deviations[p][l]['Aaron']['y'], Deviations[p][l]['Aaron']['z'] = dev_x_a, dev_y_a, dev_z_a
-           elif n == 'Oli':
-               Deviations[p][l]['Oli']['x'], Deviations[p][l]['Oli']['y'], Deviations[p][l]['Oli']['z'] = dev_x_o, dev_y_o, dev_z_o
-                
+           for j in range(len(pat_list)):
+                   dev_x_o = (com_list_clicker_1['%1.0f' % l][j][2] - com_list_clicker_ab['%1.0f' % l][j][2])#*(x_mm)
+                   dev_y_o = (com_list_clicker_1['%1.0f' % l][j][1] - com_list_clicker_ab['%1.0f' % l][j][1])#*(y_mm)
+                   dev_z_o = (com_list_clicker_1['%1.0f' % l][j][0] - com_list_clicker_ab['%1.0f' % l][j][0])#*(z_mm)
+                   '''
+                     dev_o = math.sqrt(abs(dev_x_o)**2 + abs(dev_y_o)**2 + abs(dev_z_o)**2)
+                     dev_list_o['%1.0f' % k].append(dev_o)
+                     dev_list_x_o['%1.0f' % k].append(dev_x_o)
+                     dev_list_y_o['%1.0f' % k].append(dev_y_o)
+                     dev_list_z_o['%1.0f' % k].append(dev_z_o)
+                   '''
+                   dev_x_a = (com_list_clicker_2['%1.0f' % l][j][2] - com_list_clicker_ab['%1.0f' % l][j][2])#*(x_mm)
+                   dev_y_a = (com_list_clicker_2['%1.0f' % l][j][1] - com_list_clicker_ab['%1.0f' % l][j][1])#*(y_mm)
+                   dev_z_a = (com_list_clicker_2['%1.0f' % l][j][0] - com_list_clicker_ab['%1.0f' % l][j][0])#*(z_mm)
+                     
+                   '''
+                     dev_a = math.sqrt(abs(dev_x_a)**2 + abs(dev_y_a)**2 + abs(dev_z_a)**2)
+                     dev_list_a['%1.0f' % k].append(dev_a)
+                     dev_list_x_a['%1.0f' % k].append(dev_x_a)
+                     dev_list_y_a['%1.0f' % k].append(dev_y_a)
+                     dev_list_z_a['%1.0f' % k].append(dev_z_a)
+                    '''
+                   if n == 'Aaron':
+                       Deviations[j][l]['Aaron']['x'], Deviations[j][l]['Aaron']['y'], Deviations[j][l]['Aaron']['z'] = dev_x_a, dev_y_a, dev_z_a
+                   elif n == 'Oli':
+                       Deviations[j][l]['Oli']['x'], Deviations[j][l]['Oli']['y'], Deviations[j][l]['Oli']['z'] = dev_x_o, dev_y_o, dev_z_o
+                        
              
 
 Deviations_df = pd.DataFrame(data=Deviations)
