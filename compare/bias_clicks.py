@@ -165,16 +165,16 @@ Deviations = {}
 for p in pat_list:
     # each patient has dictioanary
     Deviations[p] = {}
-    z_mm, y_mm, x_mm = pixel_to_mm(pat_list[p])
+    #z_mm, y_mm, x_mm = pixel_to_mm(pat_list[p])
     for l in landmarks:
         # dictionary for each clicker
         Deviations[p][l] = {}
         for n in clickers: 
            Deviations[p][l][n] = {'x':0, 'y':0, 'z':0}
            
-           dev_x_o = (com_list_clicker_1['%1.0f' % l][p][2] - com_list_clicker_ab['%1.0f' % l][p][2])*(x_mm)
-           dev_y_o = (com_list_clicker_1['%1.0f' % l][p][1] - com_list_clicker_ab['%1.0f' % l][p][1])*(y_mm)
-           dev_z_o = (com_list_clicker_1['%1.0f' % l][p][0] - com_list_clicker_ab['%1.0f' % l][p][0])*(z_mm)
+           dev_x_o = (com_list_clicker_1['%1.0f' % l][p][2] - com_list_clicker_ab['%1.0f' % l][p][2])#*(x_mm)
+           dev_y_o = (com_list_clicker_1['%1.0f' % l][p][1] - com_list_clicker_ab['%1.0f' % l][p][1])#*(y_mm)
+           dev_z_o = (com_list_clicker_1['%1.0f' % l][p][0] - com_list_clicker_ab['%1.0f' % l][p][0])#*(z_mm)
            '''
              dev_o = math.sqrt(abs(dev_x_o)**2 + abs(dev_y_o)**2 + abs(dev_z_o)**2)
              dev_list_o['%1.0f' % k].append(dev_o)
@@ -182,9 +182,9 @@ for p in pat_list:
              dev_list_y_o['%1.0f' % k].append(dev_y_o)
              dev_list_z_o['%1.0f' % k].append(dev_z_o)
            '''
-           dev_x_a = (com_list_clicker_1['%1.0f' % l][p][2] - com_list_clicker_ab['%1.0f' % l][p][2])*(x_mm)
-           dev_y_a = (com_list_clicker_1['%1.0f' % l][p][1] - com_list_clicker_ab['%1.0f' % l][p][1])*(y_mm)
-           dev_z_a = (com_list_clicker_1['%1.0f' % l][p][0] - com_list_clicker_ab['%1.0f' % l][p][0])*(z_mm)
+           dev_x_a = (com_list_clicker_1['%1.0f' % l][p][2] - com_list_clicker_ab['%1.0f' % l][p][2])#*(x_mm)
+           dev_y_a = (com_list_clicker_1['%1.0f' % l][p][1] - com_list_clicker_ab['%1.0f' % l][p][1])#*(y_mm)
+           dev_z_a = (com_list_clicker_1['%1.0f' % l][p][0] - com_list_clicker_ab['%1.0f' % l][p][0])#*(z_mm)
              
            '''
              dev_a = math.sqrt(abs(dev_x_a)**2 + abs(dev_y_a)**2 + abs(dev_z_a)**2)
