@@ -124,7 +124,6 @@ for k in landmarks:
     mean_list['%1.0f' % k] = []
     
 
-plot_histograms = question('histograms(y) / or not (n)')
 calc_deviations = question('calc deviations(y) / or not (n)')
 
 # for common structures add mean to array for both clicker_1 and clicker_2
@@ -180,119 +179,19 @@ if calc_deviations == True:
             dev_list_x_a['%1.0f' % k].append(dev_x_a)
             dev_list_y_a['%1.0f' % k].append(dev_y_a)
             dev_list_z_a['%1.0f' % k].append(dev_z_a)
-            '''
-            if dev > limit:
-                dev_upper_limit_list['%1.0f' % k].append(pat_list[j])
-                print('image: %s' % pat_list[j])
-                print('landmark: %1.0f' % k)
-                print(dev)
-                click_outlier_counter += 1
-                print('------------')
-            '''   
-    '''
-    # average deviation per landmark
-    for k in landmarks:
-        a = dev_list_o['%1.0f' % k]
-        b = dev_list_a['%1.0f' % k]
-        mean_o = np.mean(a)
-        mean_dev['%1.0f' % k].append(mean_o)
-        mean_dev_std['%1.0f' % k].append(np.std(a)*(len(pat_list)**-0.5))
-        # for x y and z
-        x_o = dev_list_x_o['%1.0f' % k]
-        y_o = dev_list_y_o['%1.0f' % k]
-        z_o = dev_list_z_o['%1.0f' % k]
-       
-        x_a = dev_list_x_a['%1.0f' % k]
-        y_a = dev_list_y_a['%1.0f' % k]
-        z_a = dev_list_z_a['%1.0f' % k]
-        #mean_x = np.mean(x)
-        #mean_y = np.mean(y)
-        #mean_z = np.mean(z)
-        #mean_dev_x['%1.0f' % k].append(mean_x)
-        #mean_dev_y['%1.0f' % k].append(mean_y)
-        #mean_dev_z['%1.0f' % k].append(mean_z)
-       
-        #if plot_histograms == True:
-      
-            # plot and save histogram
-           # histogram(a, 'total', k)
-           # histogram(x, 'x', k)
-           # histogram(y, 'y', k)
-           # histogram(z, 'z', k)
-      '''     
-'''
-        latex_line_landmark = ['landmark: ' + str(k)]
-        latex_line_temp_mean = [' & ' + str(round(mean,1))] 
-        latex_line_mean = latex_line_mean + latex_line_temp_mean    
-        
-        latex_line_temp_mean_std = [' & ' + str(round(mean_std,1))] 
-        latex_line_mean_std = latex_line_mean_std + latex_line_temp_mean_std    
-        
-        latex_line_temp_x = [' & ' + str(round(mean_x,1))] 
-        latex_line_x = latex_line_x + latex_line_temp_x    
-        
-        latex_line_temp_y = [' & ' + str(round(mean_y,1))] 
-        latex_line_y = latex_line_y + latex_line_temp_y   
-        
-        latex_line_temp_z = [' & ' + str(round(mean_z,1))] 
-        latex_line_z = latex_line_z + latex_line_temp_z    
-        # write in excel format for easy to calc folds 
-        
-        txt_file.writelines(latex_line_landmark)
-        txt_file.writelines(['\n'])
-        txt_file.writelines(latex_line_mean)
-        txt_file.writelines(['\n'])
-        txt_file.writelines(latex_line_mean_std)
-        txt_file.writelines(['\n'])
-        txt_file.writelines(latex_line_x)
-        txt_file.writelines(['\n'])
-        txt_file.writelines(latex_line_y)
-        txt_file.writelines(['\n'])
-        txt_file.writelines(latex_line_z)
-        txt_file.writelines(['\n'])
-        txt_file.writelines(['\n'])
-             
-    txt_file.close()        
-    
-
-# for each landmark, list of the images with deviations greater than ceratin distance
-print('for each landmark, list of the images with deviations greater than %1.0f' % limit)
-print(dev_upper_limit_list)
-print('\n')
-
-print('percentage of clicks which are outliers')
-print(100*click_outlier_counter/(len(pat_list)*len(landmarks)))
-
-       
-# mean deviation per landmark
-print('mean deviation per landmark')
-print(mean_dev)
-print('\n')
-
-# std of mean deviation per landmark
-print('std of mean deviation per landmark')
-print(mean_dev_std)
-print('\n')
-
-print('x mean dev')
-print(mean_dev_x)
-print('\n')
-
-print('y mean dev')
-print(mean_dev_y)
-print('\n')
-
-print('z mean dev')
-print(mean_dev_z)
-print('\n')
             
-print(' deviations are clicker_1 - clicker_2')
-
-        
-'''  
       
-print('x dev: ' + str(dev_list_a))
+print('x dev: ' + str(dev_list_x_a))
 print('-------------------------')
-print('y dev: ' + str(y_o))
+print('y dev: ' + str(dev_list_y_a))
 print('--------------------------')
-print('z dev: ' + str(z_o))
+print('z dev: ' + str(dev_list_z_a))
+
+oli_devs_axis = {}
+aaron_devs_axis = {}
+
+oli_devs_axis.update(dev_list_x_o)
+oli_devs_axis.update(dev_list_y_o)
+oli_devs_axis.update(dev_list_z_o)
+print(oli_devs_axis)
+
