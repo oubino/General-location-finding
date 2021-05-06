@@ -22,6 +22,8 @@ class load_model:
         for k in S.landmarks_load:
           PATH_sigma_load = os.path.join(paths.epoch_load, "sigma_%1.0f.pt" % k)
           S.sigmas[k] = torch.load(PATH_sigma_load)['sigma'] # what value to initialise sigma
+          print('debug')
+          print(S.sigmas[k])
         
         # load in model/optimizer/scaler
         if S.UNET_model_user == True:
