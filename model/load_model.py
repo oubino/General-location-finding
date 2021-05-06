@@ -61,17 +61,25 @@ class load_model:
         print('-----------------')
         summary(self.model_load, input_size=(1, S.in_y, S.in_x, S.in_z), batch_size = S.batch_size)
         
-        
+import numpy as np
+def get_number_of_learnable_parameters(model):
+    model_parameters = filter(lambda p: p.requires_grad, model.parameters())
+    return sum([np.prod(p.size()) for p in model_parameters])
+
+
     def freeze_final_layers(self):
         for name, param in self.model_load.named_parameters():
-            if (name != 'out.conv.bias' and name != 'out.conv.weight'\
-                and name != 'dec4.conv.double_conv.0.bias' and name != 'dec4.conv.double_conv.0.weight'\
-                    and name != 'dec4.conv.double_conv.1.bias' and name != 'dec4.conv.double_conv.1.weight' \
-                        and name != 'dec4.conv.double_conv.3.bias' and name != 'dec4.conv.double_conv.3.weight' \
-                            and name != 'dec4.conv.double_conv.4.bias' and name != 'dec4.conv.double_conv.4.weight'):
+            if (name != 'out.conv.bias' and name != 'out.conv.weight'):#\
+                #and name != 'dec4.conv.double_conv.0.bias' and name != 'dec4.conv.double_conv.0.weight'\
+                #    and name != 'dec4.conv.double_conv.1.bias' and name != 'dec4.conv.double_conv.1.weight' \
+                #        and name != 'dec4.conv.double_conv.3.bias' and name != 'dec4.conv.double_conv.3.weight' \
+                #            and name != 'dec4.conv.double_conv.4.bias' and name != 'dec4.conv.double_conv.4.weight'):
                 param.requires_grad = False
             if param.requires_grad == True:
                 print('grad', name)
+        print('number of learnable parameters')
+        get_number_of_learnable_parameters(self.model_load)
+
         
     def transfer_learn_unet_final_layer(self, class_number, features):
         # model becomes new model with different last layer
