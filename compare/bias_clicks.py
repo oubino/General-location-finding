@@ -84,7 +84,7 @@ landmarks = [1,2,3,4,5,6,7,8,9,10]
 
 # limit
 limit = 20
-print(file_clicker_Ab)
+#print(file_clicker_Ab)
 # common patients
 pat_list = [x for x in patients_clicker_1 if x in patients_clicker_2]
 
@@ -190,8 +190,8 @@ if calc_deviations == True:
                 dev_list_x_a['%1.0f' % k].append(dev_x_a)
                 dev_list_y_a['%1.0f' % k].append(dev_y_a)
                 dev_list_z_a['%1.0f' % k].append(dev_z_a)
+                oli_devs[p][k]['x'].append(dev_x_o), oli_devs[p][k]['y'].append(dev_y_o), oli_devs[p][k]['z'].append(dev_z_o) 
             
-            oli_devs[p][k]['x'].append(dev_x_o), oli_devs[p][k]['y'].append(dev_y_o), oli_devs[p][k]['z'].append(dev_z_o) 
             
      
 
