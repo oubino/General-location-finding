@@ -69,9 +69,7 @@ for k in dict_1.keys():
         p2p[l].append(p2p_mod)
     
 for l in landmarks:
-    print(np.mean(x_dev[l]))
-    print(np.mean(y_dev[l]))
-    print(np.mean(z_dev[l]))
+    print('landmark', l)
     print(np.mean(p2p[l]))
     
 
