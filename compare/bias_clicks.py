@@ -159,59 +159,57 @@ csv_line = []
 name_of_file = os.path.join(hist_root, clicker_1 +"_" + clicker_2 + "_compare.txt")
 txt_file = open(name_of_file, "a")    
 click_outlier_counter = 0
+clickers = ['Aaron', 'Oli']
 
-
-if calc_deviations == True:
-    oli_devs ={}
-    aaron_devs = {}
-    for p in pat_list:
-        oli_devs[p] = {} 
-        aaron_devs[p] = {} # each patient has dictioanary
-        for k in landmarks:
-   #         oli_x, oli_y, oli_z = dev_list_x_o[k], dev_list_y_o[k], dev_z_o[k]  
-            oli_devs[p][k] = {'x':0, 'y':0, 'z':0}
-            aaron_devs[p][k] = {'x':0, 'y':0, 'z':0}# calculate deviation of arrays etc.
-            for j in range(len(pat_list)):
-                z_mm, y_mm, x_mm = pixel_to_mm(pat_list[j])
-                dev_x_o = (com_list_clicker_1['%1.0f' % k][j][2] - com_list_clicker_ab['%1.0f' % k][j][2])*(x_mm)
-                dev_y_o = (com_list_clicker_1['%1.0f' % k][j][1] - com_list_clicker_ab['%1.0f' % k][j][1])*(y_mm)
-                dev_z_o = (com_list_clicker_1['%1.0f' % k][j][0] - com_list_clicker_ab['%1.0f' % k][j][0])*(z_mm)
-                dev_o = math.sqrt(abs(dev_x_o)**2 + abs(dev_y_o)**2 + abs(dev_z_o)**2)
-                dev_list_o['%1.0f' % k].append(dev_o)
-                dev_list_x_o['%1.0f' % k].append(dev_x_o)
-                dev_list_y_o['%1.0f' % k].append(dev_y_o)
-                dev_list_z_o['%1.0f' % k].append(dev_z_o)
-                
-                dev_x_a = (com_list_clicker_1['%1.0f' % k][j][2] - com_list_clicker_ab['%1.0f' % k][j][2])*(x_mm)
-                dev_y_a = (com_list_clicker_1['%1.0f' % k][j][1] - com_list_clicker_ab['%1.0f' % k][j][1])*(y_mm)
-                dev_z_a = (com_list_clicker_1['%1.0f' % k][j][0] - com_list_clicker_ab['%1.0f' % k][j][0])*(z_mm)
-                dev_a = math.sqrt(abs(dev_x_a)**2 + abs(dev_y_a)**2 + abs(dev_z_a)**2)
-                dev_list_a['%1.0f' % k].append(dev_a)
-                dev_list_x_a['%1.0f' % k].append(dev_x_a)
-                dev_list_y_a['%1.0f' % k].append(dev_y_a)
-                dev_list_z_a['%1.0f' % k].append(dev_z_a)
-                
-                
-                '''
-                oli_devs[p][k]['x'].append(dev_x_o)
-                oli_devs[p][k]['y'].append(dev_y_o)
-                oli_devs[p][k]['z'].append(dev_z_o) 
+Deviations = {}
+for p in pat_list:
+    # each patient has dictioanary
+    Deviations[p] = {}
+    for l in landmarks:
+        # dictionary for each clicker
+        Deviations[n][l] = {}
+        for n in clickers: 
+           Deviations[n][p][l] = {'x':0, 'y':0, 'z':0}
+           z_mm, y_mm, x_mm = pixel_to_mm(pat_list[p])
+           dev_x_o = (com_list_clicker_1['%1.0f' % l][p][2] - com_list_clicker_ab['%1.0f' % l][p][2])*(x_mm)
+           dev_y_o = (com_list_clicker_1['%1.0f' % l][p][1] - com_list_clicker_ab['%1.0f' % l][p][1])*(y_mm)
+           dev_z_o = (com_list_clicker_1['%1.0f' % l][p][0] - com_list_clicker_ab['%1.0f' % l][p][0])*(z_mm)
+           '''
+             dev_o = math.sqrt(abs(dev_x_o)**2 + abs(dev_y_o)**2 + abs(dev_z_o)**2)
+             dev_list_o['%1.0f' % k].append(dev_o)
+             dev_list_x_o['%1.0f' % k].append(dev_x_o)
+             dev_list_y_o['%1.0f' % k].append(dev_y_o)
+             dev_list_z_o['%1.0f' % k].append(dev_z_o)
+           '''
+           dev_x_a = (com_list_clicker_1['%1.0f' % l][p][2] - com_list_clicker_ab['%1.0f' % l][p][2])*(x_mm)
+           dev_y_a = (com_list_clicker_1['%1.0f' % l][p][1] - com_list_clicker_ab['%1.0f' % l][p][1])*(y_mm)
+           dev_z_a = (com_list_clicker_1['%1.0f' % l][p][0] - com_list_clicker_ab['%1.0f' % l][p][0])*(z_mm)
              
-                '''
-        print(dev_list_x_o)
-        print('---------------------------------------------------')
-     
+           '''
+             dev_a = math.sqrt(abs(dev_x_a)**2 + abs(dev_y_a)**2 + abs(dev_z_a)**2)
+             dev_list_a['%1.0f' % k].append(dev_a)
+             dev_list_x_a['%1.0f' % k].append(dev_x_a)
+             dev_list_y_a['%1.0f' % k].append(dev_y_a)
+             dev_list_z_a['%1.0f' % k].append(dev_z_a)
+            '''
+           if n == 'Aaron':
+               Deviations[p][l]['Aaron']['x'], Deviations[p][l]['Aaron']['y'], Deviations[p][l]['Aaron']['z'] = dev_x_a, dev_y_a, dev_z_a
+           elif n == 'Oli':
+               Deviations[p][l]['Oli']['x'], Deviations[p][l]['Oli']['y'], Deviations[p][l]['Oli']['z'] = dev_x_o, dev_y_o, dev_z_o
+                
+             
+
+Deviations_df = pd.DataFrame(data=Deviations)
+print(Deviations_df)
 
         
         
-#aaron_devs_axis = {'patient': {['x':[], 'y':[], 'z':[]}}
-#aron_devs_axis['x'] = dev_list_x_a
-#aaron_devs_axis['y'] = dev_list_y_a
-#aaron_devs_axis['z'] = dev_list_z_a
+        
 
+'''
 print(oli_devs)
 print(aaron_devs)
-'''
+
 # plot
 fig, ax = plt.subplots()
 for i in range(len(dev_list_x_a)):
