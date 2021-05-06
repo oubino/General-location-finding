@@ -64,8 +64,10 @@ class load_model:
         
     def freeze_final_layers(self):
         for name, param in self.model_load.named_parameters():
-            if (name != 'out.conv.bias' and name != 'out.conv.weight'):
+            if (name != 'out.conv.bias' and name != 'out.conv.weight' and name != 'dec4.conv.bias' and name != 'dec4.conv.weight'):
                 param.requires_grad = False
+            if param.requires_grad == True:
+                print('grad', name)
         
     def transfer_learn_unet_final_layer(self, class_number, features):
         # model becomes new model with different last layer
