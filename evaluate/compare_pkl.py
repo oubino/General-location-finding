@@ -42,12 +42,12 @@ landmarks = [1,2,3,4,5,6,7,8,9,10]
 x_dev = {}
 y_dev = {}
 z_dev = {}
+p2p = {}
 
 for l in landmarks:
     x_dev[l] = []
     y_dev[l] = []
-    z_dev[l] = []
-    
+    z_dev[l] = []    
 
 for k in dict_1.keys():
     for l in landmarks:
@@ -66,6 +66,8 @@ for l in landmarks:
     print(np.mean(x_dev[l]))
     print(np.mean(y_dev[l]))
     print(np.mean(z_dev[l]))
-
+    p2p[l] = (x_dev[l]**2+y_dev[l]**2+z_dev[l]**2)**0.5
+    
+print(p2p)
 
 
