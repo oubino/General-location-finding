@@ -32,11 +32,11 @@ for l in landmarks:
 for k in dict_1.keys():
     for l in landmarks:
         x = dict_1[k][l]['x'] - dict_2[k][l]['x']
-        x_dev[l].append(x.numpy())
+        x_dev[l].append(x.cpu().numpy())
         y = dict_1[k][l]['y'] - dict_2[k][l]['y']
-        y_dev[l].append(y.numpy())
+        y_dev[l].append(y.cpu().numpy())
         z = dict_1[k][l]['z'] - dict_2[k][l]['z']
-        z_dev[l].append(z.numpy())
+        z_dev[l].append(z.cpu().numpy())
     
 for l in landmarks:
     print(np.mean(x_dev[l]))
