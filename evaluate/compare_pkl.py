@@ -54,16 +54,17 @@ for k in dict_1.keys():
         x_mm, y_mm, z_mm = pat_to_mm(k)
         x = dict_1[k][l]['x'] - dict_2[k][l]['x']
         x = x.cpu().numpy()
-        x = x*x_mm
-        x_dev[l].append(x)
+        print(x,x_mm)
+        x_mod = x * x_mm
+        x_dev[l].append(x_mod)
         y = dict_1[k][l]['y'] - dict_2[k][l]['y']
         y = y.cpu().numpy()
-        y = y*y_mm
-        y_dev[l].append(y)
+        y_mod = y * y_mm
+        y_dev[l].append(y_mod)
         z = dict_1[k][l]['z'] - dict_2[k][l]['z']
         z = z.cpu().numpy()
-        z = z*z_mm
-        z_dev[l].append(z)
+        z_mod = z * z_mm
+        z_dev[l].append(z_mod)
     
 for l in landmarks:
     print(np.mean(x_dev[l]))
