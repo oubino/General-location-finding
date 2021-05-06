@@ -58,17 +58,22 @@ def load_obj(root, name):
 # paths
 root = r'/home/olive/data/Facial_asymmetry_test_sets'
 
-clicker_1 = input('Clicker_1, (e.g. Oli_test_set): ') 
-clicker_2 = input('Clicker_2, (e.g. Aaron_test_set): ') 
+clicker_1 = 'Oli_test_set'
+clicker_2 = 'Aaron_test_set'
+clicker_ab = 'Abby_test_set'
+
 
 hist_root = r'/home/rankinaaron98/data/Compare_aaron/Histograms_reclick__oli_aaron_testsets/'
 
 # load in pickle file
 file_clicker_1 = load_obj(root, 'coords_' + clicker_1)
 file_clicker_2 = load_obj(root, 'coords_' + clicker_2)
+file_clicker_Ab = load_obj(root, 'coords' + clicker_ab)
+
 
 patients_clicker_1 = list(file_clicker_1.keys())
 patients_clicker_2 = list(file_clicker_2.keys())
+patients_clicker_ab = list(file_clicker_Ab.keys())
 
 # landmarks
 landmarks = [1,2,3,4,5,6,7,8,9,10]
@@ -81,10 +86,15 @@ pat_list = [x for x in patients_clicker_1 if x in patients_clicker_2]
 
 com_list_clicker_1 = {}
 com_list_clicker_2 = {}
-dev_list = {}
-dev_list_x = {}
-dev_list_y = {}
-dev_list_z = {}
+com_list_clicker_ab = {}
+dev_list_o = {}
+dev_list_a = {}
+dev_list_x_o = {}
+dev_list_x_a = {}
+dev_list_y_o = {}
+dev_list_y_a = {}
+dev_list_z_o = {}
+dev_list_z_a = {}
 dev_upper_limit_list = {}
 mean_dev = {}
 mean_dev_x = {}
@@ -96,10 +106,15 @@ mean_list = {}
 for k in landmarks:
     com_list_clicker_1['%1.0f' % k] = []
     com_list_clicker_2['%1.0f' % k] = []
-    dev_list['%1.0f' % k] = []
-    dev_list_x['%1.0f' % k] = []
-    dev_list_y['%1.0f' % k] = []
-    dev_list_z['%1.0f' % k] = []
+    com_list_clicker_ab['%1.0%' % k] = []
+    dev_list_o['%1.0f' % k] = []
+    dev_list_x_o['%1.0f' % k] = []
+    dev_list_y_o['%1.0f' % k] = []
+    dev_list_z_o['%1.0f' % k] = []
+    dev_list_a['%1.0f' % k] = []
+    dev_list_x_a['%1.0f' % k] = []
+    dev_list_y_a['%1.0f' % k] = []
+    dev_list_z_a['%1.0f' % k] = []
     dev_upper_limit_list['%1.0f' % k] = []
     mean_dev['%1.0f' % k] = []
     mean_dev_x['%1.0f' % k] = []
@@ -117,7 +132,7 @@ for p in pat_list:
     for k in landmarks:
         com_list_clicker_1['%1.0f' % k].append([file_clicker_1[p][k]['z'], file_clicker_1[p][k]['y'], file_clicker_1[p][k]['x']])
         com_list_clicker_2['%1.0f' % k].append([file_clicker_2[p][k]['z'], file_clicker_2[p][k]['y'], file_clicker_2[p][k]['x']])
-        
+        com_list_clicker_ab['%1.0f' % k].append([file_clicker_Ab[p][k]['z'], file_clicker_Ab[p][k]['y'], file_clicker_Ab[p][k]['x']])
 # calculate mean of clicker_1 and clicker_2 from arrays
 for j in range(len(pat_list)):
     for k in landmarks:
@@ -131,9 +146,12 @@ for j in range(len(pat_list)):
 
 latex_line_mean = []
 latex_line_mean_std = []
-latex_line_x = []
-latex_line_y = []
-latex_line_z = []
+latex_line_x_o = []
+latex_line_y_o = []
+latex_line_z_o = []
+latex_line_x_o = []
+latex_line_y_o = []
+latex_line_z_o = []
 csv_line = []
 name_of_file = os.path.join(hist_root, clicker_1 +"_" + clicker_2 + "_compare.txt")
 txt_file = open(name_of_file, "a")    
@@ -145,14 +163,24 @@ if calc_deviations == True:
     for j in range(len(pat_list)):
         for k in landmarks:
             z_mm, y_mm, x_mm = pixel_to_mm(pat_list[j])
-            dev_x = (com_list_clicker_1['%1.0f' % k][j][2] - com_list_clicker_2['%1.0f' % k][j][2])*(x_mm)
-            dev_y = (com_list_clicker_1['%1.0f' % k][j][1] - com_list_clicker_2['%1.0f' % k][j][1])*(y_mm)
-            dev_z = (com_list_clicker_1['%1.0f' % k][j][0] - com_list_clicker_2['%1.0f' % k][j][0])*(z_mm)
-            dev = math.sqrt(abs(dev_x)**2 + abs(dev_y)**2 + abs(dev_z)**2)
-            dev_list['%1.0f' % k].append(dev)
-            dev_list_x['%1.0f' % k].append(dev_x)
-            dev_list_y['%1.0f' % k].append(dev_y)
-            dev_list_z['%1.0f' % k].append(dev_z)
+            dev_x_o = (com_list_clicker_1['%1.0f' % k][j][2] - com_list_clicker_ab['%1.0f' % k][j][2])*(x_mm)
+            dev_y_o = (com_list_clicker_1['%1.0f' % k][j][1] - com_list_clicker_ab['%1.0f' % k][j][1])*(y_mm)
+            dev_z_o = (com_list_clicker_1['%1.0f' % k][j][0] - com_list_clicker_ab['%1.0f' % k][j][0])*(z_mm)
+            dev_o = math.sqrt(abs(dev_x_o)**2 + abs(dev_y_o)**2 + abs(dev_z_o)**2)
+            dev_list_o['%1.0f' % k].append(dev_o)
+            dev_list_x_o['%1.0f' % k].append(dev_x_o)
+            dev_list_y_o['%1.0f' % k].append(dev_y_o)
+            dev_list_z_o['%1.0f' % k].append(dev_z_o)
+            
+            dev_x_a = (com_list_clicker_1['%1.0f' % k][j][2] - com_list_clicker_ab['%1.0f' % k][j][2])*(x_mm)
+            dev_y_a = (com_list_clicker_1['%1.0f' % k][j][1] - com_list_clicker_ab['%1.0f' % k][j][1])*(y_mm)
+            dev_z_a = (com_list_clicker_1['%1.0f' % k][j][0] - com_list_clicker_ab['%1.0f' % k][j][0])*(z_mm)
+            dev_a = math.sqrt(abs(dev_x_a)**2 + abs(dev_y_a)**2 + abs(dev_z_a)**2)
+            dev_list_a['%1.0f' % k].append(dev_a)
+            dev_list_x_a['%1.0f' % k].append(dev_x_a)
+            dev_list_y_a['%1.0f' % k].append(dev_y_a)
+            dev_list_z_a['%1.0f' % k].append(dev_z_a)
+            '''
             if dev > limit:
                 dev_upper_limit_list['%1.0f' % k].append(pat_list[j])
                 print('image: %s' % pat_list[j])
@@ -160,37 +188,39 @@ if calc_deviations == True:
                 print(dev)
                 click_outlier_counter += 1
                 print('------------')
-                
+            '''   
     
     # average deviation per landmark
     for k in landmarks:
-        a = dev_list['%1.0f' % k]
-        mean = np.mean(a)
-        mean_dev['%1.0f' % k].append(mean)
+        a = dev_list_o['%1.0f' % k]
+        b = dev_list_a['%1.0f' % k]
+        mean_o = np.mean(a)
+        mean_dev['%1.0f' % k].append(mean_o)
         mean_dev_std['%1.0f' % k].append(np.std(a)*(len(pat_list)**-0.5))
         # for x y and z
-        x = dev_list_x['%1.0f' % k]
-        y = dev_list_y['%1.0f' % k]
-        z = dev_list_z['%1.0f' % k]
+        x_o = dev_list_x_o['%1.0f' % k]
+        y_o = dev_list_y_o['%1.0f' % k]
+        z_o = dev_list_z_o['%1.0f' % k]
+       
+        x_a = dev_list_x_a['%1.0f' % k]
+        y_a = dev_list_y_a['%1.0f' % k]
+        z_a = dev_list_z_a['%1.0f' % k]
         #mean_x = np.mean(x)
         #mean_y = np.mean(y)
         #mean_z = np.mean(z)
         #mean_dev_x['%1.0f' % k].append(mean_x)
         #mean_dev_y['%1.0f' % k].append(mean_y)
         #mean_dev_z['%1.0f' % k].append(mean_z)
-        print('x dev: ' + str(x))
-        print('-------------------------')
-        print('y dev: ' + str(y))
-        print('--------------------------')
-        print('z dev: ' + str(z))
-        if plot_histograms == True:
+       
+        #if plot_histograms == True:
       
             # plot and save histogram
-            histogram(a, 'total', k)
-            histogram(x, 'x', k)
-            histogram(y, 'y', k)
-            histogram(z, 'z', k)
-        '''
+           # histogram(a, 'total', k)
+           # histogram(x, 'x', k)
+           # histogram(y, 'y', k)
+           # histogram(z, 'z', k)
+           
+'''
         latex_line_landmark = ['landmark: ' + str(k)]
         latex_line_temp_mean = [' & ' + str(round(mean,1))] 
         latex_line_mean = latex_line_mean + latex_line_temp_mean    
@@ -207,7 +237,7 @@ if calc_deviations == True:
         latex_line_temp_z = [' & ' + str(round(mean_z,1))] 
         latex_line_z = latex_line_z + latex_line_temp_z    
         # write in excel format for easy to calc folds 
-    
+        
         txt_file.writelines(latex_line_landmark)
         txt_file.writelines(['\n'])
         txt_file.writelines(latex_line_mean)
@@ -221,7 +251,8 @@ if calc_deviations == True:
         txt_file.writelines(latex_line_z)
         txt_file.writelines(['\n'])
         txt_file.writelines(['\n'])
-txt_file.close()        
+             
+    txt_file.close()        
     
 
 # for each landmark, list of the images with deviations greater than ceratin distance
@@ -256,4 +287,11 @@ print(mean_dev_z)
 print('\n')
             
 print(' deviations are clicker_1 - clicker_2')
-'''
+
+        
+'''        
+print('x dev: ' + str(x_o))
+print('-------------------------')
+print('y dev: ' + str(y_o))
+print('--------------------------')
+print('z dev: ' + str(z_o))
