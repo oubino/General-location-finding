@@ -180,20 +180,18 @@ if calc_deviations == True:
             dev_list_y_a['%1.0f' % k].append(dev_y_a)
             dev_list_z_a['%1.0f' % k].append(dev_z_a)
             
-      
-#print('x dev: ' + str(dev_list_x_a))
-#print('-------------------------')
-#print('y dev: ' + str(dev_list_y_a))
-#print('--------------------------')
-#print('z dev: ' + str(dev_list_z_a))
-
+     
 oli_devs_axis = {'x':[], 'y':[], 'z':[]}
 oli_devs_axis['x'] = dev_list_x_o
-aaron_devs_axis = {}
+oli_devs_axis['y'] = dev_list_y_o
+oli_devs_axis['z'] = dev_list_z_o
 
-#oli_devs_axis.update(dev_list_x_o)
-#oli_devs_axis.update(dev_list_y_o)
-#oli_devs_axis.update(dev_list_z_o)
-#oli_devs_axis = dict(chain.from_iterable(map(oli_devs_axis, dev_list_x_o, dev_list_y_o, dev_list_z_o)))
+
+aaron_devs_axis = {}
+aaron_devs_axis['x'] = dev_list_x_a
+aaron_devs_axis['y'] = dev_list_y_a
+aaron_devs_axis['z'] = dev_list_z_a
+
 print(oli_devs_axis)
+print(aaron_devs_axis)
 
