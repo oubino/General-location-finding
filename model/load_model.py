@@ -78,7 +78,7 @@ class load_model:
             if param.requires_grad == True:
                 print('grad', name)
         print('number of learnable parameters')
-        get_number_of_learnable_parameters(self.model_load)
+        print(get_number_of_learnable_parameters(self.model_load))
 
         
     def transfer_learn_unet_final_layer(self, class_number, features):
