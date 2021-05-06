@@ -191,7 +191,8 @@ for p in pat_list:
     oli_devs[p] = {} 
     aaron_devs[p] = {} # each patient has dictioanary
     for k in landmarks:
-       oli_devs[p][k] = {'x': dev_list_x_o[k], 'y':dev_list_y_o[k], 'z':dev_list_z_o[k]}
+       oli_x, oli_y, oli_z = dev_list_x_o[k], dev_list_y_o[k], dev_z_o[k]  
+       oli_devs[p][k] = {'x': oli_x, 'y':oli_y, 'z':oli_z}
        aaron_devs[p][k] = {'x':0, 'y':0, 'z':0}
         
         
