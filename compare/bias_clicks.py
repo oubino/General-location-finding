@@ -167,9 +167,9 @@ for p in pat_list:
     Deviations[p] = {}
     for l in landmarks:
         # dictionary for each clicker
-        Deviations[n][l] = {}
+        Deviations[p][l] = {}
         for n in clickers: 
-           Deviations[n][p][l] = {'x':0, 'y':0, 'z':0}
+           Deviations[p][l][n] = {'x':0, 'y':0, 'z':0}
            z_mm, y_mm, x_mm = pixel_to_mm(pat_list[p])
            dev_x_o = (com_list_clicker_1['%1.0f' % l][p][2] - com_list_clicker_ab['%1.0f' % l][p][2])*(x_mm)
            dev_y_o = (com_list_clicker_1['%1.0f' % l][p][1] - com_list_clicker_ab['%1.0f' % l][p][1])*(y_mm)
