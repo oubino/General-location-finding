@@ -60,8 +60,9 @@ class load_model:
             self.optimizer_load.add_param_group({'params': S.sigmas[k]}) 
             
         # change lr
-        self.optimizer_load.__setattr__('lr', 1e-4)
-        self.optimizer_load.__setattr__('weight_decay', 0.1)
+        for g in self.optimizer_load.param_groups:
+            g['lr'] = 1e-4
+            g['weight_decay'] = 0.1
          
         self.scheduler = lr_scheduler.StepLR(self.optimizer_load, step_size=20000, gamma=0.1)
         
