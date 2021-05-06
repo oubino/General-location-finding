@@ -193,6 +193,6 @@ aaron_devs_axis = {}
 oli_devs_axis.update(dev_list_x_o)
 oli_devs_axis.update(dev_list_y_o)
 oli_devs_axis.update(dev_list_z_o)
-oli_devs_axis = dict(chain.from_iterable(map(dict.oli_devs_axis, dev_list_x_o, dev_list_y_o, dev_list_z_o)))
+oli_devs_axis = dict(chain.from_iterable(map(oli_devs_axis, dev_list_x_o, dev_list_y_o, dev_list_z_o)))
 print(oli_devs_axis)
 
