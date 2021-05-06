@@ -53,13 +53,16 @@ for k in dict_1.keys():
     for l in landmarks:
         x_mm, y_mm, z_mm = pat_to_mm(k)
         x = dict_1[k][l]['x'] - dict_2[k][l]['x']
-        x = x.cpu().numpy()*x_mm
+        x = x.cpu().numpy()
+        x = x*x_mm
         x_dev[l].append(x)
         y = dict_1[k][l]['y'] - dict_2[k][l]['y']
-        y = y.cpu().numpy()*y_mm
+        y = y.cpu().numpy()
+        y = y*y_mm
         y_dev[l].append(y)
         z = dict_1[k][l]['z'] - dict_2[k][l]['z']
-        z = z.cpu().numpy()*z_mm
+        z = z.cpu().numpy()
+        z = z*z_mm
         z_dev[l].append(z)
     
 for l in landmarks:
