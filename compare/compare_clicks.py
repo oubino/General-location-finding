@@ -290,7 +290,7 @@ print(' deviations are clicker_1 - clicker_2')
 
         
 '''        
-print('x dev: ' + str(x_o))
+print('x dev: ' + str(dev_list_a))
 print('-------------------------')
 print('y dev: ' + str(y_o))
 print('--------------------------')
