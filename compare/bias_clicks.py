@@ -187,12 +187,13 @@ if calc_deviations == True:
 #print('--------------------------')
 #print('z dev: ' + str(dev_list_z_a))
 
-oli_devs_axis = {}
+oli_devs_axis = {'x':[], 'y':[], 'z':[]}
+oli_devs_axis['x'] = dev_list_x_o
 aaron_devs_axis = {}
 
-oli_devs_axis.update(dev_list_x_o)
-oli_devs_axis.update(dev_list_y_o)
-oli_devs_axis.update(dev_list_z_o)
-oli_devs_axis = dict(chain.from_iterable(map(oli_devs_axis, dev_list_x_o, dev_list_y_o, dev_list_z_o)))
+#oli_devs_axis.update(dev_list_x_o)
+#oli_devs_axis.update(dev_list_y_o)
+#oli_devs_axis.update(dev_list_z_o)
+#oli_devs_axis = dict(chain.from_iterable(map(oli_devs_axis, dev_list_x_o, dev_list_y_o, dev_list_z_o)))
 print(oli_devs_axis)
 
