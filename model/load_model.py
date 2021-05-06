@@ -66,6 +66,7 @@ class load_model:
         for name, param in self.model_load.named_parameters():
             if (name != 'out.conv.bias' and name != 'out.conv.weight' and name != 'dec4.conv.bias' and name != 'dec4.conv.weight'):
                 param.requires_grad = False
+                print(name)
             if param.requires_grad == True:
                 print('grad', name)
         
