@@ -135,12 +135,12 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
                     #print('\n')
                     # print 2D slice
                     #print('2D slice for landmark %1.0f' % l)
-                  print_2D_slice(l, pred_max_x, pred_max_y, pred_max_z, structure_max_x, structure_max_y, structure_max_z ,eval_path, patient[i])
+                  print_2D_slice(l, pred_max_x, pred_max_y, pred_max_z, structure_max_x, structure_max_y, structure_max_z ,eval_path, p)
                           
                   # point to point takes in original structure location!!
-                  img_landmark_point_to_point = functions.point_to_point_mm(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z, patient[i])
+                  img_landmark_point_to_point = functions.point_to_point_mm(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z, p)
                   p2p_landmarks[l] = np.append(p2p_landmarks[l],img_landmark_point_to_point.cpu())
-                  x_p2p, x_p2p_mm, y_p2p, y_p2p_mm, z_p2p, z_p2p_mm = functions.axis_p2p_err(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z, patient[i])
+                  x_p2p, x_p2p_mm, y_p2p, y_p2p_mm, z_p2p, z_p2p_mm = functions.axis_p2p_err(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z, p)
                   x_axis_err[l] = np.append(x_axis_err[l], x_p2p.cpu())
                   x_axis_err_mm[l] = np.append(x_axis_err_mm[l], x_p2p_mm.cpu())
                   y_axis_err[l] = np.append(y_axis_err[l], y_p2p.cpu())
