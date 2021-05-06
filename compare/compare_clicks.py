@@ -102,7 +102,7 @@ mean_dev_y = {}
 mean_dev_z = {}
 mean_dev_std = {}
 mean_list = {}
-
+print(patients_clicker_ab)
 for k in landmarks:
     com_list_clicker_1['%1.0f' % k] = []
     com_list_clicker_2['%1.0f' % k] = []
