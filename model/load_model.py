@@ -42,7 +42,7 @@ class load_model:
         self.optimizer_load = optim.Adam([
                         {'params': self.model_load.parameters()}
                        # {'params': S.sigmas[3]} # not general
-                    ], lr=1e-4, weight_decay = 0.1) # use adam lr optimiser
+                    ], lr=1e-3, weight_decay = 0.05) # use adam lr optimiser
         
         self.scaler_load = torch.cuda.amp.GradScaler()
         
@@ -61,8 +61,8 @@ class load_model:
             
         # change lr
         for g in self.optimizer_load.param_groups:
-            g['lr'] = 1e-4
-            g['weight_decay'] = 0.1
+            g['lr'] = 1e-3
+            g['weight_decay'] = 0.05
          
         self.scheduler = lr_scheduler.StepLR(self.optimizer_load, step_size=20000, gamma=0.1)
         
