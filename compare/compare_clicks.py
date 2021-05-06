@@ -172,13 +172,17 @@ if calc_deviations == True:
         x = dev_list_x['%1.0f' % k]
         y = dev_list_y['%1.0f' % k]
         z = dev_list_z['%1.0f' % k]
-        mean_x = np.mean(x)
-        mean_y = np.mean(y)
-        mean_z = np.mean(z)
-        mean_dev_x['%1.0f' % k].append(mean_x)
-        mean_dev_y['%1.0f' % k].append(mean_y)
-        mean_dev_z['%1.0f' % k].append(mean_z)
-        
+        #mean_x = np.mean(x)
+        #mean_y = np.mean(y)
+        #mean_z = np.mean(z)
+        #mean_dev_x['%1.0f' % k].append(mean_x)
+        #mean_dev_y['%1.0f' % k].append(mean_y)
+        #mean_dev_z['%1.0f' % k].append(mean_z)
+        print('x dev: ' + str(x))
+        print('-------------------------')
+        print('y dev: ' + str(y))
+        print('--------------------------')
+        print('z dev: ' + str(z))
         if plot_histograms == True:
       
             # plot and save histogram
@@ -219,7 +223,7 @@ if calc_deviations == True:
         txt_file.writelines(['\n'])
 txt_file.close()        
     
-'''
+
 # for each landmark, list of the images with deviations greater than ceratin distance
 print('for each landmark, list of the images with deviations greater than %1.0f' % limit)
 print(dev_upper_limit_list)
@@ -227,9 +231,6 @@ print('\n')
 
 print('percentage of clicks which are outliers')
 print(100*click_outlier_counter/(len(pat_list)*len(landmarks)))
-
-
-
 
        
 # mean deviation per landmark
@@ -255,3 +256,4 @@ print(mean_dev_z)
 print('\n')
             
 print(' deviations are clicker_1 - clicker_2')
+'''
