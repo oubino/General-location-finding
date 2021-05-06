@@ -139,9 +139,9 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
                 if phase == 'train':
                     S.writer.add_scalar('sigma for landmark %1.0f' % l, sigmas[l][0].item(),epochs_completed + epoch + 1)
                 #print('writing to tensorboard')
-            
             epoch_loss /= imgs_in_set
-            
+            S.writer.add_scalar('total epoch loss for phase %s' % phase, epoch_loss, epochs_completed + epoch + 1)
+
             
 
             # deep copy the model
