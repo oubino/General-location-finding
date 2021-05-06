@@ -166,7 +166,7 @@ for p in pat_list:
     # each patient has dictioanary
     Deviations[p] = {}
     #z_mm, y_mm, x_mm = pixel_to_mm(pat_list[p])
-    for l in landmarks:
+    for l in range(len(landmarks)):
         # dictionary for each clicker
         Deviations[p][l] = {}
         for n in clickers: 
@@ -182,9 +182,9 @@ for p in pat_list:
              dev_list_y_o['%1.0f' % k].append(dev_y_o)
              dev_list_z_o['%1.0f' % k].append(dev_z_o)
            '''
-           dev_x_a = (com_list_clicker_1['%1.0f' % l][p][2] - com_list_clicker_ab['%1.0f' % l][p][2])#*(x_mm)
-           dev_y_a = (com_list_clicker_1['%1.0f' % l][p][1] - com_list_clicker_ab['%1.0f' % l][p][1])#*(y_mm)
-           dev_z_a = (com_list_clicker_1['%1.0f' % l][p][0] - com_list_clicker_ab['%1.0f' % l][p][0])#*(z_mm)
+           dev_x_a = (com_list_clicker_2['%1.0f' % l][p][2] - com_list_clicker_ab['%1.0f' % l][p][2])#*(x_mm)
+           dev_y_a = (com_list_clicker_2['%1.0f' % l][p][1] - com_list_clicker_ab['%1.0f' % l][p][1])#*(y_mm)
+           dev_z_a = (com_list_clicker_2['%1.0f' % l][p][0] - com_list_clicker_ab['%1.0f' % l][p][0])#*(z_mm)
              
            '''
              dev_a = math.sqrt(abs(dev_x_a)**2 + abs(dev_y_a)**2 + abs(dev_z_a)**2)
