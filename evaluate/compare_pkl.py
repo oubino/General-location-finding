@@ -26,6 +26,8 @@ z_dev = {}
 
 for l in landmarks:
     x_dev[l] = []
+    y_dev[l] = []
+    z_dev[l] = []
 
 for k in dict_1.keys():
     for l in landmarks:
