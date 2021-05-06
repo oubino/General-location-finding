@@ -13,6 +13,11 @@ import settings as S
 from model import network
 from useful_functs import functions
 
+import numpy as np
+def get_number_of_learnable_parameters(model):
+    model_parameters = filter(lambda p: p.requires_grad, model.parameters())
+    return sum([np.prod(p.size()) for p in model_parameters])
+
 class load_model:
     """Loaded in model is now a class"""
 
@@ -60,11 +65,6 @@ class load_model:
         print('Network structure')
         print('-----------------')
         summary(self.model_load, input_size=(1, S.in_y, S.in_x, S.in_z), batch_size = S.batch_size)
-        
-import numpy as np
-def get_number_of_learnable_parameters(model):
-    model_parameters = filter(lambda p: p.requires_grad, model.parameters())
-    return sum([np.prod(p.size()) for p in model_parameters])
 
 
     def freeze_final_layers(self):
