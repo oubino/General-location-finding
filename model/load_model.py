@@ -42,7 +42,7 @@ class load_model:
         self.optimizer_load = optim.Adam([
                         {'params': self.model_load.parameters()}
                        # {'params': S.sigmas[3]} # not general
-                    ], lr=1e-5, weight_decay = 0.5) # use adam lr optimiser
+                    ], lr=1e-4, weight_decay = 0.1) # use adam lr optimiser
         
         self.scaler_load = torch.cuda.amp.GradScaler()
         
