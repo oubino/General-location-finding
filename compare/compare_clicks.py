@@ -68,7 +68,7 @@ hist_root = r'/home/rankinaaron98/data/Compare_aaron/Histograms_reclick__oli_aar
 # load in pickle file
 file_clicker_1 = load_obj(root, 'coords_' + clicker_1)
 file_clicker_2 = load_obj(root, 'coords_' + clicker_2)
-file_clicker_Ab = load_obj(root, 'coords' + clicker_ab)
+file_clicker_Ab = load_obj(root, 'coords_' + clicker_ab)
 
 
 patients_clicker_1 = list(file_clicker_1.keys())
