@@ -3,6 +3,25 @@
 import pickle
 import os
 import numpy as np
+import csv
+
+csv_root = r'/home/oli/data/paed_dataset/test/'
+
+def pat_to_mm(patient):
+    data = csv.reader(open(os.path.join(csv_root, 'image_dimensions.csv')),delimiter=',')
+    next(data) # skip first line
+    list_img = list(data)#, key=operator.itemgetter(0))
+    # sortedlist[img_number][0 = name, 1 = x/y, 2 = z]
+    #image_idx = int(image_idx)
+    pat_ind = patient.replace('.npy','')
+    index = 0 
+    for i in range(len(list_img)):
+        if list_img[i][0] == pat_ind:
+            index = i
+    pixel_mm_x = list_img[index][1] # 1 pixel = pixel_mm_x * mm
+    pixel_mm_y = list_img[index][1]
+    pixel_mm_z = list_img[index][2]
+    return pixel_mm_x, pixel_mm_y, pixel_mm_z
 
 root_1 = r'/home/oli/data/results/oli/run_folder/eval_100_4/'
 name_1 = 'final_loc'
@@ -28,15 +47,25 @@ for l in landmarks:
     x_dev[l] = []
     y_dev[l] = []
     z_dev[l] = []
+    
 
 for k in dict_1.keys():
     for l in landmarks:
+        x_mm, y_mm, z_mm = pat_to_mm(k)
         x = dict_1[k][l]['x'] - dict_2[k][l]['x']
-        x_dev[l].append(x.cpu().numpy())
+        x = x.cpu().numpy()*x_mm
+        x_dev[l].append(x)
         y = dict_1[k][l]['y'] - dict_2[k][l]['y']
-        y_dev[l].append(y.cpu().numpy())
+        y = y.cpu().numpy()*y_mm
+        y_dev[l].append(y)
         z = dict_1[k][l]['z'] - dict_2[k][l]['z']
-        z_dev[l].append(z.cpu().numpy())
+        z = z.cpu().numpy()*z_mm
+        z_dev[l].append(z)
     
 for l in landmarks:
     print(np.mean(x_dev[l]))
+    print(np.mean(y_dev[l]))
+    print(np.mean(z_dev[l]))
+
+
+
