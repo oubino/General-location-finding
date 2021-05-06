@@ -47,7 +47,8 @@ p2p = {}
 for l in landmarks:
     x_dev[l] = []
     y_dev[l] = []
-    z_dev[l] = []    
+    z_dev[l] = [] 
+    p2p[l] = []
 
 for k in dict_1.keys():
     for l in landmarks:
@@ -64,13 +65,13 @@ for k in dict_1.keys():
         z = z.cpu().numpy()
         z_mod = z * float(z_mm)
         z_dev[l].append(z_mod)
+        p2p_mod = (x_mod**2+y_mod**2+z_mod**2)**0.5
+        p2p[l].append(p2p_mod)
     
 for l in landmarks:
     print(np.mean(x_dev[l]))
     print(np.mean(y_dev[l]))
     print(np.mean(z_dev[l]))
-    p2p[l] = (x_dev[l]**2+y_dev[l]**2+z_dev[l]**2)**0.5
+    print(np.mean(p2p[l]))
     
-print(p2p)
-
 
