@@ -61,8 +61,8 @@ class load_model:
             
         # change lr
         for g in self.optimizer_load.param_groups:
-            g['lr'] = 1e-4
-            g['weight_decay'] = 0.1
+            g['lr'] = 1e-3
+            g['weight_decay'] = 0.05
          
         self.scheduler = lr_scheduler.StepLR(self.optimizer_load, step_size=20000, gamma=0.1)
         
@@ -74,12 +74,12 @@ class load_model:
 
     def freeze_final_layers(self):
         for name, param in self.model_load.named_parameters():
-            if (name != 'out.conv.bias' and name != 'out.conv.weight'):#\
+            #if (name != 'out.conv.bias' and name != 'out.conv.weight'):#\
                 #and name != 'dec4.conv.double_conv.0.bias' and name != 'dec4.conv.double_conv.0.weight'\
                 #    and name != 'dec4.conv.double_conv.1.bias' and name != 'dec4.conv.double_conv.1.weight' \
                 #        and name != 'dec4.conv.double_conv.3.bias' and name != 'dec4.conv.double_conv.3.weight' \
                 #            and name != 'dec4.conv.double_conv.4.bias' and name != 'dec4.conv.double_conv.4.weight'):
-                param.requires_grad = False
+            param.requires_grad = False
             if param.requires_grad == True:
                 print('grad', name)
         print('number of learnable parameters')
@@ -88,13 +88,15 @@ class load_model:
         
     def transfer_learn_unet_final_layer(self, class_number, features):
         # model becomes new model with different last layer
-        self.model_load = network.Transfer_model(class_number, features, self.model_load)
+        self.model_load = network.Transfer_model_2(class_number, features, self.model_load)
         self.model_load = self.model_load.to(S.device)
         print('Transferred model')
         summary(self.model_load, input_size=(1, S.in_y, S.in_x, S.in_z), batch_size = S.batch_size)
         for name, param in self.model_load.named_parameters():
             if (param.requires_grad == True):
                 print(name)
+        print('number of learnable parameters')
+        print(get_number_of_learnable_parameters(self.model_load))
         
         # check which params have 
         """

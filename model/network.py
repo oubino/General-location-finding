@@ -68,6 +68,14 @@ class OutConv(nn.Module):
 
     def forward(self, x):
         return self.conv(x)
+    
+class OutConv_mod(nn.Module):
+    def __init__(self, in_channels, out_channels):
+        super().__init__()
+        self.conv = nn.Conv3d(in_channels, out_channels, kernel_size = 3, padding = 1)
+
+    def forward(self, x):
+        return self.conv(x)    
 
 
 class UNet3d(nn.Module):
@@ -134,6 +142,37 @@ class Transfer_model(nn.Module):
         x9 = self.pre_trained[10](x8, x1)
         
         output = self.out(x9)
+        return output 
+
+class Transfer_model_2(nn.Module):
+    def __init__(self, n_classes, s_channels, pre_trained_model):
+        super().__init__()
+        self.n_classes = n_classes
+        self.s_channels = s_channels
+        
+        self.pre_trained = nn.Sequential(
+        *list(pre_trained_model.children())[:]) # think asterix is unpacking
+        self.out = OutConv_mod(n_classes, n_classes)
+
+    def forward(self, x): 
+        x1 = self.pre_trained[0](x)
+        x2 = self.pre_trained[1](x1)
+        x3 = self.pre_trained[2](x2)
+        x4 = self.pre_trained[3](x3)
+        x5 = self.pre_trained[4](x4)
+        
+        # extra enc & dec
+        x10 = self.pre_trained[5](x5)
+        x11 = self.pre_trained[6](x10,x5)
+        
+        x6 = self.pre_trained[7](x11,x4) # was x5,x4
+        x7 = self.pre_trained[8](x6, x3)
+        x8 = self.pre_trained[9](x7, x2)
+        x9 = self.pre_trained[10](x8, x1)
+        
+        x12 = self.pre_trained[11](x9)
+        
+        output = self.out(x12)
         return output 
     
 """
