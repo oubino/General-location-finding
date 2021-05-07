@@ -215,12 +215,12 @@ for p in pat_list:
             dev_y_a = (com_list_clicker_2['%1.0f' % l][j][1] - com_list_clicker_ab['%1.0f' % l][j][1])*(y_mm)
             dev_z_a = (com_list_clicker_2['%1.0f' % l][j][0] - com_list_clicker_ab['%1.0f' % l][j][0])*(z_mm)
             
-            x_dev = [p, l, dev_x_o, dev_x_a]
-            d_x.append(x_dev)
+        x_dev = [p, l, dev_x_o, dev_x_a]
+        d_x.append(x_dev)    
 
 
 print(d_x)        
-df_x = pd.DataFrame(data=d_x, columns=('P','A', 'O', 'L'))
+df_x = pd.DataFrame(data=d_x, columns=('P','L', 'O', 'A'))
 print(df_x)
 
 # plot
