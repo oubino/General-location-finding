@@ -27,8 +27,8 @@ clickers = ['aaron', 'oli']
 
 
 d_x = []
-d_y = {'A':0,'O':0, 'L':0}
-d_z = {'A':0,'O':0, 'L':0}
+d_y = []
+d_z = []
 #print(df_x)
 
 for i in struc_list:
@@ -48,8 +48,12 @@ for i in struc_list:
          
          
          x_dev = [i,x,m,l]
+         y_dev = [i,y,p,l]
+         z_dev = [i,z,o,l]
          #print(x_dev)
          d_x.append(x_dev)
+         d_y.append(y_dev)
+         d_z.append(z_dev)
          
        # for n in clickers:
         #    coordinates[i][l][n] = {'x':0, 'y':0, 'z':0}
@@ -58,8 +62,12 @@ for i in struc_list:
          
             #print(d_x)
 #print(d_x)
-df = pd.DataFrame(d_x, columns=('P','A', 'O', 'L'))
-print(df)                 
+df_x = pd.DataFrame(d_x, columns=('P','A', 'O', 'L'))
+print(df_x)
+df_y = pd.DataFrame(d_y, columns=('P','A', 'O', 'L'))
+print(df_y)
+df_z = pd.DataFrame(d_z, columns=('P','A', 'O', 'L'))
+print(df_z)
 '''
 df = pd.DataFrame(data=d_x, index=('A', 'O', 'L'))
 print(df)
@@ -74,8 +82,14 @@ tips = sns.load_dataset("tips")
 #print(df_2)
 
 '''
-sns_plot = sns.relplot(x = 'A', y = 'O', hue= 'P', style = 'L', data=df)
-sns_plot.savefig('bias_output.png')
+sns_plot = sns.relplot(x = 'A', y = 'O', hue= 'P', style = 'L', data=df_x)
+sns_plot.savefig('bias_output_x.png')
+
+sns_plot_y = sns.relplot(x = 'A', y = 'O', hue= 'P', style = 'L', data=df_y)
+sns_plot.savefig('bias_output_y.png')
+
+sns_plot_z = sns.relplot(x = 'A', y = 'O', hue= 'P', style = 'L', data=df_z)
+sns_plot.savefig('bias_output_z.png')
 
 
   
