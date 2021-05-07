@@ -6,16 +6,8 @@ import pickle
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
-sns.set_theme(style="darkgrid")
+#sns.set_theme(style="darkgrid")
 
-
-def question(question):
-    while "the answer is invalid":
-        reply = str(input(question+' (y/n): ')).lower().strip()
-        if reply[:1] == 'y':
-            return True
-        if reply[:1] == 'n':
-            return False
 
 def pixel_to_mm(patient):
     data = csv.reader(open(os.path.join(root, 'image_dimensions.csv')),delimiter=',')
@@ -34,40 +26,19 @@ def pixel_to_mm(patient):
     
     return pixel_mm_z, pixel_mm_y, pixel_mm_x
 
-def histogram(data, coord, landmark):
-    # plot and save histogram
-    data = np.array(data)
-    data = np.sort(data)
-    plt.figure()
-    n, bins, patches = plt.hist(x=data, bins=list(range(-30,31)), color='#0504aa',
-                            alpha=0.7)
-    plt.grid(axis='y', alpha=0.75)
-    plt.xlabel('Deviation/mm')
-    plt.ylabel('Frequency')
-    plt.title("%s deviation for landmark %1.0f" % (coord, landmark))
-    #plt.text(23, 45, r'$\mu=15, b=3$')
-    maxfreq = n.max()
-    # Set a clean upper y-axis limit.
-    plt.ylim(ymax=np.ceil(maxfreq / 10) * 10 if maxfreq % 10 else maxfreq + 10)
-    hist_name = os.path.join(hist_root, "%s_dev_%1.0f" % (coord, landmark))
-    # set x lim to centre around 0
-    plt.xticks(np.arange(-30,31,4))
-    plt.savefig(hist_name)
-
 
 def load_obj(root, name):
     with open(os.path.join(root, name) + '.pkl', 'rb') as f:       
         return pickle.load(f)
 
 # paths
-root = r'/home/olive/data/Facial_asymmetry_test_sets'
+root = r'C:\Users\ranki_252uikw\Documents\MPhysS2'
 
 clicker_1 = 'Oli_test_set'
 clicker_2 = 'Aaron_test_set'
 clicker_ab = 'Abby_test_set'
 
 
-hist_root = r'/home/rankinaaron98/data/Compare_aaron/Histograms_reclick__oli_aaron_testsets/'
 
 # load in pickle file
 file_clicker_1 = load_obj(root, 'coords_' + clicker_1)
@@ -82,8 +53,7 @@ patients_clicker_ab = list(file_clicker_Ab.keys())
 # landmarks
 landmarks = [1,2,3,4,5,6,7,8,9,10]
 
-# limit
-limit = 20
+
 #print(file_clicker_Ab)
 # common patients
 pat_list = [x for x in patients_clicker_1 if x in patients_clicker_2]
@@ -128,7 +98,7 @@ for k in landmarks:
     mean_list['%1.0f' % k] = []
     
 
-calc_deviations = question('calc deviations(y) / or not (n)')
+#calc_deviations = question('calc deviations(y) / or not (n)')
 
 # for common structures add mean to array for both clicker_1 and clicker_2
 for p in pat_list:
@@ -149,61 +119,7 @@ for j in range(len(pat_list)):
 pat_list = [item.replace('.npy', '') for item in pat_list]
 #print(pat_list)
 
-latex_line_mean = []
-latex_line_mean_std = []
-latex_line_x_o = []
-latex_line_y_o = []
-latex_line_z_o = []
-latex_line_x_o = []
-latex_line_y_o = []
-latex_line_z_o = []
-csv_line = []
-name_of_file = os.path.join(hist_root, clicker_1 +"_" + clicker_2 + "_compare.txt")
-txt_file = open(name_of_file, "a")    
-click_outlier_counter = 0
-clickers = ['Aaron', 'Oli']
 
-Deviations = {}
-'''
-for n in clickers: 
-    Deviations[n] = {}
-    for p in pat_list:
-        # each patient has dictioanary
-        Deviations[n][p] = {}
-       
-        for l in landmarks:
-            # dictionary for each clicker
-            Deviations[n][p][l] = {'x':0, 'y':0, 'z':0}
-            for j in range(len(pat_list)): 
-                   z_mm, y_mm, x_mm = pixel_to_mm(pat_list[j])
-                   dev_x_o = (com_list_clicker_1['%1.0f' % l][j][2] - com_list_clicker_ab['%1.0f' % l][j][2])*(x_mm)
-                   dev_y_o = (com_list_clicker_1['%1.0f' % l][j][1] - com_list_clicker_ab['%1.0f' % l][j][1])*(y_mm)
-                   dev_z_o = (com_list_clicker_1['%1.0f' % l][j][0] - com_list_clicker_ab['%1.0f' % l][j][0])*(z_mm)
-                   
-                     dev_o = math.sqrt(abs(dev_x_o)**2 + abs(dev_y_o)**2 + abs(dev_z_o)**2)
-                     dev_list_o['%1.0f' % k].append(dev_o)
-                     dev_list_x_o['%1.0f' % k].append(dev_x_o)
-                     dev_list_y_o['%1.0f' % k].append(dev_y_o)
-                     dev_list_z_o['%1.0f' % k].append(dev_z_o)
-                   
-                   dev_x_a = (com_list_clicker_2['%1.0f' % l][j][2] - com_list_clicker_ab['%1.0f' % l][j][2])*(x_mm)
-                   dev_y_a = (com_list_clicker_2['%1.0f' % l][j][1] - com_list_clicker_ab['%1.0f' % l][j][1])*(y_mm)
-                   dev_z_a = (com_list_clicker_2['%1.0f' % l][j][0] - com_list_clicker_ab['%1.0f' % l][j][0])*(z_mm)
-                     
-                   
-                     dev_a = math.sqrt(abs(dev_x_a)**2 + abs(dev_y_a)**2 + abs(dev_z_a)**2)
-                     dev_list_a['%1.0f' % k].append(dev_a)
-                     dev_list_x_a['%1.0f' % k].append(dev_x_a)
-                     dev_list_y_a['%1.0f' % k].append(dev_y_a)
-                     dev_list_z_a['%1.0f' % k].append(dev_z_a)
-                    
-                   if n == 'Aaron':
-                       Deviations[n][p][l]['x'], Deviations[n][p][l]['y'], Deviations[n][p][l]['z'] = dev_x_a, dev_y_a, dev_z_a
-                   elif n == 'Oli':
-                       Deviations[n][p][l]['x'], Deviations[n][p][l]['y'], Deviations[n][p][l]['z'] = dev_x_o, dev_y_o, dev_z_o
-                        
-             
-'''
 d_x = []
 d_y = []
 d_z = []
@@ -220,22 +136,31 @@ for p in pat_list:
             dev_y_a = (com_list_clicker_2['%1.0f' % l][j][1] - com_list_clicker_ab['%1.0f' % l][j][1])*(y_mm)
             dev_z_a = (com_list_clicker_2['%1.0f' % l][j][0] - com_list_clicker_ab['%1.0f' % l][j][0])*(z_mm)
             
-        x_dev = [p, dev_x_o, dev_x_a, l]
-        y_dev = [p, dev_y_o, dev_y_a, l]
-        z_dev = [p, dev_z_o, dev_z_a, l]
+        #x_dev = [p, dev_x_o, dev_x_a, l]
+        #y_dev = [p, dev_y_o, dev_y_a, l]
+        #z_dev = [p, dev_z_o, dev_z_a, l]
         devs = [p,l,dev_x_a,dev_x_o, dev_y_a, dev_y_o, dev_z_a, dev_z_o]
-        d_x.append(x_dev)    
-        d_y.append(y_dev)
-        d_z.append(z_dev)
+        #d_x.append(x_dev)    
+        #d_y.append(y_dev)
+        #d_z.append(z_dev)
         d.append(devs)
 
 
 
-df_d = pd.DataFrame(d, columns=('P', 'L', 'A_x', 'O_x', 'A_y', 'O_y', 'A_z', 'O_z'))
+df_d = pd.DataFrame(d, columns=('Patient', 'Landmark', 'A_x', 'O_x', 'A_y', 'O_y', 'A_z', 'O_z'))
 print(df_d) 
 print(df_d.shape)   
-sns_plot = sns.relplot(x = 'A_x',y = 'O_x', hue= 'P', style = 'L', data=df_d, s=75)  
-plt.savefig('bias_output_x.png', bbox_inches='tight', dpi=300)
+
+#sns_plot = sns.lmplot(data=df_d, x = 'A_x',y = 'O_x', hue ='Patient', scatter = True, fit_reg=False, markers=True)  
+sns_plot = sns.relplot(x = 'O_x', y = 'A_x', hue = 'Patient', style = 'Landmark', data=df_d, s=75)
+plt.xlabel('Oli Deviations')
+plt.ylabel('Aaron Deviations')
+plt.title("Deviations from Abby's clicks in x-axis")
+plt.savefig('bias_output_x.png', bbox_inches='tight', dpi=500)
+print(os.getcwd())
+
+
+
 '''
 #print(d_x)        
 df_x = pd.DataFrame(data=d_x, columns=('Patient', 'Oli', 'Aaron', 'Landmark'))
@@ -257,7 +182,7 @@ print(df_z)
 
 
 # plot
-print(os.getcwd())
+
 
 
 sns_plot_y = sns.relplot(x = 'Oli', y = 'Aaron', hue = 'Patient', style = 'Landmark', data=df_y)
