@@ -234,8 +234,14 @@ print(df_y)
 df_z = pd.DataFrame(data=d_z, columns=('Patient', 'Landmark', 'Oli', 'Aaron'))
 print(df_z)
 
+
 # plot
-'''
-sns_plot = sns.relplot(x = 'Oli', y = 'Aaron', hue = '', style = 'patient', data=Deviations_df)
-sns_plot.savefig('bias_output.png')
-'''
+
+sns_plot = sns.relplot(x = 'Oli', y = 'Aaron', hue = 'Patient', style = 'Landmark', data=df_x)
+sns_plot.savefig('bias_output_x.png')
+
+sns_plot = sns.relplot(x = 'Oli', y = 'Aaron', hue = 'Patient', style = 'Landmark', data=df_y)
+sns_plot.savefig('bias_output_y.png')
+
+sns_plot = sns.relplot(x = 'Oli', y = 'Aaron', hue = 'Patient', style = 'Landmark', data=df_z)
+sns_plot.savefig('bias_output_z.png')
