@@ -151,15 +151,47 @@ df_d = pd.DataFrame(d, columns=('Patient', 'Landmark', 'A_x', 'O_x', 'A_y', 'O_y
 print(df_d) 
 print(df_d.shape)   
 
-#sns_plot = sns.lmplot(data=df_d, x = 'A_x',y = 'O_x', hue ='Patient', scatter = True, fit_reg=False, markers=True)  
-sns_plot = sns.relplot(x = 'O_x', y = 'A_x', hue = 'Patient', style = 'Landmark', data=df_d, s=75)
+
+x_axis = df_d.plot.scatter(x = 'O_x',
+                   y = 'A_x',
+                   c = 'Landmark',
+                   colormap = 'Set3'
+                   )
+
+#x_axis(figsize=(8, 6), dpi=80)
 plt.xlabel('Oli Deviations')
 plt.ylabel('Aaron Deviations')
 plt.title("Deviations from Abby's clicks in x-axis")
 plt.savefig('bias_output_x.png', bbox_inches='tight', dpi=300)
+
+plt.show()
+x_axis2 = plt.scatter(x = 'O_x',
+                   y = 'A_x',
+                   #c = 'Landmark',
+                   colormap = 'Set3'
+                   )
+
+#x_axis(figsize=(8, 6), dpi=80)
+plt.xlabel('Oli Deviations')
+plt.ylabel('Aaron Deviations')
+plt.title("Deviations from Abby's clicks in x-axis")
+plt.savefig('bias_output_x.png', bbox_inches='tight', dpi=300)
+
+plt.show()
+'''
+
+#sns_plot = sns.lmplot(data=df_d, x = 'A_x',y = 'O_x', hue ='Patient', scatter = True, fit_reg=False, markers=True)  
+sns.set_palette("hls", 10)
+sns_plot = sns.relplot(x = 'O_x', y = 'A_x', hue = 'Landmark', palette = 'hls', data=df_d, s=75)
+plt.xlabel('Oli Deviations')
+plt.ylabel('Aaron Deviations')
+plt.title("Deviations from Abby's clicks in x-axis")
+plt.show()
+
+plt.savefig('bias_output_x.png', bbox_inches='tight', dpi=300)
 print(os.getcwd())
 
-
+'''
 
 '''
 #print(d_x)        

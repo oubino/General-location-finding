@@ -68,7 +68,7 @@ for i in struc_list:
 d_d = pd.DataFrame(d, columns=('P', 'L', 'A_x', 'O_x', 'A_y', 'O_y', 'A_z', 'O_z'))
 print(d_d) 
 print(d_d.shape)   
-sns_plot = sns.relplot(x = 'A_x',y = 'O_x', hue= 'P', style = 'L', data=d_d, s=75)   
+sns_plot = sns.relplot(x = 'A_x',y = 'O_x', style= 'L', data=d_d, s=75)   
 plt.xlabel('Oli Deviations')
 plt.ylabel('Aaron Deviations')
 plt.title("Deviations from Abby's clicks in x-axis")
