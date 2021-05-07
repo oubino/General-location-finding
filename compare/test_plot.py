@@ -64,10 +64,11 @@ for i in struc_list:
 #print(d_x)
 df_x = pd.DataFrame(d_x, columns=('P','A', 'O', 'L'))
 print(df_x)
-df_y = pd.DataFrame(d_y, columns=('P','A', 'O', 'L'))
-print(df_y)
-df_z = pd.DataFrame(d_z, columns=('P','A', 'O', 'L'))
-print(df_z)
+print(df_x.shape)
+#df_y = pd.DataFrame(d_y, columns=('P','A', 'O', 'L'))
+#print(df_y)
+#df_z = pd.DataFrame(d_z, columns=('P','A', 'O', 'L'))
+#print(df_z)
 '''
 df = pd.DataFrame(data=d_x, index=('A', 'O', 'L'))
 print(df)
@@ -82,14 +83,18 @@ tips = sns.load_dataset("tips")
 #print(df_2)
 
 '''
-sns_plot = sns.relplot(x = 'A', y = 'O', hue= 'P', style = 'L', data=df_x)
-sns_plot.savefig('bias_output_x.png')
+sns_plot = sns.relplot(x = 'A', y = 'O', hue= 'P', style = 'L', data=df_x, s=75)
+plt.xlabel('Oli Deviations')
+plt.ylabel('Aaron Deviations')
+plt.title("Deviations from Abby's clicks in x axis")
+plt.savefig('bias_output_x.png', bbox_inches='tight', dpi=300)
 
-sns_plot_y = sns.relplot(x = 'A', y = 'O', hue= 'P', style = 'L', data=df_y)
-sns_plot.savefig('bias_output_y.png')
 
-sns_plot_z = sns.relplot(x = 'A', y = 'O', hue= 'P', style = 'L', data=df_z)
-sns_plot.savefig('bias_output_z.png')
+#sns_plot_y = sns.relplot(x = 'A', y = 'O', hue= 'P', style = 'L', data=df_y)
+#sns_plot.savefig('bias_output_y.png')
+
+#sns_plot_z = sns.relplot(x = 'A', y = 'O', hue= 'P', style = 'L', data=df_z)
+#sns_plot.savefig('bias_output_z.png')
 
 
   
