@@ -173,7 +173,7 @@ def init(rts_q):
     normal_window = 1800
     
     # mixed precision
-    use_amp = True
+    use_amp = False
     
     # if downsampling
     downsample_ratio_list = {}

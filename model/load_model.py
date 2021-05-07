@@ -74,12 +74,12 @@ class load_model:
 
     def freeze_final_layers(self):
         for name, param in self.model_load.named_parameters():
-            if (name != 'out.conv.bias' and name != 'out.conv.weight'):
+            #if (name != 'out.conv.bias' and name != 'out.conv.weight'):
                 #and name != 'dec4.conv.double_conv.0.bias' and name != 'dec4.conv.double_conv.0.weight'\
                 #    and name != 'dec4.conv.double_conv.1.bias' and name != 'dec4.conv.double_conv.1.weight' \
                 #        and name != 'dec4.conv.double_conv.3.bias' and name != 'dec4.conv.double_conv.3.weight' \
                 #            and name != 'dec4.conv.double_conv.4.bias' and name != 'dec4.conv.double_conv.4.weight'):
-                    param.requires_grad = False
+            param.requires_grad = False
             if param.requires_grad == True:
                 print('grad', name)
         print('number of learnable parameters')
