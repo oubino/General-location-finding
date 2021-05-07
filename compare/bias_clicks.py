@@ -220,7 +220,7 @@ for p in pat_list:
 
 
 print(d_x)        
-df_x = pd.DataFrame(data=d_x)
+df_x = pd.DataFrame(data=d_x, columns=('Patient', 'Landmark', 'Oli', 'Aaron'))
 print(df_x)
 
 # plot
