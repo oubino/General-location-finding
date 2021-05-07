@@ -238,6 +238,7 @@ print(df_z)
 # plot
 print(os.getcwd())
 sns_plot_x = sns.relplot(x = 'Oli', y = 'Aaron', hue = 'Patient', style = 'Landmark', data=df_x)
+sns_plot_x.set_size_inches(18.5, 10.5)
 plt.xlabel('Oli Deviations')
 plt.ylabel('Aaron Deviations')
 plt.title("Deviations from Abby's clicks in x axis")
