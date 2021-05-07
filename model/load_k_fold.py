@@ -22,7 +22,7 @@ def init(fold):
     train_decision = yes_or_no.question('train loaded in model?')
     if train_decision == True:
         # if train is true then ask number of epochs to train for otherwise don't need to as just eval
-        settings.epoch_batch = int(50)
+        settings.epoch_batch = int(60)
         settings.num_epoch_batches = 1
         freeze_decision = yes_or_no.question('freeze all but last layer?')
         transfer_learn_decision = yes_or_no.question('transfer learn to new number of classes')
