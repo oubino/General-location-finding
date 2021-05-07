@@ -238,6 +238,9 @@ print(df_z)
 # plot
 print(os.getcwd())
 sns_plot_x = sns.relplot(x = 'Oli', y = 'Aaron', hue = 'Patient', style = 'Landmark', data=df_x)
+plt.xlabel('Oli Deviations')
+plt.ylabel('Aaron Deviations')
+plt.title("Deviations from Abby's clicks in x axis")
 plt.savefig('bias_output_x.png', dpi=300)
 
 sns_plot_y = sns.relplot(x = 'Oli', y = 'Aaron', hue = 'Patient', style = 'Landmark', data=df_y)
