@@ -217,9 +217,9 @@ for p in pat_list:
             dev_y_a = (com_list_clicker_2['%1.0f' % l][j][1] - com_list_clicker_ab['%1.0f' % l][j][1])*(y_mm)
             dev_z_a = (com_list_clicker_2['%1.0f' % l][j][0] - com_list_clicker_ab['%1.0f' % l][j][0])*(z_mm)
             
-        x_dev = [p, l, dev_x_o, dev_x_a]
-        y_dev = [p, l, dev_y_o, dev_y_a]
-        z_dev = [p, l, dev_z_o, dev_z_a]
+        x_dev = [p, dev_x_o, dev_x_a, l]
+        y_dev = [p, dev_y_o, dev_y_a, l]
+        z_dev = [p, dev_z_o, dev_z_a, l]
         
         d_x.append(x_dev)    
         d_y.append(y_dev)
@@ -227,8 +227,18 @@ for p in pat_list:
 
 
 #print(d_x)        
-df_x = pd.DataFrame(data=d_x, columns=('Patient', 'Landmark', 'Oli', 'Aaron'))
+df_x = pd.DataFrame(data=d_x, columns=('Patient', 'Oli', 'Aaron', 'Landmark'))
 print(df_x)
+print(df_x.shape)
+sns_plot_x = sns.relplot(x = 'Oli', y = 'Aaron', hue = 'Patient', style = 'Landmark', data=df_x, s=75)
+#sns_plot_x.set_size_inches(18.5, 10.5)
+plt.xlabel('Oli Deviations')
+plt.ylabel('Aaron Deviations')
+plt.title("Deviations from Abby's clicks in x-axis")
+plt.savefig('bias_output_x.png', bbox_inches='tight', dpi=300)
+
+
+'''
 df_y = pd.DataFrame(data=d_y, columns=('Patient', 'Landmark', 'Oli', 'Aaron'))
 print(df_y)
 df_z = pd.DataFrame(data=d_z, columns=('Patient', 'Landmark', 'Oli', 'Aaron'))
@@ -237,15 +247,11 @@ print(df_z)
 
 # plot
 print(os.getcwd())
-sns_plot_x = sns.relplot(x = 'Oli', y = 'Aaron', hue = 'Patient', style = 'Landmark', data=df_x, s=10)
-#sns_plot_x.set_size_inches(18.5, 10.5)
-plt.xlabel('Oli Deviations')
-plt.ylabel('Aaron Deviations')
-plt.title("Deviations from Abby's clicks in x axis")
-plt.savefig('bias_output_x.png', bbox_inches='tight', dpi=300)
+
 
 sns_plot_y = sns.relplot(x = 'Oli', y = 'Aaron', hue = 'Patient', style = 'Landmark', data=df_y)
 plt.savefig('bias_output_y.png', dpi=300)
 
 sns_plot_z = sns.relplot(x = 'Oli', y = 'Aaron', hue = 'Patient', style = 'Landmark', data=df_z)
 plt.savefig('bias_output_z.png', dpi=300)
+'''
