@@ -141,13 +141,14 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
                   img_landmark_point_to_point = functions.point_to_point_mm(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z, p)
                   p2p_landmarks[l] = np.append(p2p_landmarks[l],img_landmark_point_to_point.cpu())
                   x_p2p, x_p2p_mm, y_p2p, y_p2p_mm, z_p2p, z_p2p_mm = functions.axis_p2p_err(structure_max_x, structure_max_y, structure_max_z, pred_max_x, pred_max_y, pred_max_z, p)
+                  '''
                   x_axis_err[l] = np.append(x_axis_err[l], x_p2p.cpu())
                   x_axis_err_mm[l] = np.append(x_axis_err_mm[l], x_p2p_mm.cpu())
                   y_axis_err[l] = np.append(y_axis_err[l], y_p2p.cpu())
                   y_axis_err_mm[l] = np.append(y_axis_err_mm[l], y_p2p_mm.cpu())
                   z_axis_err[l] = np.append(z_axis_err[l], z_p2p.cpu())
                   z_axis_err_mm[l] = np.append(z_axis_err_mm[l], z_p2p_mm.cpu())
-                  
+                  '''
                  # x_axis_err[l] = np.append(x_axis_err[l], )
                   # if img_point_to_point > 20mm is an outlier
                   if img_landmark_point_to_point > 10:
@@ -178,22 +179,25 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
     lower_perc = np.percentile(p2p_landmarks[l], 25)
     error_min = np.amin(p2p_landmarks[l])
     error_max = np.amax(p2p_landmarks[l])
+    '''
     mean_x_err = np.mean(x_axis_err[l])
     mean_x_err_mm = np.mean(x_axis_err_mm[l])
     mean_y_err = np.mean(y_axis_err[l])
     mean_y_err_mm = np.mean(y_axis_err_mm[l])
     mean_z_err = np.mean(z_axis_err[l])
     mean_z_err_mm = np.mean(z_axis_err_mm[l])
-    
+    '''
     print('    mean point to point error is ' + str(mean) + '+/-' + str(std_mean))
     print('    median point to point error is ' + str(median))
     print('    75th percentile is: ' + str(upper_perc))
     print('    25th percentile is  ' + str(lower_perc))
     print('    minimum point to point error is: ' + str(error_min))
     print('    maximum point to point error is: ' + str(error_max))
+    '''
     print('    mean error in x axis is: ' + str(mean_x_err) + ' (' + str(mean_x_err_mm) + ' mm)')
     print('    mean error in y axis is: ' + str(mean_y_err) + ' (' + str(mean_y_err_mm) + ' mm)')
     print('    mean error in z axis is: ' + str(mean_z_err) + ' (' + str(mean_z_err_mm) + ' mm)')
+    '''
     print('    percentage of images which were outliers is ' + str(outliers_perc) + '%')
     print('    sigma is ' + str(sigmas[l]))
     print('    trained for ' + str(epochs_completed) + ' epochs')
@@ -207,9 +211,11 @@ def performance_metrics(model,sigmas,gamma, epochs_completed, fold):
          '  25th percentile is  ' + str(lower_perc), '\n',
          '  minimum point to point error is: ' + str(error_min), '\n',
          '  maximum point to point error is: ' + str(error_max), '\n',
+      '''
          '  mean error in x axis is: ' + str(mean_x_err) + ' (' + str(mean_x_err_mm) + ' mm)', '\n',
          '  mean error in y axis is: ' + str(mean_y_err) + ' (' + str(mean_y_err_mm) + ' mm)', '\n',
          '  mean error in z axis is: ' + str(mean_z_err) + ' (' + str(mean_z_err_mm) + ' mm)', '\n',
+         '''
          '  percentage of images which were outliers is ' + str(outliers_perc) + '%', '\n',
          '  sigma is ' + str(sigmas[l]), '\n', 
          '  pred max used = ' + str(S.pred_max), '\n',
