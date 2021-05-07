@@ -237,11 +237,11 @@ print(df_z)
 
 # plot
 
-sns_plot = sns.relplot(x = 'Oli', y = 'Aaron', hue = 'Patient', style = 'Landmark', data=df_x)
-sns_plot.savefig('bias_output_x.png')
+sns_plot_x = sns.relplot(x = 'Oli', y = 'Aaron', hue = 'Patient', style = 'Landmark', data=df_x)
+plt.savefig('bias_output_x.png', dpi=300)
 
-sns_plot = sns.relplot(x = 'Oli', y = 'Aaron', hue = 'Patient', style = 'Landmark', data=df_y)
-sns_plot.savefig('bias_output_y.png')
+sns_plot_y = sns.relplot(x = 'Oli', y = 'Aaron', hue = 'Patient', style = 'Landmark', data=df_y)
+plt.savefig('bias_output_y.png', dpi=300)
 
-sns_plot = sns.relplot(x = 'Oli', y = 'Aaron', hue = 'Patient', style = 'Landmark', data=df_z)
-sns_plot.savefig('bias_output_z.png')
+sns_plot_z = sns.relplot(x = 'Oli', y = 'Aaron', hue = 'Patient', style = 'Landmark', data=df_z)
+plt.savefig('bias_output_z.png', dpi=300)
