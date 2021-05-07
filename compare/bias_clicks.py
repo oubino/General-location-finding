@@ -156,7 +156,7 @@ sns_plot = sns.relplot(x = 'O_x', y = 'A_x', hue = 'Patient', style = 'Landmark'
 plt.xlabel('Oli Deviations')
 plt.ylabel('Aaron Deviations')
 plt.title("Deviations from Abby's clicks in x-axis")
-plt.savefig('bias_output_x.png', bbox_inches='tight', dpi=500)
+plt.savefig('bias_output_x.png', bbox_inches='tight', dpi=300)
 print(os.getcwd())
 
 
