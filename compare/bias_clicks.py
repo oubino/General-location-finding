@@ -236,7 +236,7 @@ print(df_z)
 
 
 # plot
-
+print(os.getcwd())
 sns_plot_x = sns.relplot(x = 'Oli', y = 'Aaron', hue = 'Patient', style = 'Landmark', data=df_x)
 plt.savefig('bias_output_x.png', dpi=300)
 
