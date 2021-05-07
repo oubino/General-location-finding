@@ -204,46 +204,8 @@ for p in pat_list:
 Deviations_df = pd.DataFrame(data=Deviations)
 print(Deviations_df)
 
-        
-        
-        
-
-'''
-print(oli_devs)
-print(aaron_devs)
-
 # plot
-fig, ax = plt.subplots()
-for i in range(len(dev_list_x_a)):
-               aaron, oli = dev_list_x_a, dev_list_x_o
-               ax.scatter(aaron, oli, alpha=0.3)
-               
-ax.legend
 
+sns_plot = sns.relplot(x = 'Oli', y = 'Aaron', hue = 'landmark', style = 'patient', data=Deviations_df)
+sns_plot.savefig('bias_output.png')
 
-
-def print_scatter(landmark, pred_x, pred_y, pred_z, struc_x, struc_y, struc_z, eval_path, patient):
-    
-    # image
-    #  D x H x W
-    plt.figure(figsize=(7, 7))
-        
-    pred_z = int(pred_z) # convert to nearest int
-    img = img[pred_z, :, :]
-    
-    # ---- plot as point ------
-    plt.imshow(img,cmap = 'Greys_r', alpha = 0.9)
-    plt.scatter(, struc_y, color = 'red', marker = 'x', label = 'target')
-    plt.plot(pred_x.cpu().numpy(), pred_y.cpu().numpy(),color='green', marker='o', label = 'pred')
-    # add z annotation
-    plt.annotate("%1.0f" % pred_z,(pred_x.cpu().numpy(), pred_y.cpu().numpy()), color = 'green')
-    plt.annotate("%1.0f" % int(struc_z),(struc_x, struc_y), color = 'red')
-    plt.legend()
-    # ------------------------------------
-    
-    img_name = os.path.join(eval_path, "2d_slice_%s.png" % patient.replace('.npy', '_%1.0f') % landmark)
-    S.img_counter_3 += 1
-    plt.savefig(img_name)
-
-
-'''
