@@ -70,9 +70,9 @@ class OutConv(nn.Module):
         return self.conv(x)
     
 class OutConv_mod(nn.Module):
-    def __init__(self, in_channels, out_channels):
+    def __init__(self, in_channels, out_channels, groups):
         super().__init__()
-        self.conv = nn.Conv3d(in_channels, out_channels, kernel_size = 3, padding = 1)
+        self.conv = nn.Conv3d(in_channels, out_channels, kernel_size = 3, groups = groups, padding = 1)
 
     def forward(self, x):
         return self.conv(x)    
@@ -152,7 +152,7 @@ class Transfer_model_2(nn.Module):
         
         self.pre_trained = nn.Sequential(
         *list(pre_trained_model.children())[:]) # think asterix is unpacking
-        self.out = OutConv_mod(n_classes, n_classes)
+        self.out = OutConv_mod(n_classes, n_classes, n_classes)
 
     def forward(self, x): 
         x1 = self.pre_trained[0](x)
