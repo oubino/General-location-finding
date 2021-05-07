@@ -32,6 +32,7 @@ clickers = ['aaron', 'oli']
 d_x = []
 d_y = []
 d_z = []
+d = []
 #print(df_x)
 
 for i in struc_list:
@@ -40,34 +41,39 @@ for i in struc_list:
     
     for l in landmarks_total:
          coordinates[i][l] ={}
-         x = float(np.random.random_integers(-10, 10 +1))
-         z = float(np.random.random_integers(-10, 10+1))
-         y = float(np.random.random_integers(-10, 10+1))
+         x = float(np.random.random_integers(-10, 10 + 1))
+         z = float(np.random.random_integers(-10, 10 + 1))
+         y = float(np.random.random_integers(-10, 10 + 1))
          
          
-         m = float(np.random.random_integers(-10,10+1))
-         p = float(np.random.random_integers(-10, 10+1))
-         o = float(np.random.random_integers(-10, 10+1))
+         m = float(np.random.random_integers(-10, 10 + 1))
+         p = float(np.random.random_integers(-10, 10 + 1))
+         o = float(np.random.random_integers(-10, 10 + 1))
          
          
          x_dev = [i,x,m,l]
          y_dev = [i,y,p,l]
          z_dev = [i,z,o,l]
+         devs = [i,l,x,m,y,p,z,o]
          #print(x_dev)
          d_x.append(x_dev)
          d_y.append(y_dev)
          d_z.append(z_dev)
+         d.append(devs)
          
        # for n in clickers:
         #    coordinates[i][l][n] = {'x':0, 'y':0, 'z':0}
             #d_y[n] = {}
             #df_y = pd.DataFrame(data=d_y)
-         
-            #print(d_x)
+d_d = pd.DataFrame(d, columns=('P', 'L', 'A_x', 'O_x', 'A_y', 'O_y', 'A_z', 'O_z'))
+print(d_d) 
+print(d_d.shape)   
+sns_plot = sns.relplot(x = 'A_x',y = 'O_x', hue= 'P', style = 'L', data=d_d, s=75)    
 #print(d_x)
-df_x = pd.DataFrame(d_x, columns=('P','A', 'O', 'L'))
-print(df_x)
-print(df_x.shape)
+#print(d_x)
+#df_x = pd.DataFrame(d_x, columns=('P','A', 'O', 'L'))
+#print(df_x)
+#print(df_x.shape)
 #df_y = pd.DataFrame(d_y, columns=('P','A', 'O', 'L'))
 #print(df_y)
 #df_z = pd.DataFrame(d_z, columns=('P','A', 'O', 'L'))
@@ -85,7 +91,7 @@ tips = sns.load_dataset("tips")
 #df_2 = pd.DataFrame(data=d_x)
 #print(df_2)
 
-'''
+
 sns_plot = sns.relplot(x = 'A', y = 'O', hue= 'P', style = 'L', data=df_x, s=75)
 plt.xlabel('Oli Deviations')
 plt.ylabel('Aaron Deviations')
@@ -102,24 +108,3 @@ plt.savefig('bias_output_x.png', bbox_inches='tight', dpi=300)
 
   
 '''
- x = float(np.random.random_integers(10))
- z = float(np.random.random_integers(10))
- y = float(np.random.random_integers(10))
- 
- 
- m = float(np.random.random_integers(10))
- p = float(np.random.random_integers(10))
- o = float(np.random.random_integers(10))
- 
-# print(coordinates)
-# for n in clickers:  
- if n == 'oli':
- coordinates[i][l][n]['x'], coordinates[i][l][n]['y'], coordinates[i][l][n]['z'] = m,n,o
- #d_x['A']['O']['L'] = x, y, l
- #d_y[1][p] = x  
-  #   d_y[n][n][l].append(x)
-  
- 
- else:
- coordinates[i][l][n]['x'], coordinates[i][l][n]['y'], coordinates[i][l][n]['z'] = o,p,m
-  '''  

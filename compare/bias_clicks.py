@@ -147,7 +147,7 @@ for j in range(len(pat_list)):
 
 
 pat_list = [item.replace('.npy', '') for item in pat_list]
-print(pat_list)
+#print(pat_list)
 
 latex_line_mean = []
 latex_line_mean_std = []
@@ -207,6 +207,7 @@ for n in clickers:
 d_x = []
 d_y = []
 d_z = []
+d = []
 for p in pat_list:
     for l in landmarks:
         for j in range(len(pat_list)):
@@ -222,12 +223,20 @@ for p in pat_list:
         x_dev = [p, dev_x_o, dev_x_a, l]
         y_dev = [p, dev_y_o, dev_y_a, l]
         z_dev = [p, dev_z_o, dev_z_a, l]
-        
+        devs = [p,l,dev_x_a,dev_x_o, dev_y_a, dev_y_o, dev_z_a, dev_z_o]
         d_x.append(x_dev)    
         d_y.append(y_dev)
         d_z.append(z_dev)
+        d.append(devs)
 
 
+
+df_d = pd.DataFrame(d, columns=('P', 'L', 'A_x', 'O_x', 'A_y', 'O_y', 'A_z', 'O_z'))
+print(df_d) 
+print(df_d.shape)   
+sns_plot = sns.relplot(x = 'A_x',y = 'O_x', hue= 'P', style = 'L', data=df_d, s=75)  
+plt.savefig('bias_output_x.png', bbox_inches='tight', dpi=300)
+'''
 #print(d_x)        
 df_x = pd.DataFrame(data=d_x, columns=('Patient', 'Oli', 'Aaron', 'Landmark'))
 print(df_x)
@@ -239,7 +248,7 @@ plt.ylabel('Aaron Deviations')
 plt.title("Deviations from Abby's clicks in x-axis")
 plt.savefig('bias_output_x.png', bbox_inches='tight', dpi=300)
 
-
+'''
 '''
 df_y = pd.DataFrame(data=d_y, columns=('Patient', 'Landmark', 'Oli', 'Aaron'))
 print(df_y)
