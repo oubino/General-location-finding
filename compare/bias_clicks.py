@@ -162,6 +162,7 @@ click_outlier_counter = 0
 clickers = ['Aaron', 'Oli']
 
 Deviations = {}
+'''
 for n in clickers: 
     Deviations[n] = {}
     for p in pat_list:
@@ -176,36 +177,54 @@ for n in clickers:
                    dev_x_o = (com_list_clicker_1['%1.0f' % l][j][2] - com_list_clicker_ab['%1.0f' % l][j][2])*(x_mm)
                    dev_y_o = (com_list_clicker_1['%1.0f' % l][j][1] - com_list_clicker_ab['%1.0f' % l][j][1])*(y_mm)
                    dev_z_o = (com_list_clicker_1['%1.0f' % l][j][0] - com_list_clicker_ab['%1.0f' % l][j][0])*(z_mm)
-                   '''
+                   
                      dev_o = math.sqrt(abs(dev_x_o)**2 + abs(dev_y_o)**2 + abs(dev_z_o)**2)
                      dev_list_o['%1.0f' % k].append(dev_o)
                      dev_list_x_o['%1.0f' % k].append(dev_x_o)
                      dev_list_y_o['%1.0f' % k].append(dev_y_o)
                      dev_list_z_o['%1.0f' % k].append(dev_z_o)
-                   '''
+                   
                    dev_x_a = (com_list_clicker_2['%1.0f' % l][j][2] - com_list_clicker_ab['%1.0f' % l][j][2])*(x_mm)
                    dev_y_a = (com_list_clicker_2['%1.0f' % l][j][1] - com_list_clicker_ab['%1.0f' % l][j][1])*(y_mm)
                    dev_z_a = (com_list_clicker_2['%1.0f' % l][j][0] - com_list_clicker_ab['%1.0f' % l][j][0])*(z_mm)
                      
-                   '''
+                   
                      dev_a = math.sqrt(abs(dev_x_a)**2 + abs(dev_y_a)**2 + abs(dev_z_a)**2)
                      dev_list_a['%1.0f' % k].append(dev_a)
                      dev_list_x_a['%1.0f' % k].append(dev_x_a)
                      dev_list_y_a['%1.0f' % k].append(dev_y_a)
                      dev_list_z_a['%1.0f' % k].append(dev_z_a)
-                    '''
+                    
                    if n == 'Aaron':
                        Deviations[n][p][l]['x'], Deviations[n][p][l]['y'], Deviations[n][p][l]['z'] = dev_x_a, dev_y_a, dev_z_a
                    elif n == 'Oli':
                        Deviations[n][p][l]['x'], Deviations[n][p][l]['y'], Deviations[n][p][l]['z'] = dev_x_o, dev_y_o, dev_z_o
                         
              
+'''
+d_x = []
+for p in pat_list:
+    for l in landmarks:
+        for j in range(len(pat_list)):
+            z_mm, y_mm, x_mm = pixel_to_mm(pat_list[j])
+            dev_x_o = (com_list_clicker_1['%1.0f' % l][j][2] - com_list_clicker_ab['%1.0f' % l][j][2])*(x_mm)
+            dev_y_o = (com_list_clicker_1['%1.0f' % l][j][1] - com_list_clicker_ab['%1.0f' % l][j][1])*(y_mm)
+            dev_z_o = (com_list_clicker_1['%1.0f' % l][j][0] - com_list_clicker_ab['%1.0f' % l][j][0])*(z_mm)
+            
+            dev_x_a = (com_list_clicker_2['%1.0f' % l][j][2] - com_list_clicker_ab['%1.0f' % l][j][2])*(x_mm)
+            dev_y_a = (com_list_clicker_2['%1.0f' % l][j][1] - com_list_clicker_ab['%1.0f' % l][j][1])*(y_mm)
+            dev_z_a = (com_list_clicker_2['%1.0f' % l][j][0] - com_list_clicker_ab['%1.0f' % l][j][0])*(z_mm)
+            
+            x_dev = [p, l, dev_x_o, dev_x_a]
+            d_x.append(x_dev)
 
-Deviations_df = pd.DataFrame(data=Deviations)
-print(Deviations_df)
+
+print(d_x)        
+df_x = pd.DataFrame(data=d_x, columns=('P','A', 'O', 'L'))
+print(df_x)
 
 # plot
-
-sns_plot = sns.relplot(x = 'Oli', y = 'Aaron', hue = 'landmark', style = 'patient', data=Deviations_df)
+'''
+sns_plot = sns.relplot(x = 'Oli', y = 'Aaron', hue = '', style = 'patient', data=Deviations_df)
 sns_plot.savefig('bias_output.png')
-
+'''
