@@ -162,16 +162,16 @@ click_outlier_counter = 0
 clickers = ['Aaron', 'Oli']
 
 Deviations = {}
-for p in pat_list:
-    # each patient has dictioanary
-    Deviations[p] = {}
-   
-    for l in landmarks:
-        # dictionary for each clicker
-        Deviations[p][l] = {}
-        for n in clickers: 
-           Deviations[p][l][n] = {'x':0, 'y':0, 'z':0}
-           for j in range(len(pat_list)): 
+for n in clickers: 
+    Deviations[n] = {}
+    for p in pat_list:
+        # each patient has dictioanary
+        Deviations[n][p] = {}
+       
+        for l in landmarks:
+            # dictionary for each clicker
+            Deviations[n][p][l] = {'x':0, 'y':0, 'z':0}
+            for j in range(len(pat_list)): 
                    z_mm, y_mm, x_mm = pixel_to_mm(pat_list[j])
                    dev_x_o = (com_list_clicker_1['%1.0f' % l][j][2] - com_list_clicker_ab['%1.0f' % l][j][2])*(x_mm)
                    dev_y_o = (com_list_clicker_1['%1.0f' % l][j][1] - com_list_clicker_ab['%1.0f' % l][j][1])*(y_mm)
@@ -195,9 +195,9 @@ for p in pat_list:
                      dev_list_z_a['%1.0f' % k].append(dev_z_a)
                     '''
                    if n == 'Aaron':
-                       Deviations[p][l][n]['x'], Deviations[p][l][n]['y'], Deviations[p][l][n]['z'] = dev_x_a, dev_y_a, dev_z_a
+                       Deviations[n][p][l]['x'], Deviations[n][p][l]['y'], Deviations[n][p][l]['z'] = dev_x_a, dev_y_a, dev_z_a
                    elif n == 'Oli':
-                       Deviations[p][l][n]['x'], Deviations[p][l][n]['y'], Deviations[p][l][n]['z'] = dev_x_o, dev_y_o, dev_z_o
+                       Deviations[n][p][l]['x'], Deviations[n][p][l]['y'], Deviations[n][p][l]['z'] = dev_x_o, dev_y_o, dev_z_o
                         
              
 
