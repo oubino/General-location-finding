@@ -203,6 +203,8 @@ for n in clickers:
              
 '''
 d_x = []
+d_y = []
+d_z = []
 for p in pat_list:
     for l in landmarks:
         for j in range(len(pat_list)):
@@ -216,12 +218,21 @@ for p in pat_list:
             dev_z_a = (com_list_clicker_2['%1.0f' % l][j][0] - com_list_clicker_ab['%1.0f' % l][j][0])*(z_mm)
             
         x_dev = [p, l, dev_x_o, dev_x_a]
+        y_dev = [p, l, dev_y_o, dev_y_a]
+        z_dev = [p, l, dev_z_o, dev_z_a]
+        
         d_x.append(x_dev)    
+        d_y.append(y_dev)
+        d_z.append(z_dev)
 
 
-print(d_x)        
+#print(d_x)        
 df_x = pd.DataFrame(data=d_x, columns=('Patient', 'Landmark', 'Oli', 'Aaron'))
 print(df_x)
+df_y = pd.DataFrame(data=d_y, columns=('Patient', 'Landmark', 'Oli', 'Aaron'))
+print(df_y)
+df_z = pd.DataFrame(data=d_z, columns=('Patient', 'Landmark', 'Oli', 'Aaron'))
+print(df_z)
 
 # plot
 '''
