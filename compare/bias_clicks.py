@@ -146,6 +146,8 @@ for j in range(len(pat_list)):
         mean_list['%1.0f' % k].append(coords)
 
 
+pat_list = [item.replace('.npy', '') for item in pat_list]
+print(pat_list)
 
 latex_line_mean = []
 latex_line_mean_std = []

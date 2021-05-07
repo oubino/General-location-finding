@@ -20,8 +20,11 @@ sns.set_theme(style='darkgrid')
 
 
 landmarks_total = [1,2,3,4,5,6,7,8,9,10]
-landmarks_total_loc = {1:'com',2:'com', 3: 'com',4:'com', 5:'com',6:'com', 7:'com',8:'com', 9:'com',10:'com', } 
-struc_list = [21,22,23,24,25,26]
+landmarks_total_loc = {1:'com',2:'com', 3: 'com',4:'com', 5:'com',6:'com', 7:'com',8:'com', 9:'com',10:'com', }
+struc_list = ['21.npy','22.npy','23.npy','24.npy','25.npy','26.npy']
+struc_list = [item.replace('.npy', '') for item in struc_list]
+print(struc_list)
+
 coordinates = {}
 clickers = ['aaron', 'oli']
 
