@@ -102,7 +102,7 @@ class load_model:
         self.optimizer_load = optim.Adam([
                         {'params': self.model_load.parameters()}
                        # {'params': S.sigmas[3]} # not general
-                    ], lr=1e-4, weight_decay = 0.05) # use adam lr optimiser
+                    ], lr=1e-3, weight_decay = 0.05) # use adam lr optimiser
                 
         for k in S.landmarks_load:
             self.optimizer_load.add_param_group({'params': S.sigmas_load[k]}) 
