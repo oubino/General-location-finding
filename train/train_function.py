@@ -71,7 +71,7 @@ def train_model(model,scaler, optimizer, scheduler,alpha,reg,gamma,sigmas,num_ep
                         with torch.cuda.amp.autocast(enabled = S.use_amp):
                             outputs = model((inputs))
                             # 1. convert masks to heatmaps inside loss function (allows sigma optimisation)
-                            loss = loss_func.calc_loss_gauss(model, inputs, outputs, target_coords, idx, metrics_landmarks,alpha,reg,gamma,imgs_in_set,sigmas)
+                            loss = loss_func.calc_loss_gauss(model, inputs, outputs, target_coords, idx, metrics_landmarks,alpha,reg,gamma,imgs_in_set,sigmas, patients)
                             
                             # iters to accumulate set to 12 this would mean 12 x 3 = 36 images before optim.step()
                             # if 75 images will step twice then is left over with 3 images - need to scale by this

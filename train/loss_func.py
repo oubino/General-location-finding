@@ -4,7 +4,38 @@ import torch
 from useful_functs import functions
 import settings as S
 
-def calc_loss_gauss(model, img, pred, target_coords, idx, metrics_landmarks, alpha, reg, gamma, epoch_samples, sigma): 
+import matplotlib.pyplot as plt
+import numpy as np
+import os
+
+def print_2D_heatmap(img, landmark, heatmap, pred_z, eval_path, patient):
+    
+    # image
+    #  H x W x d
+    
+    plt.figure(figsize=(7, 7))
+        
+    pred_z = int(pred_z) # convert to nearest int
+    img = img[:, :, pred_z]
+    
+    heatmap = heatmap.detach().cpu()[:,:,pred_z]
+    heatmap = np.ma.masked_where(heatmap < 0.6, heatmap)
+    
+    # ---- plot as point ------
+    plt.imshow(img.cpu(),cmap = 'Greys_r', alpha = 0.9)
+    plt.imshow(heatmap, cmap = 'viridis', alpha = 0.7)
+    # add z annotation
+    #plt.annotate("%1.0f" % pred_z,(pred_x.cpu().numpy(), pred_y.cpu().numpy()), color = 'green')
+    #plt.annotate("%1.0f" % int(struc_z_1),(struc_x_1, struc_y_1), color = 'red')
+    #plt.annotate("%1.0f" % int(struc_z_2),(struc_x_2, struc_y_2), color = 'blue')
+    #plt.legend()
+    # ------------------------------------
+    
+    img_name = os.path.join(eval_path, "2d_slice_heatmap_%s.png" % patient.replace('.npy', '_%1.0f') % landmark)
+    S.img_counter_3 += 1
+    plt.savefig(img_name)
+
+def calc_loss_gauss(model, img, pred, target_coords, idx, metrics_landmarks, alpha, reg, gamma, epoch_samples, sigma, patient): 
 
     # pred is Batch x Classes x Height x Width x Depth
     # target_coords is Batch x Dictionary (Dict[landmark][key]; Keys: x,y,z,locat,present)
@@ -84,6 +115,10 @@ def calc_loss_gauss(model, img, pred, target_coords, idx, metrics_landmarks, alp
         index = S.landmarks.index(l)
         pred_heatmap = pred[i][index]
         # l - 1 because l is 1,2,3,4,5,6
+        
+        file_name = "train_img"
+        path = os.path.join(S.run_path, file_name)
+        print_2D_heatmap(img[i][0], l, targ_gaus, structure_com_z, path, patient[i])
         
         # img_loss and sum_loss per landmark
         if S.wing_loss == False:
