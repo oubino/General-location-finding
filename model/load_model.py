@@ -88,7 +88,7 @@ class load_model:
         
     def transfer_learn_unet_final_layer(self, class_number, features):
         # model becomes new model with different last layer
-        self.model_load = network.Transfer_model_2(class_number, features, self.model_load)
+        self.model_load = network.Transfer_model(class_number, features, self.model_load)
         self.model_load = self.model_load.to(S.device)
         print('Transferred model')
         summary(self.model_load, input_size=(1, S.in_y, S.in_x, S.in_z), batch_size = S.batch_size)
