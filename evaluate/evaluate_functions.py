@@ -340,15 +340,11 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
                   val_max_list[patient[i]][l] = val_max[i] # update max val
                   coord_list[patient[i]][l]['x'], coord_list[patient[i]][l]['y'], coord_list[patient[i]][l]['z'] = pred_coords_max[i][0], pred_coords_max[i][1], pred_coords_max[i][2]                  
                   pat_index[patient[i]][l] = slide_index
-                  #if slide_index == 34 or slide_index == 35 or slide_index == 36:
-                  #    print_2D_heatmap(image[i][0], l, pred[i][l-1], coord_list[patient[i]][l]['z'], eval_path, patient[i])
+                  if slide_index == 34 or slide_index == 35 or slide_index == 36:
+                      print_2D_heatmap(image[i][0], l, pred[i][l-1], coord_list[patient[i]][l]['z'], eval_path, patient[i])
          
       S.slide_index += 1
   S.slide_index = 0
-  
-  print('val max')
-  print(val_max_list)
-  exit()
     
   # final locations dict
   final_loc = {}
