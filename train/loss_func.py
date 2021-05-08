@@ -106,6 +106,8 @@ def calc_loss_gauss(model, img, pred, target_coords, idx, metrics_landmarks, alp
           p2p_loss = S.p2p_reg_term * img_landmark_point_to_point
           file_name = "train_img"
           path = os.path.join(S.run_path, file_name)
+          print('sigma')
+          print(S.sigmas[l])
           print_2D_heatmap(img[i][0], l, targ_gaus, structure_com_z, path, patient[i])
         else:
           # target is full of zeros
