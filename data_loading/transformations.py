@@ -461,7 +461,7 @@ class ToTensor(object):
                 if z > S.in_z or z < 0:
                     print('z outside bounds of cropped image')
                     print(z)
-                print_2D_slice(image, l, x, y, z, patient)
+                #print_2D_slice(image, l, x, y, z, patient)
             #structure[z][y][x] = l
             coords[l]['x'], coords[l]['y'], coords[l]['z'] = x,y,z
             
