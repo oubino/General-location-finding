@@ -98,6 +98,21 @@ class load_model:
         print('number of learnable parameters')
         print(get_number_of_learnable_parameters(self.model_load))
         
+        # add to optimizer
+        self.optimizer_load = optim.Adam([
+                        {'params': self.model_load.parameters()}
+                       # {'params': S.sigmas[3]} # not general
+                    ], lr=1e-4, weight_decay = 0.05) # use adam lr optimiser
+                
+        for k in S.landmarks_load:
+            self.optimizer_load.add_param_group({'params': S.sigmas_load[k]}) 
+            
+        # add into optimizer any sigmas in sigmas but not in sigmas_load
+        list_sigma = [x for x in S.sigmas if x not in S.sigmas_load]
+        for k in list_sigma:
+            self.optimizer_load.add_param_group({'params': S.sigmas[k]}) 
+            
+        
         # check which params have 
         """
         for name, param in model_transfer.named_parameters():
