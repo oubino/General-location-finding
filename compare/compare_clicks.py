@@ -4,7 +4,6 @@ import math
 import csv
 import pickle
 import matplotlib.pyplot as plt
-
 def question(question):
     while "the answer is invalid":
         reply = str(input(question+' (y/n): ')).lower().strip()
@@ -15,6 +14,7 @@ def question(question):
 
 def pixel_to_mm(patient):
     data = csv.reader(open(os.path.join(csv_root, 'image_dimensions.csv')),delimiter=',')
+    data = csv.reader(open(os.path.join(root, 'image_dimensions.csv')),delimiter=',')
     next(data) # skip first line
     list_img = list(data)#, key=operator.itemgetter(0))
     # sortedlist[img_number][0 = name, 1 = x/y, 2 = z]
@@ -29,7 +29,6 @@ def pixel_to_mm(patient):
     pixel_mm_z = float(list_img[index][2])
     
     return pixel_mm_z, pixel_mm_y, pixel_mm_x
-
 def histogram(data, coord, landmark):
     # plot and save histogram
     data = np.array(data)
@@ -49,8 +48,6 @@ def histogram(data, coord, landmark):
     # set x lim to centre around 0
     plt.xticks(np.arange(-30,31,4))
     plt.savefig(hist_name)
-
-
 def load_obj(root, name):
     with open(os.path.join(root, name) + '.pkl', 'rb') as f:       
         return pickle.load(f)
@@ -58,28 +55,29 @@ def load_obj(root, name):
 # paths
 csv_root = r'/home/oli/data/paed_dataset/test'
 root = r'/home/oli/data/results/oli/run_folder/eval_100_3'
+root = r'/home/olive/data/Facial_asymmetry_test_sets'
 
 #clicker_1 = input('Clicker_1, (e.g. Oli_test_set): ') 
 #clicker_2 = input('Clicker_2, (e.g. Aaron_test_set): ') 
+clicker_1 = input('Clicker_1, (e.g. Oli_test_set): ') 
+clicker_2 = input('Clicker_2, (e.g. Aaron_test_set): ') 
 
 hist_root = r'/home/rankinaaron98/data/Compare_aaron/Histograms_reclick__oli_aaron_testsets/'
 
 # load in pickle file
 file_clicker_1 = load_obj(root, 'final_coords_no_struc')
 file_clicker_2 = load_obj(root, 'final_coords_no_struc_2')
+file_clicker_1 = load_obj(root, 'coords_' + clicker_1)
+file_clicker_2 = load_obj(root, 'coords_' + clicker_2)
 
 patients_clicker_1 = list(file_clicker_1.keys())
 patients_clicker_2 = list(file_clicker_2.keys())
-
 # landmarks
 landmarks = [1,2,3,4,5,6,7,8,9,10]
-
 # limit
 limit = 20
-
 # common patients
 pat_list = [x for x in patients_clicker_1 if x in patients_clicker_2]
-
 com_list_clicker_1 = {}
 com_list_clicker_2 = {}
 dev_list = {}
@@ -93,7 +91,6 @@ mean_dev_y = {}
 mean_dev_z = {}
 mean_dev_std = {}
 mean_list = {}
-
 for k in landmarks:
     com_list_clicker_1['%1.0f' % k] = []
     com_list_clicker_2['%1.0f' % k] = []
@@ -109,10 +106,8 @@ for k in landmarks:
     mean_dev_std['%1.0f' % k] = []
     mean_list['%1.0f' % k] = []
     
-
 plot_histograms = question('histograms(y) / or not (n)')
 calc_deviations = question('calc deviations(y) / or not (n)')
-
 # for common structures add mean to array for both clicker_1 and clicker_2
 for p in pat_list:
     for k in landmarks:
@@ -127,9 +122,6 @@ for j in range(len(pat_list)):
         mean_z = ((com_list_clicker_1['%1.0f' % k][j][0] + com_list_clicker_2['%1.0f' % k][j][0])/2)
         coords = [mean_z, mean_y, mean_x]
         mean_list['%1.0f' % k].append(coords)
-
-
-
 latex_line_mean = []
 latex_line_mean_std = []
 latex_line_x = []
@@ -137,9 +129,9 @@ latex_line_y = []
 latex_line_z = []
 csv_line = []
 name_of_file = os.path.join(root, "paed_struc_compare.txt")
+name_of_file = os.path.join(hist_root, clicker_1 +"_" + clicker_2 + "_compare.txt")
 txt_file = open(name_of_file, "a")    
 click_outlier_counter = 0
-
 
 if calc_deviations == True:
     # calculate deviation of arrays etc.
@@ -225,32 +217,23 @@ txt_file.close()
 print('for each landmark, list of the images with deviations greater than %1.0f' % limit)
 print(dev_upper_limit_list)
 print('\n')
-
 print('percentage of clicks which are outliers')
 print(100*click_outlier_counter/(len(pat_list)*len(landmarks)))
-
-
-
-
        
 # mean deviation per landmark
 print('mean deviation per landmark')
 print(mean_dev)
 print('\n')
-
 # std of mean deviation per landmark
 print('std of mean deviation per landmark')
 print(mean_dev_std)
 print('\n')
-
 print('x mean dev')
 print(mean_dev_x)
 print('\n')
-
 print('y mean dev')
 print(mean_dev_y)
 print('\n')
-
 print('z mean dev')
 print(mean_dev_z)
 print('\n')
