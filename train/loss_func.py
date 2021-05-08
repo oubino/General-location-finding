@@ -118,6 +118,10 @@ def calc_loss_gauss(model, img, pred, target_coords, idx, metrics_landmarks, alp
         
         file_name = "train_img"
         path = os.path.join(S.run_path, file_name)
+        try: 
+            os.mkdir(path)
+        except OSError as error:
+            print(error)
         print_2D_heatmap(img[i][0], l, targ_gaus, structure_com_z, path, patient[i])
         
         # img_loss and sum_loss per landmark
