@@ -340,7 +340,7 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
                   val_max_list[patient[i]][l] = val_max[i] # update max val
                   coord_list[patient[i]][l]['x'], coord_list[patient[i]][l]['y'], coord_list[patient[i]][l]['z'] = pred_coords_max[i][0], pred_coords_max[i][1], pred_coords_max[i][2]                  
                   pat_index[patient[i]][l] = slide_index
-                  if val_max[i] > 0.8:
+                  if val_max[i] > 0.7:
                       print_2D_heatmap(image[i][0], l, pred[i][l-1], coord_list[patient[i]][l]['z'], eval_path, patient[i])
          
       S.slide_index += 1
@@ -542,7 +542,7 @@ def print_2D_heatmap(img, landmark, heatmap, pred_z, eval_path, patient):
     img = img[:, :, pred_z]
     
     heatmap = heatmap.detach().cpu()[:,:,pred_z]
-    heatmap = np.ma.masked_where(heatmap < 0.8, heatmap)
+    heatmap = np.ma.masked_where(heatmap < 0.7, heatmap)
     
     # ---- plot as point ------
     plt.imshow(img.cpu(),cmap = 'Greys_r', alpha = 0.9)
