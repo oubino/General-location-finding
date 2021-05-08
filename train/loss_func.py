@@ -33,7 +33,7 @@ def print_2D_heatmap(img, landmark, heatmap, pred_z, eval_path, patient):
     
     img_name = os.path.join(eval_path, "2d_slice_heatmap_%s.png" % patient.replace('.npy', '_%1.0f') % landmark)
     S.img_counter_3 += 1
-    plt.savefig(img_name)
+    plt.savefig(img_name, dpi = 600)
 
 def calc_loss_gauss(model, img, pred, target_coords, idx, metrics_landmarks, alpha, reg, gamma, epoch_samples, sigma, patient): 
 
