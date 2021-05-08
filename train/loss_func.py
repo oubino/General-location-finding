@@ -19,7 +19,7 @@ def print_2D_heatmap(img, landmark, heatmap, pred_z, eval_path, patient):
     img = img[:, :, pred_z]
     
     heatmap = heatmap.detach().cpu()[:,:,pred_z]
-    heatmap = np.ma.masked_where(heatmap < 0.6, heatmap)
+    heatmap = np.ma.masked_where(heatmap < 0.3, heatmap)
     
     # ---- plot as point ------
     plt.imshow(img.cpu(),cmap = 'Greys_r', alpha = 0.9)
@@ -104,6 +104,9 @@ def calc_loss_gauss(model, img, pred, target_coords, idx, metrics_landmarks, alp
         if target_coords[l]['present'][i] == 1:
           targ_gaus = functions.gaussian_map(structure_com_x,structure_com_y, structure_com_z,S.sigmas[l],gamma,x_size,y_size,z_size, output = True) 
           p2p_loss = S.p2p_reg_term * img_landmark_point_to_point
+          file_name = "train_img"
+          path = os.path.join(S.run_path, file_name)
+          print_2D_heatmap(img[i][0], l, targ_gaus, structure_com_z, path, patient[i])
         else:
           # target is full of zeros
           print('zero target')
@@ -115,14 +118,6 @@ def calc_loss_gauss(model, img, pred, target_coords, idx, metrics_landmarks, alp
         index = S.landmarks.index(l)
         pred_heatmap = pred[i][index]
         # l - 1 because l is 1,2,3,4,5,6
-        
-        file_name = "train_img"
-        path = os.path.join(S.run_path, file_name)
-        try: 
-            os.mkdir(path)
-        except OSError as error:
-            print(error)
-        print_2D_heatmap(img[i][0], l, targ_gaus, structure_com_z, path, patient[i])
         
         # img_loss and sum_loss per landmark
         if S.wing_loss == False:
