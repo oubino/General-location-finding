@@ -540,7 +540,7 @@ def print_2D_heatmap(img, landmark, heatmap, pred_z, eval_path, patient):
     
     # ---- plot as point ------
     plt.imshow(img.cpu(),cmap = 'Greys_r', alpha = 0.9)
-    plt.imshow(heatmap.detach().cpu(), cmap = 'viridis', alpha = 0.3)
+    plt.imshow(heatmap.detach().cpu()[:,:,pred_z], cmap = 'viridis', alpha = 0.3)
     # add z annotation
     #plt.annotate("%1.0f" % pred_z,(pred_x.cpu().numpy(), pred_y.cpu().numpy()), color = 'green')
     #plt.annotate("%1.0f" % int(struc_z_1),(struc_x_1, struc_y_1), color = 'red')
