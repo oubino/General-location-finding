@@ -340,6 +340,7 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
                   val_max_list[patient[i]][l] = val_max[i] # update max val
                   coord_list[patient[i]][l]['x'], coord_list[patient[i]][l]['y'], coord_list[patient[i]][l]['z'] = pred_coords_max[i][0], pred_coords_max[i][1], pred_coords_max[i][2]                  
                   pat_index[patient[i]][l] = slide_index
+                  print_2D_heatmap(image[i][0], l, pred[i][l], coord_list[patient[i]][l]['z'], eval_path, patient[i])
          
       S.slide_index += 1
   S.slide_index = 0
@@ -397,7 +398,7 @@ def performance_metrics_line(model,sigmas,gamma, epochs_completed, fold):
                   
               # print 2D slice
               print('2D slice for landmark %1.0f' % l)
-              #print_2D_slice_line(l, pred_max_x, pred_max_y, pred_max_z, struc_coord, eval_path, p)
+              print_2D_slice_line(l, pred_max_x, pred_max_y, pred_max_z, struc_coord, eval_path, p)
         
 #batch_number += 1 # not sure where to put
    
@@ -524,6 +525,30 @@ def print_2D_slice_line(landmark, pred_x, pred_y, pred_z, structure_coord, eval_
     # ------------------------------------
     
     img_name = os.path.join(eval_path, "2d_slice_%s.png" % patient.replace('.npy', '_%1.0f') % landmark)
+    S.img_counter_3 += 1
+    plt.savefig(img_name)
+    
+def print_2D_heatmap(img, landmark, heatmap, pred_z, eval_path, patient):
+    
+    # image
+    #  H x W x d
+    
+    plt.figure(figsize=(7, 7))
+        
+    pred_z = int(pred_z) # convert to nearest int
+    img = img[:, :, pred_z]
+    
+    # ---- plot as point ------
+    plt.imshow(img,cmap = 'Greys_r', alpha = 0.9)
+    plt.imshow(heatmap, cmap = 'viridis', alpha = 0.3)
+    # add z annotation
+    #plt.annotate("%1.0f" % pred_z,(pred_x.cpu().numpy(), pred_y.cpu().numpy()), color = 'green')
+    #plt.annotate("%1.0f" % int(struc_z_1),(struc_x_1, struc_y_1), color = 'red')
+    #plt.annotate("%1.0f" % int(struc_z_2),(struc_x_2, struc_y_2), color = 'blue')
+    plt.legend()
+    # ------------------------------------
+    
+    img_name = os.path.join(eval_path, "2d_slice_heatmap_%s.png" % patient.replace('.npy', '_%1.0f') % landmark)
     S.img_counter_3 += 1
     plt.savefig(img_name)
     
