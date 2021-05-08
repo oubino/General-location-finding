@@ -542,7 +542,7 @@ def print_2D_heatmap(img, landmark, heatmap, pred_z, eval_path, patient):
     img = img[:, :, pred_z]
     
     heatmap = heatmap.detach().cpu()[:,:,pred_z]
-    heatmap = np.ma.masked_where(heatmap < 0.6, heatmap)
+    heatmap = np.ma.masked_where(heatmap < 0.5, heatmap)
     
     # ---- plot as point ------
     plt.imshow(img.cpu(),cmap = 'Greys_r', alpha = 0.9)
