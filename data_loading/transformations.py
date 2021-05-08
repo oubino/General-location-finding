@@ -461,11 +461,11 @@ class ToTensor(object):
                 if z > S.in_z or z < 0:
                     print('z outside bounds of cropped image')
                     print(z)
+                print_2D_slice(image, l, x, y, z, patient)
             #structure[z][y][x] = l
             coords[l]['x'], coords[l]['y'], coords[l]['z'] = x,y,z
             
-            print_2D_slice(image, l, x, y, z, patient)
-            
+
         # swap color axis because
         # numpy image: D x H x W 
         # torch image: C X H X W x D
