@@ -541,7 +541,8 @@ def print_2D_heatmap(img, landmark, heatmap, pred_z, eval_path, patient):
     pred_z = int(pred_z) # convert to nearest int
     img = img[:, :, pred_z]
     
-    heatmap = np.where(heatmap.detach().cpu()[:,:,pred_z] > 0.5)
+    heatmap = heatmap.detach().cpu()[:,:,pred_z]
+    heatmap = np.ma.masked_where(heatmap < 0.5, heatmap)
     
     # ---- plot as point ------
     plt.imshow(img.cpu(),cmap = 'Greys_r', alpha = 0.9)
