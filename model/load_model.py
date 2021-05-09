@@ -4,6 +4,7 @@ from torch.optim import lr_scheduler
 import torch 
 import os
 from torchsummary import summary
+import numpy as np
 
 from evaluate import evaluate_functions
 import paths
@@ -12,6 +13,11 @@ from train import train_function
 import settings as S
 from model import network
 from useful_functs import functions
+
+
+def get_number_of_learnable_parameters(model):
+    model_parameters = filter(lambda p: p.requires_grad, model.parameters())
+    return sum([np.prod(p.size()) for p in model_parameters])
 
 class load_model:
     """Loaded in model is now a class"""
@@ -81,6 +87,29 @@ class load_model:
         for name, param in self.model_load.named_parameters():
             if (param.requires_grad == True):
                 print(name)
+        
+        # check which params have 
+        """
+        for name, param in model_transfer.named_parameters():
+            if param.requires_grad == True:
+                print(name,param)
+        """
+        
+        # think this needed for proper optimizer initialisation
+        """
+        self.optimizer_load = optim.Adam([
+                        {'params': self.model_load.parameters()}
+                       # {'params': S.sigmas[3]} # not general
+                    ], lr=1e-3, weight_decay = 0.05) # use adam lr optimiser
+                
+        for k in S.landmarks_load:
+            self.optimizer_load.add_param_group({'params': S.sigmas_load[k]}) 
+            
+        # add into optimizer any sigmas in sigmas but not in sigmas_load
+        list_sigma = [x for x in S.sigmas if x not in S.sigmas_load]
+        for k in list_sigma:
+            self.optimizer_load.add_param_group({'params': S.sigmas[k]}) 
+        """ 
         
         # check which params have 
         """

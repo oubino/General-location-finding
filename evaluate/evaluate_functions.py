@@ -553,6 +553,33 @@ def print_2D_slice(landmark, pred_x, pred_y, pred_z, struc_x, struc_y, struc_z, 
     S.img_counter_3 += 1
     plt.savefig(img_name)
     
+def print_2D_heatmap(img, landmark, heatmap, pred_z, eval_path, patient):
+    
+    # image
+    #  H x W x d
+    
+    plt.figure(figsize=(7, 7))
+        
+    pred_z = int(pred_z) # convert to nearest int
+    img = img[:, :, pred_z]
+    
+    heatmap = heatmap.detach().cpu()[:,:,pred_z]
+    heatmap = np.ma.masked_where(heatmap < 0.5, heatmap)
+    
+    # ---- plot as point ------
+    plt.imshow(img.cpu(),cmap = 'Greys_r', alpha = 0.9)
+    plt.imshow(heatmap, cmap = 'viridis', alpha = 0.7)
+    # add z annotation
+    #plt.annotate("%1.0f" % pred_z,(pred_x.cpu().numpy(), pred_y.cpu().numpy()), color = 'green')
+    #plt.annotate("%1.0f" % int(struc_z_1),(struc_x_1, struc_y_1), color = 'red')
+    #plt.annotate("%1.0f" % int(struc_z_2),(struc_x_2, struc_y_2), color = 'blue')
+    #plt.legend()
+    # ------------------------------------
+    
+    img_name = os.path.join(eval_path, "2d_slice_heatmap_%s.png" % patient.replace('.npy', '_%1.0f') % landmark)
+    S.img_counter_3 += 1
+    plt.savefig(img_name)
+    
 
 
 """
