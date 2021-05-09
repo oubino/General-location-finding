@@ -257,6 +257,8 @@ elif inter == False:
 #plt.legend(bbox_to_anchor=(1.05, 1), handles = [sns_plot_old, sns_plot_new], loc='upper left', borderaxespad=0.)
 #plt.xlabel('Landmarks')
 plt.ylabel('Deviations (mm)')
+bottom, top = plt.ylim()
+plt.ylim(bottom, 33)
 
 medians_old = round(medians_old,1)
 medians_new = round(medians_new,1)
