@@ -32,7 +32,8 @@ def load_obj(root, name):
         return pickle.load(f)
 
 # paths
-root = r'C:\Users\ranki_252uikw\Documents\MPhysS2'
+#root = r'C:\Users\ranki_252uikw\Documents\MPhysS2'
+root = r'C:\Users\olive\OneDrive\Documents\MPhys'
 
 clicker_o_1 = 'Oli'
 clicker_o_2 = 'Oli_new'
@@ -53,6 +54,21 @@ patients_clicker_a_1 = list(file_clicker_a_1.keys())
 patients_clicker_a_2 = list(file_clicker_a_2.keys())
 # landmarks
 landmarks = [1,2,3,4,5,6,7,8,9,10]
+
+absent_keys = [x for x in patients_clicker_o_1 if x not in patients_clicker_o_2]
+for k in absent_keys:
+    file_clicker_o_1.pop(k)
+    file_clicker_a_1.pop(k)
+    
+absent_keys = [x for x in patients_clicker_o_2 if x not in patients_clicker_o_1]
+for k in absent_keys:
+    file_clicker_o_2.pop(k)
+    file_clicker_a_2.pop(k)
+    
+patients_clicker_o_1 = list(file_clicker_o_1.keys())
+patients_clicker_o_2 = list(file_clicker_o_2.keys())
+patients_clicker_a_1 = list(file_clicker_a_1.keys())
+patients_clicker_a_2 = list(file_clicker_a_2.keys())
 
 
 #print(file_clicker_Ab)
@@ -157,13 +173,13 @@ for l in landmarks:
       
 
 #print(d_old)
-df_d_old = pd.DataFrame(d_old, columns=('Patient', 'Landmark','Initial'))
+df_d_old = pd.DataFrame(d_old, columns=('Patient', 'Landmark','Deviation'))
 print(df_d_old)
 
 dev=[]
 
-for j in range(len(pat_list_new)):
-    for l in landmarks:
+for l in landmarks:
+    for j in range(len(pat_list_new)):
         z_mm, y_mm, x_mm = pixel_to_mm(pat_list_new[j])
         dev_x_new = (com_list_clicker_o_2['%1.0f' % l][j][2] - com_list_clicker_a_2['%1.0f' % l][j][2])*(x_mm)
         dev_y_new = (com_list_clicker_o_2['%1.0f' % l][j][1] - com_list_clicker_a_2['%1.0f' % l][j][1])*(y_mm)
@@ -173,12 +189,16 @@ for j in range(len(pat_list_new)):
     
         i = int(j)
         
+        devs_new = [i, l, dev_new]
+        d_new.append(devs_new)
+        
         #devs_new = [i, l, dev_new]
     #d_x.append(x_dev)    
     #d_y.append(y_dev)
     #d_z.append(z_dev)
         #d_new.append(devs_new)
         
+        """
         if j < len(pat_list_old):
             dev_x_old = (com_list_clicker_o_1['%1.0f' % l][j][2] - com_list_clicker_a_1['%1.0f' % l][j][2])*(x_mm)
             dev_y_old = (com_list_clicker_o_1['%1.0f' % l][j][1] - com_list_clicker_a_1['%1.0f' % l][j][1])*(y_mm)
@@ -191,29 +211,88 @@ for j in range(len(pat_list_new)):
         
         d = [i, l, dev_old, dev_new]   
         dev.append(d)
+        """
+df_d_new = pd.DataFrame(d_new,  columns=('Patient', 'Landmark','Deviation'))
        
-     
+"""
 tips = sns.load_dataset("tips")
 print(tips)
 #print(d_old)
 df_d = pd.DataFrame(dev, columns=('Patient', 'Landmark','Initial', 'Revised'))
 print(df_d)
 print(np.shape(d_new))
-df_d_new = pd.DataFrame(d_new, columns=('Patient', 'Landmark','Revised'))
-print(df_d_new)
+#df_d_new = pd.DataFrame(d_new, columns=('Patient', 'Landmark','Revised'))
+#print(df_d_new)
+"""
 
+df_d_new['Clicks'] = 'New'
+df_d_old['Clicks'] = 'Old'
+df_d = pd.concat([df_d_old,df_d_new])
 
-hand =  ['Initial', 'Revised']
-plt.figure(figsize=(5,4))
-sns_plot_old = sns.boxplot(x = 'Landmark', y = 'Initial',data=df_d, showfliers=False)
-#sns_plot_new = sns.boxplot(x = 'Landmark', y = 'Revised',data=df_d_new, color='b', showfliers=False, label = 'Revised dataset')
+medians_old = df_d_old.groupby(['Landmark'])['Deviation'].median()
+vertical_offset_old = df_d_old['Deviation'].median() * 0.08 # offset from median for display
+
+medians_new = df_d_new.groupby(['Landmark'])['Deviation'].median()
+vertical_offset_new = df_d_new['Deviation'].median() * 0.08 # offset from median for display
+
+means_new = df_d_new.groupby(['Landmark'])['Deviation'].mean()
+means_old = df_d_old.groupby(['Landmark'])['Deviation'].mean()
+
+#hand =  ['Initial', 'Revised']
+plt.figure(figsize=(7,6))
+box_plot = sns.boxplot(x = 'Landmark', y = 'Deviation', hue = 'Clicks', palette = 'Set1', data=df_d, showfliers=False)
+#sns_plot_new = sns.boxplot(x = 'Landmark', y = 'Revised',data=df_d_new, showfliers=False)
 #plt.legend(bbox_to_anchor=(1.05, 1), handles = [sns_plot_old, sns_plot_new], loc='upper left', borderaxespad=0.)
 plt.xlabel('Landmarks')
 plt.ylabel('Deviations (mm)')
 
+medians_old = round(medians_old,1)
+medians_new = round(medians_new,1)
+
+print(means_old)
+print(means_new)
+
+
+for xtick in box_plot.get_xticks():
+    if xtick == 1:
+        box_plot.text(xtick - 0.05,medians_old[xtick+1] + vertical_offset_old - 1,medians_old[xtick+1], 
+                horizontalalignment='right',size='x-small',color='pink', weight='semibold', rotation = 0)
+        box_plot.text(xtick + 0.05,medians_new[xtick+1] + vertical_offset_new,medians_new[xtick+1], 
+            horizontalalignment='left',size='x-small',color='pink', weight='semibold', rotation = 0)
+    elif xtick == 3:
+        box_plot.text(xtick - 0.05,medians_old[xtick+1] + vertical_offset_old - 0.03,medians_old[xtick+1], 
+                horizontalalignment='right',size='x-small',color='pink', weight='semibold', rotation = 0)
+        box_plot.text(xtick + 0.05,medians_new[xtick+1] + vertical_offset_new,medians_new[xtick+1], 
+            horizontalalignment='left',size='x-small',color='pink', weight='semibold', rotation = 0)
+    elif xtick == 4:
+        box_plot.text(xtick - 0.05,medians_old[xtick+1] + vertical_offset_old,medians_old[xtick+1], 
+                horizontalalignment='right',size='x-small',color='pink', weight='semibold', rotation = 0)
+        box_plot.text(xtick + 0.05,medians_new[xtick+1] + vertical_offset_new - 1,medians_new[xtick+1], 
+            horizontalalignment='left',size='x-small',color='pink', weight='semibold', rotation = 0)
+    elif xtick == 6:
+        box_plot.text(xtick - 0.05,medians_old[xtick+1] + vertical_offset_old,medians_old[xtick+1], 
+                horizontalalignment='right',size='x-small',color='pink', weight='semibold', rotation = 0)
+        box_plot.text(xtick + 0.05,medians_new[xtick+1] + vertical_offset_new - 0.1,medians_new[xtick+1], 
+            horizontalalignment='left',size='x-small',color='pink', weight='semibold', rotation = 0)
+    elif xtick == 7:
+        box_plot.text(xtick - 0.05,medians_old[xtick+1] + vertical_offset_old,medians_old[xtick+1], 
+                horizontalalignment='right',size='x-small',color='pink', weight='semibold', rotation = 0)
+        box_plot.text(xtick + 0.05,medians_new[xtick+1] + vertical_offset_new - 1,medians_new[xtick+1], 
+            horizontalalignment='left',size='x-small',color='pink', weight='semibold', rotation = 0)
+    elif xtick == 8:
+        box_plot.text(xtick - 0.05,medians_old[xtick+1] + vertical_offset_old - 0.1,medians_old[xtick+1], 
+                horizontalalignment='right',size='x-small',color='pink', weight='semibold', rotation = 0)
+        box_plot.text(xtick + 0.05,medians_new[xtick+1] + vertical_offset_new - 0,medians_new[xtick+1], 
+            horizontalalignment='left',size='x-small',color='pink', weight='semibold', rotation = 0)
+    else:
+        box_plot.text(xtick - 0.05,medians_old[xtick+1] + vertical_offset_old,medians_old[xtick+1], 
+                horizontalalignment='right',size='x-small',color='pink', weight='semibold', rotation = 0)
+        box_plot.text(xtick + 0.05,medians_new[xtick+1] + vertical_offset_new,medians_new[xtick+1], 
+            horizontalalignment='left',size='x-small',color='pink', weight='semibold', rotation = 0)
+
 plt.title("Inter-observer variation between initial and revised datasets")
 #sns_plot_x.fig.subplots_adjust(top=1)
-plt.savefig('variation_output.png', bbox_inches='tight', dpi=300)
+plt.savefig('variation_output.png', bbox_inches='tight', dpi=1200)
 
 
 
