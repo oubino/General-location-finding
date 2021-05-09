@@ -227,8 +227,8 @@ print(np.shape(d_new))
 #print(df_d_new)
 """
 
-df_d_new['Clicks'] = 'New'
-df_d_old['Clicks'] = 'Old'
+df_d_new['Clicks'] = 'Revised'
+df_d_old['Clicks'] = 'Initial'
 df_d = pd.concat([df_d_old,df_d_new])
 
 medians_old = df_d_old.groupby(['Landmark'])['Deviation'].median()
