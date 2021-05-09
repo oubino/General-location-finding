@@ -6,7 +6,7 @@ import pickle
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
-#sns.set_theme(style="darkgrid")
+sns.set_theme(style="darkgrid")
 
 
 def pixel_to_mm(patient):
@@ -57,7 +57,6 @@ landmarks = [1,2,3,4,5,6,7,8,9,10]
 #print(file_clicker_Ab)
 # common patients
 pat_list = [x for x in patients_clicker_1 if x in patients_clicker_2]
-
 com_list_clicker_1 = {}
 com_list_clicker_2 = {}
 com_list_clicker_ab = {}
@@ -117,109 +116,82 @@ for j in range(len(pat_list)):
 
 
 pat_list = [item.replace('.npy', '') for item in pat_list]
+
+#pat_list = np.asarray(pat_list, dtype=np.float64, order='C')
+
 #print(pat_list)
 
-
+lm = ['AMl', 'AMr', 'HMl', 'HMr', 'FZl', 'FZr', 'FNl', 'FNr', 'SOl', 'SOr']
 d_x = []
 d_y = []
 d_z = []
 d = []
-for p in pat_list:
-    for l in landmarks:
-        for j in range(len(pat_list)):
-            z_mm, y_mm, x_mm = pixel_to_mm(pat_list[j])
-            dev_x_o = (com_list_clicker_1['%1.0f' % l][j][2] - com_list_clicker_ab['%1.0f' % l][j][2])*(x_mm)
-            dev_y_o = (com_list_clicker_1['%1.0f' % l][j][1] - com_list_clicker_ab['%1.0f' % l][j][1])*(y_mm)
-            dev_z_o = (com_list_clicker_1['%1.0f' % l][j][0] - com_list_clicker_ab['%1.0f' % l][j][0])*(z_mm)
-            
-            dev_x_a = (com_list_clicker_2['%1.0f' % l][j][2] - com_list_clicker_ab['%1.0f' % l][j][2])*(x_mm)
-            dev_y_a = (com_list_clicker_2['%1.0f' % l][j][1] - com_list_clicker_ab['%1.0f' % l][j][1])*(y_mm)
-            dev_z_a = (com_list_clicker_2['%1.0f' % l][j][0] - com_list_clicker_ab['%1.0f' % l][j][0])*(z_mm)
-            
-        #x_dev = [p, dev_x_o, dev_x_a, l]
-        #y_dev = [p, dev_y_o, dev_y_a, l]
-        #z_dev = [p, dev_z_o, dev_z_a, l]
-        devs = [p,l,dev_x_a,dev_x_o, dev_y_a, dev_y_o, dev_z_a, dev_z_o]
-        #d_x.append(x_dev)    
-        #d_y.append(y_dev)
-        #d_z.append(z_dev)
+for l in landmarks:
+    for j in range(len(pat_list)):
+        z_mm, y_mm, x_mm = pixel_to_mm(pat_list[j])
+        dev_x_o = (com_list_clicker_1['%1.0f' % l][j][2] - com_list_clicker_ab['%1.0f' % l][j][2])*(x_mm)
+        dev_y_o = (com_list_clicker_1['%1.0f' % l][j][1] - com_list_clicker_ab['%1.0f' % l][j][1])*(y_mm)
+        dev_z_o = (com_list_clicker_1['%1.0f' % l][j][0] - com_list_clicker_ab['%1.0f' % l][j][0])*(z_mm)
+        
+        dev_x_a = (com_list_clicker_2['%1.0f' % l][j][2] - com_list_clicker_ab['%1.0f' % l][j][2])*(x_mm)
+        dev_y_a = (com_list_clicker_2['%1.0f' % l][j][1] - com_list_clicker_ab['%1.0f' % l][j][1])*(y_mm)
+        dev_z_a = (com_list_clicker_2['%1.0f' % l][j][0] - com_list_clicker_ab['%1.0f' % l][j][0])*(z_mm)
+        
+    #x_dev = [p, dev_x_o, dev_x_a, l]
+    #y_dev = [p, dev_y_o, dev_y_a, l]
+    #z_dev = [p, dev_z_o, dev_z_a, l]
+        i = int(j)
+        
+        devs = [ dev_x_a,dev_x_o, dev_y_a, dev_y_o, dev_z_a, dev_z_o, i, lm[j]]
+    #d_x.append(x_dev)    
+    #d_y.append(y_dev)
+    #d_z.append(z_dev)
         d.append(devs)
+       
+        
+o_x_max = np.amax(devs[1])
+print(o_x_max)
+#print(d)
+df_d = pd.DataFrame(d, columns=('A_x', 'O_x', 'A_y', 'O_y', 'A_z', 'O_z','Patient', 'Landmark'))
+print(df_d)  
 
 
-
-df_d = pd.DataFrame(d, columns=('Patient', 'Landmark', 'A_x', 'O_x', 'A_y', 'O_y', 'A_z', 'O_z'))
-print(df_d) 
-print(df_d.shape)   
-
-
-x_axis = df_d.plot.scatter(x = 'O_x',
-                   y = 'A_x',
-                   c = 'Landmark',
-                   colormap = 'Set3'
-                   )
-
-#x_axis(figsize=(8, 6), dpi=80)
-plt.xlabel('Oli Deviations')
-plt.ylabel('Aaron Deviations')
+plt.figure(figsize=(3,3))
+sns_plot_x = sns.lmplot(fit_reg=False,x = 'O_x', y = 'A_x' , hue = 'Landmark', legend='full', palette=('deep'),data=df_d)
+plt.axvline(0, color='black')
+plt.axhline(0, color='black')
+plt.xlim(-11,11)
+plt.ylim(-11,11)
+plt.xlabel('Oli deviations (mm)')
+plt.ylabel('Aaron deviations (mm)')
 plt.title("Deviations from Abby's clicks in x-axis")
+sns_plot_x.fig.subplots_adjust(top=1)
 plt.savefig('bias_output_x.png', bbox_inches='tight', dpi=300)
 
-plt.show()
-x_axis2 = plt.scatter(x = 'O_x',
-                   y = 'A_x',
-                   #c = 'Landmark',
-                   colormap = 'Set3'
-                   )
 
-#x_axis(figsize=(8, 6), dpi=80)
-plt.xlabel('Oli Deviations')
-plt.ylabel('Aaron Deviations')
-plt.title("Deviations from Abby's clicks in x-axis")
-plt.savefig('bias_output_x.png', bbox_inches='tight', dpi=300)
+plt.figure(figsize=(3,3))
+sns_plot_y = sns.lmplot(fit_reg=False, x = 'O_y', y = 'A_y' , hue = 'Landmark', legend='full', palette=('deep') ,data=df_d)
+plt.axvline(0, color='black')
+plt.axhline(0, color='black')
+plt.xlim(-11,11)
+plt.ylim(-11,11)
+plt.xlabel('Oli deviations (mm)')
+plt.ylabel('Aaron deviations (mm)')
+plt.title("Deviations from Abby's clicks in y-axis")
+sns_plot_y.fig.subplots_adjust(top=1)
+plt.savefig('bias_output_y.png',bbox_inches='tight', dpi=300)
 
-plt.show()
-'''
-
-#sns_plot = sns.lmplot(data=df_d, x = 'A_x',y = 'O_x', hue ='Patient', scatter = True, fit_reg=False, markers=True)  
-sns.set_palette("hls", 10)
-sns_plot = sns.relplot(x = 'O_x', y = 'A_x', hue = 'Landmark', palette = 'hls', data=df_d, s=75)
-plt.xlabel('Oli Deviations')
-plt.ylabel('Aaron Deviations')
-plt.title("Deviations from Abby's clicks in x-axis")
-plt.show()
-
-plt.savefig('bias_output_x.png', bbox_inches='tight', dpi=300)
-print(os.getcwd())
-
-'''
-
-'''
-#print(d_x)        
-df_x = pd.DataFrame(data=d_x, columns=('Patient', 'Oli', 'Aaron', 'Landmark'))
-print(df_x)
-print(df_x.shape)
-sns_plot_x = sns.relplot(x = 'Oli', y = 'Aaron', hue = 'Patient', style = 'Landmark', data=df_x, s=75)
-#sns_plot_x.set_size_inches(18.5, 10.5)
-plt.xlabel('Oli Deviations')
-plt.ylabel('Aaron Deviations')
-plt.title("Deviations from Abby's clicks in x-axis")
-plt.savefig('bias_output_x.png', bbox_inches='tight', dpi=300)
-
-'''
-'''
-df_y = pd.DataFrame(data=d_y, columns=('Patient', 'Landmark', 'Oli', 'Aaron'))
-print(df_y)
-df_z = pd.DataFrame(data=d_z, columns=('Patient', 'Landmark', 'Oli', 'Aaron'))
-print(df_z)
-
-
-# plot
+plt.figure(figsize=(3,3))
+sns_plot_z = sns.lmplot(fit_reg=False,x = 'O_z', y = 'A_z' , hue = 'Landmark', legend='full', palette=('deep') ,data=df_d)
+plt.axvline(0, color='black')
+plt.axhline(0, color='black')
+plt.xlim(-11,11)
+plt.ylim(-11,11)
+plt.xlabel('Oli deviations (mm)')
+plt.ylabel('Aaron deviations (mm)')
+plt.title("Deviations from Abby's clicks in z-axis")
+sns_plot_z.fig.subplots_adjust(top=1)
+plt.savefig('bias_output_z.png',bbox_inches='tight', dpi=300)
 
 
 
-sns_plot_y = sns.relplot(x = 'Oli', y = 'Aaron', hue = 'Patient', style = 'Landmark', data=df_y)
-plt.savefig('bias_output_y.png', dpi=300)
-
-sns_plot_z = sns.relplot(x = 'Oli', y = 'Aaron', hue = 'Patient', style = 'Landmark', data=df_z)
-plt.savefig('bias_output_z.png', dpi=300)
-'''
