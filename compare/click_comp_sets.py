@@ -245,7 +245,7 @@ plt.figure(figsize=(7,6))
 box_plot = sns.boxplot(x = 'Landmark', y = 'Deviation', hue = 'Clicks', palette = 'Set1', data=df_d, showfliers=False)
 #sns_plot_new = sns.boxplot(x = 'Landmark', y = 'Revised',data=df_d_new, showfliers=False)
 #plt.legend(bbox_to_anchor=(1.05, 1), handles = [sns_plot_old, sns_plot_new], loc='upper left', borderaxespad=0.)
-plt.xlabel('Landmarks')
+#plt.xlabel('Landmarks')
 plt.ylabel('Deviations (mm)')
 
 medians_old = round(medians_old,1)
@@ -296,9 +296,10 @@ for xtick in box_plot.get_xticks():
         box_plot.text(xtick + 0.05,medians_new[xtick] + vertical_offset_new,medians_new[xtick], 
             horizontalalignment='left',size='x-small',color='pink', weight='semibold', rotation = 0)
 
-plt.title("Inter-observer variation between initial and revised datasets")
+#plt.title("Inter-observer variation between initial and revised datasets")
 #sns_plot_x.fig.subplots_adjust(top=1)
-plt.savefig('variation_output.png', bbox_inches='tight', dpi=1200)
+box_plot.set(xlabel=None)
+plt.savefig('variation_output.png', bbox_inches='tight', dpi=600)
 
 
 
