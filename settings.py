@@ -42,53 +42,11 @@ def init(rts_q):
 
     # paths
     
-    Paed_q = yes_or_no.question('Paediatric data (y) / Adult data (n): ')
-    if Paed_q == False:
-        paed_bool = False
-        locally_or_server = yes_or_no.question('locally(y) / server(n): ')
-        if locally_or_server == True:
-            # use local paths and ask Aaron/Oli for local paths 
-            aaron_or_oli = yes_or_no.question('aaron(y) / oli (n): ')
-            if aaron_or_oli == True:
-                # Aaron paths
-                coding_path = r'C:\Users\ranki_252uikw\Documents\MPhysS2\General-location-finding'
-                root = r'C:\Users\ranki_252uikw\Documents\MPhysS2\Facial_asymmetry_aaron_testset' # note lack of " "
-                save_data_path = r'C:\Users\ranki_252uikw\Documents\MPhysS2\Results'
-            elif aaron_or_oli == False:
-                # Oli paths
-                coding_path = r'C:\Users\olive\OneDrive\Documents\GitHub\General-location-finding'
-                root = r'C:\Users\olive\OneDrive\Documents\MPhys\3D_data\Facial_asymmetry_reclicks' # note lack of " "
-                save_data_path = r'C:\Users\olive\OneDrive\Documents\MPhys\Sem 2\Results'
-        elif locally_or_server == False:
-            # use server paths for data and code for Aaron/Oli
-            aaron_or_oli = yes_or_no.question('aaron(y) / oli (n)')
-            if aaron_or_oli == True:
-                # Aaron paths
-                coding_path = r'/home/rankinaaron98/General-location-finding'
-                root = r'/home/rankinaaron98/data/Facial_asymmetry_reclicks'
-                save_data_path = r'/home/rankinaaron98/data/results/Aaron'
-            # load model path
-            elif aaron_or_oli == False:           
-                google_oli = yes_or_no.question('are you accessing through: sdk (n)/google (y)')
-                if google_oli == False:  
-                    # Oli paths
-                    coding_path = r'/home/olive/GitHub/General-location-finding'
-                    root = r'/home/olive/data/Facial_asymmetry_reclicks'
-                    save_data_path = r'/home/olive/data/results/Oli'
-                elif google_oli == True:
-                    # google Oli paths
-                    coding_path = r'/home/oliver_umney/GitHub/General-location-finding'
-                    root = r'/home/oliver_umney/data/Facial_asymmetry_reclicks'
-                    save_data_path =  r'/home/oliver_umney/data/results/oliver_umney_web' 
-    
-    elif Paed_q == True:
-        paed_bool = True
-        coding_path = r'/home/oli/GitHub/General-location-finding'
-        if rts_q == False:
-            root = r'/home/oli/data/paed_dataset/train'
-        elif rts_q == True:
-            root = r'/home/oli/data/paed_dataset/test'
-        save_data_path =  r'/home/oli/data/results/oli' 
+    # Oli paths
+    coding_path = r'/home/olive/GitHub/General-location-finding'
+    root = r'/home/olive/data/HNSCC_deepmind_cropped'
+    save_data_path = r'/home/olive/data/results/Oli'
+                
    
     # results directory
     print('Results directory:')
@@ -119,9 +77,9 @@ def init(rts_q):
     # specify landmarks + region want to train for - AMEND
     #landmarks = [1,2,3,5,7,9] # brainstem # not general
     #landmarks_loc = {1:'com',2:'com', 3: 'com', 5:'com', 7:'com', 9:'com'} 
-    landmarks = [1,2,3,4,5,6,7,8,9,10]
+    landmarks = [1,2,3,4,5,6]
     #landmarks_loc = {1:'line',2:'line', 3: 'line',4:'line', 5:'line',6:'line', 7:'line',8:'line', 9:'line',10:'line', }
-    landmarks_loc = {1:'com',2:'com', 3: 'com',4:'com', 5:'com',6:'com', 7:'com',8:'com', 9:'com',10:'com', } 
+    landmarks_loc = {1:'bot',2:'bot', 3: 'bot',4:'top', 5:'com',6:'com'} 
     num_class = len(landmarks)
     # make user double check correct
     print('\n')
@@ -134,14 +92,14 @@ def init(rts_q):
     # specify all structures which are actually in image
     # structures near the top which can be used for flipping
     # "AMl", "AMr","HMl", "HMr", "FZl", "FZr", "FNl", "FNr", "SOl", "SOr"
-    landmarks_total = [1,2,3,4,5,6,7,8,9,10]
+    landmarks_total = [1,2,3,4,5,6]
     #landmarks_total_loc = {1:'line', 2:'line', 3: 'line', 4:'line', 5:'line',6:'line', 7: 'line',8:'line', 9:'line',10:'line', } 
-    landmarks_total_loc = {1:'com',2:'com', 3: 'com',4:'com', 5:'com',6:'com', 7:'com',8:'com', 9:'com',10:'com', } 
-    top_structures = [5,6]
-    bot_structures = [1,2]
+    landmarks_total_loc = {1:'bot',2:'bot', 3: 'bot',4:'top', 5:'com',6:'com'} 
+    top_structures = [5]
+    bot_structures = [4]
     # L/R structures
-    left_structures = [1,3,5,7,9]
-    right_structures = [2,4,6,8,10]
+    left_structures = [1,5]
+    right_structures = [2,6]
 
     # sigma per landmark
     sigmas = {} 
