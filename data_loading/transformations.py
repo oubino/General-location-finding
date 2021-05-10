@@ -425,7 +425,15 @@ class Normalise_final(object):
         max_val = np.amax(image)
         image /= max_val
             
-        return {'image': image, 'idx': idx, 'patient':patient, 'coords':coords}   
+        return {'image': image, 'idx': idx, 'patient':patient, 'coords':coords}  
+
+class Noise(object):
+    def __call__(self,sample):
+        image, idx, patient, coords = sample['image'], sample['idx'], sample['patient'], sample['coords']
+        random_number = random.random()
+        if random_number <= 0.5:
+            image = skimage.util.random_noise(image)         
+        return {'image': image, 'idx': idx, 'patient':patient, 'coords':coords}  
 
 
 class ToTensor(object):
