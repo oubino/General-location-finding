@@ -20,10 +20,10 @@ import matplotlib.pyplot as plt
 
 if S.downsample_user == True:
     trans_plain = transforms.Compose([T.Normalise(S.normal_min, S.normal_max, S.normal_window), T.Resize(S.in_z,S.in_x,S.in_y),T.Upsidedown_scipy(), T.Check_left_right(), T.Normalise_final(), T.ToTensor()])
-    trans_augment = transforms.Compose([T.Normalise(S.normal_min, S.normal_max, S.normal_window), T.Resize(S.in_z,S.in_x,S.in_y),T.Upsidedown_scipy(), T.Shift(), T.Flips_scipy(), T.Horizontal_flip(), T.Check_left_right(), T.Normalise_final(), T.ToTensor()])
+    trans_augment = transforms.Compose([T.Normalise(S.normal_min, S.normal_max, S.normal_window), T.Resize(S.in_z,S.in_x,S.in_y),T.Upsidedown_scipy(), T.Shift(), T.Flips_scipy(), T.Horizontal_flip(), T.Check_left_right(), T.Normalise_final(), T.Noise(), T.ToTensor()])
 elif S.downsample_user == False:
     trans_plain = transforms.Compose([T.Normalise(S.normal_min, S.normal_max, S.normal_window), T.CentreCrop_test(S.in_z,S.in_x,S.in_y), T.Upsidedown_scipy(), T.Check_left_right(), T.Normalise_final(), T.ToTensor()])
-    trans_augment = transforms.Compose([T.Normalise(S.normal_min, S.normal_max, S.normal_window), T.CentreCrop_train(S.in_z,S.in_x,S.in_y),T.Upsidedown_scipy(), T.Shift(), T.Flips_scipy(), T.Horizontal_flip(), T.Check_left_right(), T.Normalise_final(), T.ToTensor()])
+    trans_augment = transforms.Compose([T.Normalise(S.normal_min, S.normal_max, S.normal_window), T.CentreCrop_train(S.in_z,S.in_x,S.in_y),T.Upsidedown_scipy(), T.Shift(), T.Flips_scipy(), T.Horizontal_flip(), T.Check_left_right(), T.Normalise_final(), T.Noise(), T.ToTensor()])
 
 #S.root_struc,
 dataset = D.CTDataset(S.root, transform_train = trans_augment, transform_test = trans_plain, test = False)
