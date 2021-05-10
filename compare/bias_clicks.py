@@ -32,7 +32,8 @@ def load_obj(root, name):
         return pickle.load(f)
 
 # paths
-root = r'C:\Users\ranki_252uikw\Documents\MPhysS2'
+#root = r'C:\Users\ranki_252uikw\Documents\MPhysS2'
+root = r'C:\Users\olive\OneDrive\Documents\MPhys'
 
 clicker_1 = 'Oli_test_set'
 clicker_2 = 'Aaron_test_set'
@@ -150,12 +151,37 @@ for l in landmarks:
        
         
 o_x_max = np.amax(devs[1])
-print(o_x_max)
+#print(o_x_max)
 #print(d)
 df_d = pd.DataFrame(d, columns=('A_x', 'O_x', 'A_y', 'O_y', 'A_z', 'O_z','Patient', 'Landmark'))
-print(df_d)  
+#print(df_d)  
 
+# calculate mean deviation per landmark from mean of A and O
+df_d['dev_x'] = df_d.apply(lambda row : (row['A_x']/2 + row['O_x']/2), axis = 1)
+df_d['dev_y'] = df_d.apply(lambda row : (row['A_y']/2 + row['O_y']/2), axis = 1)
+df_d['dev_z'] = df_d.apply(lambda row : (row['A_z']/2 + row['O_z']/2), axis = 1)
+df_d['dev_total'] = df_d.apply(lambda row : (row['dev_x']**2 + row['dev_y']**2 + row['dev_z']**2)**0.5, axis = 1)
+mean = df_d.groupby(['Landmark'])['dev_total'].mean()
+median = df_d.groupby(['Landmark'])['dev_total'].median()
+maxi = df_d.groupby(['Landmark'])['dev_total'].max()
+mini = df_d.groupby(['Landmark'])['dev_total'].min()
 
+print(mean)
+
+median = round(median,2)
+
+plt.figure(figsize=(8,6))
+box_plot = sns.boxplot(x = 'Landmark', y = 'dev_total', palette = 'Set1', data=df_d, showfliers=False)
+plt.ylabel('Deviations (mm)')
+box_plot.set(xlabel=None)
+for xtick in box_plot.get_xticks():
+    box_plot.text(xtick - 0.02,median[xtick] + 0.2,median[xtick], 
+                    horizontalalignment='center',size=12,color='black', weight='semibold', rotation = 0)
+plt.savefig('abby_vs_our_mean.png', bbox_inches='tight', dpi=600)
+
+# below are dx dy dz plots
+
+"""
 plt.figure(figsize=(3,3))
 sns_plot_x = sns.lmplot(fit_reg=False,x = 'O_x', y = 'A_x' , hue = 'Landmark', legend='full', palette=('deep'),data=df_d)
 plt.axvline(0, color='black')
@@ -193,5 +219,5 @@ plt.title("Deviations from Abby's clicks in z-axis")
 sns_plot_z.fig.subplots_adjust(top=1)
 plt.savefig('bias_output_z.png',bbox_inches='tight', dpi=300)
 
-
+"""
 
