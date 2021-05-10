@@ -474,7 +474,17 @@ class ToTensor(object):
         image = image.unsqueeze(0)
         return {'image': image,'idx': idx, 'patient':patient, 'coords':coords}
     
+# additional transfomrations to implement
 
+class Noise(object):
+    def __call__(self,sample):
+        image, idx, patient, coords = sample['image'], sample['idx'], sample['patient'], sample['coords']
+        random_number = random.random()
+        if random_number <= 0.5:
+            image = skimage.util.random_noise(image)         
+        return {'image': image, 'idx': idx, 'patient':patient, 'coords':coords}  
+    
+# random zoom
 
 """
 import os
