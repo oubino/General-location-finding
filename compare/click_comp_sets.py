@@ -156,7 +156,7 @@ d_new = []
 l_old = [0.7, 1.7, 2.7, 3.7, 4.7, 5.7, 6.7, 7.7, 8.7, 9.7] 
 l_new = [1.3, 2.3, 3.3, 4.3, 5.3, 6.3, 7.3, 8.3, 9.3, 10.3]
 
-inter = True
+inter = False
 
 if inter == True:
     for l in landmarks:
@@ -229,11 +229,11 @@ df_d_old = pd.DataFrame(d_old, columns=('Patient', 'Landmark','Deviation'))
 df_d_new = pd.DataFrame(d_new,  columns=('Patient', 'Landmark','Deviation'))
        
 if inter == True:
-    df_d_new['Clicks'] = 'Revised'
-    df_d_old['Clicks'] = 'Initial'
+    df_d_new['Annotations'] = 'Revised'
+    df_d_old['Annotations'] = 'Initial'
 if inter == False:
-    df_d_new['Clicker'] = 'Aaron'
-    df_d_old['Clicker'] = 'Oli'
+    df_d_new['Annotator'] = 'Aaron'
+    df_d_old['Annotator'] = 'Oli'
     
 df_d = pd.concat([df_d_old,df_d_new])
 
@@ -249,9 +249,9 @@ means_old = df_d_old.groupby(['Landmark'])['Deviation'].mean()
 #hand =  ['Initial', 'Revised']
 plt.figure(figsize=(8,6))
 if inter == True:       
-    box_plot = sns.boxplot(x = 'Landmark', y = 'Deviation', hue = 'Clicks', palette = 'Set1', data=df_d, showfliers=False)
+    box_plot = sns.boxplot(x = 'Landmark', y = 'Deviation', hue = 'Annotations', palette = 'Set1', data=df_d, showfliers=False)
 elif inter == False:
-    box_plot = sns.boxplot(x = 'Landmark', y = 'Deviation', hue = 'Clicker', palette = 'Set1', data=df_d, showfliers=False)
+    box_plot = sns.boxplot(x = 'Landmark', y = 'Deviation', hue = 'Annotator', palette = 'Set1', data=df_d, showfliers=False)
 
 #sns_plot_new = sns.boxplot(x = 'Landmark', y = 'Revised',data=df_d_new, showfliers=False)
 #plt.legend(bbox_to_anchor=(1.05, 1), handles = [sns_plot_old, sns_plot_new], loc='upper left', borderaxespad=0.)
@@ -278,10 +278,15 @@ if inter == True:
                     horizontalalignment='right',size=12,color='pink', weight='semibold', rotation = 0)
             box_plot.text(xtick + 0.02,medians_new[xtick] + vertical_offset_new,medians_new[xtick], 
                 horizontalalignment='left',size=12,color='pink', weight='semibold', rotation = 0)
-        elif xtick == 3:
-            box_plot.text(xtick - 0.02,medians_old[xtick] + vertical_offset_old - 0.02,medians_old[xtick], 
+        elif xtick == 2:
+            box_plot.text(xtick - 0.02,medians_old[xtick] + vertical_offset_old - 0.5,medians_old[xtick], 
                     horizontalalignment='right',size=12,color='pink', weight='semibold', rotation = 0)
-            box_plot.text(xtick + 0.02,medians_new[xtick] + vertical_offset_new,medians_new[xtick], 
+            box_plot.text(xtick + 0.02,medians_new[xtick] + vertical_offset_new - 0.5,medians_new[xtick], 
+                horizontalalignment='left',size=12,color='pink', weight='semibold', rotation = 0)
+        elif xtick == 3:
+            box_plot.text(xtick - 0.02,medians_old[xtick] + vertical_offset_old - 0.5,medians_old[xtick], 
+                    horizontalalignment='right',size=12,color='pink', weight='semibold', rotation = 0)
+            box_plot.text(xtick + 0.02,medians_new[xtick] + vertical_offset_new - 0.5,medians_new[xtick], 
                 horizontalalignment='left',size=12,color='pink', weight='semibold', rotation = 0)
         elif xtick == 4:
             box_plot.text(xtick - 0.02,medians_old[xtick] + vertical_offset_old,medians_old[xtick], 
@@ -291,7 +296,7 @@ if inter == True:
         elif xtick == 6:
             box_plot.text(xtick - 0.02,medians_old[xtick] + vertical_offset_old,medians_old[xtick], 
                     horizontalalignment='right',size=12,color='pink', weight='semibold', rotation = 0)
-            box_plot.text(xtick + 0.02,medians_new[xtick] + vertical_offset_new - 0.11,medians_new[xtick], 
+            box_plot.text(xtick + 0.02,medians_new[xtick] + vertical_offset_new - 0.5,medians_new[xtick], 
                 horizontalalignment='left',size=12,color='pink', weight='semibold', rotation = 0)
         elif xtick == 7:
             box_plot.text(xtick - 0.02,medians_old[xtick] + vertical_offset_old,medians_old[xtick], 
@@ -299,9 +304,14 @@ if inter == True:
             box_plot.text(xtick + 0.02,medians_new[xtick] + vertical_offset_new - 1,medians_new[xtick], 
                 horizontalalignment='left',size=12,color='pink', weight='semibold', rotation = 0)
         elif xtick == 8:
-            box_plot.text(xtick - 0.02,medians_old[xtick] + vertical_offset_old - 0.1,medians_old[xtick], 
+            box_plot.text(xtick - 0.02,medians_old[xtick] + vertical_offset_old - 0.5,medians_old[xtick], 
                     horizontalalignment='right',size=12,color='pink', weight='semibold', rotation = 0)
             box_plot.text(xtick + 0.02,medians_new[xtick] + vertical_offset_new - 0,medians_new[xtick], 
+                horizontalalignment='left',size=12,color='pink', weight='semibold', rotation = 0)
+        elif xtick == 9:
+            box_plot.text(xtick - 0.02,medians_old[xtick] + vertical_offset_old - 0.5,medians_old[xtick], 
+                    horizontalalignment='right',size=12,color='pink', weight='semibold', rotation = 0)
+            box_plot.text(xtick + 0.02,medians_new[xtick] + vertical_offset_new + 0.2,medians_new[xtick], 
                 horizontalalignment='left',size=12,color='pink', weight='semibold', rotation = 0)
         else:
             box_plot.text(xtick - 0.02,medians_old[xtick] + vertical_offset_old,medians_old[xtick], 
@@ -313,61 +323,64 @@ elif inter == False:
     for xtick in box_plot.get_xticks():
         
         if xtick == 1:
-            box_plot.text(xtick - 0.02,medians_old[xtick] + vertical_offset_old,medians_old[xtick], 
-                    horizontalalignment='right',size=12,color='pink', weight='semibold', rotation = 0)
-            box_plot.text(xtick + 0.02,medians_new[xtick] + vertical_offset_new,medians_new[xtick], 
-                horizontalalignment='left',size=12,color='pink', weight='semibold', rotation = 0)
+            box_plot.text(xtick - 0.08,medians_old[xtick] + vertical_offset_old + 0.1,medians_old[xtick], 
+                    horizontalalignment='right',size=12,color='pink', weight='semibold', rotation = 90)
+            box_plot.text(xtick + 0.08,medians_new[xtick] + vertical_offset_new + 0.1,medians_new[xtick], 
+                horizontalalignment='left',size=12,color='pink', weight='semibold', rotation = 90)
         elif xtick == 2:
-            box_plot.text(xtick - 0.07,medians_old[xtick] + vertical_offset_old - 0.05,medians_old[xtick], 
+            box_plot.text(xtick - 0.04,medians_old[xtick] + vertical_offset_old - 0.05,medians_old[xtick], 
                     horizontalalignment='right',size=12,color='pink', weight='semibold', rotation = 0)
-            box_plot.text(xtick + 0.07,medians_new[xtick] + vertical_offset_new - 1,medians_new[xtick], 
+            box_plot.text(xtick + 0.01,medians_new[xtick] + vertical_offset_new - 1,medians_new[xtick], 
                 horizontalalignment='left',size=12,color='pink', weight='semibold', rotation = 0)
         elif xtick == 3:
-            box_plot.text(xtick - 0.08,medians_old[xtick] + vertical_offset_old - 0.05,medians_old[xtick], 
+            box_plot.text(xtick - 0.03,medians_old[xtick] + vertical_offset_old - 0.05,medians_old[xtick], 
                     horizontalalignment='right',size=12,color='pink', weight='semibold', rotation = 0)
-            box_plot.text(xtick + 0.08,medians_new[xtick] + vertical_offset_new - 1,medians_new[xtick], 
+            box_plot.text(xtick + 0.03,medians_new[xtick] + vertical_offset_new - 1,medians_new[xtick], 
                 horizontalalignment='left',size=12,color='pink', weight='semibold', rotation = 0)
         elif xtick == 4:
-            box_plot.text(xtick - 0.05,medians_old[xtick] + vertical_offset_old,medians_old[xtick], 
+            box_plot.text(xtick - 0.02,medians_old[xtick] + vertical_offset_old,medians_old[xtick], 
                     horizontalalignment='right',size=12,color='pink', weight='semibold', rotation = 0)
-            box_plot.text(xtick + 0.05,medians_new[xtick] + vertical_offset_new,medians_new[xtick], 
+            box_plot.text(xtick + 0.02,medians_new[xtick] + vertical_offset_new,medians_new[xtick], 
                 horizontalalignment='left',size=12,color='pink', weight='semibold', rotation = 0)
         elif xtick == 5:
-            box_plot.text(xtick - 0.07,medians_old[xtick] + vertical_offset_old,medians_old[xtick], 
+            box_plot.text(xtick - 0.02,medians_old[xtick] + vertical_offset_old,medians_old[xtick], 
                     horizontalalignment='right',size=12,color='pink', weight='semibold', rotation = 0)
-            box_plot.text(xtick + 0.07,medians_new[xtick] + vertical_offset_new,medians_new[xtick], 
+            box_plot.text(xtick + 0.02,medians_new[xtick] + vertical_offset_new,medians_new[xtick], 
                 horizontalalignment='left',size=12,color='pink', weight='semibold', rotation = 0)
         elif xtick == 6:
-            box_plot.text(xtick - 0.02,medians_old[xtick] + vertical_offset_old,medians_old[xtick], 
-                    horizontalalignment='right',size=12,color='pink', weight='semibold', rotation = 0)
-            box_plot.text(xtick + 0.02,medians_new[xtick] + vertical_offset_new - 0.11,medians_new[xtick], 
-                horizontalalignment='left',size=12,color='pink', weight='semibold', rotation = 0)
-        elif xtick == 7:
-            box_plot.text(xtick - 0.02,medians_old[xtick] + vertical_offset_old,medians_old[xtick], 
+            box_plot.text(xtick - 0.07,medians_old[xtick] + vertical_offset_old,medians_old[xtick], 
                     horizontalalignment='right',size=12,color='pink', weight='semibold', rotation = 90)
-            box_plot.text(xtick + 0.02,medians_new[xtick] + vertical_offset_new,medians_new[xtick], 
+            box_plot.text(xtick + 0.08,medians_new[xtick] + vertical_offset_new - 1,medians_new[xtick], 
+                horizontalalignment='left',size=12,color='pink', weight='semibold', rotation = 90)
+        elif xtick == 7:
+            box_plot.text(xtick - 0.07,medians_old[xtick] + vertical_offset_old,medians_old[xtick], 
+                    horizontalalignment='right',size=12,color='pink', weight='semibold', rotation = 90)
+            box_plot.text(xtick + 0.09,medians_new[xtick] + vertical_offset_new - 1.5,medians_new[xtick], 
                 horizontalalignment='left',size=12,color='pink', weight='semibold', rotation = 90)
         elif xtick == 8:
-            box_plot.text(xtick - 0.07,medians_old[xtick] + vertical_offset_old - 1,medians_old[xtick], 
+            box_plot.text(xtick - 0.02,medians_old[xtick] + vertical_offset_old - 1,medians_old[xtick], 
                     horizontalalignment='right',size=12,color='pink', weight='semibold', rotation = 0)
-            box_plot.text(xtick + 0.07,medians_new[xtick] + vertical_offset_new - 0.4,medians_new[xtick], 
+            box_plot.text(xtick + 0.02,medians_new[xtick] + vertical_offset_new - 0.6,medians_new[xtick], 
                 horizontalalignment='left',size=12,color='pink', weight='semibold', rotation = 0)
         elif xtick == 9:
-            box_plot.text(xtick - 0.05,medians_old[xtick] + vertical_offset_old+0.3,medians_old[xtick], 
+            box_plot.text(xtick - 0.03,medians_old[xtick] + vertical_offset_old+0.3,medians_old[xtick], 
                     horizontalalignment='right',size=12,color='pink', weight='semibold', rotation = 0)
-            box_plot.text(xtick + 0.05,medians_new[xtick] + vertical_offset_new ,medians_new[xtick], 
+            box_plot.text(xtick + 0.03,medians_new[xtick] + vertical_offset_new ,medians_new[xtick], 
                 horizontalalignment='left',size=12,color='pink', weight='semibold', rotation = 0)
         else:
-            box_plot.text(xtick - 0.05,medians_old[xtick] + vertical_offset_old,medians_old[xtick], 
+            box_plot.text(xtick - 0.01,medians_old[xtick] + vertical_offset_old,medians_old[xtick], 
                     horizontalalignment='right',size=12,color='pink', weight='semibold', rotation = 0)
-            box_plot.text(xtick + 0.05,medians_new[xtick] + vertical_offset_new,medians_new[xtick], 
+            box_plot.text(xtick + 0.01,medians_new[xtick] + vertical_offset_new,medians_new[xtick], 
                 horizontalalignment='left',size=12,color='pink', weight='semibold', rotation = 0)
 
 
 #plt.title("Inter-observer variation between initial and revised datasets")
 #sns_plot_x.fig.subplots_adjust(top=1)
 box_plot.set(xlabel=None)
-plt.savefig('variation_output.png', bbox_inches='tight', dpi=600)
+if inter == True:
+    plt.savefig('inter_observer.png', bbox_inches='tight', dpi=600)
+elif inter == False:
+    plt.savefig('intra_observer.png', bbox_inches='tight', dpi=600)
 
 
 

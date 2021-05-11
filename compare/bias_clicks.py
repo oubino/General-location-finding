@@ -168,7 +168,7 @@ mini = df_d.groupby(['Landmark'])['dev_total'].min()
 
 print(mean)
 
-median = round(median,2)
+median = round(median,1)
 
 plt.figure(figsize=(8,6))
 box_plot = sns.boxplot(x = 'Landmark', y = 'dev_total', palette = 'Set1', data=df_d, showfliers=False)
