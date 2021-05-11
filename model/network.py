@@ -6,7 +6,6 @@ import torch.nn.functional as F
 
 import settings as S
 
-
 # UNET3D
 
 class ConvUnit(nn.Module):
@@ -123,19 +122,19 @@ class UNet3d(nn.Module):
         self.se_block_3 = SE_Block(4*s_channels)
         self.enc3 = EncoderUnit(4 * s_channels, 8 * s_channels)
         self.se_block_4 = SE_Block(8*s_channels)
-        self.enc4 = EncoderUnit(8 * s_channels, 16 * s_channels)
-        self.se_block_5 = SE_Block(16*s_channels)
-        self.enc5 = EncoderUnit(16 * s_channels, 16 * s_channels) # new
+        self.enc4 = EncoderUnit(8 * s_channels, 8 * s_channels)
+        #self.se_block_5 = SE_Block(16*s_channels)
+        #self.enc5 = EncoderUnit(16 * s_channels, 16 * s_channels) # new
         
-        self.dec0 = DecoderUnit(16 * s_channels) 
-        self.se_block_6 = SE_Block(16*s_channels)
+        #self.dec0 = DecoderUnit(16 * s_channels) 
+        #self.se_block_6 = SE_Block(16*s_channels)
 
         # takes in 16*s channels from enc5
         # gives 16 * s channels
         # concat with self.enc5 16*s channels to give 32*s channels to dec0_conv
-        self.dec0_conv = ConvPostDecoderUnit(32 * s_channels, 8 * s_channels)
+        #self.dec0_conv = ConvPostDecoderUnit(32 * s_channels, 8 * s_channels)
         self.dec1 = DecoderUnit(8 * s_channels)
-        self.se_block_7 = SE_Block(8*s_channels)
+        self.se_block_7 = SE_Block(8 *s_channels)
         self.dec1_conv = ConvPostDecoderUnit(16 * s_channels, 4 * s_channels)
         self.dec2 = DecoderUnit(4 * s_channels)
         self.se_block_8 = SE_Block(4*s_channels)
@@ -158,13 +157,13 @@ class UNet3d(nn.Module):
         x4 = self.enc3(x3)
         x4 = self.se_block_4(x4)
         x5 = self.enc4(x4)
-        x5 = self.se_block_5(x5)
-        x10 = self.enc5(x5)
+        #x5 = self.se_block_5(x5)
+        #x10 = self.enc5(x5)
 
-        x11 = self.dec0(x10)
-        x11 = self.se_block_6(x11)
-        x12 = self.dec0_conv(x11,x5)
-        x6 = self.dec1(x12)
+        #x11 = self.dec0(x10)
+        #x11 = self.se_block_6(x11)
+        #x12 = self.dec0_conv(x11,x5)
+        x6 = self.dec1(x5)
         x6 = self.se_block_7(x6)
         x13 = self.dec1_conv(x6, x4)
         x7 = self.dec2(x13)
