@@ -127,7 +127,7 @@ def init(rts_q):
     # normalise parameters
     normal_min = 15 + 1024
     
-    normal_max = 400 + 1024
+    normal_max = 50 + 1024
     normal_window = 1800
     
     # mixed precision

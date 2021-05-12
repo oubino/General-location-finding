@@ -32,7 +32,9 @@ def load_obj(root, name):
         return pickle.load(f)
 
 # paths
-root = r'C:\Users\ranki_252uikw\Documents\MPhysS2'
+#root = r'C:\Users\ranki_252uikw\Documents\MPhysS2'
+root = r'C:\Users\olive\OneDrive\Documents\MPhys'
+
 
 clicker_1 = 'Oli_test_set'
 clicker_2 = 'Aaron_test_set'
