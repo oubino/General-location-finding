@@ -115,7 +115,6 @@ for k in landmarks:
     mean_dev_z['%1.0f' % k] = [] 
     mean_dev_std['%1.0f' % k] = []
     mean_list['%1.0f' % k] = []
-    
 
 #calc_deviations = question('calc deviations(y) / or not (n)')
 
