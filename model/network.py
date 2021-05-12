@@ -91,7 +91,7 @@ class OutConv(nn.Module):
     
 class SE_Block(nn.Module):
     "credits: https://github.com/moskomule/senet.pytorch/blob/master/senet/se_module.py#L4"
-    def __init__(self, c, r=16):
+    def __init__(self, c, r=8):
         super().__init__()
         self.squeeze = nn.AdaptiveAvgPool3d(1)
         self.excitation = nn.Sequential(

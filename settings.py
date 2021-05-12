@@ -251,7 +251,7 @@ def init_new():
     
     epoch_batch = int(input ("Epoch batch: "))
     num_epoch_batches = int(input ("Num epoch batch: "))
-    net_features= 16
+    net_features= 24
     scnet_feat = 64
     
     # -- AMEND -- 
