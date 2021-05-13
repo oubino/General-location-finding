@@ -45,23 +45,112 @@ class DecoderUnit(nn.Module):
     """
     ConvUnit and upsample with Upsample or convTranspose
     """
+    def __init__(self, in_channels, out_channels):
+        super().__init__()
+        self.up = nn.ConvTranspose3d(in_channels // 2, in_channels // 2, kernel_size=2, stride=2)
+        self.conv = ConvUnit(in_channels, out_channels)
+
+    def forward(self, x1, x2):
+        x1 = self.up(x1)
+
+        diffZ = x2.size()[2] - x1.size()[2]
+        diffY = x2.size()[3] - x1.size()[3]
+        diffX = x2.size()[4] - x1.size()[4]
+        x1 = F.pad(x1, [diffX // 2, diffX - diffX // 2, diffY // 2, diffY - diffY // 2, diffZ // 2, diffZ - diffZ // 2])
+
+        x = torch.cat([x2, x1], dim=1)
+        return self.conv(x)
+
+class OutConv(nn.Module):
+    def __init__(self, in_channels, out_channels):
+        super().__init__()
+        self.conv = nn.Conv3d(in_channels, out_channels, kernel_size = 1)
+
+    def forward(self, x):
+        return self.conv(x)
+
+
+class UNet3d(nn.Module):
+    def __init__(self, in_channels, n_classes, s_channels):
+        super().__init__()
+        self.in_channels = in_channels
+        self.n_classes = n_classes
+        self.s_channels = s_channels
+
+        self.conv = ConvUnit(in_channels, s_channels)
+        self.enc1 = EncoderUnit(s_channels, 2 * s_channels)
+        self.enc2 = EncoderUnit(2 * s_channels, 4 * s_channels)
+        self.enc3 = EncoderUnit(4 * s_channels, 8 * s_channels)
+        self.enc4 = EncoderUnit(8 * s_channels, 16 * s_channels)
+        self.enc5 = EncoderUnit(16 * s_channels, 16 * s_channels) # new
+        
+        self.dec0 = DecoderUnit(32 * s_channels, 8 * s_channels) # new
+        self.dec1 = DecoderUnit(16 * s_channels, 4 * s_channels)
+        self.dec2 = DecoderUnit(8 * s_channels, 2 * s_channels)
+        self.dec3 = DecoderUnit(4 * s_channels, s_channels)
+        self.dec4 = DecoderUnit(2 * s_channels, s_channels)
+        self.out = OutConv(s_channels, n_classes)
+
+    def forward(self, x):
+        x1 = self.conv(x)
+        x2 = self.enc1(x1)
+        x3 = self.enc2(x2)
+        x4 = self.enc3(x3)
+        x5 = self.enc4(x4)
+        x10 = self.enc5(x5)
+
+        x11 = self.dec0(x10,x5)
+        x6 = self.dec1(x11, x4)
+        x7 = self.dec2(x6, x3)
+        x8 = self.dec3(x7, x2)
+        x9 = self.dec4(x8, x1)
+        output = self.out(x9)
+        return output 
+    
+class Transfer_model(nn.Module):
+    def __init__(self, n_classes, s_channels, pre_trained_model):
+        super().__init__()
+        self.n_classes = n_classes
+        self.s_channels = s_channels
+        
+        self.pre_trained = nn.Sequential(
+        *list(pre_trained_model.children())[:-1]) # think asterix is unpacking
+        self.out = OutConv(s_channels, n_classes)
+
+    def forward(self, x): 
+        x1 = self.pre_trained[0](x)
+        x2 = self.pre_trained[1](x1)
+        x3 = self.pre_trained[2](x2)
+        x4 = self.pre_trained[3](x3)
+        x5 = self.pre_trained[4](x4)
+        
+        # extra enc & dec
+        x10 = self.pre_trained[5](x5)
+        x11 = self.pre_trained[6](x10,x5)
+        
+        x6 = self.pre_trained[7](x11,x4) # was x5,x4
+        x7 = self.pre_trained[8](x6, x3)
+        x8 = self.pre_trained[9](x7, x2)
+        x9 = self.pre_trained[10](x8, x1)
+        
+        output = self.out(x9)
+        return output 
+
+# UNET3D - with squeeze and excite
+
+class DecoderUnit_SE(nn.Module):
+    """
+    ConvUnit and upsample with Upsample or convTranspose
+    """
     def __init__(self, in_channels):
         super().__init__()
         self.up = nn.ConvTranspose3d(in_channels, in_channels, kernel_size=2, stride=2)
-        #self.conv = ConvUnit(in_channels, out_channels)
 
     def forward(self, x1):
         x1 = self.up(x1)
-
-        #diffZ = x2.size()[2] - x1.size()[2]
-        #diffY = x2.size()[3] - x1.size()[3]
-        #diffX = x2.size()[4] - x1.size()[4]
-        #x1 = F.pad(x1, [diffX // 2, diffX - diffX // 2, diffY // 2, diffY - diffY // 2, diffZ // 2, diffZ - diffZ // 2])
-
-        #x = torch.cat([x2, x1], dim=1)
         return x1 #self.conv(x)
 
-class ConvPostDecoderUnit(nn.Module):
+class ConvPostDecoderUnit_SE(nn.Module):
     """
     ConvUnit and upsample with Upsample or convTranspose
     """
@@ -80,18 +169,10 @@ class ConvPostDecoderUnit(nn.Module):
 
         x = torch.cat([x1, x2], dim=1)
         return self.conv(x)
-
-class OutConv(nn.Module):
-    def __init__(self, in_channels, out_channels):
-        super().__init__()
-        self.conv = nn.Conv3d(in_channels, out_channels, kernel_size = 1)
-
-    def forward(self, x):
-        return self.conv(x)
     
 class SE_Block(nn.Module):
     "credits: https://github.com/moskomule/senet.pytorch/blob/master/senet/se_module.py#L4"
-    def __init__(self, c, r=8):
+    def __init__(self, c, r=16):
         super().__init__()
         self.squeeze = nn.AdaptiveAvgPool3d(1)
         self.excitation = nn.Sequential(
@@ -103,13 +184,12 @@ class SE_Block(nn.Module):
 
     def forward(self, x):
         bs, c, _, _, _ = x.shape
-        a = self.squeeze(x)
         y = self.squeeze(x).view(bs, c)
         y = self.excitation(y).view(bs, c, 1, 1, 1)
         return x * y.expand_as(x)
 
 
-class UNet3d(nn.Module):
+class UNet3d_SE(nn.Module):
     def __init__(self, in_channels, n_classes, s_channels):
         super().__init__()
         self.in_channels = in_channels
@@ -128,25 +208,25 @@ class UNet3d(nn.Module):
         self.se_block_5 = SE_Block(16*s_channels)
         self.enc5 = EncoderUnit(16 * s_channels, 16 * s_channels) # new
         
-        self.dec0 = DecoderUnit(16 * s_channels) 
+        self.dec0 = DecoderUnit_SE(16 * s_channels) 
         self.se_block_6 = SE_Block(16*s_channels)
 
         # takes in 16*s channels from enc5
         # gives 16 * s channels
         # concat with self.enc5 16*s channels to give 32*s channels to dec0_conv
-        self.dec0_conv = ConvPostDecoderUnit(32 * s_channels, 8 * s_channels)
-        self.dec1 = DecoderUnit(8 * s_channels)
+        self.dec0_conv = ConvPostDecoderUnit_SE(32 * s_channels, 8 * s_channels)
+        self.dec1 = DecoderUnit_SE(8 * s_channels)
         self.se_block_7 = SE_Block(8*s_channels)
-        self.dec1_conv = ConvPostDecoderUnit(16 * s_channels, 4 * s_channels)
-        self.dec2 = DecoderUnit(4 * s_channels)
+        self.dec1_conv = ConvPostDecoderUnit_SE(16 * s_channels, 4 * s_channels)
+        self.dec2 = DecoderUnit_SE(4 * s_channels)
         self.se_block_8 = SE_Block(4*s_channels)
-        self.dec2_conv = ConvPostDecoderUnit(8 * s_channels, 2 * s_channels)
-        self.dec3 = DecoderUnit(2 * s_channels)
+        self.dec2_conv = ConvPostDecoderUnit_SE(8 * s_channels, 2 * s_channels)
+        self.dec3 = DecoderUnit_SE(2 * s_channels)
         self.se_block_9 = SE_Block(2*s_channels)
-        self.dec3_conv = ConvPostDecoderUnit(4 * s_channels, s_channels)
-        self.dec4 = DecoderUnit(1 * s_channels)
+        self.dec3_conv = ConvPostDecoderUnit_SE(4 * s_channels, s_channels)
+        self.dec4 = DecoderUnit_SE(1 * s_channels)
         self.se_block_10 = SE_Block(1*s_channels)
-        self.dec4_conv = ConvPostDecoderUnit(2 * s_channels, s_channels)
+        self.dec4_conv = ConvPostDecoderUnit_SE(2 * s_channels, s_channels)
         self.out = OutConv(s_channels, n_classes)
 
     def forward(self, x):
@@ -180,35 +260,6 @@ class UNet3d(nn.Module):
         output = self.out(x16)
         return output 
 
-    
-class Transfer_model(nn.Module):
-    def __init__(self, n_classes, s_channels, pre_trained_model):
-        super().__init__()
-        self.n_classes = n_classes
-        self.s_channels = s_channels
-        
-        self.pre_trained = nn.Sequential(
-        *list(pre_trained_model.children())[:-1]) # think asterix is unpacking
-        self.out = OutConv(s_channels, n_classes)
-
-    def forward(self, x): 
-        x1 = self.pre_trained[0](x)
-        x2 = self.pre_trained[1](x1)
-        x3 = self.pre_trained[2](x2)
-        x4 = self.pre_trained[3](x3)
-        x5 = self.pre_trained[4](x4)
-        
-        # extra enc & dec
-        x10 = self.pre_trained[5](x5)
-        x11 = self.pre_trained[6](x10,x5)
-        
-        x6 = self.pre_trained[7](x11,x4) # was x5,x4
-        x7 = self.pre_trained[8](x6, x3)
-        x8 = self.pre_trained[9](x7, x2)
-        x9 = self.pre_trained[10](x8, x1)
-        
-        output = self.out(x9)
-        return output 
     
 """
 # this window level would need to be called as first function on x in forward of UNet i.e. x_mod = self.window_level(x) ; x1 = self.conv(x_mod) ; etc.
