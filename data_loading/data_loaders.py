@@ -26,7 +26,8 @@ elif S.downsample_user == False:
     trans_augment = transforms.Compose([T.Normalise(S.normal_min, S.normal_max, S.normal_window), T.CentreCrop_train(S.in_z,S.in_x,S.in_y),T.Upsidedown_scipy(), T.Shift(), T.Flips_scipy(), T.Horizontal_flip(), T.Check_left_right(), T.Normalise_final(), T.ToTensor()])
 
 #S.root_struc,
-dataset = D.CTDataset(S.root, transform_train = trans_augment, transform_test = trans_plain, test = False)
+lablled_dataset = D.LabelledCTs(S.root, transform_train = trans_augment, transform_test = trans_plain, test = False)
+unlabelled_dataset = D.UnLabelledCTs(S.root, transform_train = trans_augment, transform_test = trans_plain, test = False)
 
 def init(fold, train_ids, test_ids):
     # initialise dataloader 
@@ -39,10 +40,10 @@ def init(fold, train_ids, test_ids):
     global test_set_ids, val_set_ids
     test_set_ids = []
     val_set_ids = []
-    for i in test_ids:
-        test_set_ids.append(dataset._CTDataset__pat__from__index(i))
+    for i in labelled_test_ids:
+        test_set_ids.append(lablled_dataset._LabelledCTs__pat__from__index(i))
     for i in val_ids:
-        val_set_ids.append(dataset._CTDataset__pat__from__index(i))
+        val_set_ids.append(labelled_dataset._LabelledCTs__pat__from__index(i))
     
     val_subsampler = torch.utils.data.SubsetRandomSampler(val_ids)
     train_subsampler = torch.utils.data.SubsetRandomSampler(train_ids)

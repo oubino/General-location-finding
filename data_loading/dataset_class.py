@@ -11,7 +11,7 @@ from useful_functs import functions
 #os.chdir(settings.root) # change to data path and change back at end
 
 # CTDataset
-class CTDataset(Dataset):
+class LabelledCTs(Dataset):
     """3D CT Scan dataset."""
 
     def __init__(self, root, transform_train =None, transform_test = None, test = False, train = False):
@@ -56,6 +56,56 @@ class CTDataset(Dataset):
             struc_coord = functions.load_obj_pickle(settings.root, 'coords_' + settings.clicker)  
             struc_coord = struc_coord[sample['patient']]
         sample['coords'] = struc_coord           
+        
+        if (self.transform_train) and (self.test == False):
+            sample = self.transform_train(sample)
+        if (self.transform_test) and (self.test == True):
+            sample = self.transform_test(sample)
+        
+        return sample
+    
+    def __len__(self):
+        return len(self.imgs) # get size of dataset
+    
+    def __pat__from__index(self, idx):
+        return self.imgs[idx]
+
+    def __test__(self):
+      self.test = True
+      self.train = False
+    
+    def __train__(self):
+      self.train = True
+      self.test = False
+
+class UnLabelledCTs(Dataset):
+    """3D CT Scan dataset."""
+
+    def __init__(self, root, transform_train =None, transform_test = None, test = False, train = False):
+        """
+        Args:
+            root (string): Directory with all the images.
+            transform (callable, optional): Optional transform to be applied
+                on a sample.
+        """
+        self.root = root
+       # self.root_struc = root_struc
+        self.imgs = list(sorted(os.listdir(os.path.join(root, "unlabelled_CTs")))) # ensure they're aligned & index them
+        self.transform_train = transform_train
+        self.transform_test = transform_test
+        self.test = False
+        self.train = False
+        
+    def __getitem__(self, idx):
+        if torch.is_tensor(idx): # convert tensor to list to index items
+            idx = idx.tolist() 
+            
+        img_path = os.path.join(self.root, "unlabelled_CTs", self.imgs[idx]) # image path is combination of root and index 
+        img = np.load(img_path) # image read in as numpy array
+        
+        sample = {'image': img} # both are nd.arrays, stored in sample dataset
+        sample['idx'] = idx # should print out which image is problematic
+        sample['patient'] = self.imgs[idx]
         
         if (self.transform_train) and (self.test == False):
             sample = self.transform_train(sample)
